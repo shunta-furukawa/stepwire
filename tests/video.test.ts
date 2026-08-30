@@ -5,7 +5,7 @@ import { COMPOSITIONS, COMPOSITION_IDS, isCompositionId } from '../lib/video/com
 import { formatDuration, framesToSeconds, readingSeconds, secondsToFrames } from '../lib/video/timing';
 import { makeRenderId, renderObjectPath, renderRequestSchema } from '../lib/video/render-request';
 import { authorizeRender, createMemoryRateLimiter, RENDER_TOKEN_HEADER } from '../lib/video/guard';
-import { needsSpaceBetween, splitForReveal } from '../lib/video/text';
+import { needsSpaceBetween, splitForReveal, visualLength } from '../lib/video/text';
 import {
   barFractions,
   figureSchema,
@@ -195,6 +195,31 @@ describe('buildSceneSequence', () => {
     expect(cards).toHaveLength(1);
     expect(cards[0]!.text).toContain('It shipped.');
     expect(cards[0]!.text).toContain('difficulty table');
+  });
+
+  it('never packs a card past what the frame can fit', () => {
+    // The overflow this guards against is invisible to a unit test — body copy
+    // running into the progress rail — so the length is asserted instead.
+    const dense: ArticleVideoInput = {
+      ...article,
+      news: '短い一文です。' + 'これは十分に長い日本語の文章で、カードの詰め込み量を試すためのものです。'.repeat(3),
+      context: 'A short one. ' + 'A considerably longer sentence that tests how much a single card takes. '.repeat(3),
+      playerImpact: '中上位帯を詰めている人にとって、これは普通の追加です。計画を立てるべきは速い1曲のほうで、この形の譜面は反応速度よりも足運びの効率を要求します。',
+    };
+
+    for (const composition of COMPOSITION_IDS) {
+      for (const scene of buildSceneSequence(dense, composition).scenes) {
+        if (!scene.text) continue;
+        if (scene.type !== 'news' && scene.type !== 'context' && scene.type !== 'impact') continue;
+        // One sentence longer than the budget is still allowed to be one card;
+        // what must not happen is two sentences packed well past it.
+        const sentences = scene.text.split(/(?<=[。.])\s*/).filter(Boolean);
+        if (sentences.length < 2) continue;
+        expect(visualLength(scene.text), `${composition} ${scene.id}`).toBeLessThanOrEqual(
+          composition === 'STEPWIRE_SHORT' ? 165 : 220,
+        );
+      }
+    }
   });
 
   it('still splits a section that genuinely exceeds one card', () => {

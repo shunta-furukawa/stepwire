@@ -101,8 +101,13 @@ function chunk(text: string, budget: number, maxChunks: number): string[] {
   // short opening sentence followed by a long one strands the short one on its
   // own. So a card under this fill may take the next sentence even if that
   // overshoots the budget a little.
+  //
+  // "A little" is 10%. It was 30%, which permits a 200-budget card to carry 260
+  // weighted characters — more than a 16:9 frame fits before body copy reaches
+  // the progress rail. The budget is what fits; the overshoot is slack for a
+  // ragged sentence, not a second budget.
   const minFill = budget * 0.45;
-  const overshoot = budget * 1.3;
+  const overshoot = budget * 1.1;
 
   for (const sentence of sentences) {
     if (current.length === 0) {

@@ -143,3 +143,41 @@ describe('toSentences', () => {
     expect(toSentences('  ')).toEqual([]);
   });
 });
+
+describe('toSentences', () => {
+  it('breaks Japanese on its own full stop, which carries no trailing space', () => {
+    // The bug this pins: a rule requiring whitespace after the terminator never
+    // fires on Japanese, so a whole paragraph arrived as one "sentence" and the
+    // video card packer had nothing to split on.
+    expect(toSentences('短い一文です。次の文があります。')).toEqual([
+      '短い一文です。',
+      '次の文があります。',
+    ]);
+  });
+
+  it('breaks on the Japanese question and exclamation marks too', () => {
+    expect(toSentences('本当ですか？はい！')).toEqual(['本当ですか？', 'はい！']);
+  });
+
+  it('keeps a closing bracket with the sentence it closes', () => {
+    expect(toSentences('「これは引用です。」と彼は言った。')).toEqual([
+      '「これは引用です。」',
+      'と彼は言った。',
+    ]);
+    expect(toSentences('（注記です。）続き。')).toEqual(['（注記です。）', '続き。']);
+  });
+
+  it('still requires a space after a Latin full stop, so a decimal survives', () => {
+    expect(toSentences('BPM 300.5 is the peak. It is fast.')).toEqual([
+      'BPM 300.5 is the peak.',
+      'It is fast.',
+    ]);
+  });
+
+  it('splits a mixed-script paragraph on both terminators', () => {
+    expect(toSentences('DDR WORLD が更新された。The patch is live.')).toEqual([
+      'DDR WORLD が更新された。',
+      'The patch is live.',
+    ]);
+  });
+});

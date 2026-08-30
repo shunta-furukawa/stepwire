@@ -121,17 +121,17 @@ export default async function ArticlePage({
         />
       ) : null}
 
-      <nav aria-label="パンくずリスト" className="font-mono text-micro uppercase tracking-wide text-gray700">
-        <Link href="/" className="hover:text-signal">
+      <nav aria-label="パンくずリスト" className="font-mono text-micro uppercase tracking-wide text-muted">
+        <Link href="/" className="hover:text-accent">
           STEPWIRE
         </Link>
         <span aria-hidden="true"> / </span>
-        <Link href={`/${sectionForCategory(article.category)}`} className="hover:text-signal">
+        <Link href={`/${sectionForCategory(article.category)}`} className="hover:text-accent">
           {CATEGORY_META[article.category].label}
         </Link>
       </nav>
 
-      <header className="mt-lg border-b-4 border-ink pb-xl">
+      <header className="mt-lg border-b-4 border-accent pb-xl">
         <div className="flex flex-wrap items-center gap-sm">
           <ImportanceFlag importance={article.importance} />
           <CategoryChip category={article.category} />
@@ -146,7 +146,7 @@ export default async function ArticlePage({
         </h1>
 
         {article.dek ? (
-          <p className="mt-lg max-w-[62ch] font-body text-lead leading-snug text-gray700 sm:text-h4">
+          <p className="mt-lg max-w-[62ch] font-body text-lead leading-snug text-muted sm:text-h4">
             {article.dek}
           </p>
         ) : null}
@@ -165,8 +165,8 @@ export default async function ArticlePage({
             const meta = SECTION_LABELS[key];
             return (
               <section key={key} aria-labelledby={`section-${key}`} className="scroll-mt-24" id={key}>
-                <div className="flex items-baseline gap-md border-b-2 border-ink pb-sm">
-                  <span aria-hidden="true" className="font-mono text-micro text-signal">
+                <div className="flex items-baseline gap-md border-b-2 border-line-strong pb-sm">
+                  <span aria-hidden="true" className="font-mono text-micro text-accent">
                     {meta.index}
                   </span>
                   <h2
@@ -174,11 +174,11 @@ export default async function ArticlePage({
                     className="font-display text-h4 font-black tracking-tight"
                   >
                     {meta.heading}
-                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-muted">
                       {section.heading}
                     </span>
                   </h2>
-                  <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-gray700">
+                  <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-muted">
                     {meta.kind}
                   </span>
                 </div>
@@ -195,28 +195,28 @@ export default async function ArticlePage({
         </div>
 
         <aside className="space-y-xl lg:sticky lg:top-lg lg:self-start">
-          <nav aria-label="記事の構成" className="border-2 border-ink p-md">
+          <nav aria-label="記事の構成" className="border-2 border-line-strong p-md">
             <p className="font-mono text-micro font-bold uppercase tracking-wider">この記事の構成</p>
             <ol className="mt-md space-y-sm font-mono text-micro uppercase tracking-wide">
               {SECTION_KEYS.map((key) => (
                 <li key={key}>
-                  <a href={`#${key}`} className="hover:text-signal">
-                    <span className="text-gray700">{SECTION_LABELS[key].index}</span>{' '}
+                  <a href={`#${key}`} className="hover:text-accent">
+                    <span className="text-muted">{SECTION_LABELS[key].index}</span>{' '}
                     {SECTION_LABELS[key].heading}
                   </a>
                 </li>
               ))}
               {article.figures.length > 0 ? (
                 <li>
-                  <a href="#figures" className="hover:text-signal">
-                    <span className="text-gray700">04</span> データ
+                  <a href="#figures" className="hover:text-accent">
+                    <span className="text-muted">04</span> データ
                   </a>
                 </li>
               ) : null}
               {article.sources.length > 0 ? (
                 <li>
-                  <a href="#source-1" className="hover:text-signal">
-                    <span className="text-gray700">{article.figures.length > 0 ? '05' : '04'}</span>{' '}
+                  <a href="#source-1" className="hover:text-accent">
+                    <span className="text-muted">{article.figures.length > 0 ? '05' : '04'}</span>{' '}
                     出典
                   </a>
                 </li>
@@ -226,15 +226,15 @@ export default async function ArticlePage({
 
           <section aria-labelledby="summary-heading">
             <SectionHeading id="summary-heading" label="ひとことで" as="h2" />
-            <p className="mt-md font-body text-base leading-snug text-gray700">{article.summary}</p>
+            <p className="mt-md font-body text-base leading-snug text-muted">{article.summary}</p>
           </section>
 
           {article.tags.length > 0 ? (
             <section aria-labelledby="tags-heading">
               <SectionHeading id="tags-heading" label="タグ" as="h2" />
-              <ul className="mt-md flex flex-wrap gap-sm font-mono text-micro uppercase tracking-wide text-gray700">
+              <ul className="mt-md flex flex-wrap gap-sm font-mono text-micro uppercase tracking-wide text-muted">
                 {article.tags.map((tag) => (
-                  <li key={tag} className="border border-gray300 px-sm py-[2px]">
+                  <li key={tag} className="border border-line px-sm py-[2px]">
                     {tag}
                   </li>
                 ))}
@@ -244,7 +244,7 @@ export default async function ArticlePage({
 
           <Link
             href={{ pathname: '/studio', query: { article: article.slug } }}
-            className="block border-2 border-ink px-md py-sm text-center font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-ink hover:text-paper"
+            className="block border-2 border-line-strong px-md py-sm text-center font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-accent hover:text-on-accent"
           >
             動画スタジオで開く →
           </Link>

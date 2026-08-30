@@ -139,7 +139,7 @@ describe('narrated scene sequence', () => {
       audioSrc: '/audio/take.mp3',
       durationInSeconds: 6,
       language: 'ja',
-      speaker: 'Mono ddr',
+      speaker: 'MONO DDR',
       captions: [
         caption('はい、今日の話です。', 500, 2000),
         caption('もうひとつあります。', 2200, 4000),
@@ -192,7 +192,7 @@ describe('narrated scene sequence', () => {
     const first = buildSceneSequence(article, 'STEPWIRE_SHORT').scenes.find(
       (s) => s.type === 'narration',
     );
-    expect(first?.meta).toBe('Mono ddr');
+    expect(first?.meta).toBe('MONO DDR');
   });
 
   it('is not cut short by the format budget', () => {

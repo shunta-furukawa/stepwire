@@ -50,26 +50,26 @@ export default async function WirePage() {
 
   return (
     <div className="mx-auto max-w-[1180px] px-md py-xl">
-      <header className="border-b-4 border-ink pb-lg">
-        <p className="font-mono text-micro uppercase tracking-wider text-gray700">
+      <header className="border-b-4 border-accent pb-lg">
+        <p className="font-mono text-micro uppercase tracking-wider text-muted">
           STEPWIRE STUDIO
         </p>
         <h1 className="mt-sm font-display text-h2 font-black leading-headline tracking-headline">
           ワイヤー受信箱
-          <span className="mt-xs block font-mono text-micro font-normal tracking-wider text-gray700 sm:ml-md sm:mt-0 sm:inline">
+          <span className="mt-xs block font-mono text-micro font-normal tracking-wider text-muted sm:ml-md sm:mt-0 sm:inline">
             NEWS INBOX
           </span>
         </h1>
-        <p className="mt-md max-w-[62ch] font-body text-base leading-snug text-gray700">
+        <p className="mt-md max-w-[62ch] font-body text-base leading-snug text-muted">
           収集された候補で、まだ判断されていないものです。ここからは何も公開されません。
           記事にするなら <code className="font-mono text-small">pnpm article:from-issue</code>、
           見送るならIssueを閉じてください。
         </p>
         <nav className="mt-lg flex flex-wrap gap-md font-mono text-micro uppercase tracking-wider">
-          <Link href="/studio" className="border-2 border-ink px-md py-sm hover:bg-ink hover:text-paper">
+          <Link href="/studio" className="border-2 border-line-strong px-md py-sm hover:bg-accent hover:text-on-accent">
             動画スタジオ →
           </Link>
-          <Link href="/" className="px-md py-sm text-gray700 hover:text-signal">
+          <Link href="/" className="px-md py-sm text-muted hover:text-accent">
             サイトへ戻る
           </Link>
         </nav>
@@ -89,9 +89,9 @@ export default async function WirePage() {
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="border-2 border-ink bg-paper p-lg">
+    <section className="border-2 border-line-strong bg-raised p-lg">
       <SectionHeading label={title} as="h2" />
-      <div className="mt-md space-y-md font-body text-base leading-snug text-gray700">
+      <div className="mt-md space-y-md font-body text-base leading-snug text-muted">
         {children}
       </div>
     </section>
@@ -100,7 +100,7 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
 
 function Command({ children }: { children: React.ReactNode }) {
   return (
-    <pre className="overflow-x-auto border border-gray300 bg-off-white px-md py-sm font-mono text-small text-ink">
+    <pre className="overflow-x-auto border border-line bg-raised px-md py-sm font-mono text-small text-fg">
       {children}
     </pre>
   );

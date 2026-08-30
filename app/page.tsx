@@ -38,7 +38,7 @@ export default async function HomePage() {
             <h1 className="font-display text-h1 font-black tracking-display">
               まだ何も流れていません。
             </h1>
-            <p className="mt-md max-w-[52ch] font-body text-lead text-gray700">
+            <p className="mt-md max-w-[52ch] font-body text-lead text-muted">
               <code className="font-mono">content/articles/</code> に記事を置くと、ここに表示されます。
             </p>
           </section>
@@ -55,7 +55,7 @@ export default async function HomePage() {
             {articles.length > 9 ? (
               <Link
                 href="/news"
-                className="mt-lg inline-block border-2 border-ink px-lg py-sm font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-ink hover:text-paper"
+                className="mt-lg inline-block border-2 border-line-strong px-lg py-sm font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-accent hover:text-on-accent"
               >
                 すべてのニュース →
               </Link>
@@ -70,12 +70,12 @@ export default async function HomePage() {
                   <li key={section.slug}>
                     <Link
                       href={`/${section.slug}`}
-                      className="group block border-b border-gray300 pb-md"
+                      className="group block border-b border-line pb-md"
                     >
-                      <span className="font-display text-h4 font-bold uppercase tracking-tight transition-colors group-hover:text-signal">
+                      <span className="font-display text-h4 font-bold uppercase tracking-tight transition-colors group-hover:text-accent">
                         {section.label}
                       </span>
-                      <span className="mt-[2px] block font-mono text-micro uppercase tracking-wide text-gray700">
+                      <span className="mt-[2px] block font-mono text-micro uppercase tracking-wide text-muted">
                         {section.description}
                       </span>
                     </Link>
@@ -94,23 +94,23 @@ export default async function HomePage() {
                     </li>
                   ))}
                 </ul>
-                <p className="mt-md font-body text-small leading-snug text-gray700">
+                <p className="mt-md font-body text-small leading-snug text-muted">
                   {CATEGORY_META[activeCategories[0]!].blurb}
                 </p>
               </section>
             ) : null}
 
-            <section aria-labelledby="wire-heading" className="border-2 border-ink p-lg">
+            <section aria-labelledby="wire-heading" className="border-2 border-line-strong p-lg">
               <SectionHeading id="wire-heading" label="STEPWIREの読み方" as="h2" />
               <ol className="mt-md space-y-md font-mono text-micro uppercase tracking-wide">
                 <li>
-                  <span className="text-signal">01</span> NEWS — 何が起きたか。出典つき。
+                  <span className="text-accent">01</span> NEWS — 何が起きたか。出典つき。
                 </li>
                 <li>
-                  <span className="text-signal">02</span> CONTEXT — なぜ注目なのか。
+                  <span className="text-accent">02</span> CONTEXT — なぜ注目なのか。
                 </li>
                 <li>
-                  <span className="text-signal">03</span> PLAYER IMPACT — あなたに何が変わるか。
+                  <span className="text-accent">03</span> PLAYER IMPACT — あなたに何が変わるか。
                 </li>
               </ol>
             </section>

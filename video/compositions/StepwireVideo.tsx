@@ -30,7 +30,7 @@ export const StepwireVideo: React.FC<StepwireVideoProps> = ({ article, compositi
   const sequence = buildSceneSequence(article, composition, definition.fps);
 
   return (
-    <AbsoluteFill style={{ background: color.offWhite, fontFamily: font.display }}>
+    <AbsoluteFill style={{ background: color.surface, fontFamily: font.display }}>
       {/*
        * The voice, mounted over exactly the span its subtitle pages occupy.
        * The ident and headline play silent before it, and the source and outro

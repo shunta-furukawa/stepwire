@@ -29,7 +29,7 @@ function Inline({ nodes }: { nodes: InlineNode[] }) {
             );
           case 'code':
             return (
-              <code key={index} className="bg-gray100 px-1 font-mono text-[0.9em]">
+              <code key={index} className="bg-line px-1 font-mono text-[0.9em]">
                 {node.value}
               </code>
             );
@@ -38,7 +38,7 @@ function Inline({ nodes }: { nodes: InlineNode[] }) {
               <a
                 key={index}
                 href={node.href}
-                className="underline decoration-gray300 underline-offset-4 transition-colors hover:decoration-signal"
+                className="underline decoration-line underline-offset-4 transition-colors hover:decoration-accent"
                 {...(node.href.startsWith('http')
                   ? { target: '_blank', rel: 'noopener noreferrer' }
                   : {})}
@@ -54,7 +54,7 @@ function Inline({ nodes }: { nodes: InlineNode[] }) {
                 key={index}
                 href={`#source-${node.index}`}
                 id={`citation-${node.index}`}
-                className="ml-[2px] inline-flex h-[15px] min-w-[15px] items-center justify-center border border-ink align-super font-mono text-[10px] leading-none transition-colors hover:bg-ink hover:text-paper"
+                className="ml-[2px] inline-flex h-[15px] min-w-[15px] items-center justify-center border border-line-strong align-super font-mono text-[10px] leading-none transition-colors hover:bg-accent hover:text-on-accent"
                 aria-label={`Jump to source ${node.index}`}
               >
                 {node.index}
@@ -68,7 +68,7 @@ function Inline({ nodes }: { nodes: InlineNode[] }) {
 
 export function Markdown({ blocks }: { blocks: Block[] }) {
   return (
-    <div className="font-body text-lead leading-normal text-ink [&>*+*]:mt-lg">
+    <div className="font-body text-lead leading-normal text-fg [&>*+*]:mt-lg">
       {blocks.map((block, index) => {
         switch (block.type) {
           case 'paragraph':
@@ -102,7 +102,7 @@ export function Markdown({ blocks }: { blocks: Block[] }) {
                 {block.items.map((item, itemIndex) => (
                   <li
                     key={itemIndex}
-                    className={block.ordered ? '' : 'relative pl-lg before:absolute before:left-0 before:top-[0.55em] before:h-[6px] before:w-[6px] before:bg-signal'}
+                    className={block.ordered ? '' : 'relative pl-lg before:absolute before:left-0 before:top-[0.55em] before:h-[6px] before:w-[6px] before:bg-accent'}
                   >
                     <Inline nodes={item} />
                   </li>
@@ -114,13 +114,13 @@ export function Markdown({ blocks }: { blocks: Block[] }) {
             return (
               <blockquote
                 key={index}
-                className="border-l-4 border-ink pl-lg font-display text-h4 font-medium leading-tight tracking-tight"
+                className="border-l-4 border-line-strong pl-lg font-display text-h4 font-medium leading-tight tracking-tight"
               >
                 <Inline nodes={block.children} />
               </blockquote>
             );
           case 'rule':
-            return <hr key={index} className="border-gray300" />;
+            return <hr key={index} className="border-line" />;
         }
       })}
     </div>

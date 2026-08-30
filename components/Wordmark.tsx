@@ -18,14 +18,14 @@ export function Wordmark({
     return (
       <span className={`block font-display leading-[0.82] tracking-display ${className}`}>
         <span className="block font-black">STEP</span>
-        <span className="block font-black text-signal">WIRE</span>
+        <span className="block font-black text-accent">WIRE</span>
       </span>
     );
   }
 
   return (
     <span className={`font-display font-black tracking-display ${className}`}>
-      STEP<span className="text-signal">WIRE</span>
+      STEP<span className="text-accent">WIRE</span>
     </span>
   );
 }

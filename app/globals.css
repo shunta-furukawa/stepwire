@@ -7,17 +7,17 @@
  * enforces it, so the website and the Remotion compositions can never drift.
  */
 @theme {
-  --color-ink: #0b0b0c;
-  --color-ink80: #17171a;
-  --color-paper: #ffffff;
-  --color-off-white: #f3f2ee;
-  --color-gray100: #e4e3de;
-  --color-gray300: #c2c1bb;
-  --color-gray500: #8a8983;
-  --color-gray700: #565550;
-  --color-signal: #c62b14;
-  --color-signal-on-dark: #f2543a;
-  --color-wire: #0b6bd6;
+  --color-surface: #0a0a0b;
+  --color-raised: #141417;
+  --color-deep: #000000;
+  --color-fg: #ecece7;
+  --color-muted: #9a9a94;
+  --color-faint: #828279;
+  --color-line: #26262a;
+  --color-line-strong: #3a3a40;
+  --color-accent: #b4da46;
+  --color-accent-hot: #e4ff6c;
+  --color-on-accent: #0a0a0b;
 
   --font-display: 'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans',
     'Hiragino Kaku Gothic ProN', 'Yu Gothic Medium', 'Yu Gothic', Meiryo, 'Noto Sans JP',
@@ -64,9 +64,9 @@
 
 @layer base {
   :root {
-    color-scheme: light;
-    --rule: 1px solid var(--color-gray100);
-    --rule-strong: 2px solid var(--color-ink);
+    color-scheme: dark;
+    --rule: 1px solid var(--color-line);
+    --rule-strong: 2px solid var(--color-line-strong);
   }
 
   html {
@@ -82,8 +82,8 @@
   }
 
   body {
-    background: var(--color-off-white);
-    color: var(--color-ink);
+    background: var(--color-surface);
+    color: var(--color-fg);
     font-family: var(--font-display);
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
@@ -104,13 +104,13 @@
    * editorial design never removes it.
    */
   :focus-visible {
-    outline: 3px solid var(--color-signal);
+    outline: 3px solid var(--color-accent);
     outline-offset: 2px;
   }
 
   ::selection {
-    background: var(--color-ink);
-    color: var(--color-paper);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
   }
 
   a {
@@ -136,8 +136,8 @@
   .wire-scan {
     background-image: repeating-linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--color-ink) 6%, transparent) 0px,
-      color-mix(in srgb, var(--color-ink) 6%, transparent) 1px,
+      color-mix(in srgb, var(--color-fg) 7%, transparent) 0px,
+      color-mix(in srgb, var(--color-fg) 7%, transparent) 1px,
       transparent 1px,
       transparent 4px
     );
@@ -146,9 +146,46 @@
   /* 4-panel grid motif — an abstraction of the four-arrow panel. */
   .panel-grid {
     background-image:
-      linear-gradient(to right, color-mix(in srgb, var(--color-ink) 8%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in srgb, var(--color-ink) 8%, transparent) 1px, transparent 1px);
+      linear-gradient(to right, color-mix(in srgb, var(--color-fg) 9%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--color-fg) 9%, transparent) 1px, transparent 1px);
     background-size: 25% 25%;
+  }
+
+  /*
+   * Low-poly facets — the MONO DDR mark is built from triangles, so the site
+   * carries the same geometry as texture rather than borrowing the mark itself.
+   * Two opposed 60deg hatches read as triangulation without drawing a mesh.
+   */
+  .facet {
+    background-image:
+      repeating-linear-gradient(
+        60deg,
+        color-mix(in srgb, var(--color-fg) 4%, transparent) 0 1px,
+        transparent 1px 64px
+      ),
+      repeating-linear-gradient(
+        -60deg,
+        color-mix(in srgb, var(--color-fg) 4%, transparent) 0 1px,
+        transparent 1px 64px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-fg) 3%, transparent) 0 1px,
+        transparent 1px 55px
+      );
+  }
+
+  /* The lit diagonal from the banner's right edge. Decorative, never content. */
+  .streak {
+    background-image: linear-gradient(
+      104deg,
+      transparent 0%,
+      transparent 62%,
+      color-mix(in srgb, var(--color-accent) 22%, transparent) 74%,
+      color-mix(in srgb, var(--color-accent-hot) 45%, transparent) 78%,
+      transparent 82%,
+      transparent 100%
+    );
   }
 }
 

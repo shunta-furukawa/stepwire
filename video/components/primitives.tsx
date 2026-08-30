@@ -42,7 +42,7 @@ export function ScanLines({ opacity = 0.05 }: { opacity?: number }) {
         inset: 0,
         pointerEvents: 'none',
         opacity,
-        backgroundImage: `repeating-linear-gradient(to bottom, ${color.ink} 0px, ${color.ink} 2px, transparent 2px, transparent 8px)`,
+        backgroundImage: `repeating-linear-gradient(to bottom, ${color.fg} 0px, ${color.fg} 2px, transparent 2px, transparent 8px)`,
       }}
     />
   );
@@ -54,7 +54,7 @@ export function ScanLines({ opacity = 0.05 }: { opacity?: number }) {
  */
 export function PanelGrid({
   opacity = 0.08,
-  stroke = color.ink,
+  stroke = color.fg,
 }: {
   opacity?: number;
   stroke?: string;
@@ -77,7 +77,7 @@ export function PanelGrid({
 export function Arrow({
   direction = 'up',
   size = 24,
-  fill = color.signal,  // callers on a dark ground pass color.signalOnDark
+  fill = color.accent,
   style,
 }: {
   direction?: 'up' | 'right' | 'down' | 'left';
@@ -99,14 +99,25 @@ export function Arrow({
   );
 }
 
-/** The section label chip. */
+/**
+ * The section label chip.
+ *
+ * `tone` carries the fact/analysis distinction, and it is the chip rather than
+ * the ground that carries it: on a dark-first palette the two grounds differ by
+ * a few percent of luminance, which reads clearly side by side and not at all
+ * across a cut. A neutral chip is reported fact; a lime chip is STEPWIRE
+ * talking. That is the same pair of labels the article page prints as
+ * 報道 / STEPWIREの分析.
+ */
 export function LabelChip({
   children,
-  inverted = false,
+  tone = 'fact',
 }: {
   children: React.ReactNode;
-  inverted?: boolean;
+  tone?: 'fact' | 'analysis';
 }) {
+  const analysis = tone === 'analysis';
+
   return (
     <span
       style={{
@@ -115,14 +126,14 @@ export function LabelChip({
         alignItems: 'center',
         gap: gap.sm,
         padding: `${gap.sm}px ${gap.md}px`,
-        background: inverted ? color.paper : color.ink,
-        color: inverted ? color.ink : color.paper,
+        background: analysis ? color.accent : color.fg,
+        color: color.onAccent,
       }}
     >
       <Arrow
         direction="right"
         size={type.base}
-        fill={inverted ? color.signal : color.signalOnDark}
+        fill={analysis ? color.onAccent : color.accent}
       />
       {children}
     </span>
@@ -139,11 +150,9 @@ export function LabelChip({
 export function ProgressRail({
   index,
   total,
-  inverted = false,
 }: {
   index: number;
   total: number;
-  inverted?: boolean;
 }) {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
@@ -161,7 +170,7 @@ export function ProgressRail({
             style={{
               flex: 1,
               height: 6,
-              background: inverted ? 'rgba(255,255,255,0.25)' : color.gray300,
+              background: color.lineStrong,
               overflow: 'hidden',
             }}
           >
@@ -171,12 +180,8 @@ export function ProgressRail({
                 height: '100%',
                 background:
                   position === index
-                    ? inverted
-                      ? color.signalOnDark
-                      : color.signal
-                    : inverted
-                      ? color.paper
-                      : color.ink,
+                    ? color.accent
+                    : color.fg,
               }}
             />
           </div>
@@ -187,13 +192,7 @@ export function ProgressRail({
 }
 
 /** The persistent masthead strip. Keeps the brand present without a watermark. */
-export function WireBar({
-  meta,
-  inverted = false,
-}: {
-  meta?: string;
-  inverted?: boolean;
-}) {
+export function WireBar({ meta }: { meta?: string }) {
   const frame = useCurrentFrame();
   const blink = Math.sin(frame / 6) > -0.4 ? 1 : 0.25;
 
@@ -213,10 +212,10 @@ export function WireBar({
           fontWeight: fontWeight.black,
           fontSize: type.h4,
           letterSpacing: `${tracking.display}em`,
-          color: inverted ? color.paper : color.ink,
+          color: color.fg,
         }}
       >
-        STEP<span style={{ color: inverted ? color.signalOnDark : color.signal }}>WIRE</span>
+        STEP<span style={{ color: color.accent }}>WIRE</span>
       </span>
 
       <span
@@ -225,14 +224,14 @@ export function WireBar({
           display: 'flex',
           alignItems: 'center',
           gap: gap.sm,
-          color: inverted ? color.gray300 : color.gray700,
+          color: color.muted,
         }}
       >
         <span
           style={{
             width: 10,
             height: 10,
-            background: inverted ? color.signalOnDark : color.signal,
+            background: color.accent,
             opacity: blink,
             display: 'block',
           }}
@@ -252,7 +251,7 @@ export function WireBar({
 export function KineticText({
   text,
   fontSize: size,
-  color: textColor = color.ink,
+  color: textColor = color.fg,
   stagger = 2,
   delay = 0,
   style,
@@ -303,7 +302,7 @@ export function KineticText({
 export function BodyText({
   text,
   fontSize: size,
-  color: textColor = color.ink,
+  color: textColor = color.fg,
   maxWidth,
 }: {
   text: string;
@@ -332,14 +331,12 @@ export function BodyText({
 /** A full-bleed card. `frame` draws the heavy editorial border. */
 export function Card({
   children,
-  background = color.offWhite,
+  background = color.surface,
   padding,
-  inverted = false,
 }: {
   children: React.ReactNode;
   background?: string;
   padding: number;
-  inverted?: boolean;
 }) {
   return (
     <div
@@ -351,7 +348,7 @@ export function Card({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        color: inverted ? color.paper : color.ink,
+        color: color.fg,
       }}
     >
       {children}

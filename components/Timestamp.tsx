@@ -14,7 +14,7 @@ export function Timestamp({
   return (
     <time
       dateTime={iso}
-      className={`font-mono text-micro uppercase tracking-wide text-gray700 ${className}`}
+      className={`font-mono text-micro uppercase tracking-wide text-muted ${className}`}
     >
       {label ? `${label} ` : ''}
       {precise ? formatDateTime(iso) : formatDate(iso)}

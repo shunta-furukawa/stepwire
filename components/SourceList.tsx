@@ -12,7 +12,7 @@ export function SourceList({ sources }: { sources: SourceRef[] }) {
   if (sources.length === 0) return null;
 
   return (
-    <section aria-labelledby="sources-heading" className="border-t-2 border-ink pt-lg">
+    <section aria-labelledby="sources-heading" className="border-t-2 border-line-strong pt-lg">
       <h2
         id="sources-heading"
         className="font-mono text-micro font-bold uppercase tracking-wider"
@@ -26,9 +26,9 @@ export function SourceList({ sources }: { sources: SourceRef[] }) {
             <li
               key={source.url}
               id={`source-${number}`}
-              className="grid grid-cols-[28px_1fr] gap-md scroll-mt-24 target:bg-gray100"
+              className="grid grid-cols-[28px_1fr] gap-md scroll-mt-24 target:bg-line"
             >
-              <span className="mt-[3px] flex h-[20px] w-[20px] items-center justify-center border border-ink font-mono text-[11px] leading-none">
+              <span className="mt-[3px] flex h-[20px] w-[20px] items-center justify-center border border-line-strong font-mono text-[11px] leading-none">
                 {number}
               </span>
               <div>
@@ -36,11 +36,11 @@ export function SourceList({ sources }: { sources: SourceRef[] }) {
                   href={source.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-display text-base font-medium leading-snug underline decoration-gray300 underline-offset-4 transition-colors hover:decoration-signal"
+                  className="font-display text-base font-medium leading-snug underline decoration-line underline-offset-4 transition-colors hover:decoration-accent"
                 >
                   {source.title}
                 </a>
-                <p className="mt-[2px] font-mono text-micro uppercase tracking-wide text-gray700">
+                <p className="mt-[2px] font-mono text-micro uppercase tracking-wide text-muted">
                   {source.publisher}
                   {source.type ? ` · ${source.type}` : ''} · {hostnameOf(source.url)}
                   {source.publishedAt ? ` · ${formatDate(source.publishedAt)}` : ''}
@@ -62,7 +62,7 @@ export function SourceAttribution({ sources }: { sources: SourceRef[] }) {
   const extra = sources.length - 1;
 
   return (
-    <p className="font-mono text-micro uppercase tracking-wide text-gray700">
+    <p className="font-mono text-micro uppercase tracking-wide text-muted">
       <span aria-hidden="true">↳ </span>
       {primary.publisher}
       {extra > 0 ? ` +${extra} more` : ''}

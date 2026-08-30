@@ -11,41 +11,62 @@
  * sync, so a token can never drift between web and video.
  */
 
-/** Monochrome-first palette. Accents are reserved, never decorative. */
+/**
+ * The palette, sampled from the MONO DDR identity.
+ *
+ * Black ground, low-poly greyscale, one lime accent — measured off the operator's
+ * own banner rather than approximated: the ground is #000000 across two thirds
+ * of it, the logo facets sit between #B7B7B7 and #CACACA, and the lime reads
+ * #B4DA46 with a lit #E4FF6C in the light streaks.
+ *
+ * Names describe the ROLE, not the colour. The previous set (`ink`, `paper`,
+ * `offWhite`) named the pigment, which stops being honest the moment the ground
+ * flips: `bg-ink` meaning "the page" and `text-ink` meaning "the text" cannot
+ * both be true. A role name survives a repaint; a pigment name does not.
+ */
 export const color = {
-  /** Primary text / primary surface in dark contexts. */
-  ink: '#0B0B0C',
-  /** One step up from `ink`, used for panels on black. */
-  ink80: '#17171A',
-  paper: '#FFFFFF',
-  /** Page background. Warm off-white keeps long reads comfortable. */
-  offWhite: '#F3F2EE',
-  gray100: '#E4E3DE',
-  gray300: '#C2C1BB',
   /**
-   * `gray500` clears AA only against a dark ground (5.61:1 on ink); on a light
-   * ground it reaches 3.13:1, so light surfaces use `gray700` (6.67:1) for
-   * secondary text. The pairing is deliberate, not interchangeable.
+   * The page. A hair off true black — near-white text on #000 halates on OLED,
+   * and true black is worth keeping in reserve so `deep` can still read as a
+   * step down from the page rather than as the same surface.
    */
-  gray500: '#8A8983',
-  gray700: '#565550',
+  surface: '#0A0A0B',
+  /** Raised panel: cards, figures, the summary strip. */
+  raised: '#141417',
+  /** The deepest block. True black, exactly as the banner uses it. */
+  deep: '#000000',
+  /** Primary text. Off-white, in the register of the logo's brightest facets. */
+  fg: '#ECECE7',
+  /** Secondary text — deks, summaries, source lines. 6.99:1 on `surface`. */
+  muted: '#9A9A94',
   /**
-   * Signal. Used ONLY for breaking / high-importance news and for the live
-   * "wire" indicator. Never as a background for body text.
+   * Tertiary text — timestamps, counts, captions. Tuned to clear AA on the
+   * RAISED surface (4.74:1), not merely on the page, because that is where it
+   * is dimmest; a tone that only passed on `surface` would fail inside a card.
+   */
+  faint: '#828279',
+  /** Hairline between rows. */
+  line: '#26262A',
+  /** Structural rule — the equivalent of the old heavy black keyline. */
+  lineStrong: '#3A3A40',
+  /**
+   * The one chromatic accent, and the brand itself.
    *
-   * Two tones, because no single red can clear WCAG AA against both a
-   * near-white and a near-black ground: `signal` is tuned for light surfaces
-   * (4.99:1 on offWhite, and 5.59:1 for white text sitting on it), and
-   * `signalOnDark` for the inverted ones (5.72:1 on ink). Pick by ground, not
-   * by taste.
+   * One hue rather than the previous red-plus-blue: the identity is greyscale
+   * plus lime, and a second and third hue would read as a different brand no
+   * matter how well each was justified. Alert and data are therefore separated
+   * by FORM, not by colour — an alert is a filled chip that pulses, a datum is
+   * accent-coloured text. That is the same "glyph and typography, not eight
+   * accent colours" rule the categories already follow.
    */
-  signal: '#C62B14',
-  signalOnDark: '#F2543A',
+  accent: '#B4DA46',
   /**
-   * Wire. Used ONLY for chart/BPM/difficulty data readouts — the DDR-derived
-   * numeric information the brand treats as a distinct content class.
+   * Lit. Reserved for live and breaking, where the accent has to out-shout an
+   * accent that is already on screen. Echoes the light streaks in the banner.
    */
-  wire: '#0B6BD6',
+  accentHot: '#E4FF6C',
+  /** Text and glyphs sitting on an accent fill. */
+  onAccent: '#0A0A0B',
 } as const;
 
 export const font = {

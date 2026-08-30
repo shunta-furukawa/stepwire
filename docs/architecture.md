@@ -8,7 +8,7 @@ decisions that would be expensive to reverse.
 
 Every technical decision here answers one question:
 
-> Can Mono ddr, working alone, keep publishing?
+> Can MONO DDR, working alone, keep publishing?
 
 That rules out anything with operational overhead: a CMS to run, a database to
 migrate, a render service to keep deployed, a queue to drain. It also rules out
@@ -117,7 +117,8 @@ without flattening the data model — and adding a desk is one entry in `SECTION
 plus a four-line route file.
 
 Categories are distinguished by glyph and typography rather than colour, so the
-signal accent keeps meaning "this is important" instead of "this is an update".
+accent keeps meaning "this is important" instead of "this is an update". The
+palette has exactly one hue to spend, so it is spent on one thing.
 
 ### Two render drivers behind one interface
 

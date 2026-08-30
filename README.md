@@ -3,7 +3,7 @@
 **DDR News, Charts & Culture.**
 
 An independent news and culture wire for DanceDanceRevolution, operated by
-Mono ddr. Not affiliated with, endorsed by, or connected to KONAMI.
+MONO DDR. Not affiliated with, endorsed by, or connected to KONAMI.
 
 This repository is not just the website. It is the whole newsroom: the source
 registry, the editorial inbox, the content store, the publishing pipeline and

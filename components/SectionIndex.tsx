@@ -21,14 +21,14 @@ export async function SectionIndex({ slug }: { slug: SectionSlug }) {
 
   return (
     <div className="mx-auto max-w-[1180px] px-md py-xl">
-      <header className="border-b-4 border-ink pb-lg">
-        <p className="font-mono text-micro font-bold uppercase tracking-wider text-signal">
+      <header className="border-b-4 border-accent pb-lg">
+        <p className="font-mono text-micro font-bold uppercase tracking-wider text-accent">
           DESK
         </p>
         <h1 className="mt-sm font-display text-h2 font-black leading-headline tracking-headline sm:text-h1">
           {section.label}
         </h1>
-        <p className="mt-md max-w-[56ch] font-body text-lead leading-snug text-gray700">
+        <p className="mt-md max-w-[56ch] font-body text-lead leading-snug text-muted">
           {section.description}
         </p>
         <ul className="mt-lg flex flex-wrap gap-sm">

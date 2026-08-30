@@ -14,14 +14,14 @@ export function SectionHeading({
   id?: string;
 }) {
   return (
-    <div className="border-b-2 border-ink pb-sm">
+    <div className="border-b-2 border-line-strong pb-sm">
       <Tag
         id={id}
         className="flex items-baseline gap-md font-mono text-micro font-bold uppercase tracking-wider"
       >
         {label}
         {description ? (
-          <span className="hidden font-normal normal-case tracking-normal text-gray700 sm:inline">
+          <span className="hidden font-normal normal-case tracking-normal text-muted sm:inline">
             {description}
           </span>
         ) : null}

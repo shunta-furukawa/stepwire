@@ -7,7 +7,7 @@ should be added to a core module.
 
 **Collection, editing, publishing and video rendering must all keep working
 with AI absent.** Not degraded-but-limping — working. An outage, a cost ceiling,
-a bad model update or a decision to stop using a vendor must never stop Mono ddr
+a bad model update or a decision to stop using a vendor must never stop MONO DDR
 from publishing a story.
 
 That makes AI an optional accelerator layered on top of a complete pipeline,

@@ -6,7 +6,7 @@ export const site = {
   taglineJa: 'DDRのニュース、譜面、カルチャー。',
   description:
     'STEPWIREは、DanceDanceRevolutionを扱う独立系のニュース／カルチャーメディアです。ゲームの更新、新曲と新譜面、イベント、大会、譜面データ、そして筐体のまわりにあるコミュニティを記録します。',
-  operator: 'Mono ddr',
+  operator: 'MONO DDR',
   locale: 'ja',
   /**
    * Canonical origin. Vercel injects VERCEL_PROJECT_PRODUCTION_URL on every

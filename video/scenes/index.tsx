@@ -92,10 +92,10 @@ export function IntroScene({ scene, orientation }: SceneProps) {
   });
 
   return (
-    <AbsoluteFill style={{ background: color.ink, opacity: exit }}>
-      <PanelGrid opacity={0.14} stroke={color.paper} />
+    <AbsoluteFill style={{ background: color.deep, opacity: exit }}>
+      <PanelGrid opacity={0.14} stroke={color.fg} />
       <ScanLines opacity={0.08} />
-      <Card background="transparent" padding={l.padding} inverted>
+      <Card background="transparent" padding={l.padding}>
         <div />
         <div style={{ textAlign: 'center' }}>
           <span
@@ -103,7 +103,7 @@ export function IntroScene({ scene, orientation }: SceneProps) {
               ...textStyles.display,
               display: 'block',
               fontSize: l.wordmark,
-              color: color.paper,
+              color: color.fg,
               transform: `translateX(${(1 - assemble) * -14}%)`,
               opacity: assemble,
             }}
@@ -116,7 +116,7 @@ export function IntroScene({ scene, orientation }: SceneProps) {
               height: 8,
               width: `${ruleWidth}%`,
               margin: `${gap.sm}px auto`,
-              background: color.signalOnDark,
+              background: color.accent,
             }}
           />
           <span
@@ -124,7 +124,7 @@ export function IntroScene({ scene, orientation }: SceneProps) {
               ...textStyles.display,
               display: 'block',
               fontSize: l.wordmark,
-              color: color.paper,
+              color: color.fg,
               transform: `translateX(${(1 - assemble) * 14}%)`,
               opacity: assemble,
             }}
@@ -136,7 +136,7 @@ export function IntroScene({ scene, orientation }: SceneProps) {
               style={{
                 ...textStyles.meta,
                 marginTop: gap.lg,
-                color: color.gray300,
+                color: color.muted,
                 fontSize: type.base,
                 opacity: easeOut((frame - 14) / 10),
               }}
@@ -145,7 +145,7 @@ export function IntroScene({ scene, orientation }: SceneProps) {
             </p>
           ) : null}
         </div>
-        <p style={{ ...textStyles.meta, color: color.gray500, textAlign: 'center' }}>
+        <p style={{ ...textStyles.meta, color: color.faint, textAlign: 'center' }}>
           {scene.meta}
         </p>
       </Card>
@@ -160,7 +160,7 @@ export function HeadlineScene({ scene, orientation }: SceneProps) {
   const enter = useEnter(10, 4);
 
   return (
-    <AbsoluteFill style={{ background: color.offWhite }}>
+    <AbsoluteFill style={{ background: color.surface }}>
       <ScanLines opacity={0.04} />
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={caption(scene)} />
@@ -187,7 +187,7 @@ export function HeadlineScene({ scene, orientation }: SceneProps) {
               style={{
                 ...textStyles.body,
                 fontSize: type.lead,
-                color: color.gray700,
+                color: color.muted,
                 marginTop: gap.lg,
                 maxWidth: l.maxWidth,
                 ...enter,
@@ -209,28 +209,29 @@ export function HeadlineScene({ scene, orientation }: SceneProps) {
 /**
  * The three body scenes share a layout and differ only in accent treatment:
  * NEWS is reported fact (light ground), CONTEXT and PLAYER IMPACT are analysis
- * (inverted ground). The inversion is the same fact/analysis distinction the
+ * (a raised ground). The elevation is the same fact/analysis distinction the
  * website draws with its section labels.
  */
 function BodyScene({
   scene,
   orientation,
-  inverted,
+  ground,
   accent,
-}: SceneProps & { inverted: boolean; accent: string }) {
+  tone,
+}: SceneProps & { ground: string; accent: string; tone: 'fact' | 'analysis' }) {
   const l = layout(orientation);
 
   return (
-    <AbsoluteFill style={{ background: inverted ? color.ink : color.offWhite }}>
-      <PanelGrid opacity={inverted ? 0.1 : 0.06} stroke={inverted ? color.paper : color.ink} />
-      <ScanLines opacity={inverted ? 0.06 : 0.035} />
-      <Card background="transparent" padding={l.padding} inverted={inverted}>
-        <WireBar meta={caption(scene)} inverted={inverted} />
+    <AbsoluteFill style={{ background: ground }}>
+      <PanelGrid opacity={0.09} />
+      <ScanLines opacity={0.05} />
+      <Card background="transparent" padding={l.padding}>
+        <WireBar meta={caption(scene)} />
 
         <div>
           {scene.label ? (
             <div style={{ marginBottom: gap.lg }}>
-              <LabelChip inverted={inverted}>{scene.label}</LabelChip>
+              <LabelChip tone={tone}>{scene.label}</LabelChip>
             </div>
           ) : (
             <div
@@ -245,27 +246,29 @@ function BodyScene({
           <BodyText
             text={scene.text ?? ''}
             fontSize={l.body}
-            color={inverted ? color.paper : color.ink}
+            color={color.fg}
             maxWidth={l.maxWidth}
           />
         </div>
 
-        <ProgressRail index={scene.index} total={scene.total} inverted={inverted} />
+        <ProgressRail index={scene.index} total={scene.total} />
       </Card>
     </AbsoluteFill>
   );
 }
 
 export function NewsScene(props: SceneProps) {
-  return <BodyScene {...props} inverted={false} accent={color.ink} />;
+  // Reported fact sits on the deepest, plainest ground with a neutral rule:
+  // nothing about how it is drawn editorialises it.
+  return <BodyScene {...props} ground={color.deep} accent={color.fg} tone="fact" />;
 }
 
 export function ContextScene(props: SceneProps) {
-  return <BodyScene {...props} inverted accent={color.signalOnDark} />;
+  return <BodyScene {...props} ground={color.raised} accent={color.accent} tone="analysis" />;
 }
 
 export function ImpactScene(props: SceneProps) {
-  return <BodyScene {...props} inverted accent={color.wire} />;
+  return <BodyScene {...props} ground={color.raised} accent={color.accent} tone="analysis" />;
 }
 
 // ---------------------------------------------------------------------------
@@ -284,7 +287,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
   const l = layout(orientation);
   const figure = scene.figure;
 
-  if (!figure) return <AbsoluteFill style={{ background: color.paper }} />;
+  if (!figure) return <AbsoluteFill style={{ background: color.surface }} />;
 
   /** Rows arrive one after another, in the order they are read. */
   const rowProgress = (index: number) => easeOut((frame - index * 4) / 12);
@@ -322,7 +325,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
   );
 
   return (
-    <AbsoluteFill style={{ background: color.paper }}>
+    <AbsoluteFill style={{ background: color.surface }}>
       <PanelGrid opacity={0.1} />
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={caption(scene)} />
@@ -342,20 +345,20 @@ export function FigureScene({ scene, orientation }: SceneProps) {
                   <div
                     key={entry.label}
                     style={{
-                      borderTop: `8px solid ${color.ink}`,
+                      borderTop: `8px solid ${color.fg}`,
                       paddingTop: gap.md,
                       opacity: progress,
                       transform: `translateY(${(1 - progress) * 16}px)`,
                     }}
                   >
-                    <p style={{ ...textStyles.meta, color: color.gray700, margin: 0 }}>
+                    <p style={{ ...textStyles.meta, color: color.muted, margin: 0 }}>
                       {entry.label}
                     </p>
                     <p
                       style={{
                         ...textStyles.display,
                         fontSize: valueSize,
-                        color: color.wire,
+                        color: color.accent,
                         margin: 0,
                         letterSpacing: `${tracking.headline}em`,
                         fontVariantNumeric: 'tabular-nums',
@@ -364,7 +367,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
                       {entry.value}
                     </p>
                     {entry.note ? (
-                      <p style={{ ...textStyles.meta, color: color.gray700, margin: 0 }}>
+                      <p style={{ ...textStyles.meta, color: color.muted, margin: 0 }}>
                         {entry.note}
                       </p>
                     ) : null}
@@ -413,7 +416,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
                             <span
                               style={{
                                 ...textStyles.meta,
-                                color: entry.highlight ? color.wire : color.gray700,
+                                color: entry.highlight ? color.accent : color.muted,
                                 fontVariantNumeric: 'tabular-nums',
                                 flexShrink: 0,
                               }}
@@ -421,14 +424,14 @@ export function FigureScene({ scene, orientation }: SceneProps) {
                               {formatBarValue(figure, entry.value)}
                             </span>
                           </div>
-                          <div style={{ height: 18, background: color.gray100 }}>
+                          <div style={{ height: 18, background: color.line }}>
                             <div
                               style={{
                                 // Bars grow to their true proportion; the reveal
                                 // scales the drawn length, never the value.
                                 width: `${(fractions[index] ?? 0) * 100 * progress}%`,
                                 height: '100%',
-                                background: entry.highlight ? color.wire : color.ink,
+                                background: entry.highlight ? color.accent : color.fg,
                               }}
                             />
                           </div>
@@ -461,7 +464,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
                       display: 'grid',
                       gridTemplateColumns: 'subgrid',
                       paddingBottom: gap.md,
-                      borderLeft: `4px solid ${entry.highlight ? color.wire : color.gray300}`,
+                      borderLeft: `4px solid ${entry.highlight ? color.accent : color.lineStrong}`,
                       paddingLeft: gap.md,
                       opacity: progress,
                       transform: `translateX(${(1 - progress) * 12}px)`,
@@ -470,7 +473,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
                     <span
                       style={{
                         ...textStyles.meta,
-                        color: entry.highlight ? color.wire : color.gray700,
+                        color: entry.highlight ? color.accent : color.muted,
                         fontVariantNumeric: 'tabular-nums',
                       }}
                     >
@@ -489,7 +492,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
                       </span>
                       {entry.note ? (
                         <span
-                          style={{ ...textStyles.meta, display: 'block', color: color.gray700 }}
+                          style={{ ...textStyles.meta, display: 'block', color: color.muted }}
                         >
                           {entry.note}
                         </span>
@@ -502,7 +505,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
           ) : null}
 
           {figure.caption ? (
-            <p style={{ ...textStyles.meta, color: color.gray700, margin: 0 }}>
+            <p style={{ ...textStyles.meta, color: color.muted, margin: 0 }}>
               {figure.caption}
             </p>
           ) : null}
@@ -527,14 +530,14 @@ export function SourceScene({ scene, orientation }: SceneProps) {
   const enter = useEnter(10);
 
   return (
-    <AbsoluteFill style={{ background: color.offWhite }}>
+    <AbsoluteFill style={{ background: color.surface }}>
       <ScanLines opacity={0.04} />
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={caption(scene)} />
 
         <div style={enter}>
-          <div style={{ height: 8, width: '100%', background: color.ink, marginBottom: gap.lg }} />
-          <p style={{ ...textStyles.meta, color: color.gray700, margin: 0 }}>{scene.label}</p>
+          <div style={{ height: 8, width: '100%', background: color.accent, marginBottom: gap.lg }} />
+          <p style={{ ...textStyles.meta, color: color.muted, margin: 0 }}>{scene.label}</p>
           <p
             style={{
               ...textStyles.body,
@@ -545,7 +548,7 @@ export function SourceScene({ scene, orientation }: SceneProps) {
           >
             {scene.text}
           </p>
-          <p style={{ ...textStyles.meta, color: color.gray700, marginTop: gap.md }}>
+          <p style={{ ...textStyles.meta, color: color.muted, marginTop: gap.md }}>
             {scene.meta}
           </p>
         </div>
@@ -564,10 +567,10 @@ export function OutroScene({ scene, orientation }: SceneProps) {
   const enter = easeOut(frame / 12);
 
   return (
-    <AbsoluteFill style={{ background: color.ink }}>
-      <PanelGrid opacity={0.14} stroke={color.paper} />
+    <AbsoluteFill style={{ background: color.deep }}>
+      <PanelGrid opacity={0.14} stroke={color.fg} />
       <ScanLines opacity={0.08} />
-      <Card background="transparent" padding={l.padding} inverted>
+      <Card background="transparent" padding={l.padding}>
         <div />
         <div style={{ textAlign: 'center', opacity: enter }}>
           <span
@@ -575,10 +578,10 @@ export function OutroScene({ scene, orientation }: SceneProps) {
               ...textStyles.display,
               display: 'block',
               fontSize: l.wordmark,
-              color: color.paper,
+              color: color.fg,
             }}
           >
-            STEP<span style={{ color: color.signalOnDark }}>WIRE</span>
+            STEP<span style={{ color: color.accent }}>WIRE</span>
           </span>
           <p
             style={{
@@ -587,7 +590,7 @@ export function OutroScene({ scene, orientation }: SceneProps) {
               fontWeight: fontWeight.regular,
               letterSpacing: `${tracking.wider}em`,
               textTransform: 'uppercase',
-              color: color.gray300,
+              color: color.muted,
               marginTop: gap.md,
             }}
           >
@@ -600,7 +603,7 @@ export function OutroScene({ scene, orientation }: SceneProps) {
               key={direction}
               direction={direction}
               size={type.h3}
-              fill={index % 2 === 0 ? color.paper : color.signalOnDark}
+              fill={index % 2 === 0 ? color.fg : color.accent}
               style={{ opacity: easeOut((frame - 6 - index * 3) / 10) }}
             />
           ))}
@@ -629,7 +632,7 @@ export function NarrationScene({ scene, orientation }: SceneProps) {
   const tokens = scene.tokens ?? [];
 
   return (
-    <AbsoluteFill style={{ background: color.offWhite }}>
+    <AbsoluteFill style={{ background: color.surface }}>
       <ScanLines opacity={0.035} />
       <Card background="transparent" padding={l.padding}>
         {/* The speaker's name, not a section label: this card is the voice. */}
@@ -639,7 +642,7 @@ export function NarrationScene({ scene, orientation }: SceneProps) {
           style={{
             ...textStyles.body,
             fontSize: l.body,
-            color: color.gray700,
+            color: color.muted,
             // Subtitles sit centred rather than pinned to a section heading —
             // there is nothing else on the card competing for the eye.
             margin: 'auto 0',
@@ -657,8 +660,8 @@ export function NarrationScene({ scene, orientation }: SceneProps) {
                     style={{
                       // Said already: black. Being said: reversed out on the
                       // accent. Still ahead: grey.
-                      background: speaking ? color.signal : 'transparent',
-                      color: speaking ? color.paper : spoken ? color.ink : color.gray500,
+                      background: speaking ? color.accent : 'transparent',
+                      color: speaking ? color.onAccent : spoken ? color.fg : color.faint,
                       ...(speaking ? { padding: '0 0.08em' } : {}),
                     }}
                   >

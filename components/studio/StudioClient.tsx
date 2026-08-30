@@ -183,12 +183,12 @@ export function StudioClient({
     return (
       <div className="mx-auto max-w-[1180px] px-md py-3xl">
         <h1 className="font-display text-h2 font-black tracking-display sm:text-h1">Studio</h1>
-        <p className="mt-md font-body text-lead text-gray700">
+        <p className="mt-md font-body text-lead text-muted">
           レンダリングできる公開記事がまだありません。
         </p>
         <Link
           href="/studio/wire"
-          className="mt-lg inline-block border-2 border-ink px-md py-sm font-mono text-micro uppercase tracking-wider hover:bg-ink hover:text-paper"
+          className="mt-lg inline-block border-2 border-line-strong px-md py-sm font-mono text-micro uppercase tracking-wider hover:bg-accent hover:text-on-accent"
         >
           ワイヤー受信箱 →
         </Link>
@@ -200,25 +200,25 @@ export function StudioClient({
 
   return (
     <div className="mx-auto max-w-[1180px] px-md py-xl">
-      <header className="border-b-4 border-ink pb-lg">
-        <p className="font-mono text-micro font-bold uppercase tracking-wider text-signal">
+      <header className="border-b-4 border-accent pb-lg">
+        <p className="font-mono text-micro font-bold uppercase tracking-wider text-accent">
           社内ツール
         </p>
         <h1 className="mt-sm font-display text-h2 font-black leading-headline tracking-headline sm:text-h1">
           動画スタジオ
         </h1>
-        <p className="mt-md max-w-[62ch] font-body text-lead leading-snug text-gray700">
+        <p className="mt-md max-w-[62ch] font-body text-lead leading-snug text-muted">
           動画は記事から導出されます。別に書くものではありません。動画の内容を変えるには記事を編集してください。
           シーンも尺もペースも、それに追随します。
         </p>
         <nav className="mt-lg flex flex-wrap gap-md font-mono text-micro uppercase tracking-wider">
           <Link
             href="/studio/wire"
-            className="border-2 border-ink px-md py-sm hover:bg-ink hover:text-paper"
+            className="border-2 border-line-strong px-md py-sm hover:bg-accent hover:text-on-accent"
           >
             ワイヤー受信箱 →
           </Link>
-          <Link href="/" className="px-md py-sm text-gray700 hover:text-signal">
+          <Link href="/" className="px-md py-sm text-muted hover:text-accent">
             サイトへ戻る
           </Link>
         </nav>
@@ -233,7 +233,7 @@ export function StudioClient({
           />
 
           <div
-            className="mt-lg bg-ink p-md"
+            className="mt-lg bg-deep p-md"
             style={{ maxWidth: definition.orientation === 'vertical' ? 420 : '100%' }}
           >
             <Player
@@ -250,27 +250,27 @@ export function StudioClient({
             />
           </div>
 
-          <dl className="mt-lg grid grid-cols-2 gap-md border-t border-gray300 pt-md font-mono text-micro uppercase tracking-wide sm:grid-cols-4">
+          <dl className="mt-lg grid grid-cols-2 gap-md border-t border-line pt-md font-mono text-micro uppercase tracking-wide sm:grid-cols-4">
             <div>
-              <dt className="text-gray700">Duration</dt>
+              <dt className="text-muted">Duration</dt>
               <dd className="text-h4 font-bold tracking-tight">
                 {formatDuration(sequence.durationInFrames, sequence.fps)}
               </dd>
             </div>
             <div>
-              <dt className="text-gray700">Frames</dt>
+              <dt className="text-muted">Frames</dt>
               <dd className="text-h4 font-bold tabular-nums tracking-tight">
                 {sequence.durationInFrames}
               </dd>
             </div>
             <div>
-              <dt className="text-gray700">Scenes</dt>
+              <dt className="text-muted">Scenes</dt>
               <dd className="text-h4 font-bold tabular-nums tracking-tight">
                 {sequence.scenes.length}
               </dd>
             </div>
             <div>
-              <dt className="text-gray700">Aspect</dt>
+              <dt className="text-muted">Aspect</dt>
               <dd className="text-h4 font-bold tracking-tight">{definition.aspectRatio}</dd>
             </div>
           </dl>
@@ -281,18 +281,18 @@ export function StudioClient({
               {sequence.scenes.map((scene) => (
                 <li
                   key={scene.id}
-                  className="grid grid-cols-[3ch_1fr_auto] items-baseline gap-md border-b border-gray300 py-sm font-mono text-micro uppercase tracking-wide"
+                  className="grid grid-cols-[3ch_1fr_auto] items-baseline gap-md border-b border-line py-sm font-mono text-micro uppercase tracking-wide"
                 >
-                  <span className="text-gray700 tabular-nums">
+                  <span className="text-muted tabular-nums">
                     {String(scene.index + 1).padStart(2, '0')}
                   </span>
                   <span>
                     <span className="font-bold">{scene.id}</span>
                     {scene.label ? (
-                      <span className="ml-sm text-gray700">{scene.label}</span>
+                      <span className="ml-sm text-muted">{scene.label}</span>
                     ) : null}
                   </span>
-                  <span className="tabular-nums text-gray700">
+                  <span className="tabular-nums text-muted">
                     {formatDuration(scene.durationInFrames, sequence.fps)}
                   </span>
                 </li>
@@ -306,7 +306,7 @@ export function StudioClient({
             <SectionHeading id="source-heading" label="Source article" as="h2" />
             <label
               htmlFor="studio-article"
-              className="mt-md block font-mono text-micro uppercase tracking-wide text-gray700"
+              className="mt-md block font-mono text-micro uppercase tracking-wide text-muted"
             >
               Article
             </label>
@@ -314,7 +314,7 @@ export function StudioClient({
               id="studio-article"
               value={slug}
               onChange={(event) => setSlug(event.target.value)}
-              className="mt-sm w-full border-2 border-ink bg-paper px-md py-sm font-display text-base"
+              className="mt-sm w-full border-2 border-line-strong bg-raised px-md py-sm font-display text-base"
             >
               {articles.map((item) => (
                 <option key={item.slug} value={item.slug}>
@@ -326,7 +326,7 @@ export function StudioClient({
 
             <label
               htmlFor="studio-composition"
-              className="mt-lg block font-mono text-micro uppercase tracking-wide text-gray700"
+              className="mt-lg block font-mono text-micro uppercase tracking-wide text-muted"
             >
               Composition
             </label>
@@ -334,7 +334,7 @@ export function StudioClient({
               id="studio-composition"
               value={composition}
               onChange={(event) => setComposition(event.target.value as CompositionId)}
-              className="mt-sm w-full border-2 border-ink bg-paper px-md py-sm font-display text-base"
+              className="mt-sm w-full border-2 border-line-strong bg-raised px-md py-sm font-display text-base"
             >
               {COMPOSITION_IDS.map((id) => (
                 <option key={id} value={id}>
@@ -342,7 +342,7 @@ export function StudioClient({
                 </option>
               ))}
             </select>
-            <p className="mt-sm font-mono text-micro uppercase tracking-wide text-gray700">
+            <p className="mt-sm font-mono text-micro uppercase tracking-wide text-muted">
               {definition.usage}
             </p>
 
@@ -351,15 +351,15 @@ export function StudioClient({
              * thing about its video, so it is stated plainly rather than left
              * to be inferred from the scene list.
              */}
-            <div className="mt-lg border-t border-gray300 pt-md">
-              <p className="font-mono text-micro uppercase tracking-wide text-gray700">ナレーション</p>
+            <div className="mt-lg border-t border-line pt-md">
+              <p className="font-mono text-micro uppercase tracking-wide text-muted">ナレーション</p>
               {article.narration ? (
                 <>
                   <p className="mt-xs font-display text-base font-bold">
                     あり · {article.narration.durationInSeconds.toFixed(1)}秒
                     {article.narration.speaker ? ` · ${article.narration.speaker}` : ''}
                   </p>
-                  <p className="mt-xs font-body text-small leading-snug text-gray700">
+                  <p className="mt-xs font-body text-small leading-snug text-muted">
                     尺と場面の切り替わりは音声に従います。字幕は
                     <code className="font-mono">content/transcripts/{article.slug}.json</code>
                     を直接編集して直せます。
@@ -367,8 +367,8 @@ export function StudioClient({
                 </>
               ) : (
                 <>
-                  <p className="mt-xs font-display text-base font-bold text-gray700">なし（無音）</p>
-                  <p className="mt-xs font-body text-small leading-snug text-gray700">
+                  <p className="mt-xs font-display text-base font-bold text-muted">なし（無音）</p>
+                  <p className="mt-xs font-body text-small leading-snug text-muted">
                     本文から組み立てた無音の動画です。声を入れるには録音を
                     <code className="font-mono">public/audio/</code>
                     に置き、記事に <code className="font-mono">narration.audio</code> を書いて
@@ -380,23 +380,23 @@ export function StudioClient({
             </div>
 
             {article.fixture ? (
-              <p className="mt-lg border-2 border-ink bg-ink px-md py-sm font-mono text-micro font-bold uppercase tracking-wider text-paper">
+              <p className="mt-lg border-2 border-accent-hot bg-accent-hot px-md py-sm font-mono text-micro font-bold uppercase tracking-wider text-on-accent">
                 サンプル記事です — この動画を公開しないでください
               </p>
             ) : null}
           </section>
 
-          <section aria-labelledby="render-heading" className="border-2 border-ink p-lg">
+          <section aria-labelledby="render-heading" className="border-2 border-line-strong p-lg">
             <SectionHeading id="render-heading" label="Render" as="h2" />
 
-            <p className="mt-md font-body text-small leading-snug text-gray700">
+            <p className="mt-md font-body text-small leading-snug text-muted">
               レンダリングはクラウド上で実行され、費用が発生します。エンドポイントは運用トークンを要求し、
               同一内容のレンダリングは再利用されるため二重に課金されません。
             </p>
 
             <label
               htmlFor="studio-token"
-              className="mt-lg block font-mono text-micro uppercase tracking-wide text-gray700"
+              className="mt-lg block font-mono text-micro uppercase tracking-wide text-muted"
             >
               Render token
             </label>
@@ -407,28 +407,28 @@ export function StudioClient({
               autoComplete="off"
               onChange={(event) => setToken(event.target.value)}
               placeholder="STEPWIRE_RENDER_TOKEN"
-              className="mt-sm w-full border-2 border-ink bg-paper px-md py-sm font-mono text-small"
+              className="mt-sm w-full border-2 border-line-strong bg-raised px-md py-sm font-mono text-small"
             />
 
             <button
               type="button"
               onClick={() => void startRender()}
               disabled={busy || token.length === 0}
-              className="mt-lg w-full border-2 border-ink bg-ink px-md py-sm font-mono text-micro font-bold uppercase tracking-wider text-paper transition-colors hover:bg-signal hover:border-signal disabled:cursor-not-allowed disabled:border-gray300 disabled:bg-gray300 disabled:text-gray700"
+              className="mt-lg w-full border-2 border-accent bg-accent px-md py-sm font-mono text-micro font-bold uppercase tracking-wider text-on-accent transition-colors hover:bg-accent-hot hover:border-accent-hot disabled:cursor-not-allowed disabled:border-line disabled:bg-line disabled:text-muted"
             >
               {busy ? 'Rendering…' : `Render ${composition}`}
             </button>
 
             <div aria-live="polite" className="mt-lg">
               <p className="font-mono text-micro uppercase tracking-wide">
-                <span className="text-gray700">Status </span>
+                <span className="text-muted">Status </span>
                 <span
                   className={
                     render.status === 'failed'
-                      ? 'font-bold text-signal'
+                      ? 'font-bold text-accent'
                       : render.status === 'complete'
                         ? 'font-bold'
-                        : 'text-gray700'
+                        : 'text-muted'
                   }
                 >
                   {render.status}
@@ -437,27 +437,27 @@ export function StudioClient({
               </p>
 
               {render.renderId ? (
-                <p className="mt-sm break-all font-mono text-[10px] text-gray700">
+                <p className="mt-sm break-all font-mono text-[10px] text-muted">
                   {render.renderId}
                 </p>
               ) : null}
 
               {render.error ? (
-                <p className="mt-sm font-body text-small leading-snug text-signal">
+                <p className="mt-sm font-body text-small leading-snug text-accent">
                   {render.error}
                 </p>
               ) : null}
 
               {render.url ? (
                 <div className="mt-md">
-                  <p className="font-mono text-micro uppercase tracking-wide text-gray700">
+                  <p className="font-mono text-micro uppercase tracking-wide text-muted">
                     Output
                   </p>
                   <a
                     href={render.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-xs block break-all font-mono text-small underline decoration-gray300 underline-offset-4 hover:decoration-signal"
+                    className="mt-xs block break-all font-mono text-small underline decoration-line underline-offset-4 hover:decoration-accent"
                   >
                     {render.url}
                   </a>
@@ -465,7 +465,7 @@ export function StudioClient({
               ) : null}
 
               {render.log.length > 0 ? (
-                <ol className="mt-md max-h-[180px] overflow-y-auto border-t border-gray300 pt-sm font-mono text-[10px] leading-relaxed text-gray700">
+                <ol className="mt-md max-h-[180px] overflow-y-auto border-t border-line pt-sm font-mono text-[10px] leading-relaxed text-muted">
                   {render.log.map((line, index) => (
                     <li key={index}>{line}</li>
                   ))}
@@ -476,10 +476,10 @@ export function StudioClient({
 
           <section aria-labelledby="local-heading">
             <SectionHeading id="local-heading" label="Render locally" as="h2" />
-            <p className="mt-md font-body text-small leading-snug text-gray700">
+            <p className="mt-md font-body text-small leading-snug text-muted">
               クラウドのアカウントは不要です。
             </p>
-            <pre className="mt-sm overflow-x-auto border border-gray300 bg-paper p-md font-mono text-[11px]">
+            <pre className="mt-sm overflow-x-auto border border-line bg-raised p-md font-mono text-[11px]">
               {`pnpm video:render ${article.slug} \\\n  --composition ${composition}`}
             </pre>
           </section>

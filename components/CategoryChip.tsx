@@ -19,9 +19,9 @@ export function CategoryChip({
 }) {
   const meta = CATEGORY_META[category];
   const classes = [
-    'inline-flex items-center gap-[6px] border border-ink font-mono uppercase tracking-wider',
+    'inline-flex items-center gap-[6px] border border-line-strong font-mono uppercase tracking-wider',
     size === 'small' ? 'px-[6px] py-[1px] text-[10px]' : 'px-2 py-[3px] text-micro',
-    href ? 'transition-colors hover:bg-ink hover:text-paper' : '',
+    href ? 'transition-colors hover:bg-accent hover:text-on-accent' : '',
   ].join(' ');
 
   const body = (
@@ -48,9 +48,15 @@ export function CategoryChip({
 export function ImportanceFlag({ importance }: { importance: string }) {
   if (importance !== 'breaking' && importance !== 'major') return null;
 
+  // Breaking gets the lit accent: it has to out-shout a page that already
+  // carries the accent elsewhere. Major gets the accent itself.
+  const fill = importance === 'breaking' ? 'bg-accent-hot' : 'bg-accent';
+
   return (
-    <span className="inline-flex items-center gap-[6px] bg-signal px-2 py-[3px] font-mono text-micro font-bold uppercase tracking-wider text-paper">
-      <span aria-hidden="true" className="wire-pulse block h-[6px] w-[6px] bg-paper" />
+    <span
+      className={`inline-flex items-center gap-[6px] ${fill} px-2 py-[3px] font-mono text-micro font-bold uppercase tracking-wider text-on-accent`}
+    >
+      <span aria-hidden="true" className="wire-pulse block h-[6px] w-[6px] bg-on-accent" />
       {importance === 'breaking' ? '速報' : '重要'}
     </span>
   );

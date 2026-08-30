@@ -30,7 +30,7 @@ export function WireBoard({ items }: { items: InboxItem[] }) {
 
   return (
     <div className="space-y-2xl">
-      <section aria-labelledby="wire-summary" className="border-2 border-ink bg-paper">
+      <section aria-labelledby="wire-summary" className="border-2 border-line-strong bg-raised">
         <h2 id="wire-summary" className="sr-only">
           受信箱の概況
         </h2>
@@ -40,11 +40,11 @@ export function WireBoard({ items }: { items: InboxItem[] }) {
           <Stat label="速報指定" value={String(summary.breaking)} highlight={summary.breaking > 0} />
         </dl>
         {summary.bySource.length > 0 ? (
-          <ul className="flex flex-wrap gap-x-lg gap-y-sm border-t-2 border-ink px-md py-sm font-mono text-micro uppercase tracking-wide text-gray700">
+          <ul className="flex flex-wrap gap-x-lg gap-y-sm border-t-2 border-line-strong px-md py-sm font-mono text-micro uppercase tracking-wide text-muted">
             {summary.bySource.map((source) => (
               <li key={source.sourceId}>
                 {source.sourceName}
-                <span className="ml-sm tabular-nums text-ink">{source.count}</span>
+                <span className="ml-sm tabular-nums text-fg">{source.count}</span>
               </li>
             ))}
           </ul>
@@ -53,14 +53,14 @@ export function WireBoard({ items }: { items: InboxItem[] }) {
 
       {days.map((day) => (
         <section key={day.date || 'undated'} aria-labelledby={`day-${day.date || 'undated'}`}>
-          <div className="flex items-baseline gap-md border-b-2 border-ink pb-sm">
+          <div className="flex items-baseline gap-md border-b-2 border-line-strong pb-sm">
             <h2
               id={`day-${day.date || 'undated'}`}
               className="font-mono text-micro font-bold uppercase tracking-wider tabular-nums"
             >
               {day.date ? formatDate(day.date) : '日付なし'}
             </h2>
-            <span className="ml-auto font-mono text-micro tabular-nums text-gray700">
+            <span className="ml-auto font-mono text-micro tabular-nums text-muted">
               {day.items.length}
             </span>
           </div>
@@ -85,11 +85,11 @@ function Stat({
   highlight?: boolean;
 }) {
   return (
-    <div className="border-r-2 border-ink px-md py-md last:border-r-0">
-      <dt className="font-mono text-micro uppercase tracking-wide text-gray700">{label}</dt>
+    <div className="border-r-2 border-line-strong px-md py-md last:border-r-0">
+      <dt className="font-mono text-micro uppercase tracking-wide text-muted">{label}</dt>
       <dd
         className={`mt-xs font-display text-h3 font-black leading-headline tabular-nums ${
-          highlight ? 'text-signal' : 'text-wire'
+          highlight ? 'text-accent' : 'text-accent'
         }`}
       >
         {value}
@@ -100,14 +100,14 @@ function Stat({
 
 function WireRow({ item }: { item: InboxItem }) {
   return (
-    <li className="border-b border-gray100 py-md">
-      <div className="flex flex-wrap items-center gap-sm font-mono text-micro uppercase tracking-wide text-gray700">
-        <span className="tabular-nums text-ink">#{item.number}</span>
+    <li className="border-b border-line py-md">
+      <div className="flex flex-wrap items-center gap-sm font-mono text-micro uppercase tracking-wide text-muted">
+        <span className="tabular-nums text-fg">#{item.number}</span>
         {item.priority === 'breaking' ? (
-          <span className="bg-signal px-[6px] py-[1px] font-bold text-paper">速報</span>
+          <span className="bg-accent px-[6px] py-[1px] font-bold text-on-accent">速報</span>
         ) : null}
         {item.sourceCategory ? (
-          <span className="border border-gray300 px-[6px] py-[1px]">
+          <span className="border border-line px-[6px] py-[1px]">
             {SOURCE_LABELS[item.sourceCategory] ?? item.sourceCategory}
           </span>
         ) : null}
@@ -118,7 +118,7 @@ function WireRow({ item }: { item: InboxItem }) {
           // The collector files everything as needs-review, so its absence means
           // an editor has been here — worth showing, since a triaged candidate
           // is not the same as a new one.
-          <span className="border border-gray300 px-[6px] py-[1px]">確認済み</span>
+          <span className="border border-line px-[6px] py-[1px]">確認済み</span>
         )}
       </div>
 
@@ -128,7 +128,7 @@ function WireRow({ item }: { item: InboxItem }) {
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="underline decoration-gray300 underline-offset-4 transition-colors hover:decoration-wire"
+            className="underline decoration-line underline-offset-4 transition-colors hover:decoration-accent"
           >
             {item.headline}
           </a>
@@ -138,13 +138,13 @@ function WireRow({ item }: { item: InboxItem }) {
       </h3>
 
       {item.summary ? (
-        <p className="mt-sm max-w-[70ch] font-body text-small leading-snug text-gray700 line-clamp-3">
+        <p className="mt-sm max-w-[70ch] font-body text-small leading-snug text-muted line-clamp-3">
           {item.summary}
         </p>
       ) : null}
 
-      <div className="mt-sm flex flex-wrap items-center gap-x-md gap-y-xs font-mono text-micro uppercase tracking-wide text-gray700">
-        {item.sourceName ? <span className="text-ink">{item.sourceName}</span> : null}
+      <div className="mt-sm flex flex-wrap items-center gap-x-md gap-y-xs font-mono text-micro uppercase tracking-wide text-muted">
+        {item.sourceName ? <span className="text-fg">{item.sourceName}</span> : null}
         {item.url ? <span>{hostnameOf(item.url)}</span> : null}
         {item.publishedAt ? (
           <time dateTime={item.publishedAt}>{formatDateTime(item.publishedAt)}</time>
@@ -157,19 +157,19 @@ function WireRow({ item }: { item: InboxItem }) {
           href={item.issueUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="ml-auto underline underline-offset-4 hover:text-signal"
+          className="ml-auto underline underline-offset-4 hover:text-accent"
         >
           Issue →
         </a>
       </div>
 
       {item.degraded ? (
-        <p className="mt-sm font-mono text-micro text-gray700">
+        <p className="mt-sm font-mono text-micro text-muted">
           ⚠ 収集メタデータを読み取れませんでした。ラベルとタイトルのみ表示しています。
         </p>
       ) : null}
 
-      <p className="mt-sm select-all bg-off-white px-sm py-[6px] font-mono text-micro text-gray700">
+      <p className="mt-sm select-all bg-raised px-sm py-[6px] font-mono text-micro text-muted">
         pnpm article:from-issue {item.number}
       </p>
     </li>

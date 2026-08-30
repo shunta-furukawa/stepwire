@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-STEPWIRE — a DDR news wire and archive, operated by Mono ddr. This repository is
+STEPWIRE — a DDR news wire and archive, operated by MONO DDR. This repository is
 the CMS, the editorial workflow and the video studio, not just the website.
 
 Detailed guides live in `docs/`. This file holds the standing rules only.
@@ -97,8 +97,15 @@ verified by eye with `pnpm video:render`.
 ## Important constraints
 
 - **Brand tokens have one home.** `lib/design/tokens.ts`, mirrored into
-  `app/globals.css`. `tests/tokens.test.ts` fails if they drift. Changing a
-  colour means changing both.
+  `app/globals.css`. `tests/tokens.test.ts` fails if they drift — it also
+  asserts WCAG AA for every text tone on every ground, so contrast is a build
+  failure rather than a review note. Changing a colour means changing both.
+- **The palette is greyscale plus one hue.** Black ground, off-white type, and
+  the MONO DDR lime (`accent`, with `accentHot` for live and breaking). Alert
+  and data are separated by *form* — a filled chip that pulses versus accent
+  text — never by adding a second hue. Token names describe the role
+  (`surface`, `raised`, `fg`, `muted`, `line`), never the pigment: a name like
+  `ink` stops being true the moment the ground flips.
 - **No HTML scraping.** Official feeds, official APIs and public feeds only. A
   site-specific adapter requires the checks in `docs/sources.md` first.
 - **The collector never publishes.** Its only output is a GitHub issue for a

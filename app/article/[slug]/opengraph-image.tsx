@@ -35,8 +35,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          background: color.offWhite,
-          color: color.ink,
+          background: color.surface,
+          color: color.fg,
           padding: 64,
           fontFamily: 'sans-serif',
         }}
@@ -44,8 +44,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <div
             style={{
-              background: color.ink,
-              color: color.paper,
+              background: color.fg,
+              color: color.surface,
               padding: '8px 16px',
               fontSize: 26,
               fontWeight: 900,
@@ -56,7 +56,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           </div>
           <div
             style={{
-              border: `2px solid ${color.ink}`,
+              border: `2px solid ${color.lineStrong}`,
               padding: '6px 14px',
               fontSize: 22,
               letterSpacing: '0.18em',
@@ -67,8 +67,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           {article?.fixture ? (
             <div
               style={{
-                background: color.signal,
-                color: color.paper,
+                background: color.accent,
+                color: color.onAccent,
                 padding: '6px 14px',
                 fontSize: 22,
                 letterSpacing: '0.18em',
@@ -97,14 +97,14 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-end',
-            borderTop: `4px solid ${color.ink}`,
+            borderTop: `4px solid ${color.accent}`,
             paddingTop: 20,
             fontSize: 24,
             letterSpacing: '0.12em',
           }}
         >
           <div style={{ display: 'flex' }}>DDR NEWS, CHARTS &amp; CULTURE.</div>
-          <div style={{ display: 'flex', color: color.gray700 }}>
+          <div style={{ display: 'flex', color: color.faint }}>
             {article ? formatDate(article.publishedAt) : ''}
           </div>
         </div>

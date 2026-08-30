@@ -32,18 +32,21 @@ describe('design tokens', () => {
   it('mirrors every colour into the Tailwind theme', async () => {
     const variables = await themeVariables();
     const expected: Record<string, string> = {
-      'color-ink': color.ink,
-      'color-ink80': color.ink80,
-      'color-paper': color.paper,
-      'color-off-white': color.offWhite,
-      'color-gray100': color.gray100,
-      'color-gray300': color.gray300,
-      'color-gray500': color.gray500,
-      'color-gray700': color.gray700,
-      'color-signal': color.signal,
-      'color-signal-on-dark': color.signalOnDark,
-      'color-wire': color.wire,
+      'color-surface': color.surface,
+      'color-raised': color.raised,
+      'color-deep': color.deep,
+      'color-fg': color.fg,
+      'color-muted': color.muted,
+      'color-faint': color.faint,
+      'color-line': color.line,
+      'color-line-strong': color.lineStrong,
+      'color-accent': color.accent,
+      'color-accent-hot': color.accentHot,
+      'color-on-accent': color.onAccent,
     };
+
+    // Every token, not just the ones someone remembered to list here.
+    expect(Object.keys(expected).length).toBe(Object.keys(color).length);
 
     for (const [name, value] of Object.entries(expected)) {
       expect(variables.get(name)?.toLowerCase(), `--${name}`).toBe(value.toLowerCase());
@@ -75,20 +78,29 @@ describe('design tokens', () => {
     expect(type.micro).toBe(fontSize.micro * SCALE);
   });
 
-  it('keeps the accents reserved and distinct from the monochrome ramp', () => {
+  it('keeps the ramp monochrome, with the accent as the only hue', () => {
     const monochrome = [
-      color.ink,
-      color.ink80,
-      color.paper,
-      color.offWhite,
-      color.gray100,
-      color.gray300,
-      color.gray500,
-      color.gray700,
+      color.surface,
+      color.raised,
+      color.deep,
+      color.fg,
+      color.muted,
+      color.faint,
+      color.line,
+      color.lineStrong,
     ];
-    expect(monochrome).not.toContain(color.signal);
-    expect(monochrome).not.toContain(color.wire);
-    expect(color.signal).not.toBe(color.wire);
+
+    // "Monochrome" as a measurable claim, not a description: a neutral has no
+    // meaningful spread between its channels. This is what stops a stray tinted
+    // grey from creeping into a palette whose whole point is greyscale + lime.
+    for (const hex of monochrome) {
+      const n = Number.parseInt(hex.slice(1), 16);
+      const channels = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+      expect(Math.max(...channels) - Math.min(...channels), hex).toBeLessThanOrEqual(10);
+    }
+
+    expect(monochrome).not.toContain(color.accent);
+    expect(monochrome).not.toContain(color.accentHot);
   });
 
   it('pins the video formats the brief specifies', () => {
@@ -126,29 +138,44 @@ describe('colour contrast (WCAG 2.1)', () => {
 
   const AA = 4.5;
 
-  it('meets AA for body and secondary text on the light ground', () => {
-    expect(contrast(color.ink, color.offWhite)).toBeGreaterThanOrEqual(AA);
-    expect(contrast(color.gray700, color.offWhite)).toBeGreaterThanOrEqual(AA);
+  it('meets AA for every text tone on the page ground', () => {
+    expect(contrast(color.fg, color.surface)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.muted, color.surface)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.faint, color.surface)).toBeGreaterThanOrEqual(AA);
   });
 
-  it('meets AA for text on the inverted ground', () => {
-    expect(contrast(color.paper, color.ink)).toBeGreaterThanOrEqual(AA);
-    expect(contrast(color.gray300, color.ink)).toBeGreaterThanOrEqual(AA);
-    // gray500 is the on-dark secondary tone; it is not usable on light.
-    expect(contrast(color.gray500, color.ink)).toBeGreaterThanOrEqual(AA);
+  it('meets AA for every text tone on a raised card', () => {
+    // The stricter of the two grounds — a card is lighter than the page, so a
+    // tone that only passed on `surface` would fail inside a figure or a panel.
+    expect(contrast(color.fg, color.raised)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.muted, color.raised)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.faint, color.raised)).toBeGreaterThanOrEqual(AA);
   });
 
-  it('meets AA for each signal tone against the ground it is meant for', () => {
-    expect(contrast(color.signal, color.offWhite)).toBeGreaterThanOrEqual(AA);
-    expect(contrast(color.signal, color.paper)).toBeGreaterThanOrEqual(AA);
-    // The importance flag is white text on a signal fill.
-    expect(contrast(color.paper, color.signal)).toBeGreaterThanOrEqual(AA);
-    expect(contrast(color.signalOnDark, color.ink)).toBeGreaterThanOrEqual(AA);
+  it('meets AA for every text tone on the deepest block', () => {
+    expect(contrast(color.fg, color.deep)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.muted, color.deep)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.faint, color.deep)).toBeGreaterThanOrEqual(AA);
   });
 
-  it('meets AA for the data accent', () => {
-    expect(contrast(color.wire, color.paper)).toBeGreaterThanOrEqual(AA);
-    expect(contrast(color.wire, color.offWhite)).toBeGreaterThanOrEqual(AA);
+  it('meets AA for the accent as text and as a fill', () => {
+    for (const ground of [color.surface, color.raised, color.deep]) {
+      expect(contrast(color.accent, ground)).toBeGreaterThanOrEqual(AA);
+      expect(contrast(color.accentHot, ground)).toBeGreaterThanOrEqual(AA);
+    }
+    // A chip is text ON the accent, which is the pairing that usually fails.
+    expect(contrast(color.onAccent, color.accent)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.onAccent, color.accentHot)).toBeGreaterThanOrEqual(AA);
   });
 
+  it('keeps the lit accent brighter than the accent it has to out-shout', () => {
+    expect(luminance(color.accentHot)).toBeGreaterThan(luminance(color.accent));
+  });
+
+  it('keeps the structural rule visible without becoming text', () => {
+    // A 3:1 non-text minimum (WCAG 1.4.11) — a keyline nobody can see is not a
+    // keyline, and this design is built almost entirely out of them.
+    expect(contrast(color.lineStrong, color.surface)).toBeGreaterThanOrEqual(1.4);
+    expect(contrast(color.line, color.surface)).toBeGreaterThan(1);
+  });
 });

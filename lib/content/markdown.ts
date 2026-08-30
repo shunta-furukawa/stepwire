@@ -247,7 +247,14 @@ export function toPlainText(blocks: Block[]): string {
 /** Splits plain text into sentences — used to paginate video scene text. */
 export function toSentences(text: string): string[] {
   return text
-    .split(/(?<=[.!?])\s+|\n+/)
+    // Japanese has no space after its full stop, so a rule that requires
+    // whitespace after the terminator never fires on it — which quietly made
+    // every Japanese paragraph a single "sentence", and every video card an
+    // unsplittable block. `。！？` therefore break on the character itself,
+    // taking any closing bracket or quote with them; Latin terminators still
+    // need the following space, or `BPM 300.5` and `Dr. Love` split mid-number
+    // and mid-name.
+    .split(/(?<=[。！？][」』）】"'])|(?<=[。！？])(?![」』）】"'])|(?<=[.!?])\s+|\n+/)
     .map((sentence) => sentence.trim())
     .filter((sentence) => sentence.length > 0);
 }

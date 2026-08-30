@@ -46,7 +46,7 @@ Sourcing stays entirely on the article. A recording is never a source.
    ```yaml
    narration:
      audio: audio/2026-08-24-summer-update.m4a
-     speaker: Mono ddr
+     speaker: MONO DDR
    ```
 
 3. Transcribe it:
@@ -282,9 +282,14 @@ Shared primitives live in `video/components/primitives.tsx`:
 | `KineticText` | Word-by-word reveal — emphasis, not busywork |
 | `LabelChip` · `BodyText` · `Card` | Layout and typography |
 
-Reported fact renders on a light ground; editorial analysis renders inverted.
-That is the same fact/analysis distinction the website draws with its section
-labels — the video does not invent its own vocabulary.
+Reported fact carries a neutral label chip; editorial analysis carries a lime
+one. That is the same fact/analysis distinction the website draws with its
+報道 / STEPWIREの分析 labels — the video does not invent its own vocabulary.
+
+Fact also sits on the deepest ground and analysis on a raised one, but the chip
+is what actually carries the distinction: on a dark-first palette the two
+grounds differ by a few percent of luminance, which reads side by side and not
+at all across a cut.
 
 **Fonts.** Video type uses the same system stack as the website — no webfont.
 

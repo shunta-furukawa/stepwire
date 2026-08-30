@@ -11,7 +11,7 @@ import { FixtureBanner } from './FixtureBanner';
  */
 export function LeadStory({ article }: { article: Article }) {
   return (
-    <article className="border-b-4 border-ink pb-xl">
+    <article className="border-b-4 border-line-strong pb-xl">
       <div className="flex flex-wrap items-center gap-sm">
         <ImportanceFlag importance={article.importance} />
         <CategoryChip category={article.category} />
@@ -22,14 +22,14 @@ export function LeadStory({ article }: { article: Article }) {
       <h2 className="mt-md font-display text-h3 font-black leading-headline tracking-headline text-balance sm:text-h2 lg:text-h1">
         <Link
           href={`/article/${article.slug}`}
-          className="transition-colors hover:text-signal"
+          className="transition-colors hover:text-accent"
         >
           {article.title}
         </Link>
       </h2>
 
       {article.dek ? (
-        <p className="mt-lg max-w-[62ch] font-body text-lead leading-snug text-gray700 sm:text-h4">
+        <p className="mt-lg max-w-[62ch] font-body text-lead leading-snug text-muted sm:text-h4">
           {article.dek}
         </p>
       ) : null}
@@ -57,16 +57,16 @@ export function StoryCard({
   showDek?: boolean;
 }) {
   return (
-    <article className="group grid grid-cols-[auto_1fr] gap-md border-t border-gray300 py-lg first:border-t-0">
+    <article className="group grid grid-cols-[auto_1fr] gap-md border-t border-line py-lg first:border-t-0">
       {typeof rank === 'number' ? (
         <span
           aria-hidden="true"
-          className="w-[2.5ch] font-mono text-micro tabular-nums text-gray700"
+          className="w-[2.5ch] font-mono text-micro tabular-nums text-muted"
         >
           {String(rank).padStart(2, '0')}
         </span>
       ) : (
-        <span aria-hidden="true" className="w-[2.5ch] font-mono text-micro text-gray300">
+        <span aria-hidden="true" className="w-[2.5ch] font-mono text-micro text-muted">
           ▸
         </span>
       )}
@@ -82,14 +82,14 @@ export function StoryCard({
         <h3 className="mt-sm font-display text-h4 font-bold leading-tight tracking-headline text-pretty sm:text-h3">
           <Link
             href={`/article/${article.slug}`}
-            className="transition-colors group-hover:text-signal"
+            className="transition-colors group-hover:text-accent"
           >
             {article.shortTitle ?? article.title}
           </Link>
         </h3>
 
         {showDek && article.dek ? (
-          <p className="mt-sm max-w-[68ch] font-body text-base leading-snug text-gray700">
+          <p className="mt-sm max-w-[68ch] font-body text-base leading-snug text-muted">
             {article.dek}
           </p>
         ) : null}
@@ -113,7 +113,7 @@ export function StoryList({
 }) {
   if (articles.length === 0) {
     return (
-      <p className="border-t border-gray300 py-xl font-mono text-small uppercase tracking-wide text-gray700">
+      <p className="border-t border-line py-xl font-mono text-small uppercase tracking-wide text-muted">
         まだ記事がありません。
       </p>
     );

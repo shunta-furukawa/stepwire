@@ -26,7 +26,7 @@ import {
  */
 export function Figure({ figure }: { figure: FigureData }) {
   return (
-    <figure className="border-2 border-ink bg-paper p-md sm:p-lg">
+    <figure className="border-2 border-line-strong bg-raised p-md sm:p-lg">
       {figure.title ? (
         <p className="font-mono text-micro font-bold uppercase tracking-wider">{figure.title}</p>
       ) : null}
@@ -38,7 +38,7 @@ export function Figure({ figure }: { figure: FigureData }) {
       </div>
 
       {figure.caption ? (
-        <figcaption className="mt-md border-t border-gray100 pt-sm font-mono text-micro leading-snug text-gray700">
+        <figcaption className="mt-md border-t border-line pt-sm font-mono text-micro leading-snug text-muted">
           {figure.caption}
         </figcaption>
       ) : null}
@@ -58,15 +58,15 @@ function StatRows({ figure }: { figure: StatFigure }) {
   return (
     <dl className={`grid grid-cols-2 gap-md ${STAT_COLUMNS[figure.items.length] ?? ''}`}>
       {figure.items.map((item) => (
-        <div key={item.label} className="border-t-2 border-ink pt-sm">
-          <dt className="font-mono text-micro uppercase tracking-wide text-gray700">
+        <div key={item.label} className="border-t-2 border-line-strong pt-sm">
+          <dt className="font-mono text-micro uppercase tracking-wide text-muted">
             {item.label}
           </dt>
-          <dd className="mt-xs font-display text-h3 font-black leading-headline tracking-tight text-wire">
+          <dd className="mt-xs font-display text-h3 font-black leading-headline tracking-tight text-accent">
             {item.value}
           </dd>
           {item.note ? (
-            <p className="mt-xs font-mono text-micro leading-snug text-gray700">{item.note}</p>
+            <p className="mt-xs font-mono text-micro leading-snug text-muted">{item.note}</p>
           ) : null}
         </div>
       ))}
@@ -87,16 +87,18 @@ function BarRows({ figure }: { figure: BarsFigure }) {
             </span>
             <span
               className={`shrink-0 font-mono text-small tabular-nums ${
-                item.highlight ? 'font-bold text-wire' : ''
+                item.highlight ? 'font-bold text-accent' : ''
               }`}
             >
               {formatBarValue(figure, item.value)}
             </span>
           </div>
           {/* The value above is the accessible content; the bar restates it. */}
-          <div aria-hidden="true" className="mt-xs h-[10px] bg-gray100">
+          {/* On a dark ground the filled bar is the LIGHTER of the two: a dark
+              bar on a lighter track reads as an empty one. */}
+          <div aria-hidden="true" className="mt-xs h-[10px] bg-line">
             <div
-              className={`h-full ${item.highlight ? 'bg-wire' : 'bg-ink'}`}
+              className={`h-full ${item.highlight ? 'bg-accent' : 'bg-muted'}`}
               // A proportion is data, not design: it cannot come from a class.
               style={{ width: `${Math.max((fractions[index] ?? 0) * 100, 1)}%` }}
             />
@@ -117,12 +119,12 @@ function TimelineRows({ figure }: { figure: TimelineFigure }) {
         <li key={`${item.at}-${item.label}`} className="col-span-2 grid grid-cols-subgrid pb-md">
           <span
             className={`border-t-2 pt-sm font-mono text-micro uppercase leading-snug tracking-wide ${
-              item.highlight ? 'border-wire text-wire' : 'border-ink text-gray700'
+              item.highlight ? 'border-accent text-accent' : 'border-line-strong text-muted'
             }`}
           >
             {item.at}
           </span>
-          <div className="min-w-0 border-t border-gray100 pt-sm">
+          <div className="min-w-0 border-t border-line pt-sm">
             <p
               className={`font-display text-base leading-snug ${
                 item.highlight ? 'font-bold' : 'font-medium'
@@ -131,7 +133,7 @@ function TimelineRows({ figure }: { figure: TimelineFigure }) {
               {item.label}
             </p>
             {item.note ? (
-              <p className="mt-xs font-mono text-micro leading-snug text-gray700">{item.note}</p>
+              <p className="mt-xs font-mono text-micro leading-snug text-muted">{item.note}</p>
             ) : null}
           </div>
         </li>
@@ -146,17 +148,17 @@ export function FigureList({ figures }: { figures: FigureData[] }) {
 
   return (
     <section aria-labelledby="figures-heading" className="scroll-mt-24" id="figures">
-      <div className="flex items-baseline gap-md border-b-2 border-ink pb-sm">
-        <span aria-hidden="true" className="font-mono text-micro text-signal">
+      <div className="flex items-baseline gap-md border-b-2 border-line-strong pb-sm">
+        <span aria-hidden="true" className="font-mono text-micro text-accent">
           ◆
         </span>
         <h2 id="figures-heading" className="font-display text-h4 font-black tracking-tight">
           データ
-          <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+          <span className="ml-sm font-mono text-micro font-normal tracking-wider text-muted">
             FIGURES
           </span>
         </h2>
-        <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-gray700">
+        <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-muted">
           記事のデータ
         </span>
       </div>

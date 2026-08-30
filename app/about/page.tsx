@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-[1180px] px-md py-xl">
-      <header className="border-b-4 border-ink pb-lg">
+      <header className="border-b-4 border-accent pb-lg">
         <Wordmark variant="stacked" className="text-h1 sm:text-display" />
-        <p className="mt-lg font-mono text-micro font-bold uppercase tracking-wider text-gray700">
+        <p className="mt-lg font-mono text-micro font-bold uppercase tracking-wider text-muted">
           {site.tagline}
         </p>
       </header>
@@ -46,7 +46,7 @@ export default function AboutPage() {
                 <li>
                   <span className="block font-display text-h4 font-bold tracking-tight">
                     ニュース
-                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-muted">
                       NEWS
                     </span>
                   </span>
@@ -55,7 +55,7 @@ export default function AboutPage() {
                 <li>
                   <span className="block font-display text-h4 font-bold tracking-tight">
                     コンテクスト
-                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-muted">
                       CONTEXT
                     </span>
                   </span>
@@ -64,7 +64,7 @@ export default function AboutPage() {
                 <li>
                   <span className="block font-display text-h4 font-bold tracking-tight">
                     プレイヤーへの影響
-                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-muted">
                       PLAYER IMPACT
                     </span>
                   </span>
@@ -91,17 +91,17 @@ export default function AboutPage() {
         </div>
 
         <aside className="space-y-lg">
-          <section className="border-2 border-ink p-lg" aria-labelledby="masthead-heading">
+          <section className="border-2 border-line-strong p-lg" aria-labelledby="masthead-heading">
             <SectionHeading id="masthead-heading" label="MASTHEAD" as="h2" />
             <dl className="mt-md space-y-md font-mono text-micro uppercase tracking-wide">
               <div>
-                <dt className="text-gray700">運営</dt>
+                <dt className="text-muted">運営</dt>
                 <dd>{site.operator}</dd>
               </div>
               <div>
-                <dt className="text-gray700">フィード</dt>
+                <dt className="text-muted">フィード</dt>
                 <dd>
-                  <a href="/feed.xml" className="underline underline-offset-4 hover:text-signal">
+                  <a href="/feed.xml" className="underline underline-offset-4 hover:text-accent">
                     /feed.xml
                   </a>
                 </dd>
@@ -109,7 +109,7 @@ export default function AboutPage() {
             </dl>
           </section>
 
-          <p className="font-body text-small leading-snug text-gray700">
+          <p className="font-body text-small leading-snug text-muted">
             STEPWIREは独立した媒体です。KONAMIとは無関係で、提携も承認も受けていません。
             各商標はそれぞれの権利者に帰属します。
           </p>
