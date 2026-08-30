@@ -17,6 +17,11 @@ const parser = new XMLParser({
   trimValues: true,
   // Some feeds wrap content in CDATA; keep it as a plain string.
   cdataPropName: '#cdata',
+  // WordPress feeds emit numeric character references in titles
+  // ("GALAXY BRAVE &#8211; MISERY"). Without this they survive parsing and end
+  // up rendered verbatim in a headline, on the page and in the video.
+  processEntities: true,
+  htmlEntities: true,
 });
 
 function textOf(value: unknown): string | undefined {
@@ -79,7 +84,17 @@ export function stripHtml(input: string): string {
     .replace(/&lt;/gi, '<')
     .replace(/&gt;/gi, '>')
     .replace(/&quot;/gi, '"')
-    .replace(/&#39;/gi, "'")
+    .replace(/&#0*39;/g, "'")
+    // Numeric character references, which publishers use freely for dashes and
+    // typographic quotes. Restricted to the Basic Multilingual Plane.
+    .replace(/&#(\d{2,5});/g, (_, code: string) => {
+      const point = Number(code);
+      return point > 0 && point <= 0xffff ? String.fromCodePoint(point) : '';
+    })
+    .replace(/&#x([0-9a-f]{2,4});/gi, (_, code: string) => {
+      const point = Number.parseInt(code, 16);
+      return point > 0 && point <= 0xffff ? String.fromCodePoint(point) : '';
+    })
     .replace(/\s+/g, ' ')
     .trim();
 }

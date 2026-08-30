@@ -105,6 +105,25 @@ sources:
       edits across several pages over hours or days, so at least one lands in
       some window — but do not treat this source as complete.
 
+  - id: ddrcommunity
+    name: DDRCommunity
+    type: rss
+    url: https://ddrcommunity.com/feed/
+    enabled: true
+    category: community
+    suggestedCategory: NEWS
+    homepage: https://ddrcommunity.com/
+    maxItems: 10
+    # No filter: this is the one source found so far that is DDR-only, so
+    # everything it publishes is on-topic by construction.
+    notes: >-
+      English-language DDR community news site (WordPress). Verified 2026-08-30:
+      RSS 2.0 with proper pubDate, 10 items per window, headlines already tagged
+      by title ("[DDR WORLD] …", "[DDR GRAND PRIX] …"). robots.txt disallows only
+      /wp-admin/. The highest signal-to-noise source in this registry — but it is
+      a community outlet, not a first-party one, so a story sourced here should
+      still be traced back to the announcement it reports.
+
   - id: 4gamer
     name: 4Gamer.net
     type: rss
@@ -128,6 +147,46 @@ sources:
   # ---------------------------------------------------------------------------
   # Checked and NOT enabled. Recorded so nobody re-investigates them.
   # ---------------------------------------------------------------------------
+  - id: bemani-youtube
+    name: BEMANI CHANNEL (YouTube)
+    type: atom
+    url: https://www.youtube.com/feeds/videos.xml?channel_id=UCVbHFsn9ymFxkT7xsFVE17Q
+    enabled: false
+    category: official
+    suggestedCategory: NEWS
+    homepage: https://www.youtube.com/@bemaniproleague
+    maxItems: 10
+    filter:
+      include:
+        - DanceDanceRevolution
+        - DDR
+        - BPL
+    notes: >-
+      KONAMI's official BEMANI channel, and where BEMANI PRO LEAGUE matches are
+      streamed. The feed works (verified 2026-08-30, HTTP 200, Atom), but
+      YouTube's robots.txt contains "Disallow: /feeds/videos.xml" for
+      "User-agent: *". This project's own collection policy says robots is
+      checked before a source is enabled, so it stays off. The compliant route is
+      the YouTube Data API v3 with a project API key (playlistItems.list on the
+      channel's uploads playlist), which would need a new adapter and a
+      YOUTUBE_API_KEY secret. Do not simply flip enabled to true.
+
+  - id: bpl-official
+    name: BEMANI PRO LEAGUE (official site)
+    type: manual
+    url: https://p.eagate.573.jp/game/bpl/
+    enabled: false
+    category: official
+    suggestedCategory: TOURNAMENT
+    homepage: https://p.eagate.573.jp/game/bpl/
+    notes: >-
+      The official BPL site. Verified 2026-08-30: the page returns HTTP 200 but
+      declares no RSS or Atom link at all, and the eagate domain sits behind a
+      WAF with no robots.txt. There is nothing to poll. BPL schedules and results
+      reach the inbox either by hand via the News candidate template, or
+      indirectly through ddrcommunity and bemaniwiki, both of which cover BPL.
+      Recorded as a source so its absence is a documented decision.
+
   - id: reddit-ddr
     name: r/DanceDanceRevolution
     type: atom

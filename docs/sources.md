@@ -52,16 +52,45 @@ fails the run with a clear message, and `pnpm test` covers the same rules.
 
 | id | Source | Type | Enabled | Why |
 | --- | --- | --- | --- | --- |
-| `bemaniwiki` | BEMANIWiki 2nd (RecentChanges) | RSS 2.0 | ✅ | The most reliable early signal that a DDR page changed. Filtered to DDR. |
+| `ddrcommunity` | DDRCommunity | RSS 2.0 | ✅ | The only DDR-only source found. Highest signal-to-noise; needs no filter. Also covers BPL and tournament results. |
+| `bemaniwiki` | BEMANIWiki 2nd (RecentChanges) | RSS 2.0 | ✅ | Earliest signal that a DDR page changed. Filtered to DDR. |
 | `4gamer` | 4Gamer.net | RSS 1.0 | ✅ | Catches the rare DDR story that reaches general games media. Filtered. |
+| `bemani-youtube` | BEMANI CHANNEL (YouTube) | Atom | ❌ | **The feed works, but YouTube's robots.txt disallows it.** See below. |
+| `bpl-official` | BEMANI PRO LEAGUE site | — | ❌ | Live, but publishes no feed of any kind. Manual route. |
 | `reddit-ddr` | r/DanceDanceRevolution | Atom | ❌ | DDR-specific and a good fit, but Reddit rate-limits datacenter IPs — a runner would mostly see 429. |
 | `fixture-*` | Sample feeds in `data/fixtures/` | fixture | ✅ | Exercise the pipeline in CI with no network access. |
 
-**KONAMI / e-amusement publish no feed.** `p.eagate.573.jp` returns no
-`robots.txt` and sits behind a WAF; `konami.com/amusement` has article pages but
-no index or RSS. First-party announcements therefore enter the inbox by hand,
-through the *News candidate (manual)* issue template. That is the intended
-route, not a gap — see the scraping policy below.
+### Sources with no feed
+
+**KONAMI / e-amusement.** `p.eagate.573.jp` returns no `robots.txt` and sits
+behind a WAF; `konami.com/amusement` has article pages but no index or RSS. The
+**BEMANI PRO LEAGUE** site at `p.eagate.573.jp/game/bpl/` is live and returns
+HTTP 200, but declares no RSS or Atom link at all — there is nothing to poll.
+
+First-party announcements and BPL schedules therefore enter the inbox by hand,
+through the *News candidate (manual)* issue template — or indirectly, since
+`ddrcommunity` and `bemaniwiki` both cover BPL. That is the intended route, not
+a gap: see the scraping policy below.
+
+### YouTube: the feed works and is still not enabled
+
+`https://www.youtube.com/feeds/videos.xml?channel_id=…` returns a valid Atom
+feed for the official BEMANI channel, where BPL matches are streamed. It is
+registered and **disabled**, because YouTube's `robots.txt` says:
+
+```
+User-agent: *
+Disallow: /feeds/videos.xml
+```
+
+This project's own policy is that robots is checked before a source goes live.
+Enabling a feed the site asks automated clients not to fetch would make that
+policy decorative, so the entry stays off with the reason recorded next to it.
+
+The compliant route is the **YouTube Data API v3** — an official, documented
+interface: `playlistItems.list` against the channel's uploads playlist, with a
+project API key. That needs a new adapter and a `YOUTUBE_API_KEY` secret, and is
+the right way to add official video as a source. Do not simply flip `enabled`.
 
 ## Relevance filtering
 

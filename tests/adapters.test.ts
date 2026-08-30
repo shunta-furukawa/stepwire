@@ -130,6 +130,25 @@ describe('stripHtml', () => {
   it('removes markup and decodes the common entities', () => {
     expect(stripHtml('<p>a &amp; b</p><script>bad()</script>')).toBe('a & b');
   });
+
+  it('decodes numeric character references', () => {
+    // WordPress emits these for dashes and typographic quotes.
+    expect(stripHtml('GALAXY BRAVE &#8211; MISERY')).toBe('GALAXY BRAVE – MISERY');
+    expect(stripHtml('&#x2014; dash')).toBe('— dash');
+  });
+});
+
+describe('entity handling in titles', () => {
+  it('decodes a numeric reference in a feed title', () => {
+    // Left raw, this reaches the headline on the page and in the video.
+    const [item] = parseFeed(
+      `<?xml version="1.0"?><rss version="2.0"><channel><item>
+         <title>GALAXY BRAVE &#8211; MISERY</title>
+         <link>https://example.com/a</link>
+       </item></channel></rss>`,
+    );
+    expect(item!.title).toBe('GALAXY BRAVE – MISERY');
+  });
 });
 
 describe('source filtering', () => {
