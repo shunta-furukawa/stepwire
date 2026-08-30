@@ -1,5 +1,6 @@
 import type { ArticleVideoInput } from '../content/article';
 import type { CompositionId } from './compositions';
+import type { EnvLike } from './guard';
 
 /**
  * Render drivers.
@@ -42,9 +43,7 @@ export interface RenderDriver {
  * falls back to local, so a misconfigured deployment fails loudly at render
  * time rather than silently spending money in a half-set-up account.
  */
-export function selectDriverName(
-  env: NodeJS.ProcessEnv = process.env,
-): 'local' | 'sandbox' {
+export function selectDriverName(env: EnvLike = process.env): 'local' | 'sandbox' {
   const explicit = env.STEPWIRE_RENDER_DRIVER;
   if (explicit === 'local' || explicit === 'sandbox') return explicit;
 

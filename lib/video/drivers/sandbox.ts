@@ -1,5 +1,6 @@
 import type { RenderDriver, RenderInput, RenderOutput } from '../drivers';
 import type { StepwireVideoProps } from '../../../video/compositions/StepwireVideo';
+import type { EnvLike } from '../guard';
 
 /**
  * Vercel Sandbox render driver.
@@ -23,7 +24,7 @@ interface SandboxConfig {
   revision: string;
 }
 
-export function readSandboxConfig(env: NodeJS.ProcessEnv = process.env): SandboxConfig {
+export function readSandboxConfig(env: EnvLike = process.env): SandboxConfig {
   const missing = (['VERCEL_TOKEN', 'VERCEL_TEAM_ID', 'VERCEL_PROJECT_ID'] as const).filter(
     (key) => !env[key],
   );

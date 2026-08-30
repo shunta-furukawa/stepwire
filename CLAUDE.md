@@ -1,0 +1,115 @@
+# CLAUDE.md
+
+STEPWIRE — a DDR news wire and archive, operated by Mono ddr. This repository is
+the CMS, the editorial workflow and the video studio, not just the website.
+
+Detailed guides live in `docs/`. This file holds the standing rules only.
+
+## Architecture
+
+```
+sources.yml → collector → GitHub Issue → human review → content/*.mdx → PR → merge
+                                                             │
+                                              ┌──────────────┴──────────────┐
+                                          website (Vercel)          video (Remotion)
+```
+
+One Article is the source of truth for both the web page and the video. There is
+no second content store, and there must never be one.
+
+- `content/articles/` real articles · `content/fixtures/` labelled samples
+- `lib/content/` schema, parsing, validation, loading
+- `lib/news/` source registry, adapters, normalisation, deduplication
+- `lib/video/` composition registry, scene derivation, render drivers, guards
+- `lib/design/tokens.ts` the one source of brand tokens
+- `video/` Remotion root, compositions, scenes, primitives
+- `app/` Next.js App Router · `components/` server components (studio is the
+  only client island)
+
+## Commands
+
+```bash
+pnpm dev                 # website, localhost:3000
+pnpm verify              # lint + typecheck + test + content:validate + build
+
+pnpm content:validate    # editorial gate
+pnpm article:new --title "Headline" --category UPDATE
+pnpm article:from-issue 42
+
+pnpm news:collect --dry-run          # fixtures only, no network, no issues
+pnpm news:collect --create-issues    # file candidates into the inbox
+
+pnpm video:studio                    # Remotion studio (scene design)
+pnpm video:render <slug>             # local render, no cloud, no cost
+```
+
+Run `pnpm verify` before every commit. Never leave the tree failing.
+
+## Content rules
+
+Article bodies are `.mdx` with typed YAML frontmatter and exactly three
+sections, always in this order:
+
+```
+## NEWS            reported fact — must cite a source with [^n]
+## CONTEXT         STEPWIRE analysis
+## PLAYER IMPACT   STEPWIRE analysis
+```
+
+- **NEWS is fact; CONTEXT and PLAYER IMPACT are analysis.** Never blur them.
+  The website labels which is which and readers rely on it.
+- **Every published report cites a source.** `[^1]` markers bind a claim to an
+  entry in `sources`. `pnpm content:validate` fails the build otherwise.
+- **AI output is never a source.** A source is something a reader can check: a
+  first-party announcement, a published report, a community record, a dataset.
+- **Slugs are permanent.** Once published, a URL never changes — the archive
+  promise depends on it.
+- **Fixtures must stay obviously fake.** Anything in `content/fixtures/` is
+  sample content: keep "SAMPLE" in the title, and never remove the banner, the
+  `noindex`, or the feed/sitemap exclusions.
+
+## Coding conventions
+
+- TypeScript strict, `noUncheckedIndexedAccess`. No `any`; no non-null
+  assertions outside tests.
+- Server components by default. Add `'use client'` only where interaction
+  genuinely requires it (today: the studio, and nothing else).
+- Zod validates everything entering the system: frontmatter, `sources.yml`,
+  API request bodies.
+- Import via the `@/` alias from `app/` and `components/`; relative paths inside
+  `lib/`, `video/` and `scripts/`.
+- Comments explain *why*. Do not narrate what the code already says.
+
+## Verification
+
+```bash
+pnpm lint && pnpm typecheck && pnpm test && pnpm content:validate && pnpm build
+```
+
+Tests are pure logic and run in about a second. **Never write a test that
+renders a video** — scene derivation is tested as data, and the rendering is
+verified by eye with `pnpm video:render`.
+
+## Important constraints
+
+- **Brand tokens have one home.** `lib/design/tokens.ts`, mirrored into
+  `app/globals.css`. `tests/tokens.test.ts` fails if they drift. Changing a
+  colour means changing both.
+- **No HTML scraping.** Official feeds, official APIs and public feeds only. A
+  site-specific adapter requires the checks in `docs/sources.md` first.
+- **The collector never publishes.** Its only output is a GitHub issue for a
+  human to accept or ignore. It also never labels anything `priority:breaking`;
+  that is an editorial judgement.
+- **Rendering costs money.** `/api/render` fails closed without
+  `STEPWIRE_RENDER_TOKEN`. Duplicate prevention is the Blob existence check —
+  it is the only state shared across serverless instances, so do not replace it
+  with in-memory bookkeeping. Do not bulk-render while iterating; use
+  `pnpm video:render` locally.
+- **Do not add a video CMS.** Video copy is derived from the article. If a video
+  needs different wording, add a narrow override under `article.video`, never a
+  parallel file.
+- **Keep dependencies minimal.** Prefer a small typed module over a library. Do
+  not add a database, a CMS, a job queue, or a state-management framework.
+- **Keep AI at the boundary.** `lib/ai/` may be added later for drafting and
+  triage. Collection, editing, publishing and rendering must all keep working
+  with it absent, and no core module may import a vendor SDK.

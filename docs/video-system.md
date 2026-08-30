@@ -1,0 +1,221 @@
+# Video system
+
+STEPWIRE videos are *derived* from articles. There is no video CMS, no script
+file, and no second copy of the copy.
+
+```
+Article ──► buildSceneSequence() ──► Scene[] ──► Remotion ──► MP4
+```
+
+## How a video is built
+
+`lib/video/scenes.ts` turns an `ArticleVideoInput` into a scene sequence:
+
+1. **Intro** — the ident, with the category and date.
+2. **Headline** — `video.headline` ?? `shortTitle` ?? `title`, with the summary.
+3. **News / Context / Impact** — each section is split on sentence boundaries
+   and packed into cards up to a per-format character budget.
+4. **Data** — only if the article supplies `video.data`.
+5. **Source** — the primary source. Never dropped.
+6. **Outro** — the wordmark and tagline.
+
+Each card's duration comes from its reading time (roughly 12 characters per
+second, plus time to register the card, clamped per format). **The length of a
+video is therefore a property of the article's content** — nobody types a
+duration anywhere. Remotion learns the total through `calculateMetadata`.
+
+If the total exceeds the format's ceiling, `trimToBudget` drops trailing
+analysis cards. The intro, headline, first news card, source and outro are never
+dropped: a short video missing its last supporting point is still coherent; one
+missing its source is not.
+
+## Compositions
+
+| Id | Size | fps | For |
+| --- | --- | --- | --- |
+| `STEPWIRE_SHORT` | 1080×1920 (9:16) | 30 | Shorts, Reels, TikTok, X. Target 20–45s |
+| `STEPWIRE_NEWS` | 1920×1080 (16:9) | 30 | YouTube, embeds. Target 35–90s |
+
+Both render from one component tree (`video/compositions/StepwireVideo.tsx`).
+They differ only in the derived sequence — card budget, cards per section,
+duration bounds and layout scale — not in duplicated React.
+
+> Remotion composition ids may not contain underscores. `STEPWIRE_SHORT` is the
+> name used by the API, the studio and these docs; each definition also carries
+> a `remotionId` (`STEPWIRE-SHORT`) used only when registering and rendering.
+
+## Overrides
+
+Article frontmatter may narrow what the video says. Every field is optional, and
+an article with none still produces a complete video.
+
+```yaml
+video:
+  headline: A shorter headline that fits a 9:16 frame
+  hook: One line under the ident
+  data:
+    - label: PEAK BPM
+      value: '300'
+    - label: SONGS
+      value: '6'
+  scenes:
+    context-2:
+      skip: true
+    intro:
+      durationInSeconds: 2.5
+    impact:
+      text: A tighter line, written for the screen
+```
+
+Use them sparingly. If a line reads badly on screen it usually reads badly on
+the page too, and fixing the article fixes both. An override is for a real
+difference between the surfaces — a headline that will not fit, a numeric
+readout that has no place in prose.
+
+Scene keys are scene ids as shown in the studio's scene list (`news-1`,
+`context-2`, `source`…). `pnpm content:validate` rejects a malformed key.
+
+## Previewing
+
+**In the website** (live article data, an article selector, render controls):
+
+```bash
+pnpm dev     # → http://localhost:3000/studio
+```
+
+**In Remotion Studio** (scene design, frame-by-frame, timeline scrubbing):
+
+```bash
+pnpm video:studio
+```
+
+Remotion Studio bundles for the browser and cannot read `content/` off disk, so
+it opens with the committed sample in `video/defaultProps.ts`. To preview a real
+article there:
+
+```bash
+pnpm video:data
+pnpm exec remotion studio video/index.ts --props=video/data/<slug>.json
+```
+
+## Rendering
+
+### Locally — free, no account
+
+```bash
+pnpm video:render <slug>
+pnpm video:render <slug> --composition STEPWIRE_NEWS
+pnpm video:render <slug> --out out/clip.mp4
+```
+
+Runs `@remotion/bundler` + `@remotion/renderer` in-process and writes to
+`video/out/`. A 40-second short takes about 80 seconds on a laptop-class
+machine. Use this while iterating on design — it costs nothing.
+
+Run `pnpm video:render` with no slug to list the published articles.
+
+### In the cloud — Vercel Sandbox
+
+The studio's **Render** button posts to `/api/render`, which:
+
+1. checks the operator token,
+2. computes a render id from the slug, the composition and the article's content
+   hash,
+3. returns the existing Blob URL if that id has already been rendered,
+4. otherwise starts a background job: create a sandbox at the deployed commit,
+   install, `remotion render`, stream the MP4 back, upload to Vercel Blob.
+
+The response is immediate (`202`) with a render id; the studio polls
+`GET /api/render?renderId=…`.
+
+```bash
+curl -X POST https://stepwire.example/api/render \
+  -H 'content-type: application/json' \
+  -H "x-stepwire-render-token: $STEPWIRE_RENDER_TOKEN" \
+  -d '{"articleSlug":"a-slug","composition":"STEPWIRE_SHORT"}'
+```
+
+### Cost protection
+
+Rendering bills real money, so the endpoint is guarded in layers:
+
+- **Shared secret.** `STEPWIRE_RENDER_TOKEN` in the `x-stepwire-render-token`
+  header, compared in constant time. **No token configured means the endpoint is
+  disabled** and returns 503 — a partial deployment fails closed, not open.
+- **Duplicate prevention.** The render id is content-addressed, so re-clicking
+  Render is free and editing the article produces a genuinely new id. The
+  authoritative check is "does the object exist in Blob storage", because that
+  is the only state shared across serverless instances.
+- **Rate limit.** Ten renders per hour per instance by default
+  (`STEPWIRE_RENDER_RATE_LIMIT`), behind a `RateLimiter` interface so a shared
+  store can replace it when there is more than one operator.
+- **In-flight check.** A render already running on this instance returns the
+  existing job rather than starting a second one.
+- **Logs.** Every render logs its id and outcome to the function log.
+
+Use `pnpm video:render` while iterating. Do not bulk-render.
+
+## Adding a scene
+
+1. Add the type to `SceneType` in `lib/video/scenes.ts`.
+2. Emit it in `buildSceneSequence`, with a duration derived from its content.
+3. Write the component in `video/scenes/index.tsx` taking `{ scene, orientation }`.
+4. Register it in `SCENE_COMPONENTS`.
+5. If it should be droppable under budget pressure, add it to `droppable` in
+   `trimToBudget`. If it must always appear, do not.
+6. Add a case to `tests/video.test.ts` — scenes are tested as data, never by
+   rendering.
+
+## Adding a composition
+
+1. Add an entry to `COMPOSITIONS` in `lib/video/compositions.ts`, including a
+   `remotionId` with no underscores.
+2. Add a profile to `PROFILES` in `lib/video/scenes.ts` (card budget, cards per
+   section, duration bounds, fixed-scene lengths).
+3. If the aspect ratio is new, extend `layout()` in `video/scenes/index.tsx`.
+
+`video/Root.tsx`, `/studio` and `/api/render` all read the registry, so nothing
+else needs changing.
+
+## Design system
+
+Video styles come from `lib/design/tokens.ts` — the same module the website's
+Tailwind theme mirrors. `video/styles/theme.ts` scales the type and spacing
+scales by 3 for a 1080p-class canvas; it does not define new values.
+`tests/tokens.test.ts` fails if the two ever drift.
+
+Shared primitives live in `video/components/primitives.tsx`:
+
+| Primitive | Motif |
+| --- | --- |
+| `Arrow` | One shape at four rotations — the arrow abstraction |
+| `PanelGrid` | The four-panel layout as a structural background |
+| `ProgressRail` | The step timeline, doing real work: how much is left |
+| `ScanLines` | Wire transmission, as texture |
+| `WireBar` | The persistent masthead, instead of a watermark |
+| `KineticText` | Word-by-word reveal — emphasis, not busywork |
+| `LabelChip` · `BodyText` · `Card` | Layout and typography |
+
+Reported fact renders on a light ground; editorial analysis renders inverted.
+That is the same fact/analysis distinction the website draws with its section
+labels — the video does not invent its own vocabulary.
+
+**Fonts.** Video type uses the same system stack as the website. That removes a
+network dependency from both the web build and the headless render, at the cost
+of exact cross-platform metrics. If exact metrics start to matter,
+`@remotion/google-fonts` is the upgrade path.
+
+## Troubleshooting
+
+**"Composition id can only contain a-z, A-Z, 0-9, CJK characters and -"** — a
+composition was registered with its public name instead of its `remotionId`.
+
+**A render succeeds but returns no URL.** `BLOB_READ_WRITE_TOKEN` is missing.
+The render ran and was discarded; add a Blob store to the project.
+
+**The studio says `status: unknown` while polling.** The job started on a
+different serverless instance. The finished file will still appear — storage,
+not the job registry, is authoritative.
+
+**A card looks overfull.** The budget is per format in `PROFILES`. Shortening
+the article's sentences is usually the better fix; it improves the web page too.

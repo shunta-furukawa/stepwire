@@ -267,19 +267,19 @@ describe('authorizeRender', () => {
     new Headers(token ? { [RENDER_TOKEN_HEADER]: token } : {});
 
   it('fails closed when no token is configured', () => {
-    const result = authorizeRender(headers('anything'), {} as NodeJS.ProcessEnv);
+    const result = authorizeRender(headers('anything'), {});
     expect(result).toMatchObject({ ok: false, status: 503 });
   });
 
   it('rejects a missing token', () => {
     const result = authorizeRender(headers(), {
       STEPWIRE_RENDER_TOKEN: 'secret',
-    } as NodeJS.ProcessEnv);
+    });
     expect(result).toMatchObject({ ok: false, status: 401 });
   });
 
   it('rejects a wrong token, including one of a different length', () => {
-    const env = { STEPWIRE_RENDER_TOKEN: 'secret' } as NodeJS.ProcessEnv;
+    const env = { STEPWIRE_RENDER_TOKEN: 'secret' };
     expect(authorizeRender(headers('wrong!'), env)).toMatchObject({ ok: false, status: 403 });
     expect(authorizeRender(headers('s'), env)).toMatchObject({ ok: false, status: 403 });
   });
@@ -287,7 +287,7 @@ describe('authorizeRender', () => {
   it('accepts the configured token', () => {
     const result = authorizeRender(headers('secret'), {
       STEPWIRE_RENDER_TOKEN: 'secret',
-    } as NodeJS.ProcessEnv);
+    });
     expect(result.ok).toBe(true);
   });
 });

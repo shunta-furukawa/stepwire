@@ -17,6 +17,9 @@ import { timingSafeEqual } from 'node:crypto';
 
 export const RENDER_TOKEN_HEADER = 'x-stepwire-render-token';
 
+/** Just the shape these helpers read, so a test can pass a stub. */
+export type EnvLike = Record<string, string | undefined>;
+
 export type AuthResult =
   | { ok: true }
   | { ok: false; status: 401 | 403 | 503; message: string };
@@ -29,10 +32,7 @@ function secretsMatch(provided: string, expected: string): boolean {
   return timingSafeEqual(a, b);
 }
 
-export function authorizeRender(
-  headers: Headers,
-  env: NodeJS.ProcessEnv = process.env,
-): AuthResult {
+export function authorizeRender(headers: Headers, env: EnvLike = process.env): AuthResult {
   const expected = env.STEPWIRE_RENDER_TOKEN;
 
   if (!expected) {

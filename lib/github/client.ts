@@ -132,7 +132,9 @@ export class GitHubClient {
 }
 
 /** Builds a client from the environment Actions provides. Returns undefined if unconfigured. */
-export function clientFromEnv(env: NodeJS.ProcessEnv = process.env): GitHubClient | undefined {
+export function clientFromEnv(
+  env: Record<string, string | undefined> = process.env,
+): GitHubClient | undefined {
   const token = env.GITHUB_TOKEN;
   const repository = env.GITHUB_REPOSITORY;
   if (!token || !repository) return undefined;

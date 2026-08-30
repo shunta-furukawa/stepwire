@@ -16,7 +16,7 @@ export interface StoredRender {
   uploadedAt?: string;
 }
 
-export function blobConfigured(env: NodeJS.ProcessEnv = process.env): boolean {
+export function blobConfigured(env: Record<string, string | undefined> = process.env): boolean {
   return Boolean(env.BLOB_READ_WRITE_TOKEN);
 }
 
