@@ -61,7 +61,7 @@ export function StoryCard({
       {typeof rank === 'number' ? (
         <span
           aria-hidden="true"
-          className="w-[2.5ch] font-mono text-micro tabular-nums text-gray500"
+          className="w-[2.5ch] font-mono text-micro tabular-nums text-gray700"
         >
           {String(rank).padStart(2, '0')}
         </span>
@@ -113,7 +113,7 @@ export function StoryList({
 }) {
   if (articles.length === 0) {
     return (
-      <p className="border-t border-gray300 py-xl font-mono text-small uppercase tracking-wide text-gray500">
+      <p className="border-t border-gray300 py-xl font-mono text-small uppercase tracking-wide text-gray700">
         No stories filed yet.
       </p>
     );

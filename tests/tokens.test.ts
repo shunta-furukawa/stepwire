@@ -41,6 +41,7 @@ describe('design tokens', () => {
       'color-gray500': color.gray500,
       'color-gray700': color.gray700,
       'color-signal': color.signal,
+      'color-signal-on-dark': color.signalOnDark,
       'color-wire': color.wire,
     };
 
@@ -95,4 +96,59 @@ describe('design tokens', () => {
     expect(video.formats.STEPWIRE_SHORT).toEqual({ width: 1080, height: 1920 });
     expect(video.formats.STEPWIRE_NEWS).toEqual({ width: 1920, height: 1080 });
   });
+});
+
+/**
+ * Contrast is a product requirement, not a review checklist item, so it is
+ * asserted. No single accent can clear AA against both a near-white and a
+ * near-black ground, which is why there are two signal tones — these tests are
+ * what stop someone "simplifying" them back into one.
+ */
+describe('colour contrast (WCAG 2.1)', () => {
+  const channel = (value: number) => {
+    const c = value / 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  };
+
+  const luminance = (hex: string) => {
+    const n = Number.parseInt(hex.slice(1), 16);
+    return (
+      0.2126 * channel((n >> 16) & 255) +
+      0.7152 * channel((n >> 8) & 255) +
+      0.0722 * channel(n & 255)
+    );
+  };
+
+  const contrast = (a: string, b: string) => {
+    const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (hi! + 0.05) / (lo! + 0.05);
+  };
+
+  const AA = 4.5;
+
+  it('meets AA for body and secondary text on the light ground', () => {
+    expect(contrast(color.ink, color.offWhite)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.gray700, color.offWhite)).toBeGreaterThanOrEqual(AA);
+  });
+
+  it('meets AA for text on the inverted ground', () => {
+    expect(contrast(color.paper, color.ink)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.gray300, color.ink)).toBeGreaterThanOrEqual(AA);
+    // gray500 is the on-dark secondary tone; it is not usable on light.
+    expect(contrast(color.gray500, color.ink)).toBeGreaterThanOrEqual(AA);
+  });
+
+  it('meets AA for each signal tone against the ground it is meant for', () => {
+    expect(contrast(color.signal, color.offWhite)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.signal, color.paper)).toBeGreaterThanOrEqual(AA);
+    // The importance flag is white text on a signal fill.
+    expect(contrast(color.paper, color.signal)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.signalOnDark, color.ink)).toBeGreaterThanOrEqual(AA);
+  });
+
+  it('meets AA for the data accent', () => {
+    expect(contrast(color.wire, color.paper)).toBeGreaterThanOrEqual(AA);
+    expect(contrast(color.wire, color.offWhite)).toBeGreaterThanOrEqual(AA);
+  });
+
 });

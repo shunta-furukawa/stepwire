@@ -76,7 +76,7 @@ export function PanelGrid({
 export function Arrow({
   direction = 'up',
   size = 24,
-  fill = color.signal,
+  fill = color.signal,  // callers on a dark ground pass color.signalOnDark
   style,
 }: {
   direction?: 'up' | 'right' | 'down' | 'left';
@@ -118,7 +118,11 @@ export function LabelChip({
         color: inverted ? color.ink : color.paper,
       }}
     >
-      <Arrow direction="right" size={type.base} fill={color.signal} />
+      <Arrow
+        direction="right"
+        size={type.base}
+        fill={inverted ? color.signal : color.signalOnDark}
+      />
       {children}
     </span>
   );
@@ -164,7 +168,14 @@ export function ProgressRail({
               style={{
                 width: `${state * 100}%`,
                 height: '100%',
-                background: position === index ? color.signal : inverted ? color.paper : color.ink,
+                background:
+                  position === index
+                    ? inverted
+                      ? color.signalOnDark
+                      : color.signal
+                    : inverted
+                      ? color.paper
+                      : color.ink,
               }}
             />
           </div>
@@ -204,7 +215,7 @@ export function WireBar({
           color: inverted ? color.paper : color.ink,
         }}
       >
-        STEP<span style={{ color: color.signal }}>WIRE</span>
+        STEP<span style={{ color: inverted ? color.signalOnDark : color.signal }}>WIRE</span>
       </span>
 
       <span
@@ -220,7 +231,7 @@ export function WireBar({
           style={{
             width: 10,
             height: 10,
-            background: color.signal,
+            background: inverted ? color.signalOnDark : color.signal,
             opacity: blink,
             display: 'block',
           }}

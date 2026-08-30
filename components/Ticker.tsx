@@ -19,7 +19,7 @@ export function Ticker({ articles }: { articles: Article[] }) {
     >
       <div className="mx-auto flex max-w-[1180px] items-stretch">
         <p className="flex shrink-0 items-center gap-sm border-r border-gray700 px-md py-sm font-mono text-micro font-bold uppercase tracking-wider">
-          <span aria-hidden="true" className="wire-pulse block h-[6px] w-[6px] bg-signal" />
+          <span aria-hidden="true" className="wire-pulse block h-[6px] w-[6px] bg-signal-on-dark" />
           Latest
         </p>
         <ul className="flex flex-1 gap-0 overflow-x-auto">
@@ -29,7 +29,7 @@ export function Ticker({ articles }: { articles: Article[] }) {
                 href={`/article/${article.slug}`}
                 className="flex h-full items-center gap-sm px-md py-sm font-mono text-micro uppercase tracking-wide transition-colors hover:bg-signal"
               >
-                <span className="text-gray500">{formatDate(article.publishedAt)}</span>
+                <span className="text-gray300">{formatDate(article.publishedAt)}</span>
                 <span className="max-w-[46ch] truncate">
                   {article.shortTitle ?? article.title}
                 </span>

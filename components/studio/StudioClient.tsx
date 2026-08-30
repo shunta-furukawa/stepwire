@@ -234,25 +234,25 @@ export function StudioClient({
 
           <dl className="mt-lg grid grid-cols-2 gap-md border-t border-gray300 pt-md font-mono text-micro uppercase tracking-wide sm:grid-cols-4">
             <div>
-              <dt className="text-gray500">Duration</dt>
+              <dt className="text-gray700">Duration</dt>
               <dd className="text-h4 font-bold tracking-tight">
                 {formatDuration(sequence.durationInFrames, sequence.fps)}
               </dd>
             </div>
             <div>
-              <dt className="text-gray500">Frames</dt>
+              <dt className="text-gray700">Frames</dt>
               <dd className="text-h4 font-bold tabular-nums tracking-tight">
                 {sequence.durationInFrames}
               </dd>
             </div>
             <div>
-              <dt className="text-gray500">Scenes</dt>
+              <dt className="text-gray700">Scenes</dt>
               <dd className="text-h4 font-bold tabular-nums tracking-tight">
                 {sequence.scenes.length}
               </dd>
             </div>
             <div>
-              <dt className="text-gray500">Aspect</dt>
+              <dt className="text-gray700">Aspect</dt>
               <dd className="text-h4 font-bold tracking-tight">{definition.aspectRatio}</dd>
             </div>
           </dl>
@@ -265,7 +265,7 @@ export function StudioClient({
                   key={scene.id}
                   className="grid grid-cols-[3ch_1fr_auto] items-baseline gap-md border-b border-gray300 py-sm font-mono text-micro uppercase tracking-wide"
                 >
-                  <span className="text-gray500 tabular-nums">
+                  <span className="text-gray700 tabular-nums">
                     {String(scene.index + 1).padStart(2, '0')}
                   </span>
                   <span>
@@ -324,7 +324,7 @@ export function StudioClient({
                 </option>
               ))}
             </select>
-            <p className="mt-sm font-mono text-micro uppercase tracking-wide text-gray500">
+            <p className="mt-sm font-mono text-micro uppercase tracking-wide text-gray700">
               {definition.usage}
             </p>
 
@@ -370,7 +370,7 @@ export function StudioClient({
 
             <div aria-live="polite" className="mt-lg">
               <p className="font-mono text-micro uppercase tracking-wide">
-                <span className="text-gray500">Status </span>
+                <span className="text-gray700">Status </span>
                 <span
                   className={
                     render.status === 'failed'
@@ -386,7 +386,7 @@ export function StudioClient({
               </p>
 
               {render.renderId ? (
-                <p className="mt-sm break-all font-mono text-[10px] text-gray500">
+                <p className="mt-sm break-all font-mono text-[10px] text-gray700">
                   {render.renderId}
                 </p>
               ) : null}
@@ -399,7 +399,7 @@ export function StudioClient({
 
               {render.url ? (
                 <div className="mt-md">
-                  <p className="font-mono text-micro uppercase tracking-wide text-gray500">
+                  <p className="font-mono text-micro uppercase tracking-wide text-gray700">
                     Output
                   </p>
                   <a

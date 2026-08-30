@@ -109,7 +109,7 @@ export function IntroScene({ scene, orientation }: SceneProps) {
               height: 8,
               width: `${ruleWidth}%`,
               margin: `${gap.sm}px auto`,
-              background: color.signal,
+              background: color.signalOnDark,
             }}
           />
           <span
@@ -248,7 +248,7 @@ export function NewsScene(props: SceneProps) {
 }
 
 export function ContextScene(props: SceneProps) {
-  return <BodyScene {...props} inverted accent={color.signal} />;
+  return <BodyScene {...props} inverted accent={color.signalOnDark} />;
 }
 
 export function ImpactScene(props: SceneProps) {
@@ -388,7 +388,7 @@ export function OutroScene({ scene, orientation }: SceneProps) {
               color: color.paper,
             }}
           >
-            STEP<span style={{ color: color.signal }}>WIRE</span>
+            STEP<span style={{ color: color.signalOnDark }}>WIRE</span>
           </span>
           <p
             style={{
@@ -410,7 +410,7 @@ export function OutroScene({ scene, orientation }: SceneProps) {
               key={direction}
               direction={direction}
               size={type.h3}
-              fill={index % 2 === 0 ? color.paper : color.signal}
+              fill={index % 2 === 0 ? color.paper : color.signalOnDark}
               style={{ opacity: easeOut((frame - 6 - index * 3) / 10) }}
             />
           ))}

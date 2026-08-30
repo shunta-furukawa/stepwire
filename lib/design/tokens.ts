@@ -22,13 +22,25 @@ export const color = {
   offWhite: '#F3F2EE',
   gray100: '#E4E3DE',
   gray300: '#C2C1BB',
+  /**
+   * `gray500` clears AA only against a dark ground (5.61:1 on ink); on a light
+   * ground it reaches 3.13:1, so light surfaces use `gray700` (6.67:1) for
+   * secondary text. The pairing is deliberate, not interchangeable.
+   */
   gray500: '#8A8983',
   gray700: '#565550',
   /**
    * Signal. Used ONLY for breaking / high-importance news and for the live
    * "wire" indicator. Never as a background for body text.
+   *
+   * Two tones, because no single red can clear WCAG AA against both a
+   * near-white and a near-black ground: `signal` is tuned for light surfaces
+   * (4.99:1 on offWhite, and 5.59:1 for white text sitting on it), and
+   * `signalOnDark` for the inverted ones (5.72:1 on ink). Pick by ground, not
+   * by taste.
    */
-  signal: '#E8341C',
+  signal: '#C62B14',
+  signalOnDark: '#F2543A',
   /**
    * Wire. Used ONLY for chart/BPM/difficulty data readouts — the DDR-derived
    * numeric information the brand treats as a distinct content class.

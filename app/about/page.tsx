@@ -86,11 +86,11 @@ export default function AboutPage() {
             <SectionHeading id="masthead-heading" label="Masthead" as="h2" />
             <dl className="mt-md space-y-md font-mono text-micro uppercase tracking-wide">
               <div>
-                <dt className="text-gray500">Operator</dt>
+                <dt className="text-gray700">Operator</dt>
                 <dd>{site.operator}</dd>
               </div>
               <div>
-                <dt className="text-gray500">Feed</dt>
+                <dt className="text-gray700">Feed</dt>
                 <dd>
                   <a href="/feed.xml" className="underline underline-offset-4 hover:text-signal">
                     /feed.xml

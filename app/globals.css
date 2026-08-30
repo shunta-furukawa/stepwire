@@ -15,7 +15,8 @@
   --color-gray300: #c2c1bb;
   --color-gray500: #8a8983;
   --color-gray700: #565550;
-  --color-signal: #e8341c;
+  --color-signal: #c62b14;
+  --color-signal-on-dark: #f2543a;
   --color-wire: #0b6bd6;
 
   --font-display: 'Helvetica Neue', Helvetica, 'Inter', ui-sans-serif, system-ui, 'Segoe UI', Arial,

@@ -174,7 +174,7 @@ export default async function ArticlePage({
                   >
                     {section.heading}
                   </h2>
-                  <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-gray500">
+                  <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-gray700">
                     {meta.kind}
                   </span>
                 </div>
@@ -195,7 +195,7 @@ export default async function ArticlePage({
               {SECTION_KEYS.map((key) => (
                 <li key={key}>
                   <a href={`#${key}`} className="hover:text-signal">
-                    <span className="text-gray500">{SECTION_LABELS[key].index}</span>{' '}
+                    <span className="text-gray700">{SECTION_LABELS[key].index}</span>{' '}
                     {article.sections[key].heading}
                   </a>
                 </li>
@@ -203,7 +203,7 @@ export default async function ArticlePage({
               {article.sources.length > 0 ? (
                 <li>
                   <a href="#source-1" className="hover:text-signal">
-                    <span className="text-gray500">04</span> Sources
+                    <span className="text-gray700">04</span> Sources
                   </a>
                 </li>
               ) : null}

@@ -22,18 +22,18 @@ export function Footer() {
           <ul className="space-y-sm">
             {SECTIONS.map((section) => (
               <li key={section.slug}>
-                <Link href={`/${section.slug}`} className="hover:text-signal">
+                <Link href={`/${section.slug}`} className="hover:text-signal-on-dark">
                   {section.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href="/about" className="hover:text-signal">
+              <Link href="/about" className="hover:text-signal-on-dark">
                 About
               </Link>
             </li>
             <li>
-              <a href="/feed.xml" className="hover:text-signal">
+              <a href="/feed.xml" className="hover:text-signal-on-dark">
                 RSS
               </a>
             </li>
