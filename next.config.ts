@@ -11,9 +11,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/**': ['./content/**/*'],
   },
-  experimental: {
-    typedRoutes: true,
-  },
+  typedRoutes: true,
 };
 
 export default nextConfig;
