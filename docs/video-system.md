@@ -324,5 +324,11 @@ The render ran and was discarded; add a Blob store to the project.
 different serverless instance. The finished file will still appear — storage,
 not the job registry, is authoritative.
 
+**The deployment fails with `invalid_max_duration`.** `/api/render` declares a
+`maxDuration`, and a value above the plan's limit fails the whole deployment —
+not just that route. It is set to 300, the Hobby ceiling. Raising it to 800
+gives a long sandbox render the headroom it wants, but only on a plan that
+allows it.
+
 **A card looks overfull.** The budget is per format in `PROFILES`. Shortening
 the article's sentences is usually the better fix; it improves the web page too.

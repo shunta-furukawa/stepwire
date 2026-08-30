@@ -24,8 +24,21 @@ import { authorizeRender, renderRateLimiter } from '@/lib/video/guard';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-/** The `after()` callback needs headroom beyond the response itself. */
-export const maxDuration = 800;
+/**
+ * The `after()` callback outlives the response, so it needs its own ceiling.
+ *
+ * 300 seconds is the Hobby plan's maximum, and a value above a plan's limit
+ * fails the *deployment*, not the request — the whole site refuses to ship
+ * because of one endpoint nobody enabled. So this is the universally valid
+ * number rather than the generous one; Next.js requires a literal here, so it
+ * cannot be read from the environment.
+ *
+ * The consequence is real and worth knowing: the sandbox itself is allowed
+ * twelve minutes, so on a plan capped at 300s a render that runs longer than
+ * five minutes loses the function waiting to collect and upload it. Raise this
+ * to 800 on a plan that permits it.
+ */
+export const maxDuration = 300;
 
 function json(body: unknown, status = 200): Response {
   return Response.json(body, {
