@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Captured from https://www.4gamer.net/rss/index.xml on 2026-08-30, trimmed to 3 items.
+     Kept verbatim: it is the regression fixture for RSS 1.0 (RDF), whose <item>
+     elements are siblings of <channel> rather than children of it. -->
+
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:syn="http://purl.org/rss/1.0/modules/syndication/"
+ xmlns:admin="http://webns.net/mvcb/"
+>
+
+<channel rdf:about="https://www.4gamer.net">
+<title>4Gamer.net − 最新記事</title>
+<link>https://www.4gamer.net/</link>
+<description>日本最大級の総合ゲームサイトです。コンシューマゲームやオンラインゲーム，iPhone/iPadのゲーム，そしてPC のディープなハードウェア情報まで，日本だけでなく世界からも最新ゲームニュースをお届けします。ほかにも，ユーザーレビューなどのクチコミ情報も充実。</description>
+<dc:language>ja</dc:language>
+<dc:rights>Copyright (C) 2000-2026 Aetas Inc. All Rights Reserved. 本サ
+イト「4Gamer.net」の内容は，すべて無断転載を禁止します。ただし商用利用を
+除き，リンクについてはその限りではありません。
+</dc:rights>
+<dc:date>2026-08-29T18:00:00+09:00</dc:date>
+<dc:publisher>4Gamer.net</dc:publisher>
+<dc:creator>Aetas（株）</dc:creator>
+<dc:subject>4Gamer.net</dc:subject>
+<items>
+ <rdf:Seq>
+
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/038/G003821/20260829004/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/024/G102445/20260829029/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/035/G103532/20260829027/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/950/G095017/20260829026/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/014/G101452/20260829019/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/997/G099744/20260829025/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103749/20260829022/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/991/G999110/20260829024/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/968/G096894/20260829018/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/015/G101558/20260829011/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/991/G999110/20260829021/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/013/G101368/20260829020/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/476/G047609/20260828062/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/658/G065821/20260829015/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/807/G080716/20260829017/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/607/G060786/20260829014/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/611/G061190/20260829016/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/866/G086688/20260829010/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/022/G102216/20260829013/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/999/G999905/20260829012/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/979/G097918/20260829008/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/939/G093900/20260829007/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/202/G020288/20260829009/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/779/G077901/20260829005/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/223/G022384/20260828053/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/975/G097539/20260829002/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/448/G044868/20260828005/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/999/G999905/20260828015/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/991/G999103/20260828064/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103741/20260828048/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/630/G063081/20260828066/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/901/G090124/20260828065/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103745/20260828063/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103744/20260828061/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/905/G090534/20260828036/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/148/G014877/20260828057/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/693/G069335/20260828060/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/760/G076023/20260828059/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/905/G090591/20260828058/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/022/G002210/20260828054/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/476/G047609/20260828056/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/476/G047609/20260828055/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/901/G090156/20260828050/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/387/G038732/20260828051/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/014/G101414/20260828045/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103742/20260828049/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/991/G999110/20260828047/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/961/G096148/20260828043/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/828/G082885/20260828001/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/538/G053843/20260827044/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/987/G098741/20260828044/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/985/G098530/20260828042/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103733/20260828041/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/991/G999110/20260828031/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/779/G077989/20260826075/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/991/G999101/20260828039/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103729/20260828040/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/668/G066881/20260828034/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103709/20260828026/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103730/20260828038/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103721/20260828035/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103714/20260828030/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/735/G073548/20260828037/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103708/20260828025/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103718/20260828033/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/520/G052094/20260828032/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/476/G047609/20260828029/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/865/G086590/20260828002/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/476/G047609/20260828028/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/202/G020261/20260828027/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/908/G090896/20260828024/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/013/G101320/20260828021/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/013/G101345/20260828023/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/999/G999903/20260828022/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103707/20260828018/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/831/G083189/20260828019/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/007/G100759/20260828020/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/248/G024865/20260828016/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/540/G054095/20260828017/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/259/G025981/20260828014/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/993/G099337/20260828012/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/400/G040078/20260828013/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103701/20260828004/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/466/G046611/20260813041/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/988/G098872/20260826093/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/999/G999903/20260827055/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/440/G044054/20260824039/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/945/G094561/20260827067/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/484/G048410/20260827007/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/579/G057941/20260828010/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103702/20260828009/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/898/G089828/20260828008/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/758/G075801/20260828007/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/668/G066881/20260828006/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/640/G064053/20260818029/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/010/G101087/20260825045/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/025/G102544/20260827016/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/037/G103700/20260827065/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/463/G046388/20260827066/" />
+	  <rdf:li rdf:resource="https://www.4gamer.net/games/036/G103699/20260827064/" />
+
+
+ </rdf:Seq>
+</items>
+</channel>
+
+<image rdf:about="https://www.4gamer.net/image/logo_publisher_wide_4gamer.png">
+ <title>4Gamer.net</title> 
+ <link>https://www.4gamer.net/</link> 
+ <url>https://www.4gamer.net/image/logo_publisher_wide_4gamer.png</url> 
+</image>
+
+	<item rdf:about="https://www.4gamer.net/games/038/G003821/20260829004/">
+<title>週刊Steam広場 第168号：「Resonance: A Plague Tale Legacy」や「STAR WARS ゼロ・カンパニー」が発売に</title>
+<link>https://www.4gamer.net/games/038/G003821/20260829004/</link>
+<dc:date>2026-08-29T18:00:00+09:00</dc:date>
+<description>
+　今週発売されたSteamの注目タイトルやセール情報をお届けする「週刊Steam広場」。今週は，「APlagueTale」シリーズの最新作「Resonance:APlagueTaleLegacy」や，クローン戦争を題材とする「STARWARSゼロ・カンパニー」がリリースされた。
+</description>
+</item>
+<item rdf:about="https://www.4gamer.net/games/024/G102445/20260829029/">
+<title>物理系宇宙開発シム新作「Kitten Space Agency」がgamescom 2026でお披露目。KSPオリジナルクリエイターも参戦［gamescom］</title>
+<link>https://www.4gamer.net/games/024/G102445/20260829029/</link>
+<dc:date>2026-08-29T17:54:34+09:00</dc:date>
+<description>
+　gamescom2026の会場にて，新作宇宙開発シミュレーション「KittenSpaceAgency」のデモプレイと最新情報が初公開されていたので立ち寄ってみた。本作は，「KerbalSpaceProgram」の精神的後継作という位置づけで，オリジナルクリエイターのフェリペ・ファランゲ氏もブースで発見した。
+</description>
+</item>
+<item rdf:about="https://www.4gamer.net/games/035/G103532/20260829027/">
+<title>武器を落とし，投げ，マージして神を討つ。物理演算パズル×デッキ構築ローグライト「Helcast」を世界初試遊［gamescom］</title>
+<link>https://www.4gamer.net/games/035/G103532/20260829027/</link>
+<dc:date>2026-08-29T17:12:03+09:00</dc:date>
+<description>
+　gamescom2026のインディーコーナー・HYPERREALブースにプレイアブル出展された「Helcast」を試遊。武器の質量や速度，衝突，跳ね返りを利用してマージを起こす，北欧神話を題材にしたデッキ構築型ローグライトだ。
+</description>
+</item>
+</rdf:RDF>

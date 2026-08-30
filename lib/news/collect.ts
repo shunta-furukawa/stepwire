@@ -1,4 +1,5 @@
 import { createFetch, getAdapter, type AdapterContext, type FetchLike } from './adapters';
+import { applyFilter } from './filter';
 import {
   addToSeenIndex,
   defaultDuplicateDetector,
@@ -86,9 +87,16 @@ export async function collectNews(options: CollectOptions): Promise<CollectRunRe
       continue;
     }
 
-    onLog(`${source.id}: ${items.length} item(s) fetched`);
+    // Filter before capping: applying `maxItems` first would spend the budget
+    // on items the filter is about to discard, and a busy multi-game feed would
+    // then yield nothing relevant at all.
+    const { kept, removed } = applyFilter(items, source.filter);
+    onLog(
+      `${source.id}: ${items.length} item(s) fetched` +
+        (removed > 0 ? `, ${removed} filtered out as off-topic` : ''),
+    );
 
-    const perSource = items.slice(0, source.maxItems ?? 10);
+    const perSource = kept.slice(0, source.maxItems ?? 10);
 
     for (const item of perSource) {
       const candidate = toCandidate(item, source, collectedAt);

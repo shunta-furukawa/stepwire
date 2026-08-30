@@ -1,4 +1,5 @@
 import type { Category } from '../content/categories';
+import type { SourceFilter } from './filter';
 
 /**
  * A raw item exactly as an adapter found it. Adapters do no interpretation
@@ -51,6 +52,11 @@ export interface SourceDefinition {
   homepage?: string;
   /** Per-source cap on items collected per run. Protects against feed floods. */
   maxItems?: number;
+  /**
+   * Relevance filter. Required in practice for any feed that is not
+   * DDR-specific — see `lib/news/filter.ts`.
+   */
+  filter?: SourceFilter;
   /** Free-form notes: terms of use, rate limits, contact. */
   notes?: string;
   /** Adapter-specific options (e.g. JSON field mapping). */

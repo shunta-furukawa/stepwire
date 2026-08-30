@@ -66,18 +66,80 @@ sources:
       JSON API can be added without writing a new adapter.
 
   # ---------------------------------------------------------------------------
-  # Real sources. Disabled until an operator has checked the feed, its terms and
-  # its update frequency, then enables it in its own pull request.
+  # Real sources. Each was fetched and inspected before being enabled; see the
+  # notes for what was checked and when. Neither is DDR-specific, so both carry
+  # a filter — that is what keeps the inbox short enough to triage.
   # ---------------------------------------------------------------------------
-  - id: example-official
-    name: Example Official Announcements
+  - id: bemaniwiki
+    name: BEMANIWiki 2nd
     type: rss
-    url: https://example.com/feed.xml
-    enabled: false
-    category: official
+    url: https://bemaniwiki.com/index.php?cmd=rss&ver=2.0
+    enabled: true
+    category: community
     suggestedCategory: UPDATE
-    homepage: https://example.com/
+    homepage: https://bemaniwiki.com/
+    maxItems: 10
+    filter:
+      # The feed is the wiki's RecentChanges across every BEMANI series, so the
+      # filter is what makes it a DDR source rather than a firehose.
+      include:
+        - DanceDanceRevolution
+        - DDR
+      exclude:
+        # Navigation and container pages are edited constantly and never carry
+        # news of their own.
+        - MenuBar
+        - RecentChanges
+        - SandBox
+        - コメント/
+    notes: >-
+      Community wiki covering the BEMANI series, including DDR. Verified
+      2026-08-30: RSS 2.0 at ver=2.0 (the default is RSS 0.91 and omits
+      pubDate). robots.txt declares only a Sitemap and no Disallow. An edit to a
+      DDR page is a signal that something changed, not a report — treat every
+      candidate as a lead to verify against a first-party source.
+      WINDOW: the feed returns a fixed 15 items regardless of any limit
+      parameter, which at observed edit rates is roughly two hours. The
+      four-hourly schedule therefore samples this feed rather than reading all
+      of it. That is acceptable because a real DDR change produces a burst of
+      edits across several pages over hours or days, so at least one lands in
+      some window — but do not treat this source as complete.
+
+  - id: 4gamer
+    name: 4Gamer.net
+    type: rss
+    url: https://www.4gamer.net/rss/index.xml
+    enabled: true
+    category: media
+    suggestedCategory: NEWS
+    homepage: https://www.4gamer.net/
+    maxItems: 10
+    filter:
+      include:
+        - DanceDanceRevolution
+        - DDR
+        - ダンスダンスレボリューション
+        - BEMANI
+    notes: >-
+      General games media. Verified 2026-08-30: RSS 1.0 (RDF), robots.txt allows
+      all. DDR appears rarely, so the filter usually removes every item — that is
+      the intended behaviour and costs one request per run.
+
+  # ---------------------------------------------------------------------------
+  # Checked and NOT enabled. Recorded so nobody re-investigates them.
+  # ---------------------------------------------------------------------------
+  - id: reddit-ddr
+    name: r/DanceDanceRevolution
+    type: atom
+    url: https://old.reddit.com/r/DanceDanceRevolution/.rss
+    enabled: false
+    category: community
+    suggestedCategory: COMMUNITY
+    homepage: https://www.reddit.com/r/DanceDanceRevolution/
     maxItems: 10
     notes: >-
-      Placeholder. Replace with a real first-party announcement feed, confirm it
-      permits automated polling at this interval, then enable in a separate PR.
+      DDR-specific and well suited to this pipeline, but Reddit rate-limits
+      datacenter IPs: verified 2026-08-30, www returned 429 and old.reddit
+      returned 200 only intermittently. A GitHub Actions runner is also a
+      datacenter IP, so enabling this would mostly add a failing source to every
+      run. Revisit with an authenticated Reddit API client.

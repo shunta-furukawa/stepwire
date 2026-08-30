@@ -24,6 +24,12 @@ export const sourceSchema = z.object({
   category: z.enum(['official', 'media', 'community']),
   suggestedCategory: z.enum(CATEGORIES).default('NEWS'),
   homepage: z.url().optional(),
+  filter: z
+    .object({
+      include: z.array(z.string().min(1)).optional(),
+      exclude: z.array(z.string().min(1)).optional(),
+    })
+    .optional(),
   maxItems: z.number().int().positive().max(50).default(10),
   notes: z.string().optional(),
   options: z.record(z.string(), z.unknown()).optional(),

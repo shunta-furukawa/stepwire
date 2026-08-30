@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Captured from https://bemaniwiki.com/index.php?cmd=rss&ver=2.0 on 2026-08-30, trimmed to 3 items.
+     Kept verbatim: it is the regression fixture for RSS 2.0 with a "JST" pubDate. -->
+
+<rss version="2.0">
+ <channel>
+  <title>BEMANIWiki 2nd</title>
+  <link>https://bemaniwiki.com/index.php?RecentChanges</link>
+  <description>PukiWiki RecentChanges</description>
+  <language>ja</language>
+
+<item>
+ <title>SOUND VOLTEX ∇/新曲雑記/BEMANI・オリジナル・その他</title>
+ <link>https://bemaniwiki.com/index.php?SOUND+VOLTEX+%E2%88%87/%E6%96%B0%E6%9B%B2%E9%9B%91%E8%A8%98/BEMANI%E3%83%BB%E3%82%AA%E3%83%AA%E3%82%B8%E3%83%8A%E3%83%AB%E3%83%BB%E3%81%9D%E3%81%AE%E4%BB%96</link>
+ <pubDate>Sun, 30 Aug 2026 21:58:37 JST</pubDate>
+</item>
+<item>
+ <title>MenuBar</title>
+ <link>https://bemaniwiki.com/index.php?MenuBar</link>
+ <pubDate>Sun, 30 Aug 2026 21:57:04 JST</pubDate>
+</item>
+<item>
+ <title>GITADORA GALAXY WAVE DELTA/隠し要素/解禁イベント</title>
+ <link>https://bemaniwiki.com/index.php?GITADORA+GALAXY+WAVE+DELTA/%E9%9A%A0%E3%81%97%E8%A6%81%E7%B4%A0/%E8%A7%A3%E7%A6%81%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88</link>
+ <pubDate>Sun, 30 Aug 2026 20:50:14 JST</pubDate>
+</item>
+ </channel>
+</rss>

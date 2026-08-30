@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { parseFeed, stripHtml } from '../lib/news/adapters/feed';
+import { applyFilter, matchesFilter } from '../lib/news/filter';
 import { parseJsonItems } from '../lib/news/adapters/json';
 import { parseSources } from '../lib/news/sources';
 import { collectNews } from '../lib/news/collect';
@@ -44,10 +45,49 @@ describe('parseFeed (Atom)', () => {
   });
 });
 
+/**
+ * These two fixtures are verbatim captures of live feeds, trimmed to three
+ * items. They exist because both sources broke assumptions the hand-written
+ * fixtures did not: 4Gamer serves RSS 1.0, and BEMANIWiki stamps dates with a
+ * "JST" abbreviation. A synthetic fixture would only ever encode what we
+ * already believed.
+ */
+describe('parseFeed (captured real feeds)', () => {
+  it('parses RSS 1.0 (RDF), whose items are siblings of <channel>', async () => {
+    const items = parseFeed(await fixture('4gamer-latest.captured.xml'));
+    expect(items).toHaveLength(3);
+    expect(items[0]!.raw?.format).toBe('rss1.0');
+    expect(items[0]!.url).toMatch(/^https?:\/\//);
+    expect(items[0]!.title.length).toBeGreaterThan(0);
+    // RSS 1.0 dates the item with dc:date rather than pubDate.
+    expect(items[0]!.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}T/);
+  });
+
+  it('parses a "JST" pubDate that Date.parse alone rejects', async () => {
+    const items = parseFeed(await fixture('bemaniwiki-recent-changes.captured.xml'));
+    expect(items).toHaveLength(3);
+    // 21:58:37 JST is 12:58:37 UTC. Getting this wrong by nine hours would be
+    // invisible without an assertion on the exact instant.
+    expect(items[0]!.publishedAt).toBe('2026-08-30T12:58:37.000Z');
+  });
+
+  it('yields no date rather than a wrong one for an unknown timezone', () => {
+    const [item] = parseFeed(
+      `<?xml version="1.0"?><rss version="2.0"><channel><item>
+         <title>Unknown zone</title><link>https://example.com/a</link>
+         <pubDate>Sun, 30 Aug 2026 21:58:37 XYZ</pubDate>
+       </item></channel></rss>`,
+    );
+    // An absent date is safe: the item just skips the age filter. A guessed one
+    // would be silently wrong by hours.
+    expect(item!.publishedAt).toBeUndefined();
+  });
+});
+
 describe('parseFeed (invalid input)', () => {
   it('throws a legible error rather than returning nothing', () => {
     expect(() => parseFeed('<html><body>not a feed</body></html>')).toThrow(
-      /neither an RSS channel nor an Atom feed/,
+      /neither an RSS\/RDF channel nor an Atom feed/,
     );
   });
 });
@@ -89,6 +129,50 @@ describe('parseJsonItems', () => {
 describe('stripHtml', () => {
   it('removes markup and decodes the common entities', () => {
     expect(stripHtml('<p>a &amp; b</p><script>bad()</script>')).toBe('a & b');
+  });
+});
+
+describe('source filtering', () => {
+  const item = (title: string, summary?: string) => ({
+    url: 'https://example.com/a',
+    title,
+    ...(summary ? { summary } : {}),
+  });
+
+  it('keeps everything when no filter is configured', () => {
+    expect(matchesFilter(item('Anything at all'))).toBe(true);
+  });
+
+  it('keeps an item matching any include term', () => {
+    const filter = { include: ['DanceDanceRevolution', 'DDR'] };
+    // Real BEMANIWiki page titles.
+    expect(matchesFilter(item('DanceDanceRevolution WORLD/新曲リスト'), filter)).toBe(true);
+    expect(matchesFilter(item('DDR GRAND PRIX/解禁イベント'), filter)).toBe(true);
+    expect(matchesFilter(item('SOUND VOLTEX ∇/新曲雑記'), filter)).toBe(false);
+    expect(matchesFilter(item('jubeat beyond the Ave./新曲リスト'), filter)).toBe(false);
+  });
+
+  it('matches case-insensitively and searches the summary too', () => {
+    const filter = { include: ['ddr'] };
+    expect(matchesFilter(item('An update', 'Covers DDR WORLD.'), filter)).toBe(true);
+    expect(matchesFilter(item('DANCEDANCEREVOLUTION'), { include: ['DanceDanceRevolution'] })).toBe(true);
+  });
+
+  it('applies exclude after include', () => {
+    const filter = { include: ['DDR'], exclude: ['MenuBar'] };
+    expect(matchesFilter(item('DDR WORLD/Contents'), filter)).toBe(true);
+    expect(matchesFilter(item('MenuBar'), filter)).toBe(false);
+    // Excluded even though it matches an include term.
+    expect(matchesFilter(item('DDR MenuBar'), filter)).toBe(false);
+  });
+
+  it('reports how many items it removed', () => {
+    const result = applyFilter(
+      [item('DanceDanceRevolution WORLD'), item('SOUND VOLTEX'), item('jubeat')],
+      { include: ['DanceDanceRevolution'] },
+    );
+    expect(result.kept).toHaveLength(1);
+    expect(result.removed).toBe(2);
   });
 });
 
@@ -194,7 +278,8 @@ describe('collectNews', () => {
       now: () => new Date('2026-08-30T00:00:00.000Z'),
       maxAgeDays: 365,
     });
-    expect(result.skipped).toContain('example-official');
+    // The registry keeps checked-but-rejected sources recorded and disabled.
+    expect(result.skipped).toContain('reddit-ddr');
   });
 
   it('turns one failing source into a warning, not a failed run', async () => {

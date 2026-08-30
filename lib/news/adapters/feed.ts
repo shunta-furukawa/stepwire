@@ -84,9 +84,33 @@ export function stripHtml(input: string): string {
     .trim();
 }
 
+/**
+ * Timezone abbreviations `Date.parse` does not accept.
+ *
+ * `Date.parse` already resolves the RFC-822 US zones (GMT, EST/EDT, CST/CDT,
+ * MST/MDT, PST/PDT); this map covers the Asia-Pacific ones it rejects, which is
+ * what Japanese feeds actually emit. An abbreviation in neither set yields no
+ * date at all — a supported state, since the item simply skips the age filter.
+ */
+const TIMEZONE_OFFSETS: Record<string, string> = {
+  JST: '+0900',
+  KST: '+0900',
+  HKT: '+0800',
+  SGT: '+0800',
+  AEST: '+1000',
+  NZST: '+1200',
+};
+
 function toIso(value: string | undefined): string | undefined {
   if (!value) return undefined;
-  const parsed = Date.parse(value);
+
+  let candidate = value.trim();
+  const abbreviation = /\s([A-Z]{2,4})$/.exec(candidate)?.[1];
+  if (abbreviation && TIMEZONE_OFFSETS[abbreviation]) {
+    candidate = candidate.replace(/\s[A-Z]{2,4}$/, ` ${TIMEZONE_OFFSETS[abbreviation]}`);
+  }
+
+  const parsed = Date.parse(candidate);
   return Number.isNaN(parsed) ? undefined : new Date(parsed).toISOString();
 }
 
@@ -95,11 +119,21 @@ export function parseFeed(xml: string): RawItem[] {
   const document = parser.parse(xml) as Record<string, unknown>;
 
   const rss = document['rss'] as Record<string, unknown> | undefined;
-  const channel = rss?.['channel'] as Record<string, unknown> | undefined;
+  const rdf = document['rdf:RDF'] as Record<string, unknown> | undefined;
   const feed = document['feed'] as Record<string, unknown> | undefined;
 
-  if (channel) {
-    return asArray(channel['item'] as Record<string, unknown>[])
+  // RSS 2.0/0.9x nests <item> inside <channel>; RSS 1.0 hangs them off <rdf:RDF>
+  // alongside it. Both otherwise use the same element names, so one branch
+  // handles the pair once the items have been located.
+  const channel = (rss?.['channel'] ?? undefined) as Record<string, unknown> | undefined;
+  const items = channel
+    ? asArray(channel['item'] as Record<string, unknown>[])
+    : rdf
+      ? asArray(rdf['item'] as Record<string, unknown>[])
+      : undefined;
+
+  if (items) {
+    return items
       .map((entry) => {
         const url =
           textOf(entry['link']) ??
@@ -119,7 +153,7 @@ export function parseFeed(xml: string): RawItem[] {
             ? { publishedAt: toIso(textOf(entry['pubDate']) ?? textOf(entry['dc:date']))! }
             : {}),
           raw: {
-            format: 'rss',
+            format: rdf ? 'rss1.0' : 'rss',
             guid: textOf(entry['guid']),
             categories: asArray(entry['category'] as unknown[])
               .map(textOf)
@@ -163,7 +197,7 @@ export function parseFeed(xml: string): RawItem[] {
       .filter((item): item is RawItem => item !== null);
   }
 
-  throw new Error('document is neither an RSS channel nor an Atom feed');
+  throw new Error('document is neither an RSS/RDF channel nor an Atom feed');
 }
 
 export const feedAdapter: SourceAdapter = {

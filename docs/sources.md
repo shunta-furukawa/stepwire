@@ -18,6 +18,8 @@ sources:
     suggestedCategory: UPDATE     # the STEPWIRE category a human will usually pick
     homepage: https://example.com/
     maxItems: 10                  # per-run cap for this source
+    filter:                       # required unless the feed is DDR-only
+      include: [DanceDanceRevolution, DDR]
     notes: >-
       Terms permit automated polling. Publishes 2–3 items a week.
 ```
@@ -33,6 +35,7 @@ sources:
 | `suggestedCategory` | no | Defaults to `NEWS`. |
 | `homepage` | no | Attribution link. |
 | `maxItems` | no | Defaults to 10. Protects against a feed flood. |
+| `filter` | no | Relevance terms. Required in practice for any feed that is not DDR-specific — see below. |
 | `notes` | no | Terms, rate limits, contact — anything a future reviewer needs. |
 | `options` | no | Adapter-specific. Only the JSON adapter uses it. |
 
@@ -45,11 +48,56 @@ pnpm news:collect --dry-run --source example-official
 The registry is Zod-validated: a malformed entry, a bad id or a duplicate id
 fails the run with a clear message, and `pnpm test` covers the same rules.
 
+## Currently registered
+
+| id | Source | Type | Enabled | Why |
+| --- | --- | --- | --- | --- |
+| `bemaniwiki` | BEMANIWiki 2nd (RecentChanges) | RSS 2.0 | ✅ | The most reliable early signal that a DDR page changed. Filtered to DDR. |
+| `4gamer` | 4Gamer.net | RSS 1.0 | ✅ | Catches the rare DDR story that reaches general games media. Filtered. |
+| `reddit-ddr` | r/DanceDanceRevolution | Atom | ❌ | DDR-specific and a good fit, but Reddit rate-limits datacenter IPs — a runner would mostly see 429. |
+| `fixture-*` | Sample feeds in `data/fixtures/` | fixture | ✅ | Exercise the pipeline in CI with no network access. |
+
+**KONAMI / e-amusement publish no feed.** `p.eagate.573.jp` returns no
+`robots.txt` and sits behind a WAF; `konami.com/amusement` has article pages but
+no index or RSS. First-party announcements therefore enter the inbox by hand,
+through the *News candidate (manual)* issue template. That is the intended
+route, not a gap — see the scraping policy below.
+
+## Relevance filtering
+
+Almost no real feed is DDR-specific: a wiki's recent-changes feed covers every
+game it documents, and a games-media feed covers every game there is. Without a
+filter one run would bury a single relevant item under fifty irrelevant ones,
+and an inbox that cannot be triaged on a phone has lost its only advantage.
+
+```yaml
+    filter:
+      include:              # keep an item matching ANY of these
+        - DanceDanceRevolution
+        - DDR
+      exclude:              # ...unless it matches any of these
+        - MenuBar
+```
+
+Matching is case-insensitive substring against the title and the summary.
+Deliberately not regular expressions: the registry is editorial configuration
+reviewed by a human in a pull request, and a mis-anchored regex fails in ways a
+substring cannot.
+
+The filter runs **before** `maxItems`, so a busy multi-game feed cannot spend
+its per-source budget on items that are about to be discarded.
+
+A run where the filter removes everything is normal and costs one request:
+
+```
+bemaniwiki: 15 item(s) fetched, 15 filtered out as off-topic
+```
+
 ## Adapters
 
 | `type` | Status | Notes |
 | --- | --- | --- |
-| `rss` | implemented | RSS 2.0 |
+| `rss` | implemented | RSS 2.0, 0.9x **and RSS 1.0 (RDF)** — the last is still common on Japanese sites, and its `<item>` elements are siblings of `<channel>` rather than children |
 | `atom` | implemented | Atom 1.0 — same adapter; the two formats describe the same thing and publishers mix them |
 | `json` | implemented | JSON Feed, or any JSON endpoint via a field mapping |
 | `fixture` | implemented | Reads from `data/fixtures/`. How the pipeline is tested without touching the network |
@@ -167,5 +215,15 @@ consent wall or a redirect).
 **Nothing new, but the feed has new items.** They are being deduplicated. Check
 `data/news-ledger.json` and the closed `news-inbox` issues for the collector ID.
 
-**Everything is filtered out.** `--max-age-days` defaults to 14. A feed that
-republishes old items with old timestamps will produce nothing.
+**Everything is filtered out.** Two different causes. `--max-age-days` defaults
+to 14, so a feed republishing old items with old timestamps produces nothing.
+Separately, a source's `filter` may simply not match anything in the current
+window — for a general-interest feed that is the normal case, and the run log
+says so explicitly (`… 15 filtered out as off-topic`).
+
+**Dates are missing on every item.** The feed is probably stamping them with a
+timezone abbreviation. `Date.parse` accepts the RFC-822 US zones; the adapter
+adds the Asia-Pacific ones (JST, KST, HKT, SGT, AEST, NZST). Anything else
+yields no date rather than a guessed one, which is safe — the item just skips
+the age filter. Add the abbreviation to `TIMEZONE_OFFSETS` in
+`lib/news/adapters/feed.ts` if it is unambiguous.
