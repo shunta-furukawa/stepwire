@@ -1,0 +1,110 @@
+name: News candidate (manual)
+description: File a story into the STEPWIRE editorial inbox by hand.
+title: '[inbox] '
+labels: ['news-inbox', 'needs-review']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The collector fills this inbox automatically from `data/sources.yml`.
+        Use this template for anything it cannot see — a post in a chat, a
+        conversation at an arcade, something a player told you.
+
+        **A candidate is not a story.** It becomes one when it has a source a
+        reader can check.
+
+  - type: input
+    id: headline
+    attributes:
+      label: Headline
+      description: What happened, in one line. This is not the final title.
+      placeholder: New chart pack announced for the autumn rotation
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: Who announced or reported this.
+      placeholder: KONAMI / an event organiser / a community archive
+    validations:
+      required: true
+
+  - type: input
+    id: url
+    attributes:
+      label: Canonical URL
+      description: >-
+        A link a reader can open. If there is genuinely no URL, write how the
+        claim can be verified instead — STEPWIRE does not publish unsourced
+        reporting.
+    validations:
+      required: true
+
+  - type: input
+    id: published_at
+    attributes:
+      label: Published at
+      description: When the source published it (ISO-8601 or a plain date).
+      placeholder: '2026-08-30T09:00:00+09:00'
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Two or three sentences of fact. No interpretation here.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it may matter
+      description: >-
+        The CONTEXT half of the STEPWIRE format. If you cannot say why it
+        matters, it is probably not a story yet.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Suggested category
+      options:
+        - NEWS
+        - UPDATE
+        - CHARTS
+        - EVENT
+        - TOURNAMENT
+        - DATA
+        - CULTURE
+        - COMMUNITY
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - normal
+        - breaking
+        - low
+    validations:
+      required: true
+
+  - type: textarea
+    id: raw
+    attributes:
+      label: Raw metadata
+      description: Anything else worth keeping — screenshots, quoted text, IDs.
+
+  - type: input
+    id: collector_id
+    attributes:
+      label: Collector ID
+      description: >-
+        Leave blank. Automated candidates carry an id here so a later run knows
+        the story already has an issue.
+      placeholder: manual

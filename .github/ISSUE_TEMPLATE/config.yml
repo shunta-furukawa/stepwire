@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: STEPWIRE editorial workflow
+    url: https://github.com/shunta-furukawa/stepwire/blob/main/docs/editorial-workflow.md
+    about: How a candidate becomes a published article and a video.

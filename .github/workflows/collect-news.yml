@@ -1,0 +1,109 @@
+name: Collect news
+
+# The editorial inbox filler.
+#
+# This workflow NEVER publishes. Its only effect is to open GitHub issues
+# labelled `news-inbox` for a human to accept or ignore. It is deliberately kept
+# separate from CI and from deployment: a broken feed, an expired token or a
+# rate-limited source must never be able to hold up the website.
+
+on:
+  schedule:
+    # Every 4 hours, offset off the hour so the run does not collide with the
+    # top-of-hour spike on GitHub's shared runners.
+    #
+    # Cron is UTC. These are 07:10, 11:10, 15:10, 19:10, 23:10 and 03:10 JST
+    # (UTC+9) — a morning check, a lunchtime check, an evening check, and a
+    # late-night one that catches announcements made at the Japanese end of day.
+    - cron: '10 22,2,6,10,14,18 * * *'
+
+  workflow_dispatch:
+    inputs:
+      sources:
+        description: 'Comma-separated source ids (blank = every enabled source)'
+        required: false
+        type: string
+      limit:
+        description: 'Maximum candidates to file this run'
+        required: false
+        default: '10'
+        type: string
+      dry_run:
+        description: 'Collect and log only — do not create issues'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  # Never let two collector runs race: they would both see the same ledger and
+  # could file the same story twice.
+  group: collect-news
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  collect:
+    name: Collect candidate news
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Collect
+        id: collect
+        env:
+          # GITHUB_TOKEN is provided by Actions; no secret needs configuring for
+          # issue creation in this repository.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          set -o pipefail
+          ARGS="--limit ${{ inputs.limit || '10' }}"
+          if [ -n "${{ inputs.sources }}" ]; then
+            ARGS="$ARGS --source ${{ inputs.sources }}"
+          fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          else
+            ARGS="$ARGS --create-issues"
+          fi
+          echo "running: pnpm news:collect $ARGS"
+          pnpm news:collect $ARGS 2>&1 | tee collect.log
+
+      # The ledger is what stops the same story being filed twice after the
+      # issue is closed. Committing it is the persistence layer — no database.
+      - name: Commit the collection ledger
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          if git diff --quiet -- data/news-ledger.json; then
+            echo "ledger unchanged"
+            exit 0
+          fi
+          git config user.name  "stepwire-collector[bot]"
+          git config user.email "stepwire-collector@users.noreply.github.com"
+          git add data/news-ledger.json
+          git commit -m "chore(collector): record collected candidates"
+          git push
+
+      - name: Upload run log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: collect-log-${{ github.run_id }}
+          path: collect.log
+          if-no-files-found: ignore
+          retention-days: 14

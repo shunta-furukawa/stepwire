@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: lint · typecheck · test · content · build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Test
+        run: pnpm test
+
+      # The editorial gate: a published report that does not cite a source, or a
+      # citation that points at nothing, fails here rather than reaching the site.
+      - name: Validate content
+        run: pnpm content:validate
+
+      - name: Build
+        run: pnpm build
+
+      # Exercises the collector end to end against repository fixtures. No
+      # network requests, no issues created — this only proves the pipeline
+      # still normalises, deduplicates and formats correctly.
+      - name: Collector smoke test (fixtures only)
+        run: pnpm news:collect --dry-run --source fixture-official,fixture-community,fixture-json

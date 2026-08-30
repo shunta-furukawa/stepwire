@@ -1,0 +1,83 @@
+# STEPWIRE source registry
+#
+# Adding a source is a pull request against this file — no code change.
+# See docs/sources.md for the full guide.
+#
+# Fields
+#   id                lowercase-kebab-case, stable forever (it seeds collector IDs,
+#                     so changing it re-collects everything from that source)
+#   name              human-readable name, shown in the issue and in attribution
+#   type              rss | atom | json | fixture   (html and manual are not implemented — see docs/sources.md)
+#   url               feed URL, or a repo-relative path for type: fixture
+#   enabled           false by default. Enable deliberately, one source at a time.
+#   category          official | media | community  → becomes the source:* issue label
+#   suggestedCategory the STEPWIRE category a human will most often pick for this source
+#   maxItems          per-run cap for this source (default 10)
+#   homepage          attribution link
+#   notes             terms, rate limits, contact — anything a future reviewer needs
+#
+# POLICY: STEPWIRE prefers official feeds, official APIs and public feeds.
+# HTML scraping is not implemented and is not added casually; see docs/sources.md.
+
+sources:
+  # ---------------------------------------------------------------------------
+  # Fixtures. Always enabled: they are how the pipeline is exercised in CI and
+  # locally without sending a single request to anyone's server.
+  # ---------------------------------------------------------------------------
+  - id: fixture-official
+    name: STEPWIRE Fixture — Official Feed (sample)
+    type: fixture
+    url: data/fixtures/official-feed.xml
+    enabled: true
+    category: official
+    suggestedCategory: UPDATE
+    maxItems: 10
+    notes: >-
+      Sample RSS document with invented DDR announcements. Used by tests and by
+      `pnpm news:collect --dry-run`. Contains no real news.
+
+  - id: fixture-community
+    name: STEPWIRE Fixture — Community Feed (sample)
+    type: fixture
+    url: data/fixtures/community-feed.atom
+    enabled: true
+    category: community
+    suggestedCategory: COMMUNITY
+    maxItems: 10
+    notes: Sample Atom document with invented community posts.
+
+  - id: fixture-json
+    name: STEPWIRE Fixture — JSON API (sample)
+    type: fixture
+    url: data/fixtures/chart-releases.json
+    enabled: true
+    category: official
+    suggestedCategory: CHARTS
+    maxItems: 10
+    options:
+      itemsPath: releases
+      fields:
+        url: link
+        title: name
+        summary: note
+        publishedAt: released_at
+    notes: >-
+      Demonstrates the JSON adapter's configurable field mapping — an official
+      JSON API can be added without writing a new adapter.
+
+  # ---------------------------------------------------------------------------
+  # Real sources. Disabled until an operator has checked the feed, its terms and
+  # its update frequency, then enables it in its own pull request.
+  # ---------------------------------------------------------------------------
+  - id: example-official
+    name: Example Official Announcements
+    type: rss
+    url: https://example.com/feed.xml
+    enabled: false
+    category: official
+    suggestedCategory: UPDATE
+    homepage: https://example.com/
+    maxItems: 10
+    notes: >-
+      Placeholder. Replace with a real first-party announcement feed, confirm it
+      permits automated polling at this interval, then enable in a separate PR.

@@ -1,0 +1,62 @@
+name: Add a source
+description: Propose a new feed for the STEPWIRE collector.
+title: '[source] '
+labels: ['source-request']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        STEPWIRE collects from official feeds, official APIs and public feeds.
+        It does not scrape. See `docs/sources.md` before filing.
+
+  - type: input
+    id: name
+    attributes:
+      label: Source name
+    validations:
+      required: true
+
+  - type: input
+    id: feed_url
+    attributes:
+      label: Feed URL
+      description: The RSS, Atom or JSON endpoint — not the homepage.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Feed type
+      options: [rss, atom, json]
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Source category
+      options: [official, media, community]
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: policy
+    attributes:
+      label: Collection policy
+      description: All of these must be true before a source is enabled.
+      options:
+        - label: The feed is published by the source for public consumption.
+          required: true
+        - label: I have checked the site's terms and robots.txt for restrictions on automated access.
+          required: true
+        - label: Polling every four hours is well within any stated rate limit.
+          required: true
+        - label: STEPWIRE will attribute this source by name on every story that uses it.
+          required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Update frequency, volume per day, contact, anything unusual.

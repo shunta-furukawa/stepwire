@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SAMPLE FIXTURE FEED — invented content. Not a real community feed.
+-->
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>STEPWIRE Fixture — Community Feed (sample)</title>
+  <link href="https://example.org/stepwire/fixtures/community" rel="alternate"/>
+  <link href="https://example.org/stepwire/fixtures/community.atom" rel="self"/>
+  <id>urn:stepwire:fixtures:community</id>
+  <updated>2026-08-29T14:15:00Z</updated>
+  <entry>
+    <title>SAMPLE: Regional qualifier decided on a tiebreak</title>
+    <link rel="alternate" href="https://example.org/stepwire/fixtures/qualifier?ref=newsletter"/>
+    <id>urn:stepwire:fixtures:qualifier</id>
+    <published>2026-08-29T14:15:00Z</published>
+    <updated>2026-08-29T14:15:00Z</updated>
+    <category term="tournament"/>
+    <summary type="html">&lt;p&gt;A &lt;em&gt;fictional&lt;/em&gt; qualifier ended on a random-select tiebreak.&lt;/p&gt;</summary>
+  </entry>
+  <entry>
+    <title>SAMPLE: Community chart archive publishes a difficulty dataset</title>
+    <link rel="alternate" href="https://example.org/stepwire/fixtures/dataset"/>
+    <id>urn:stepwire:fixtures:dataset</id>
+    <published>2026-08-26T02:00:00Z</published>
+    <updated>2026-08-26T02:00:00Z</updated>
+    <summary>An invented community project publishing an invented dataset.</summary>
+  </entry>
+</feed>

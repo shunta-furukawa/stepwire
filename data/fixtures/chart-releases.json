@@ -1,0 +1,17 @@
+{
+  "_comment": "SAMPLE FIXTURE — invented chart releases. Demonstrates the JSON adapter field mapping.",
+  "releases": [
+    {
+      "name": "SAMPLE: Seasonal pack adds one 300 BPM chart",
+      "link": "https://example.com/stepwire/fixtures/chart-pack?gclid=abc123",
+      "note": "Fictional. Six songs, peak sustained tempo 300 BPM.",
+      "released_at": "2026-08-27T10:00:00Z"
+    },
+    {
+      "name": "SAMPLE: Difficulty table revision for four boss charts",
+      "link": "https://example.com/stepwire/fixtures/difficulty-revision",
+      "note": "Fictional rebalance of four invented charts.",
+      "released_at": "2026-08-25T04:30:00Z"
+    }
+  ]
+}
