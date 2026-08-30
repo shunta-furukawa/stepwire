@@ -80,12 +80,13 @@ export function normalizeUrl(input: string): string {
     url.searchParams.append(name, value);
   }
 
-  let normalized = url.toString();
-  // Drop a trailing slash on the path, but never turn "https://host/" into
-  // "https://host".
-  normalized = normalized.replace(/(?<=\/[^/?#]+)\/(?=$|\?)/, '');
+  // Drop a trailing slash, but never on the root path: "https://host/" and
+  // "https://host" are the same document, and the origin needs its slash.
+  if (url.pathname.length > 1 && url.pathname.endsWith('/')) {
+    url.pathname = url.pathname.replace(/\/+$/, '');
+  }
 
-  return normalized;
+  return url.toString();
 }
 
 /** Normalises a title for near-duplicate comparison across syndicating feeds. */
