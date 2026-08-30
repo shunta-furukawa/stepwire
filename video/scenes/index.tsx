@@ -1,7 +1,7 @@
 import React from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import type { Scene } from '../../lib/video/scenes';
-import { color, font, fontWeight, gap, textStyles, tracking, type } from '../styles/theme';
+import { color, font, fontWeight, gap, leading, textStyles, tracking, type } from '../styles/theme';
 import {
   Arrow,
   BodyText,
@@ -170,7 +170,13 @@ export function HeadlineScene({ scene, orientation }: SceneProps) {
               fontSize={l.headline}
               stagger={2}
               delay={2}
-              style={{ maxWidth: l.maxWidth }}
+              // The display style is tuned for the Latin wordmark; a headline
+              // that may be Japanese needs its tracking relaxed.
+              style={{
+                maxWidth: l.maxWidth,
+                letterSpacing: `${tracking.headline}em`,
+                lineHeight: leading.headline,
+              }}
             />
           </div>
           {scene.meta ? (

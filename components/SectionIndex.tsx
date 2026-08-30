@@ -23,9 +23,9 @@ export async function SectionIndex({ slug }: { slug: SectionSlug }) {
     <div className="mx-auto max-w-[1180px] px-md py-xl">
       <header className="border-b-4 border-ink pb-lg">
         <p className="font-mono text-micro font-bold uppercase tracking-wider text-signal">
-          Desk
+          DESK
         </p>
-        <h1 className="mt-sm font-display text-h2 font-black uppercase leading-display tracking-display sm:text-h1">
+        <h1 className="mt-sm font-display text-h2 font-black leading-headline tracking-headline sm:text-h1">
           {section.label}
         </h1>
         <p className="mt-md max-w-[56ch] font-body text-lead leading-snug text-gray700">
@@ -49,7 +49,8 @@ export async function SectionIndex({ slug }: { slug: SectionSlug }) {
       <section aria-labelledby="more-heading" className="pt-2xl">
         <SectionHeading
           id="more-heading"
-          label={lead ? 'More from this desk' : 'Filed'}
+          label={lead ? 'MORE' : 'FILED'}
+          description={lead ? 'このデスクの他の記事' : '入稿済み'}
         />
         <StoryList articles={rest} showDek />
       </section>

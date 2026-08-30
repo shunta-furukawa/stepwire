@@ -91,6 +91,32 @@ export const sandboxDriver: RenderDriver = {
         { path: 'render-props.json', content: Buffer.from(JSON.stringify(props), 'utf8') },
       ]);
 
+      // Japanese article text renders as tofu in headless Chrome unless the
+      // machine has a CJK face. The sandbox image is not guaranteed to carry
+      // one, so ensure it here rather than shipping megabytes of webfont in the
+      // repository or making a network request per unicode range at render time.
+      log('checking for a CJK font');
+      const fontCheck = await sandbox.runCommand({
+        cmd: 'bash',
+        args: ['-lc', 'fc-list 2>/dev/null | grep -ciE "cjk|noto sans jp|noto serif jp" || true'],
+      });
+      if ((await fontCheck.stdout()).trim() === '0') {
+        log('no CJK font present — installing fonts-noto-cjk');
+        const install = await sandbox.runCommand({
+          cmd: 'bash',
+          args: [
+            '-lc',
+            'apt-get update -qq && apt-get install -y -qq fonts-noto-cjk && fc-cache -f',
+          ],
+          sudo: true,
+        });
+        if (install.exitCode !== 0) {
+          // Not fatal: Latin content still renders, and failing the whole render
+          // over a font would be worse than a legible warning.
+          log(`warning: could not install a CJK font — Japanese text may not render`);
+        }
+      }
+
       log('installing dependencies');
       const install = await sandbox.runCommand({
         cmd: 'npx',

@@ -15,12 +15,33 @@ import {
  * Every value is derived from `lib/design/tokens.ts` — the same tokens the
  * website's Tailwind theme mirrors. The video does not have a palette or a type
  * scale of its own; it has the brand's, scaled up for a 1080p-class canvas.
+ *
+ * Fonts follow the web: the same system stack, no webfont.
+ *
+ * Loading Noto Sans JP from Google Fonts was tried and reverted. The Japanese
+ * subset is split across ~124 unicode ranges per weight, and Remotion must wait
+ * for all of them before the first frame — 363 network requests per render, and
+ * a hard dependency on fonts.gstatic.com being reachable. That is strictly
+ * worse than the system stack, which renders Japanese correctly on any machine
+ * that has a CJK face.
+ *
+ * The real requirement is therefore on the render environment, not the bundle:
+ * it must have a CJK font installed. `lib/video/drivers/sandbox.ts` ensures one
+ * in the sandbox, and `docs/video-system.md` records the requirement for local
+ * renders.
  */
 
 /** Type is ~3x web size at these canvas dimensions. */
 export const SCALE = 3;
 
 export const px = (value: number) => `${value * SCALE}px`;
+
+/** The video type stack — identical to the website's. */
+export const videoFont = {
+  display: font.display,
+  body: font.body,
+  mono: font.mono,
+} as const;
 
 export const type = {
   display: fontSize.display * SCALE,
@@ -49,7 +70,7 @@ export { color, font, fontWeight, tracking, leading, border };
 export const textStyles = {
   /** All-caps mono metadata — the "wire" voice. */
   meta: {
-    fontFamily: font.mono,
+    fontFamily: videoFont.mono,
     fontSize: type.small,
     letterSpacing: `${tracking.wider}em`,
     textTransform: 'uppercase',
@@ -57,7 +78,7 @@ export const textStyles = {
   },
   /** Section label chips. */
   label: {
-    fontFamily: font.mono,
+    fontFamily: videoFont.mono,
     fontSize: type.base,
     fontWeight: fontWeight.bold,
     letterSpacing: `${tracking.wider}em`,
@@ -66,16 +87,17 @@ export const textStyles = {
   },
   /** Headline / display type. */
   display: {
-    fontFamily: font.display,
+    fontFamily: videoFont.display,
     fontWeight: fontWeight.black,
     letterSpacing: `${tracking.display}em`,
     lineHeight: leading.display,
   },
-  /** Body copy on a card. */
+  /** Body copy on a card. Japanese needs near-normal tracking, not the
+   *  wordmark's -0.03em; see `tracking.headline`. */
   body: {
-    fontFamily: font.display,
+    fontFamily: videoFont.display,
     fontWeight: fontWeight.medium,
-    letterSpacing: `${tracking.tight}em`,
+    letterSpacing: `${tracking.headline}em`,
     lineHeight: leading.tight,
   },
 } as const satisfies Record<string, React.CSSProperties>;

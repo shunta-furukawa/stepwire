@@ -50,16 +50,28 @@ export const color = {
 
 export const font = {
   /**
-   * Display + UI. Deliberately a system stack: it removes a network dependency
-   * from both the web build and the headless-Chrome video render, so the two
-   * surfaces cannot disagree because a webfont failed to load.
+   * Display + UI.
+   *
+   * Latin faces are listed first so Latin glyphs keep the tight, neutral
+   * grotesque the wordmark is built on; the Japanese faces that follow pick up
+   * the CJK glyphs the Latin faces do not carry. That ordering is the whole
+   * trick to mixed-script type on the web.
+   *
+   * Still a system stack on purpose: it removes a network dependency from the
+   * web build. The video render loads Noto Sans JP explicitly instead, because
+   * headless Chrome cannot be assumed to carry a CJK face.
    */
   display:
-    "'Helvetica Neue', Helvetica, 'Inter', ui-sans-serif, system-ui, 'Segoe UI', Arial, sans-serif",
-  /** Long-form article body. Serif gives the editorial/magazine register. */
-  body: "'Iowan Old Style', 'Charter', Georgia, 'Times New Roman', ui-serif, serif",
+    "'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic Medium', 'Yu Gothic', Meiryo, 'Noto Sans JP', ui-sans-serif, system-ui, sans-serif",
+  /**
+   * Long-form article body. Mincho is the Japanese editorial register, and it
+   * keeps the display/body contrast that the Latin serif gave the design.
+   */
+  body:
+    "'Iowan Old Style', Charter, Georgia, 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'Yu Mincho', YuMincho, 'Noto Serif JP', ui-serif, serif",
   /** Metadata, timestamps, source lines, data readouts — the "wire" voice. */
-  mono: "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace",
+  mono:
+    "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'Hiragino Sans', 'Yu Gothic', monospace",
 } as const;
 
 /** Modular type scale, in px. Video scales these up via `videoScale`. */
@@ -84,7 +96,14 @@ export const fontWeight = {
 
 /** Tracking in em. Display type is set tight; small caps are set loose. */
 export const tracking = {
+  /** The wordmark and other all-Latin display type. */
   display: -0.03,
+  /**
+   * Headlines and body copy. Japanese fills its em box, so the negative
+   * tracking that flatters a Latin grotesque makes CJK look jammed — and
+   * `font-feature-settings: 'palt'` has already tightened it once.
+   */
+  headline: -0.005,
   tight: -0.015,
   normal: 0,
   wide: 0.08,
@@ -92,10 +111,18 @@ export const tracking = {
 } as const;
 
 export const leading = {
+  /** All-Latin display type — the wordmark. Sub-1 leading only works there. */
   display: 0.92,
-  tight: 1.08,
-  snug: 1.3,
-  normal: 1.6,
+  /**
+   * Headlines. A CJK glyph fills its full em box, so anything under about 1.1
+   * makes consecutive lines touch.
+   */
+  headline: 1.18,
+  tight: 1.35,
+  snug: 1.45,
+  // Japanese body text needs more air between lines than Latin does; 1.8 is
+  // comfortable for mincho at reading sizes without loosening the column.
+  normal: 1.8,
 } as const;
 
 /** 4px base spacing scale, in px. */

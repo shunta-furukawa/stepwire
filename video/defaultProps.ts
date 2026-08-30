@@ -17,29 +17,29 @@ import type { ArticleVideoInput } from '../lib/content/article';
  */
 export const SAMPLE_ARTICLE: ArticleVideoInput = {
   slug: 'sample-ddr-world-summer-update',
-  title: 'SAMPLE: DDR WORLD ships a summer update with a reworked scoring readout',
-  shortTitle: 'SAMPLE: Summer update reworks scoring',
-  dek: 'Fictional sample content used to develop the STEPWIRE video system.',
+  title: '【SAMPLE】DDR WORLD、夏のアップデートでスコア表示を刷新',
+  shortTitle: '【SAMPLE】夏の更新でスコア表示刷新',
+  dek: 'STEPWIREの動画システムを開発するための架空のサンプルです。',
   summary:
-    'A fictional summer update adds a per-panel accuracy readout to the results screen and rebalances four boss charts.',
+    '架空の夏アップデートで、リザルト画面にパネル別の精度表示が追加され、上位4譜面が調整された。',
   category: 'UPDATE',
   importance: 'major',
   publishedAt: '2026-08-24T09:00:00+09:00',
-  news: 'This is fixture content and describes nothing that happened. A fictional summer update adds a per-panel accuracy readout to the results screen. It also rebalances four charts at the top of the difficulty table.',
+  news: 'この記事はサンプルで、実際には何も起きていません。架空の夏アップデートがリザルト画面にパネル別の精度表示を追加しました。難易度表の上位にある4譜面も調整されています。',
   context:
-    'Results screens have historically told a player how well a run went without telling them where it went wrong. A per-panel breakdown moves that diagnosis into the cabinet itself.',
+    'リザルト画面はこれまで、どれだけ良かったかは教えても、どこで崩れたかは教えてくれませんでした。パネル別の内訳は、その診断を筐体そのものへ移します。',
   playerImpact:
-    'A failed run now points at a specific panel instead of a general feeling. Expect the effect to land on practice routine rather than on scores.',
+    '落ちた run が漠然とした感覚ではなく特定のパネルを指すようになります。影響はスコアよりも練習の組み立てに出るはずです。',
   primarySource: {
     publisher: 'STEPWIRE Fixtures',
-    title: 'SAMPLE SOURCE — not a real announcement',
+    title: 'SAMPLE SOURCE — 実在しない告知',
     url: 'https://example.com/stepwire/fixtures/summer-update',
   },
   video: {
-    hook: 'A results screen you actually read',
+    hook: '読めるリザルト画面',
     data: [
-      { label: 'CHARTS TOUCHED', value: '4' },
-      { label: 'NEW READOUT', value: 'PER-PANEL' },
+      { label: '調整譜面', value: '4' },
+      { label: '新表示', value: 'パネル別' },
     ],
   },
 };

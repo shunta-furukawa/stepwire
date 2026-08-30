@@ -4,8 +4,8 @@ import { SectionHeading } from '@/components/SectionHeading';
 import { Wordmark } from '@/components/Wordmark';
 
 export const metadata: Metadata = {
-  title: 'About',
-  description: `About ${site.name} — ${site.description}`,
+  title: 'STEPWIREについて',
+  description: site.description,
   alternates: { canonical: '/about' },
 };
 
@@ -22,60 +22,69 @@ export default function AboutPage() {
       <div className="grid gap-2xl pt-2xl lg:grid-cols-[1fr_320px]">
         <div className="space-y-2xl">
           <section aria-labelledby="what-heading">
-            <SectionHeading id="what-heading" label="What this is" />
-            <div className="mt-lg max-w-[68ch] space-y-lg font-body text-lead leading-normal">
+            <SectionHeading id="what-heading" label="STEPWIREとは" />
+            <div className="mt-lg max-w-[62ch] space-y-lg font-body text-lead leading-normal">
               <p>
-                {site.name} is an independent news and culture wire for DanceDanceRevolution,
-                operated by {site.operator}. It covers game updates, new songs and charts, events,
-                tournaments, chart data, and the people around the machine.
+                STEPWIREは、DanceDanceRevolutionを扱う独立系のニュース／カルチャーメディアです。
+                運営は{site.operator}。ゲームの更新、新曲と新譜面、イベント、大会、譜面データ、
+                そして筐体のまわりにいる人たちを扱います。
               </p>
               <p>
-                It is also an <strong>archive</strong>. Scenes lose their own history quickly:
-                announcements move, forums close, and what everyone knew last year becomes
-                unverifiable. Every story here keeps its sources attached and its URL stable, so
-                that the record survives the sources.
+                同時に<strong>アーカイブ</strong>でもあります。シーンは自分の歴史をすぐに失います。
+                告知は移転し、掲示板は閉じ、去年みんなが知っていたことが検証できなくなる。
+                だからここでは、すべての記事が出典を持ち、URLが永続します。
+                <strong>出典そのものが消えても、記録が残るように。</strong>
               </p>
             </div>
           </section>
 
           <section aria-labelledby="format-heading">
-            <SectionHeading id="format-heading" label="The format" />
-            <div className="mt-lg max-w-[68ch] space-y-lg font-body text-lead leading-normal">
-              <p>Every story is written in three parts, always in the same order.</p>
+            <SectionHeading id="format-heading" label="記事のかたち" />
+            <div className="mt-lg max-w-[62ch] space-y-lg font-body text-lead leading-normal">
+              <p>すべての記事は、必ず同じ順序の3つの部分で書かれます。</p>
               <ol className="space-y-lg">
                 <li>
-                  <span className="block font-display text-h4 font-bold uppercase tracking-tight">
-                    News
+                  <span className="block font-display text-h4 font-bold tracking-tight">
+                    ニュース
+                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+                      NEWS
+                    </span>
                   </span>
-                  What happened. Reported fact, and it must cite a source.
+                  何が起きたか。報道された事実であり、必ず出典を引用します。
                 </li>
                 <li>
-                  <span className="block font-display text-h4 font-bold uppercase tracking-tight">
-                    Context
+                  <span className="block font-display text-h4 font-bold tracking-tight">
+                    コンテクスト
+                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+                      CONTEXT
+                    </span>
                   </span>
-                  Why it is notable. This is editorial analysis, and it is labelled as such.
+                  なぜ注目なのか。ここはSTEPWIREの分析であり、そう明記されます。
                 </li>
                 <li>
-                  <span className="block font-display text-h4 font-bold uppercase tracking-tight">
-                    Player impact
+                  <span className="block font-display text-h4 font-bold tracking-tight">
+                    プレイヤーへの影響
+                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+                      PLAYER IMPACT
+                    </span>
                   </span>
-                  What actually changes for someone who plays. Also editorial analysis.
+                  実際にプレイする人にとって何が変わるか。これも分析です。
                 </li>
               </ol>
               <p>
-                The split is enforced by the content schema, not by habit: a published report that
-                does not cite a source in its News section fails the build.
+                この区別は慣習ではなく、コンテンツスキーマが強制しています。
+                <strong>ニュースの節が出典を引用していない記事は、ビルドが通りません。</strong>
               </p>
             </div>
           </section>
 
           <section aria-labelledby="ai-heading">
-            <SectionHeading id="ai-heading" label="On sourcing and AI" />
-            <div className="mt-lg max-w-[68ch] space-y-lg font-body text-lead leading-normal">
+            <SectionHeading id="ai-heading" label="出典とAIについて" />
+            <div className="mt-lg max-w-[62ch] space-y-lg font-body text-lead leading-normal">
               <p>
-                Automated tools may be used to gather candidate stories and to draft. They are
-                never a source. A source is a first-party announcement, a published report, a
-                community record or a dataset — something a reader can go and check.
+                候補の収集や下書きに自動化された道具を使うことはあります。しかし
+                <strong>それらは出典ではありません</strong>。出典とは、一次発表、報じられた記事、
+                コミュニティの記録、データセット —— 読者が自分で確かめにいけるもののことです。
               </p>
             </div>
           </section>
@@ -83,14 +92,14 @@ export default function AboutPage() {
 
         <aside className="space-y-lg">
           <section className="border-2 border-ink p-lg" aria-labelledby="masthead-heading">
-            <SectionHeading id="masthead-heading" label="Masthead" as="h2" />
+            <SectionHeading id="masthead-heading" label="MASTHEAD" as="h2" />
             <dl className="mt-md space-y-md font-mono text-micro uppercase tracking-wide">
               <div>
-                <dt className="text-gray700">Operator</dt>
+                <dt className="text-gray700">運営</dt>
                 <dd>{site.operator}</dd>
               </div>
               <div>
-                <dt className="text-gray700">Feed</dt>
+                <dt className="text-gray700">フィード</dt>
                 <dd>
                   <a href="/feed.xml" className="underline underline-offset-4 hover:text-signal">
                     /feed.xml
@@ -101,8 +110,8 @@ export default function AboutPage() {
           </section>
 
           <p className="font-body text-small leading-snug text-gray700">
-            {site.name} is not affiliated with, endorsed by, or connected to KONAMI. All trademarks
-            belong to their respective owners.
+            STEPWIREは独立した媒体です。KONAMIとは無関係で、提携も承認も受けていません。
+            各商標はそれぞれの権利者に帰属します。
           </p>
         </aside>
       </div>

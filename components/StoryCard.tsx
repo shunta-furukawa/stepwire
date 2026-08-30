@@ -19,7 +19,7 @@ export function LeadStory({ article }: { article: Article }) {
         <Timestamp iso={article.publishedAt} />
       </div>
 
-      <h2 className="mt-md font-display text-h2 font-black leading-display tracking-display text-balance sm:text-h1 lg:text-display">
+      <h2 className="mt-md font-display text-h3 font-black leading-headline tracking-headline text-balance sm:text-h2 lg:text-h1">
         <Link
           href={`/article/${article.slug}`}
           className="transition-colors hover:text-signal"
@@ -79,7 +79,7 @@ export function StoryCard({
           <Timestamp iso={article.publishedAt} />
         </div>
 
-        <h3 className="mt-sm font-display text-h4 font-bold leading-tight tracking-tight text-pretty sm:text-h3">
+        <h3 className="mt-sm font-display text-h4 font-bold leading-tight tracking-headline text-pretty sm:text-h3">
           <Link
             href={`/article/${article.slug}`}
             className="transition-colors group-hover:text-signal"
@@ -114,7 +114,7 @@ export function StoryList({
   if (articles.length === 0) {
     return (
       <p className="border-t border-gray300 py-xl font-mono text-small uppercase tracking-wide text-gray700">
-        No stories filed yet.
+        まだ記事がありません。
       </p>
     );
   }

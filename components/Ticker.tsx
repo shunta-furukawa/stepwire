@@ -14,13 +14,13 @@ export function Ticker({ articles }: { articles: Article[] }) {
 
   return (
     <section
-      aria-label="Latest stories"
+      aria-label="最新の記事"
       className="border-b-2 border-ink bg-ink text-paper"
     >
       <div className="mx-auto flex max-w-[1180px] items-stretch">
         <p className="flex shrink-0 items-center gap-sm border-r border-gray700 px-md py-sm font-mono text-micro font-bold uppercase tracking-wider">
           <span aria-hidden="true" className="wire-pulse block h-[6px] w-[6px] bg-signal-on-dark" />
-          Latest
+          最新
         </p>
         <ul className="flex flex-1 gap-0 overflow-x-auto">
           {articles.map((article) => (

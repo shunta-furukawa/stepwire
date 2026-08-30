@@ -5,7 +5,7 @@ import { site } from '@/lib/site';
 
 const NAV = [
   ...SECTIONS.map((section) => ({ href: `/${section.slug}`, label: section.label })),
-  { href: '/about', label: 'About' },
+  { href: '/about', label: 'STEPWIREについて' },
 ];
 
 export function Header() {
@@ -15,7 +15,7 @@ export function Header() {
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-md focus:top-md focus:z-50 focus:border-2 focus:border-ink focus:bg-paper focus:px-md focus:py-sm focus:font-mono focus:text-small"
       >
-        Skip to content
+        本文へスキップ
       </a>
 
       <div className="mx-auto flex max-w-[1180px] items-baseline justify-between gap-md px-md py-md">
@@ -31,7 +31,7 @@ export function Header() {
         </p>
       </div>
 
-      <nav aria-label="Sections" className="border-t border-gray300">
+      <nav aria-label="セクション" className="border-t border-gray300">
         <ul className="mx-auto flex max-w-[1180px] items-stretch gap-0 overflow-x-auto px-md">
           {NAV.map((item) => (
             <li key={item.href} className="shrink-0">

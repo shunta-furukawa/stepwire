@@ -7,7 +7,7 @@ import { site } from '@/lib/site';
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.tagline}`,
+    default: `${site.name} — ${site.taglineJa}`,
     template: `%s — ${site.name}`,
   },
   description: site.description,
@@ -22,14 +22,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: site.name,
-    title: `${site.name} — ${site.tagline}`,
+    title: `${site.name} — ${site.taglineJa}`,
     description: site.description,
     url: site.url,
-    locale: 'en',
+    locale: 'ja_JP',
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${site.name} — ${site.tagline}`,
+    title: `${site.name} — ${site.taglineJa}`,
     description: site.description,
   },
   robots: {

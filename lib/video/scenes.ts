@@ -1,5 +1,6 @@
 import type { ArticleVideoInput } from '../content/article';
 import { toSentences } from '../content/markdown';
+import { visualLength } from './text';
 import { CATEGORY_META } from '../content/categories';
 import { formatDate } from '../format';
 import { COMPOSITIONS, type CompositionId } from './compositions';
@@ -70,6 +71,10 @@ function chunk(text: string, budget: number, maxChunks: number): string[] {
   const sentences = toSentences(text);
   const chunks: string[] = [];
   let current = '';
+  // Budgets are in weighted characters, so one number works for both scripts:
+  // 200 is about 200 Latin characters or 100 Japanese ones, which occupy the
+  // same space on the card.
+  const width = visualLength;
 
   // A card that is nearly empty wastes a slot and a couple of seconds, and a
   // short opening sentence followed by a long one strands the short one on its
@@ -84,8 +89,8 @@ function chunk(text: string, budget: number, maxChunks: number): string[] {
       continue;
     }
 
-    const joined = current.length + sentence.length + 1;
-    if (joined <= budget || (current.length < minFill && joined <= overshoot)) {
+    const joined = width(current) + width(sentence) + 1;
+    if (joined <= budget || (width(current) < minFill && joined <= overshoot)) {
       current = `${current} ${sentence}`;
     } else {
       chunks.push(current);

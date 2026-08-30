@@ -1,11 +1,13 @@
 /** Site-wide constants. Kept in one place so metadata never disagrees. */
 export const site = {
   name: 'STEPWIRE',
+  /** The brand line stays in English: it is a wordmark, not a sentence. */
   tagline: 'DDR News, Charts & Culture.',
+  taglineJa: 'DDRのニュース、譜面、カルチャー。',
   description:
-    'STEPWIRE is an independent news and culture wire for DanceDanceRevolution: game updates, new charts, events, tournaments, data and the community around the machine.',
+    'STEPWIREは、DanceDanceRevolutionを扱う独立系のニュース／カルチャーメディアです。ゲームの更新、新曲と新譜面、イベント、大会、譜面データ、そして筐体のまわりにあるコミュニティを記録します。',
   operator: 'Mono ddr',
-  locale: 'en',
+  locale: 'ja',
   /**
    * Canonical origin. Vercel injects VERCEL_PROJECT_PRODUCTION_URL on every
    * deployment, so production canonicals are correct without configuration;

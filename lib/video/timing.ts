@@ -1,4 +1,5 @@
 import { motion, video } from '../design/tokens';
+import { visualLength } from './text';
 
 /**
  * Timing.
@@ -28,11 +29,13 @@ export const MOTION_FRAMES = {
 } as const;
 
 /**
- * Reading speed for on-screen text.
+ * Reading speed for on-screen text, in weighted characters per second.
  *
  * Deliberately slower than silent reading: a viewer is also watching motion,
  * and social video is often played without sound, so text has to survive a
- * single pass. ~12 characters per second lands around 145 words per minute.
+ * single pass. The measure is `visualLength`, which counts a CJK character
+ * twice — so this works out to ~12 Latin characters or ~6 Japanese characters
+ * per second, which is about right for both.
  */
 const CHARS_PER_SECOND = 12;
 /** Time to register that a new card has appeared, before reading starts. */
@@ -50,7 +53,7 @@ export function readingSeconds(
   text: string,
   bounds: DurationBounds = DEFAULT_TEXT_BOUNDS,
 ): number {
-  const characters = text.trim().length;
+  const characters = visualLength(text.trim());
   const seconds = ENTRY_SECONDS + characters / CHARS_PER_SECOND;
   return Math.min(bounds.max, Math.max(bounds.min, Number(seconds.toFixed(2))));
 }

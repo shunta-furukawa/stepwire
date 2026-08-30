@@ -11,8 +11,8 @@ import { StudioClient } from '@/components/studio/StudioClient';
  * lives inside `StudioClient`; nothing else on the site ships this JavaScript.
  */
 export const metadata: Metadata = {
-  title: 'Video studio',
-  description: 'Preview and render STEPWIRE videos from published articles.',
+  title: '動画スタジオ',
+  description: '公開済みの記事からSTEPWIREの動画をプレビューし、書き出します。',
   robots: { index: false, follow: false },
 };
 

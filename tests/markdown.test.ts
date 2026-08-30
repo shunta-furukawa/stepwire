@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   collectCitations,
+  joinWrappedLines,
   parseInline,
   parseMarkdown,
   toPlainText,
@@ -42,11 +43,46 @@ describe('parseInline', () => {
   });
 });
 
+/**
+ * A line break inside a paragraph is a formatting artifact of the .mdx file.
+ * In Latin text it stands for a word space; in Japanese it stands for nothing,
+ * and inserting a space leaves a visible gap after every 、 that happened to
+ * land at the end of a source line.
+ */
+describe('joinWrappedLines', () => {
+  it('joins Latin lines with a space', () => {
+    expect(joinWrappedLines(['one line', 'continued here'])).toBe('one line continued here');
+  });
+
+  it('joins Japanese lines with nothing', () => {
+    expect(joinWrappedLines(['動画システムを、', '報道と誤認されうるものを公開せずに'])).toBe(
+      '動画システムを、報道と誤認されうるものを公開せずに',
+    );
+  });
+
+  it('adds no space where Latin meets Japanese across a break', () => {
+    // "STEPWIRE の" would be wrong; the particle attaches to the word.
+    expect(joinWrappedLines(['STEPWIRE', 'のレイアウト'])).toBe('STEPWIREのレイアウト');
+    expect(joinWrappedLines(['架空の', 'DDR WORLD'])).toBe('架空のDDR WORLD');
+  });
+
+  it('handles a single line and trims', () => {
+    expect(joinWrappedLines(['  only  '])).toBe('only');
+  });
+});
+
 describe('parseMarkdown', () => {
   it('joins wrapped lines into one paragraph', () => {
     const blocks = parseMarkdown('one line\ncontinued here\n\nsecond paragraph');
     expect(blocks).toHaveLength(2);
     expect(toPlainText([blocks[0]!])).toBe('one line continued here');
+  });
+
+  it('does not insert spaces into wrapped Japanese prose', () => {
+    const blocks = parseMarkdown('この記事はサンプルです。STEPWIREのレイアウト、\n動画システムを開発するために置かれています。');
+    expect(toPlainText(blocks)).toBe(
+      'この記事はサンプルです。STEPWIREのレイアウト、動画システムを開発するために置かれています。',
+    );
   });
 
   it('parses unordered and ordered lists', () => {

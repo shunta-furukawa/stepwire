@@ -5,6 +5,7 @@ import { COMPOSITIONS, COMPOSITION_IDS, isCompositionId } from '../lib/video/com
 import { formatDuration, framesToSeconds, readingSeconds, secondsToFrames } from '../lib/video/timing';
 import { makeRenderId, renderObjectPath, renderRequestSchema } from '../lib/video/render-request';
 import { authorizeRender, createMemoryRateLimiter, RENDER_TOKEN_HEADER } from '../lib/video/guard';
+import { needsSpaceBetween, splitForReveal } from '../lib/video/text';
 
 const article: ArticleVideoInput = {
   slug: 'a-test-article',
@@ -44,6 +45,38 @@ describe('timing', () => {
   it('formats durations for the studio', () => {
     expect(formatDuration(300, 30)).toBe('10.0s');
     expect(formatDuration(1950, 30)).toBe('1:05');
+  });
+});
+
+describe('headline reveal splitting', () => {
+  it('splits Latin on word boundaries', () => {
+    expect(splitForReveal('A test article with a headline')).toEqual([
+      'A', 'test', 'article', 'with', 'a', 'headline',
+    ]);
+  });
+
+  it('splits Japanese into bunsetsu-like units', () => {
+    // Japanese has no spaces, so without this a headline reveals as one block.
+    expect(splitForReveal('【SAMPLE】DDR WORLD、夏のアップデートでスコア表示を刷新')).toEqual([
+      '【SAMPLE】', 'DDR', 'WORLD、', '夏の', 'アップデートで', 'スコア表示を', '刷新',
+    ]);
+  });
+
+  it('breaks after closing punctuation', () => {
+    expect(splitForReveal('速報。譜面が増えた')).toEqual(['速報。', '譜面が', '増えた']);
+  });
+
+  it('puts a space only between two Latin units', () => {
+    const units = splitForReveal('【SAMPLE】DDR WORLD、夏の更新');
+    expect(units).toEqual(['【SAMPLE】', 'DDR', 'WORLD、', '夏の', '更新']);
+    // Only DDR -> WORLD、 takes a space; nothing before or after a CJK unit does.
+    expect(units.map((unit, i) => needsSpaceBetween(unit, units[i + 1]))).toEqual([
+      false, true, false, false, false,
+    ]);
+  });
+
+  it('never puts a space after the last unit', () => {
+    expect(needsSpaceBetween('headline', undefined)).toBe(false);
   });
 });
 

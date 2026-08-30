@@ -13,12 +13,12 @@ export function Footer() {
             {site.tagline}
           </p>
           <p className="mt-lg max-w-[52ch] font-body text-small leading-snug text-gray300">
-            An independent DanceDanceRevolution news wire and archive, operated by {site.operator}.
-            Not affiliated with, endorsed by, or connected to KONAMI.
+            DanceDanceRevolutionの独立系ニュースワイヤー兼アーカイブ。運営は{site.operator}。
+            KONAMIとは無関係で、提携も承認も受けていません。
           </p>
         </div>
 
-        <nav aria-label="Footer" className="font-mono text-micro uppercase tracking-wider">
+        <nav aria-label="フッター" className="font-mono text-micro uppercase tracking-wider">
           <ul className="space-y-sm">
             {SECTIONS.map((section) => (
               <li key={section.slug}>
@@ -29,7 +29,7 @@ export function Footer() {
             ))}
             <li>
               <Link href="/about" className="hover:text-signal-on-dark">
-                About
+                STEPWIREについて
               </Link>
             </li>
             <li>

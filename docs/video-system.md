@@ -200,10 +200,31 @@ Reported fact renders on a light ground; editorial analysis renders inverted.
 That is the same fact/analysis distinction the website draws with its section
 labels — the video does not invent its own vocabulary.
 
-**Fonts.** Video type uses the same system stack as the website. That removes a
-network dependency from both the web build and the headless render, at the cost
-of exact cross-platform metrics. If exact metrics start to matter,
-`@remotion/google-fonts` is the upgrade path.
+**Fonts.** Video type uses the same system stack as the website — no webfont.
+
+Loading Noto Sans JP from Google Fonts was tried and reverted: the Japanese
+subset is split across ~124 unicode ranges per weight, and Remotion waits for
+all of them before the first frame. That was **363 network requests per render**
+plus a hard dependency on `fonts.gstatic.com` being reachable — strictly worse
+than the system stack, which renders Japanese correctly on any machine that has
+a CJK face.
+
+So the requirement sits on the render environment rather than in the bundle:
+
+- **Sandbox renders** — the driver checks `fc-list` and installs
+  `fonts-noto-cjk` if the image has none. A failed install warns rather than
+  failing the render.
+- **Local renders** — macOS and Windows always have Japanese fonts. On Linux,
+  install one (`apt-get install fonts-noto-cjk`) or Japanese text renders as
+  tofu. Check with:
+
+  ```bash
+  fc-list | grep -ci cjk
+  ```
+
+The cost of this choice is that glyph metrics vary slightly between render
+machines. For a wire that publishes from one operator's setup, that is a
+better trade than a render that cannot run offline.
 
 ## Troubleshooting
 

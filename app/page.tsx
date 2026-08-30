@@ -29,18 +29,17 @@ export default async function HomePage() {
         {lead ? (
           <section aria-labelledby="lead-heading" className="pt-xl">
             <h1 id="lead-heading" className="sr-only">
-              {site.name} — {site.tagline}
+              {site.name} — {site.taglineJa}
             </h1>
             <LeadStory article={lead} />
           </section>
         ) : (
           <section className="py-3xl">
             <h1 className="font-display text-h1 font-black tracking-display">
-              Nothing on the wire yet.
+              まだ何も流れていません。
             </h1>
             <p className="mt-md max-w-[52ch] font-body text-lead text-gray700">
-              Add an article to <code className="font-mono">content/articles/</code> and it will
-              appear here.
+              <code className="font-mono">content/articles/</code> に記事を置くと、ここに表示されます。
             </p>
           </section>
         )}
@@ -49,8 +48,8 @@ export default async function HomePage() {
           <section aria-labelledby="latest-heading">
             <SectionHeading
               id="latest-heading"
-              label="Latest"
-              description="Everything filed, newest first"
+              label="LATEST"
+              description="入稿順、新しいものから"
             />
             <StoryList articles={latest} showDek />
             {articles.length > 9 ? (
@@ -58,14 +57,14 @@ export default async function HomePage() {
                 href="/news"
                 className="mt-lg inline-block border-2 border-ink px-lg py-sm font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-ink hover:text-paper"
               >
-                All news →
+                すべてのニュース →
               </Link>
             ) : null}
           </section>
 
           <aside className="space-y-2xl">
             <section aria-labelledby="desks-heading">
-              <SectionHeading id="desks-heading" label="Desks" as="h2" />
+              <SectionHeading id="desks-heading" label="DESKS" description="担当領域" as="h2" />
               <ul className="mt-md space-y-md">
                 {SECTIONS.map((section) => (
                   <li key={section.slug}>
@@ -87,7 +86,7 @@ export default async function HomePage() {
 
             {activeCategories.length > 0 ? (
               <section aria-labelledby="categories-heading">
-                <SectionHeading id="categories-heading" label="Categories" as="h2" />
+                <SectionHeading id="categories-heading" label="CATEGORIES" description="カテゴリ" as="h2" />
                 <ul className="mt-md flex flex-wrap gap-sm">
                   {activeCategories.map((category) => (
                     <li key={category}>
@@ -102,16 +101,16 @@ export default async function HomePage() {
             ) : null}
 
             <section aria-labelledby="wire-heading" className="border-2 border-ink p-lg">
-              <SectionHeading id="wire-heading" label="How STEPWIRE reads" as="h2" />
+              <SectionHeading id="wire-heading" label="STEPWIREの読み方" as="h2" />
               <ol className="mt-md space-y-md font-mono text-micro uppercase tracking-wide">
                 <li>
-                  <span className="text-signal">01</span> News — what happened, sourced.
+                  <span className="text-signal">01</span> NEWS — 何が起きたか。出典つき。
                 </li>
                 <li>
-                  <span className="text-signal">02</span> Context — why it is notable.
+                  <span className="text-signal">02</span> CONTEXT — なぜ注目なのか。
                 </li>
                 <li>
-                  <span className="text-signal">03</span> Player impact — what changes for you.
+                  <span className="text-signal">03</span> PLAYER IMPACT — あなたに何が変わるか。
                 </li>
               </ol>
             </section>

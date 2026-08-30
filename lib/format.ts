@@ -8,29 +8,32 @@
  */
 export const NEWSROOM_TIME_ZONE = 'Asia/Tokyo';
 
-const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+/**
+ * Dates are set numerically (`2026.08.24`) rather than with a month name.
+ * It is script-neutral, it sits correctly in the monospace "wire" voice, and it
+ * does not switch register when a headline beside it is Japanese.
+ */
+const dateFormatter = new Intl.DateTimeFormat('en-CA', {
   timeZone: NEWSROOM_TIME_ZONE,
-  day: '2-digit',
-  month: 'short',
   year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
 });
 
-const dateTimeFormatter = new Intl.DateTimeFormat('en-GB', {
+const timeFormatter = new Intl.DateTimeFormat('en-GB', {
   timeZone: NEWSROOM_TIME_ZONE,
-  day: '2-digit',
-  month: 'short',
-  year: 'numeric',
   hour: '2-digit',
   minute: '2-digit',
   hour12: false,
 });
 
 export function formatDate(iso: string): string {
-  return dateFormatter.format(new Date(iso)).toUpperCase();
+  return dateFormatter.format(new Date(iso)).replace(/-/g, '.');
 }
 
 export function formatDateTime(iso: string): string {
-  return `${dateTimeFormatter.format(new Date(iso)).toUpperCase()} JST`;
+  const date = new Date(iso);
+  return `${formatDate(iso)} ${timeFormatter.format(date)} JST`;
 }
 
 /** `2026-08-29` — used for `<time datetime>` and for filenames. */

@@ -23,45 +23,50 @@ export type Category = (typeof CATEGORIES)[number];
  * without introducing eight accent colours. The glyphs are a deliberate
  * abstraction of arrow / panel / step motifs rather than game artwork.
  */
+/**
+ * The category code itself stays Latin and uppercase: it is set in monospace as
+ * a chip, where it reads as a wire code rather than as a word. The Japanese
+ * label is what appears in prose.
+ */
 export const CATEGORY_META: Record<
   Category,
   { glyph: string; label: string; blurb: string }
 > = {
-  NEWS: { glyph: '▲', label: 'News', blurb: 'Reported news from the DDR world.' },
-  UPDATE: { glyph: '▶', label: 'Update', blurb: 'Game, cabinet and service updates.' },
-  CHARTS: { glyph: '◀', label: 'Charts', blurb: 'New songs, new charts, difficulty changes.' },
-  EVENT: { glyph: '▼', label: 'Event', blurb: 'Location tests, campaigns and in-game events.' },
-  TOURNAMENT: { glyph: '◆', label: 'Tournament', blurb: 'Competitive play and results.' },
-  DATA: { glyph: '■', label: 'Data', blurb: 'BPM, difficulty and chart data analysis.' },
-  CULTURE: { glyph: '●', label: 'Culture', blurb: 'The scene, the music, the history.' },
-  COMMUNITY: { glyph: '◎', label: 'Community', blurb: 'Players, crews and community projects.' },
+  NEWS: { glyph: '▲', label: 'ニュース', blurb: 'DDRをめぐる報道。' },
+  UPDATE: { glyph: '▶', label: 'アップデート', blurb: 'ゲーム・筐体・サービスの更新。' },
+  CHARTS: { glyph: '◀', label: '譜面', blurb: '新曲、新譜面、難易度の変更。' },
+  EVENT: { glyph: '▼', label: 'イベント', blurb: 'ロケテスト、キャンペーン、ゲーム内イベント。' },
+  TOURNAMENT: { glyph: '◆', label: '大会', blurb: '競技シーンと結果。' },
+  DATA: { glyph: '■', label: 'データ', blurb: 'BPM・難易度・譜面データの分析。' },
+  CULTURE: { glyph: '●', label: 'カルチャー', blurb: 'シーン、音楽、そして歴史。' },
+  COMMUNITY: { glyph: '◎', label: 'コミュニティ', blurb: 'プレイヤー、チーム、コミュニティの活動。' },
 };
 
 /** Site sections. MVP intentionally maps many categories onto few pages. */
 export const SECTIONS = [
   {
     slug: 'news',
-    label: 'News',
+    label: 'ニュース',
     categories: ['NEWS', 'UPDATE', 'EVENT', 'TOURNAMENT'] as Category[],
-    description: 'Reported DDR news: game updates, events and competitive play.',
+    description: 'DDRの報道。ゲームの更新、イベント、そして競技シーン。',
   },
   {
     slug: 'charts',
-    label: 'Charts',
+    label: '譜面',
     categories: ['CHARTS'] as Category[],
-    description: 'New songs, new charts and difficulty changes.',
+    description: '新曲、新譜面、難易度の変更。',
   },
   {
     slug: 'data',
-    label: 'Data',
+    label: 'データ',
     categories: ['DATA'] as Category[],
-    description: 'BPM, difficulty and chart data, examined.',
+    description: 'BPM・難易度・譜面データを読み解く。',
   },
   {
     slug: 'culture',
-    label: 'Culture',
+    label: 'カルチャー',
     categories: ['CULTURE', 'COMMUNITY'] as Category[],
-    description: 'The scene around the machine: music, players and history.',
+    description: '筐体のまわりにあるもの。音楽、プレイヤー、歴史。',
   },
 ] as const;
 

@@ -51,7 +51,7 @@ export function ImportanceFlag({ importance }: { importance: string }) {
   return (
     <span className="inline-flex items-center gap-[6px] bg-signal px-2 py-[3px] font-mono text-micro font-bold uppercase tracking-wider text-paper">
       <span aria-hidden="true" className="wire-pulse block h-[6px] w-[6px] bg-paper" />
-      {importance === 'breaking' ? 'Breaking' : 'Major'}
+      {importance === 'breaking' ? '速報' : '重要'}
     </span>
   );
 }

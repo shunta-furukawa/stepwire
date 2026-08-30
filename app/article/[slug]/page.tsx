@@ -70,11 +70,11 @@ export async function generateMetadata({
  */
 const SECTION_LABELS: Record<
   (typeof SECTION_KEYS)[number],
-  { index: string; kind: string }
+  { index: string; heading: string; kind: string }
 > = {
-  news: { index: '01', kind: 'Reported' },
-  context: { index: '02', kind: 'STEPWIRE analysis' },
-  playerImpact: { index: '03', kind: 'STEPWIRE analysis' },
+  news: { index: '01', heading: 'ニュース', kind: '報道' },
+  context: { index: '02', heading: 'コンテクスト', kind: 'STEPWIREの分析' },
+  playerImpact: { index: '03', heading: 'プレイヤーへの影響', kind: 'STEPWIREの分析' },
 };
 
 export default async function ArticlePage({
@@ -120,7 +120,7 @@ export default async function ArticlePage({
         />
       ) : null}
 
-      <nav aria-label="Breadcrumb" className="font-mono text-micro uppercase tracking-wide text-gray700">
+      <nav aria-label="パンくずリスト" className="font-mono text-micro uppercase tracking-wide text-gray700">
         <Link href="/" className="hover:text-signal">
           STEPWIRE
         </Link>
@@ -140,7 +140,7 @@ export default async function ArticlePage({
           ) : null}
         </div>
 
-        <h1 className="mt-lg max-w-[22ch] font-display text-h2 font-black leading-display tracking-display text-balance sm:text-h1 lg:text-display">
+        <h1 className="mt-lg max-w-[26ch] font-display text-h2 font-black leading-headline tracking-headline text-balance sm:text-h1">
           {article.title}
         </h1>
 
@@ -170,9 +170,12 @@ export default async function ArticlePage({
                   </span>
                   <h2
                     id={`section-${key}`}
-                    className="font-display text-h4 font-black uppercase tracking-tight"
+                    className="font-display text-h4 font-black tracking-tight"
                   >
-                    {section.heading}
+                    {meta.heading}
+                    <span className="ml-sm font-mono text-micro font-normal tracking-wider text-gray700">
+                      {section.heading}
+                    </span>
                   </h2>
                   <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-gray700">
                     {meta.kind}
@@ -189,21 +192,21 @@ export default async function ArticlePage({
         </div>
 
         <aside className="space-y-xl lg:sticky lg:top-lg lg:self-start">
-          <nav aria-label="In this article" className="border-2 border-ink p-md">
-            <p className="font-mono text-micro font-bold uppercase tracking-wider">In this story</p>
+          <nav aria-label="記事の構成" className="border-2 border-ink p-md">
+            <p className="font-mono text-micro font-bold uppercase tracking-wider">この記事の構成</p>
             <ol className="mt-md space-y-sm font-mono text-micro uppercase tracking-wide">
               {SECTION_KEYS.map((key) => (
                 <li key={key}>
                   <a href={`#${key}`} className="hover:text-signal">
                     <span className="text-gray700">{SECTION_LABELS[key].index}</span>{' '}
-                    {article.sections[key].heading}
+                    {SECTION_LABELS[key].heading}
                   </a>
                 </li>
               ))}
               {article.sources.length > 0 ? (
                 <li>
                   <a href="#source-1" className="hover:text-signal">
-                    <span className="text-gray700">04</span> Sources
+                    <span className="text-gray700">04</span> 出典
                   </a>
                 </li>
               ) : null}
@@ -211,13 +214,13 @@ export default async function ArticlePage({
           </nav>
 
           <section aria-labelledby="summary-heading">
-            <SectionHeading id="summary-heading" label="In one line" as="h2" />
+            <SectionHeading id="summary-heading" label="ひとことで" as="h2" />
             <p className="mt-md font-body text-base leading-snug text-gray700">{article.summary}</p>
           </section>
 
           {article.tags.length > 0 ? (
             <section aria-labelledby="tags-heading">
-              <SectionHeading id="tags-heading" label="Tags" as="h2" />
+              <SectionHeading id="tags-heading" label="タグ" as="h2" />
               <ul className="mt-md flex flex-wrap gap-sm font-mono text-micro uppercase tracking-wide text-gray700">
                 {article.tags.map((tag) => (
                   <li key={tag} className="border border-gray300 px-sm py-[2px]">
@@ -232,14 +235,15 @@ export default async function ArticlePage({
             href={{ pathname: '/studio', query: { article: article.slug } }}
             className="block border-2 border-ink px-md py-sm text-center font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-ink hover:text-paper"
           >
-            Open in video studio →
+            動画スタジオで開く →
           </Link>
         </aside>
       </div>
 
       {related.length > 0 ? (
         <section aria-labelledby="related-heading" className="pt-3xl">
-          <SectionHeading id="related-heading" label={`More ${CATEGORY_META[article.category].label}`} />
+          <SectionHeading id="related-heading" label="RELATED"
+            description={`${CATEGORY_META[article.category].label}の他の記事`} />
           <StoryList articles={related} numbered={false} />
         </section>
       ) : null}

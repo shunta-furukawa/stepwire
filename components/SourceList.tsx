@@ -17,7 +17,7 @@ export function SourceList({ sources }: { sources: SourceRef[] }) {
         id="sources-heading"
         className="font-mono text-micro font-bold uppercase tracking-wider"
       >
-        Sources
+        出典
       </h2>
       <ol className="mt-md space-y-md">
         {sources.map((source, index) => {

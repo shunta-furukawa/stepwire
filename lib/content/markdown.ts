@@ -78,6 +78,34 @@ export function parseInline(input: string): InlineNode[] {
 const LIST_ITEM = /^\s*(?:[-*]|\d+\.)\s+(.*)$/;
 const ORDERED_ITEM = /^\s*\d+\.\s+/;
 
+/**
+ * CJK characters: Han, Hiragana, Katakana, CJK punctuation and fullwidth forms.
+ */
+const CJK = /[\u3000-\u303F\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uFF00-\uFFEF]/;
+
+/**
+ * Rejoins the lines of a soft-wrapped paragraph.
+ *
+ * A line break inside a paragraph is a formatting artifact of the source file,
+ * not content. In Latin text it stands for a word space, so the lines are
+ * joined with one. In Japanese there is no space between clauses, and inserting
+ * one puts a visible gap after every 、 that happened to fall at the end of a
+ * line in the .mdx — a defect that only appears once the prose is Japanese.
+ *
+ * So a space is added only where both sides of the break are non-CJK.
+ */
+export function joinWrappedLines(lines: string[]): string {
+  return lines
+    .reduce((joined, line, index) => {
+      if (index === 0) return line;
+      const left = joined.at(-1) ?? '';
+      const right = line.charAt(0);
+      const separator = CJK.test(left) || CJK.test(right) ? '' : ' ';
+      return `${joined}${separator}${line}`;
+    }, '')
+    .trim();
+}
+
 export function parseMarkdown(source: string): Block[] {
   const lines = source.replace(/\r\n/g, '\n').split('\n');
   const blocks: Block[] = [];
@@ -85,7 +113,7 @@ export function parseMarkdown(source: string): Block[] {
 
   const flushParagraph = (buffer: string[]) => {
     if (buffer.length === 0) return;
-    blocks.push({ type: 'paragraph', children: parseInline(buffer.join(' ').trim()) });
+    blocks.push({ type: 'paragraph', children: parseInline(joinWrappedLines(buffer)) });
     buffer.length = 0;
   };
 
@@ -127,7 +155,7 @@ export function parseMarkdown(source: string): Block[] {
         quote.push((lines[index] ?? '').trim().slice(2));
         index += 1;
       }
-      blocks.push({ type: 'blockquote', children: parseInline(quote.join(' ')) });
+      blocks.push({ type: 'blockquote', children: parseInline(joinWrappedLines(quote)) });
       continue;
     }
 

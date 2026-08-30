@@ -1,6 +1,7 @@
 import React from 'react';
 import { interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import { color, font, fontWeight, gap, px, textStyles, tracking, type } from '../styles/theme';
+import { needsSpaceBetween, splitForReveal } from '../../lib/video/text';
 
 /**
  * STEPWIRE motion primitives.
@@ -264,7 +265,7 @@ export function KineticText({
   style?: React.CSSProperties;
 }) {
   const frame = useCurrentFrame();
-  const words = text.split(/\s+/).filter(Boolean);
+  const words = splitForReveal(text);
 
   return (
     <span
@@ -284,7 +285,8 @@ export function KineticText({
             key={`${word}-${index}`}
             style={{
               display: 'inline-block',
-              marginRight: '0.26em',
+              // Japanese units butt against each other; Latin words need a space.
+              marginRight: needsSpaceBetween(word, words[index + 1]) ? '0.26em' : 0,
               opacity: progress,
               transform: `translateY(${(1 - progress) * 0.16}em)`,
             }}

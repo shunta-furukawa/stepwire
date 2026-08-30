@@ -197,7 +197,7 @@ export function StudioClient({
         <p className="font-mono text-micro font-bold uppercase tracking-wider text-signal">
           Internal tool
         </p>
-        <h1 className="mt-sm font-display text-h2 font-black uppercase leading-display tracking-display sm:text-h1">
+        <h1 className="mt-sm font-display text-h2 font-black leading-headline tracking-headline sm:text-h1">
           Video studio
         </h1>
         <p className="mt-md max-w-[62ch] font-body text-lead leading-snug text-gray700">
