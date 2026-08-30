@@ -68,6 +68,14 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  h1,
+  h2,
+  h3 {
+    /* Display type is large enough that one long token could otherwise exceed a
+       narrow viewport. */
+    overflow-wrap: break-word;
+  }
+
   body {
     background: var(--color-off-white);
     color: var(--color-ink);

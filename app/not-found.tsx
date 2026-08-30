@@ -6,7 +6,7 @@ export default function NotFound() {
       <p className="font-mono text-micro font-bold uppercase tracking-wider text-signal">
         404 — off the wire
       </p>
-      <h1 className="mt-md font-display text-h1 font-black leading-display tracking-display lg:text-display">
+      <h1 className="mt-md font-display text-h2 font-black leading-display tracking-display sm:text-h1 lg:text-display">
         No story at this address.
       </h1>
       <p className="mt-lg max-w-[52ch] font-body text-lead text-gray700">

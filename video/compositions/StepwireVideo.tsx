@@ -2,7 +2,12 @@ import React from 'react';
 import { AbsoluteFill, Series } from 'remotion';
 import type { ArticleVideoInput } from '../../lib/content/article';
 import { buildSceneSequence } from '../../lib/video/scenes';
-import { getComposition, type CompositionId } from '../../lib/video/compositions';
+import {
+  COMPOSITIONS,
+  COMPOSITION_IDS,
+  getComposition,
+  type CompositionId,
+} from '../../lib/video/compositions';
 import { SCENE_COMPONENTS } from '../scenes';
 import { color, font } from '../styles/theme';
 
@@ -51,11 +56,30 @@ export const StepwireVideo: React.FC<StepwireVideoProps> = ({ article, compositi
  * sequence builder how long it is instead of declaring a fixed duration. This
  * is what makes "duration comes from the scene definition" true at the Remotion
  * level and not just inside our own code.
+ *
+ * It also reconciles the one place this design can contradict itself. The
+ * format is named twice — once by the Remotion composition being rendered, and
+ * once inside the props — and a props file written for one format can be passed
+ * to the other (`remotion render STEPWIRE-NEWS --props=…short.json`). The
+ * composition actually being rendered wins, and the corrected props are handed
+ * back so the component cannot lay out for a format it is not rendering into.
  */
-export function calculateStepwireMetadata({ props }: { props: StepwireVideoProps }) {
-  const definition = getComposition(props.composition);
-  const sequence = buildSceneSequence(props.article, props.composition, definition.fps);
+export function calculateStepwireMetadata({
+  props,
+  compositionId,
+}: {
+  props: StepwireVideoProps;
+  compositionId: string;
+}) {
+  const requested = COMPOSITION_IDS.find(
+    (id) => COMPOSITIONS[id].remotionId === compositionId,
+  );
+  const composition = requested ?? props.composition;
+  const definition = getComposition(composition);
+  const sequence = buildSceneSequence(props.article, composition, definition.fps);
+
   return {
+    props: { ...props, composition },
     durationInFrames: sequence.durationInFrames,
     fps: definition.fps,
     width: definition.width,

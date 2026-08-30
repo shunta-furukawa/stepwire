@@ -71,10 +71,21 @@ function chunk(text: string, budget: number, maxChunks: number): string[] {
   const chunks: string[] = [];
   let current = '';
 
+  // A card that is nearly empty wastes a slot and a couple of seconds, and a
+  // short opening sentence followed by a long one strands the short one on its
+  // own. So a card under this fill may take the next sentence even if that
+  // overshoots the budget a little.
+  const minFill = budget * 0.45;
+  const overshoot = budget * 1.3;
+
   for (const sentence of sentences) {
     if (current.length === 0) {
       current = sentence;
-    } else if (current.length + sentence.length + 1 <= budget) {
+      continue;
+    }
+
+    const joined = current.length + sentence.length + 1;
+    if (joined <= budget || (current.length < minFill && joined <= overshoot)) {
       current = `${current} ${sentence}`;
     } else {
       chunks.push(current);
@@ -115,9 +126,11 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
     outroSeconds: 2,
     dataSeconds: 3,
   },
-  // Landscape: watched, not scrolled past. Room for the full argument.
+  // Landscape: watched, not scrolled past. Room for the full argument, but a
+  // 16:9 frame has less vertical space per card than its width suggests, so the
+  // budget is only modestly larger than the vertical one.
   STEPWIRE_NEWS: {
-    budget: 260,
+    budget: 200,
     maxChunks: { news: 3, context: 3, impact: 3 },
     bounds: { min: 2.5, max: 8 },
     introSeconds: 2,

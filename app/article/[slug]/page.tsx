@@ -140,12 +140,12 @@ export default async function ArticlePage({
           ) : null}
         </div>
 
-        <h1 className="mt-lg max-w-[22ch] font-display text-h1 font-black leading-display tracking-display text-balance lg:text-display">
+        <h1 className="mt-lg max-w-[22ch] font-display text-h2 font-black leading-display tracking-display text-balance sm:text-h1 lg:text-display">
           {article.title}
         </h1>
 
         {article.dek ? (
-          <p className="mt-lg max-w-[62ch] font-body text-h4 leading-snug text-gray700">
+          <p className="mt-lg max-w-[62ch] font-body text-lead leading-snug text-gray700 sm:text-h4">
             {article.dek}
           </p>
         ) : null}

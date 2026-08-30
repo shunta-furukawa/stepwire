@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="mt-3xl border-t-4 border-ink bg-ink text-paper">
       <div className="mx-auto grid max-w-[1180px] gap-xl px-md py-2xl sm:grid-cols-[1fr_auto]">
         <div>
-          <Wordmark variant="stacked" className="text-h1" />
+          <Wordmark variant="stacked" className="text-h2 sm:text-h1" />
           <p className="mt-md max-w-[46ch] font-mono text-micro uppercase tracking-wider text-gray300">
             {site.tagline}
           </p>

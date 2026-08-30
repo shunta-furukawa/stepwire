@@ -181,7 +181,7 @@ export function StudioClient({
   if (!article || !sequence) {
     return (
       <div className="mx-auto max-w-[1180px] px-md py-3xl">
-        <h1 className="font-display text-h1 font-black tracking-display">Studio</h1>
+        <h1 className="font-display text-h2 font-black tracking-display sm:text-h1">Studio</h1>
         <p className="mt-md font-body text-lead text-gray700">
           There are no published articles to render yet.
         </p>
@@ -197,7 +197,7 @@ export function StudioClient({
         <p className="font-mono text-micro font-bold uppercase tracking-wider text-signal">
           Internal tool
         </p>
-        <h1 className="mt-sm font-display text-h1 font-black uppercase leading-display tracking-display">
+        <h1 className="mt-sm font-display text-h2 font-black uppercase leading-display tracking-display sm:text-h1">
           Video studio
         </h1>
         <p className="mt-md max-w-[62ch] font-body text-lead leading-snug text-gray700">

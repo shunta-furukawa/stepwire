@@ -58,11 +58,15 @@ function layout(orientation: SceneProps['orientation']) {
         maxWidth: '100%' as const,
       }
     : {
-        padding: gap.xxl,
+        // Landscape has less vertical room per line than its width suggests:
+        // at 1080px tall, a full body card has to fit inside roughly 840px
+        // once the wire bar, the label chip and the progress rail are placed.
+        // Smaller body type and a wider measure keep a dense card inside frame.
+        padding: gap.xl,
         headline: type.h1,
         wordmark: type.display,
-        body: type.h3,
-        maxWidth: '68%' as const,
+        body: type.h4,
+        maxWidth: '82%' as const,
       };
 }
 

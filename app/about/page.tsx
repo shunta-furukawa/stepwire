@@ -13,7 +13,7 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-[1180px] px-md py-xl">
       <header className="border-b-4 border-ink pb-lg">
-        <Wordmark variant="stacked" className="text-display" />
+        <Wordmark variant="stacked" className="text-h1 sm:text-display" />
         <p className="mt-lg font-mono text-micro font-bold uppercase tracking-wider text-gray700">
           {site.tagline}
         </p>

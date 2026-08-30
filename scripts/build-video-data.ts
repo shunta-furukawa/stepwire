@@ -28,21 +28,25 @@ async function main() {
     return;
   }
 
-  const index: { slug: string; title: string; propsFile: string }[] = [];
+  const index: { slug: string; composition: string; propsFile: string }[] = [];
 
   for (const article of articles) {
     const videoInput = toVideoInput(article);
-    // The default composition for a props file; switch formats inside the
-    // studio by editing the `composition` field.
-    const props = { article: videoInput, composition: COMPOSITION_IDS[0] };
-    const file = path.join(outDir, `${article.slug}.json`);
-    await writeFile(file, `${JSON.stringify(props, null, 2)}\n`, 'utf8');
 
-    index.push({
-      slug: article.slug,
-      title: article.title,
-      propsFile: path.relative(process.cwd(), file),
-    });
+    // One file per composition. A props file always matches the format it is
+    // named for, so passing the wrong one is not an easy mistake to make.
+    for (const composition of COMPOSITION_IDS) {
+      const props = { article: videoInput, composition };
+      const suffix = composition === COMPOSITION_IDS[0] ? '' : `.${composition.toLowerCase()}`;
+      const file = path.join(outDir, `${article.slug}${suffix}.json`);
+      await writeFile(file, `${JSON.stringify(props, null, 2)}\n`, 'utf8');
+
+      index.push({
+        slug: article.slug,
+        composition,
+        propsFile: path.relative(process.cwd(), file),
+      });
+    }
 
     const durations = COMPOSITION_IDS.map((id) => {
       const sequence = buildSceneSequence(videoInput, id);
@@ -58,7 +62,7 @@ async function main() {
     'utf8',
   );
 
-  console.log(`\n  ${articles.length} props file(s) written to video/data/\n`);
+  console.log(`\n  ${index.length} props file(s) written to video/data/\n`);
 }
 
 main().catch((error) => {

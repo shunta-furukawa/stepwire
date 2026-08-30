@@ -122,6 +122,31 @@ describe('buildSceneSequence', () => {
     expect(types).toContain('news');
   });
 
+  it('does not strand a short opening sentence on its own card', () => {
+    const stranded: ArticleVideoInput = {
+      ...article,
+      news:
+        'It shipped. The update adds a per-panel accuracy readout to the results screen and rebalances four charts at the top of the difficulty table for the new season.',
+    };
+    const cards = buildSceneSequence(stranded, 'STEPWIRE_NEWS').scenes.filter(
+      (scene) => scene.type === 'news',
+    );
+    expect(cards).toHaveLength(1);
+    expect(cards[0]!.text).toContain('It shipped.');
+    expect(cards[0]!.text).toContain('difficulty table');
+  });
+
+  it('still splits a section that genuinely exceeds one card', () => {
+    const long: ArticleVideoInput = {
+      ...article,
+      news: 'A full sentence of reported detail about the update. '.repeat(8),
+    };
+    const cards = buildSceneSequence(long, 'STEPWIRE_NEWS').scenes.filter(
+      (scene) => scene.type === 'news',
+    );
+    expect(cards.length).toBeGreaterThan(1);
+  });
+
   it('gives a shorter article a shorter video', () => {
     const brief: ArticleVideoInput = {
       ...article,
