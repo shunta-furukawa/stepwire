@@ -97,7 +97,7 @@ the recording is never clipped.
 2. **Headline** — `video.headline` ?? `shortTitle` ?? `title`, with the summary.
 3. **News / Context / Impact** — each section is split on sentence boundaries
    and packed into cards up to a per-format character budget.
-4. **Data** — only if the article supplies `video.data`.
+4. **Figures** — one scene per entry in the article's `figures`, if any.
 5. **Source** — the primary source. Never dropped.
 6. **Outro** — the wordmark and tagline.
 
@@ -141,11 +141,6 @@ an article with none still produces a complete video.
 video:
   headline: A shorter headline that fits a 9:16 frame
   hook: One line under the ident
-  data:
-    - label: PEAK BPM
-      value: '300'
-    - label: SONGS
-      value: '6'
   scenes:
     context-2:
       skip: true
@@ -157,8 +152,11 @@ video:
 
 Use them sparingly. If a line reads badly on screen it usually reads badly on
 the page too, and fixing the article fixes both. An override is for a real
-difference between the surfaces — a headline that will not fit, a numeric
-readout that has no place in prose.
+difference between the surfaces — a headline that will not fit, a hook that
+only makes sense over an ident.
+
+Data is **not** an override. `figures` sits at the top level of the frontmatter
+and is drawn by both the page and the video; see `docs/figures.md`.
 
 Scene keys are scene ids as shown in the studio's scene list (`news-1`,
 `context-2`, `source`…). `pnpm content:validate` rejects a malformed key.

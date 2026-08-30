@@ -63,6 +63,9 @@ sections, always in this order:
   entry in `sources`. `pnpm content:validate` fails the build otherwise.
 - **AI output is never a source.** A source is something a reader can check: a
   first-party announcement, a published report, a community record, a dataset.
+- **A figure is written, never inferred.** `figures` in the frontmatter declares
+  the rows; the page and the video both draw them. Nothing generates a chart
+  from prose or from a transcript — see `docs/figures.md`.
 - **Slugs are permanent.** Once published, a URL never changes — the archive
   promise depends on it.
 - **Fixtures must stay obviously fake.** Anything in `content/fixtures/` is

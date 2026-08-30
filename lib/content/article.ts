@@ -12,6 +12,7 @@ import {
   toPlainText,
   type Block,
 } from './markdown';
+import type { Figure } from './figures';
 import {
   narrationPublicPath,
   type Transcript,
@@ -67,6 +68,7 @@ export interface ArticleVideoInput {
   context: string;
   playerImpact: string;
   primarySource?: { publisher: string; title: string; url: string };
+  figures: Figure[];
   video?: ArticleFrontmatter['video'];
   /**
    * Present only when the article has a recording AND a transcript. The video
@@ -190,6 +192,7 @@ export function toVideoInput(
     category: article.category,
     importance: article.importance,
     publishedAt: article.publishedAt,
+    figures: article.figures,
     news: article.sections.news.text,
     context: article.sections.context.text,
     playerImpact: article.sections.playerImpact.text,

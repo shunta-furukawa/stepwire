@@ -11,6 +11,7 @@ import { Timestamp } from '@/components/Timestamp';
 import { FixtureBanner } from '@/components/FixtureBanner';
 import { StoryList } from '@/components/StoryCard';
 import { SectionHeading } from '@/components/SectionHeading';
+import { FigureList } from '@/components/Figure';
 import { absoluteUrl, site } from '@/lib/site';
 
 /**
@@ -188,6 +189,8 @@ export default async function ArticlePage({
             );
           })}
 
+          <FigureList figures={article.figures} />
+
           <SourceList sources={article.sources} />
         </div>
 
@@ -203,10 +206,18 @@ export default async function ArticlePage({
                   </a>
                 </li>
               ))}
+              {article.figures.length > 0 ? (
+                <li>
+                  <a href="#figures" className="hover:text-signal">
+                    <span className="text-gray700">04</span> データ
+                  </a>
+                </li>
+              ) : null}
               {article.sources.length > 0 ? (
                 <li>
                   <a href="#source-1" className="hover:text-signal">
-                    <span className="text-gray700">04</span> 出典
+                    <span className="text-gray700">{article.figures.length > 0 ? '05' : '04'}</span>{' '}
+                    出典
                   </a>
                 </li>
               ) : null}

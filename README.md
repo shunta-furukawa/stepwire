@@ -80,7 +80,7 @@ lib/
   design/     tokens.ts — the one source of brand tokens
 video/        Remotion root, compositions, scenes, primitives
 scripts/      collect-news · create-article · validate-content · render-video
-docs/         architecture · editorial-workflow · sources · video-system
+docs/         architecture · editorial-workflow · sources · video-system · figures
 ```
 
 ---

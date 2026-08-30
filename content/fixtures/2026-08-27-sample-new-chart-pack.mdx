@@ -19,14 +19,30 @@ sources:
     publisher: STEPWIRE Fixtures
     url: https://example.com/stepwire/fixtures/chart-pack
     type: official
-video:
-  data:
-    - label: 曲数
-      value: '6'
-    - label: 最高BPM
-      value: '300'
-    - label: 最高レベル
-      value: '18'
+figures:
+  - kind: stat
+    title: パックの規模
+    items:
+      - label: 曲数
+        value: '6'
+      - label: 最高BPM
+        value: '300'
+      - label: 最高レベル
+        value: '18'
+  - kind: bars
+    title: 持続BPMの比較
+    unit: BPM
+    caption: 'SAMPLE — 架空の譜面です。数値に意味はありません。'
+    items:
+      - label: 'SAMPLE CHART F(架空の新曲)'
+        value: 300
+        highlight: true
+      - label: 'SAMPLE CHART E'
+        value: 205
+      - label: 'SAMPLE CHART D'
+        value: 190
+      - label: 'SAMPLE CHART C'
+        value: 175
 ---
 
 ## NEWS

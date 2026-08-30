@@ -1,4 +1,5 @@
 import type { ArticleVideoInput, NarrationInput } from '../content/article';
+import type { Figure } from '../content/figures';
 import { toSentences } from '../content/markdown';
 import { pageCaptions } from './captions';
 import { visualLength } from './text';
@@ -25,7 +26,7 @@ export type SceneType =
   | 'news'
   | 'context'
   | 'impact'
-  | 'data'
+  | 'figure'
   | 'source'
   | 'outro'
   /** A page of spoken narration, subtitled in time with the voice. */
@@ -42,8 +43,8 @@ export interface Scene {
   text?: string;
   /** Short supporting line — a kicker, a date, an attribution. */
   meta?: string;
-  /** `data` scenes only. */
-  data?: { label: string; value: string }[];
+  /** `figure` scenes only. */
+  figure?: Figure;
   /**
    * `narration` scenes only: the tokens of this page with their timings,
    * relative to the start of the scene, so a scene needs no knowledge of where
@@ -76,7 +77,7 @@ const LABELS = {
   news: 'WHAT HAPPENED',
   context: 'WHY IT MATTERS',
   impact: 'PLAYER IMPACT',
-  data: 'BY THE NUMBERS',
+  figure: 'BY THE NUMBERS',
 } as const;
 
 type Draft = Omit<Scene, 'index' | 'total'>;
@@ -135,7 +136,7 @@ interface FormatProfile {
   headlineBounds: DurationBounds;
   sourceSeconds: number;
   outroSeconds: number;
-  dataSeconds: number;
+  figureSeconds: number;
 }
 
 const PROFILES: Record<CompositionId, FormatProfile> = {
@@ -149,7 +150,7 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
     headlineBounds: { min: 2.4, max: 5 },
     sourceSeconds: 2.2,
     outroSeconds: 2,
-    dataSeconds: 3,
+    figureSeconds: 3,
   },
   // Landscape: watched, not scrolled past. Room for the full argument, but a
   // 16:9 frame has less vertical space per card than its width suggests, so the
@@ -162,7 +163,7 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
     headlineBounds: { min: 3, max: 6 },
     sourceSeconds: 3,
     outroSeconds: 2.5,
-    dataSeconds: 3.5,
+    figureSeconds: 3.5,
   },
 };
 
@@ -276,15 +277,20 @@ export function buildSceneSequence(
     drafts.push(...narrationScenes(article.narration, fps));
   }
 
-  if (article.video?.data && article.video.data.length > 0) {
+  // One scene per figure. A figure with more rows needs longer on screen, so
+  // the duration is derived from the row count rather than fixed.
+  article.figures.forEach((figure, index) => {
     drafts.push({
-      id: 'data',
-      type: 'data',
-      durationInFrames: secondsToFrames(profile.dataSeconds, fps),
-      label: LABELS.data,
-      data: article.video.data,
+      id: article.figures.length > 1 ? `figure-${index + 1}` : 'figure',
+      type: 'figure',
+      durationInFrames: secondsToFrames(
+        Math.min(profile.figureSeconds + figure.items.length * 0.55, 9),
+        fps,
+      ),
+      ...(figure.title ? { label: figure.title } : { label: LABELS.figure }),
+      figure,
     });
-  }
+  });
 
   drafts.push({
     id: 'source',

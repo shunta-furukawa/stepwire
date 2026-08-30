@@ -35,11 +35,28 @@ export const SAMPLE_ARTICLE: ArticleVideoInput = {
     title: 'SAMPLE SOURCE — 実在しない告知',
     url: 'https://example.com/stepwire/fixtures/summer-update',
   },
+  figures: [
+    {
+      kind: 'stat',
+      title: 'アップデートの中身',
+      items: [
+        { label: '調整譜面', value: '4', note: '難易度表の上位' },
+        { label: '新表示', value: 'パネル別', note: 'リザルト画面' },
+      ],
+    },
+    {
+      kind: 'bars',
+      title: '調整された譜面のBPM',
+      unit: 'BPM',
+      caption: 'SAMPLE — 実在しない数値です。',
+      items: [
+        { label: 'SAMPLE CHART A', value: 300, highlight: true },
+        { label: 'SAMPLE CHART B', value: 222 },
+        { label: 'SAMPLE CHART C', value: 180 },
+      ],
+    },
+  ],
   video: {
     hook: '読めるリザルト画面',
-    data: [
-      { label: '調整譜面', value: '4' },
-      { label: '新表示', value: 'パネル別' },
-    ],
   },
 };

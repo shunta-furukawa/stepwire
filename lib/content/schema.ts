@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { CATEGORIES } from './categories';
+import { figureSchema } from './figures';
 
 /**
  * The STEPWIRE Article model.
@@ -80,11 +81,6 @@ export const videoOverrideSchema = z.object({
       }),
     )
     .optional(),
-  /** Optional data readout rendered by `DataScene` (BPM, difficulty, etc.). */
-  data: z
-    .array(z.object({ label: z.string().min(1), value: z.string().min(1) }))
-    .max(4)
-    .optional(),
 });
 export type VideoOverride = z.infer<typeof videoOverrideSchema>;
 
@@ -122,6 +118,12 @@ export const articleFrontmatterSchema = z.object({
   /** One-sentence factual summary. Used for meta description and video. */
   summary: z.string().min(1).max(320),
   sources: z.array(sourceRefSchema).default([]),
+  /**
+   * Diagrams. Drawn on the page and in the video from the same declared data —
+   * see `lib/content/figures.ts` for why the article declares rather than the
+   * system infers.
+   */
+  figures: z.array(figureSchema).max(3).default([]),
   heroImage: imageRefSchema.optional(),
   thumbnail: imageRefSchema.optional(),
   video: videoOverrideSchema.optional(),

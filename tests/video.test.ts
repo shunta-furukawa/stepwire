@@ -6,6 +6,33 @@ import { formatDuration, framesToSeconds, readingSeconds, secondsToFrames } from
 import { makeRenderId, renderObjectPath, renderRequestSchema } from '../lib/video/render-request';
 import { authorizeRender, createMemoryRateLimiter, RENDER_TOKEN_HEADER } from '../lib/video/guard';
 import { needsSpaceBetween, splitForReveal } from '../lib/video/text';
+import {
+  barFractions,
+  figureSchema,
+  formatBarValue,
+  type BarsFigure,
+  type Figure,
+  type StatFigure,
+} from '../lib/content/figures';
+
+const statFigure: StatFigure = {
+  kind: 'stat',
+  items: [
+    { label: 'PEAK BPM', value: '300' },
+    { label: 'SONGS', value: '6' },
+  ],
+};
+
+const barsFigure: BarsFigure = {
+  kind: 'bars',
+  title: 'Peak BPM',
+  unit: 'BPM',
+  items: [
+    { label: 'Chart A', value: 300, highlight: true },
+    { label: 'Chart B', value: 200 },
+    { label: 'Chart C', value: 100 },
+  ],
+};
 
 const article: ArticleVideoInput = {
   slug: 'a-test-article',
@@ -22,6 +49,7 @@ const article: ArticleVideoInput = {
     title: 'The announcement',
     url: 'https://example.com/a',
   },
+  figures: [],
 };
 
 describe('timing', () => {
@@ -245,18 +273,45 @@ describe('buildSceneSequence', () => {
     expect(sequence.scenes.some((scene) => scene.type === 'outro')).toBe(false);
   });
 
-  it('adds a data scene only when the article supplies data', () => {
+  it('adds a figure scene only when the article declares one', () => {
     expect(
-      buildSceneSequence(article, 'STEPWIRE_SHORT').scenes.some((scene) => scene.type === 'data'),
+      buildSceneSequence(article, 'STEPWIRE_SHORT').scenes.some((scene) => scene.type === 'figure'),
     ).toBe(false);
 
-    const withData = buildSceneSequence(
-      { ...article, video: { data: [{ label: 'BPM', value: '300' }] } },
-      'STEPWIRE_SHORT',
+    const withFigure = buildSceneSequence({ ...article, figures: [statFigure] }, 'STEPWIRE_SHORT');
+    const scene = withFigure.scenes.find((scene) => scene.type === 'figure');
+    expect(scene?.id).toBe('figure');
+    expect(scene?.figure).toEqual(statFigure);
+  });
+
+  it('gives each figure its own scene, numbered', () => {
+    const sequence = buildSceneSequence(
+      { ...article, figures: [statFigure, barsFigure] },
+      'STEPWIRE_NEWS',
     );
-    expect(withData.scenes.find((scene) => scene.type === 'data')?.data).toEqual([
-      { label: 'BPM', value: '300' },
-    ]);
+    const ids = sequence.scenes.filter((scene) => scene.type === 'figure').map((scene) => scene.id);
+    expect(ids).toEqual(['figure-1', 'figure-2']);
+  });
+
+  it("labels a figure with its own title, falling back to the section label", () => {
+    const titled = buildSceneSequence({ ...article, figures: [barsFigure] }, 'STEPWIRE_NEWS');
+    expect(titled.scenes.find((scene) => scene.type === 'figure')?.label).toBe('Peak BPM');
+
+    const untitled: Figure = { kind: 'stat', items: statFigure.items };
+    const plain = buildSceneSequence({ ...article, figures: [untitled] }, 'STEPWIRE_NEWS');
+    expect(plain.scenes.find((scene) => scene.type === 'figure')?.label).toBe('BY THE NUMBERS');
+  });
+
+  it('holds a figure with more rows on screen for longer', () => {
+    const two = buildSceneSequence({ ...article, figures: [statFigure] }, 'STEPWIRE_NEWS');
+    const six: Figure = {
+      kind: 'timeline',
+      items: Array.from({ length: 6 }, (_, i) => ({ at: `2026.0${i + 1}`, label: `Step ${i + 1}` })),
+    };
+    const many = buildSceneSequence({ ...article, figures: [six] }, 'STEPWIRE_NEWS');
+    const duration = (s: typeof two) =>
+      s.scenes.find((scene) => scene.type === 'figure')!.durationInFrames;
+    expect(duration(many)).toBeGreaterThan(duration(two));
   });
 
   it('falls back to STEPWIRE reporting when there is no source', () => {
@@ -362,5 +417,79 @@ describe('rate limiter', () => {
     const limiter = createMemoryRateLimiter(1, 60_000);
     expect((await limiter.check('a')).allowed).toBe(true);
     expect((await limiter.check('b')).allowed).toBe(true);
+  });
+});
+
+describe('figures', () => {
+  it('accepts each of the three shapes', () => {
+    for (const figure of [statFigure, barsFigure]) {
+      expect(figureSchema.safeParse(figure).success).toBe(true);
+    }
+    expect(
+      figureSchema.safeParse({
+        kind: 'timeline',
+        items: [
+          { at: '2026.08', label: 'Announced' },
+          { at: '未定', label: 'Release', highlight: true },
+        ],
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects an unknown kind and a comparison of one', () => {
+    expect(figureSchema.safeParse({ kind: 'pie', items: [] }).success).toBe(false);
+    expect(
+      figureSchema.safeParse({ kind: 'bars', items: [{ label: 'A', value: 1 }] }).success,
+    ).toBe(false);
+  });
+
+  it('rejects a bar value that is not a number', () => {
+    // The point of `bars` over `stat` is that the lengths are true to scale,
+    // which only holds if the values are real numbers.
+    expect(
+      figureSchema.safeParse({
+        kind: 'bars',
+        items: [
+          { label: 'A', value: '300' },
+          { label: 'B', value: '200' },
+        ],
+      }).success,
+    ).toBe(false);
+  });
+
+  it('baselines bars at zero rather than at the smallest value', () => {
+    // Baselining at the minimum would draw Chart C as a zero-length bar and
+    // make a 3x difference look infinite.
+    expect(barFractions(barsFigure)).toEqual([1, 2 / 3, 1 / 3]);
+  });
+
+  it('handles a comparison in which every value is equal', () => {
+    expect(
+      barFractions({
+        kind: 'bars',
+        items: [
+          { label: 'A', value: 5 },
+          { label: 'B', value: 5 },
+        ],
+      }),
+    ).toEqual([1, 1]);
+  });
+
+  it('includes negative values in the span so a bar is never negative-length', () => {
+    const fractions = barFractions({
+      kind: 'bars',
+      items: [
+        { label: 'A', value: -10 },
+        { label: 'B', value: 30 },
+      ],
+    });
+    expect(Math.min(...fractions)).toBeGreaterThanOrEqual(0);
+    expect(Math.max(...fractions)).toBe(1);
+  });
+
+  it('appends the unit, and keeps whole numbers whole', () => {
+    expect(formatBarValue(barsFigure, 300)).toBe('300 BPM');
+    expect(formatBarValue(barsFigure, 187.53)).toBe('187.5 BPM');
+    expect(formatBarValue({ ...barsFigure, unit: undefined }, 300)).toBe('300');
   });
 });

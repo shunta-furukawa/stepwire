@@ -1,6 +1,8 @@
 import React from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 import type { Scene } from '../../lib/video/scenes';
+import { barFractions, formatBarValue } from '../../lib/content/figures';
+import { visualLength } from '../../lib/video/text';
 import { color, font, fontWeight, gap, leading, textStyles, tracking, type } from '../styles/theme';
 import {
   Arrow,
@@ -38,7 +40,7 @@ const SECTION_CAPTION: Record<string, string> = {
   news: 'WHAT HAPPENED',
   context: 'WHY IT MATTERS',
   impact: 'PLAYER IMPACT',
-  data: 'BY THE NUMBERS',
+  figure: 'BY THE NUMBERS',
   source: 'SOURCE',
   headline: 'HEADLINE',
   narration: 'STEPWIRE',
@@ -269,13 +271,55 @@ export function ImpactScene(props: SceneProps) {
 // ---------------------------------------------------------------------------
 
 /**
- * The data readout. The one place the `wire` accent is allowed, because this is
- * the DDR-derived numeric information the brand treats as its own content class.
+ * The figure scene — a diagram drawn from data the article declared.
+ *
+ * The `wire` accent lives here and nowhere else: this is the DDR-derived
+ * numeric information the brand treats as its own content class. Nothing is
+ * inferred at render time; every number on screen came from the frontmatter and
+ * was reviewed in a pull request.
  */
-export function DataScene({ scene, orientation }: SceneProps) {
+export function FigureScene({ scene, orientation }: SceneProps) {
   const frame = useCurrentFrame();
+  const { width: frameWidth } = useVideoConfig();
   const l = layout(orientation);
-  const values = scene.data ?? [];
+  const figure = scene.figure;
+
+  if (!figure) return <AbsoluteFill style={{ background: color.paper }} />;
+
+  /** Rows arrive one after another, in the order they are read. */
+  const rowProgress = (index: number) => easeOut((frame - index * 4) / 12);
+
+  // `visualLength` weights a CJK glyph as two, so this is the longest value in
+  // the figure measured the way it will occupy the frame.
+  const widest =
+    figure.kind === 'stat'
+      ? Math.max(...figure.items.map((item) => visualLength(item.value)))
+      : 1;
+
+  // A vertical frame takes two stats side by side; a landscape one takes the
+  // whole row. A word-shaped value (`パネル別`, not `300`) needs a wider column
+  // than that, or the whole row shrinks to fit its longest member.
+  const maxColumns =
+    orientation === 'vertical' ? (widest > 5 ? 1 : 2) : widest > 5 ? 2 : 4;
+  const statColumns = figure.kind === 'stat' ? Math.min(figure.items.length, maxColumns) : 1;
+  const columnWidth =
+    (frameWidth - l.padding * 2 - gap.lg * (statColumns - 1)) / statColumns;
+
+  /**
+   * The size every stat value in this figure is set at.
+   *
+   * A big number is the point of a stat figure, but `パネル別` at display size
+   * runs off the frame. A glyph is roughly 0.55em wide at the `visualLength`
+   * weighting, so this is the largest size the longest value still fits its
+   * column at — never larger than the format's display size.
+   *
+   * One size for the whole row: fitting each value to its own width would set
+   * `18` larger than `300` and read as emphasis nobody asked for.
+   */
+  const valueSize = Math.min(
+    orientation === 'vertical' ? type.h1 : type.display,
+    columnWidth / Math.max(widest * 0.55, 1),
+  );
 
   return (
     <AbsoluteFill style={{ background: color.paper }}>
@@ -283,50 +327,185 @@ export function DataScene({ scene, orientation }: SceneProps) {
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={caption(scene)} />
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: values.length > 2 ? '1fr 1fr' : '1fr',
-            gap: gap.lg,
-          }}
-        >
-          {values.map((entry, index) => {
-            const progress = easeOut((frame - index * 4) / 12);
-            // Values are usually short numerals, but a word-shaped value needs
-            // to step down or it wraps across the whole card.
-            const valueSize =
-              entry.value.length > 4
-                ? type.h3
-                : orientation === 'vertical'
-                  ? type.h1
-                  : type.display;
-            return (
-              <div
-                key={entry.label}
-                style={{
-                  borderTop: `8px solid ${color.ink}`,
-                  paddingTop: gap.md,
-                  opacity: progress,
-                  transform: `translateY(${(1 - progress) * 16}px)`,
-                }}
-              >
-                <p style={{ ...textStyles.meta, color: color.gray700, margin: 0 }}>
-                  {entry.label}
-                </p>
-                <p
-                  style={{
-                    ...textStyles.display,
-                    fontSize: valueSize,
-                    color: color.wire,
-                    margin: 0,
-                    fontVariantNumeric: 'tabular-nums',
-                  }}
-                >
-                  {entry.value}
-                </p>
-              </div>
-            );
-          })}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: gap.lg }}>
+          {figure.kind === 'stat' ? (
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: `repeat(${statColumns}, 1fr)`,
+                gap: gap.lg,
+              }}
+            >
+              {figure.items.map((entry, index) => {
+                const progress = rowProgress(index);
+                return (
+                  <div
+                    key={entry.label}
+                    style={{
+                      borderTop: `8px solid ${color.ink}`,
+                      paddingTop: gap.md,
+                      opacity: progress,
+                      transform: `translateY(${(1 - progress) * 16}px)`,
+                    }}
+                  >
+                    <p style={{ ...textStyles.meta, color: color.gray700, margin: 0 }}>
+                      {entry.label}
+                    </p>
+                    <p
+                      style={{
+                        ...textStyles.display,
+                        fontSize: valueSize,
+                        color: color.wire,
+                        margin: 0,
+                        letterSpacing: `${tracking.headline}em`,
+                        fontVariantNumeric: 'tabular-nums',
+                      }}
+                    >
+                      {entry.value}
+                    </p>
+                    {entry.note ? (
+                      <p style={{ ...textStyles.meta, color: color.gray700, margin: 0 }}>
+                        {entry.note}
+                      </p>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
+
+          {figure.kind === 'bars'
+            ? (() => {
+                const fractions = barFractions(figure);
+                return (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: gap.md }}>
+                    {figure.items.map((entry, index) => {
+                      const progress = rowProgress(index);
+                      return (
+                        <div key={entry.label} style={{ opacity: progress }}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'baseline',
+                              gap: gap.md,
+                              marginBottom: gap.xs,
+                            }}
+                          >
+                            <span
+                              style={{
+                                ...textStyles.body,
+                                // A label that wraps collides with its own
+                                // value, so it is held to one line and cut.
+                                // The vertical frame is narrow enough to need a
+                                // step down as well.
+                                fontSize: orientation === 'vertical' ? type.small : type.base,
+                                fontWeight: entry.highlight ? fontWeight.black : fontWeight.medium,
+                                letterSpacing: `${tracking.headline}em`,
+                                minWidth: 0,
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                              }}
+                            >
+                              {entry.label}
+                            </span>
+                            <span
+                              style={{
+                                ...textStyles.meta,
+                                color: entry.highlight ? color.wire : color.gray700,
+                                fontVariantNumeric: 'tabular-nums',
+                                flexShrink: 0,
+                              }}
+                            >
+                              {formatBarValue(figure, entry.value)}
+                            </span>
+                          </div>
+                          <div style={{ height: 18, background: color.gray100 }}>
+                            <div
+                              style={{
+                                // Bars grow to their true proportion; the reveal
+                                // scales the drawn length, never the value.
+                                width: `${(fractions[index] ?? 0) * 100 * progress}%`,
+                                height: '100%',
+                                background: entry.highlight ? color.wire : color.ink,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()
+            : null}
+
+          {figure.kind === 'timeline' ? (
+            // One grid for the whole timeline rather than one per row, so the
+            // `at` column is a single width down the list. Per-row grids size
+            // to their own content and leave a ragged left edge.
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'max-content 1fr',
+                columnGap: gap.md,
+              }}
+            >
+              {figure.items.map((entry, index) => {
+                const progress = rowProgress(index);
+                return (
+                  <div
+                    key={`${entry.at}-${entry.label}`}
+                    style={{
+                      gridColumn: '1 / -1',
+                      display: 'grid',
+                      gridTemplateColumns: 'subgrid',
+                      paddingBottom: gap.md,
+                      borderLeft: `4px solid ${entry.highlight ? color.wire : color.gray300}`,
+                      paddingLeft: gap.md,
+                      opacity: progress,
+                      transform: `translateX(${(1 - progress) * 12}px)`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        ...textStyles.meta,
+                        color: entry.highlight ? color.wire : color.gray700,
+                        fontVariantNumeric: 'tabular-nums',
+                      }}
+                    >
+                      {entry.at}
+                    </span>
+                    <span>
+                      <span
+                        style={{
+                          ...textStyles.body,
+                          fontSize: type.base,
+                          fontWeight: entry.highlight ? fontWeight.black : fontWeight.medium,
+                          letterSpacing: `${tracking.headline}em`,
+                        }}
+                      >
+                        {entry.label}
+                      </span>
+                      {entry.note ? (
+                        <span
+                          style={{ ...textStyles.meta, display: 'block', color: color.gray700 }}
+                        >
+                          {entry.note}
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
+
+          {figure.caption ? (
+            <p style={{ ...textStyles.meta, color: color.gray700, margin: 0 }}>
+              {figure.caption}
+            </p>
+          ) : null}
         </div>
 
         <ProgressRail index={scene.index} total={scene.total} />
@@ -505,7 +684,7 @@ export const SCENE_COMPONENTS: Record<Scene['type'], React.FC<SceneProps>> = {
   news: NewsScene,
   context: ContextScene,
   impact: ImpactScene,
-  data: DataScene,
+  figure: FigureScene,
   source: SourceScene,
   outro: OutroScene,
   narration: NarrationScene,

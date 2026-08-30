@@ -134,6 +134,7 @@ describe('narrated scene sequence', () => {
     news: '本文のニュース。',
     context: '本文のコンテクスト。',
     playerImpact: '本文の影響。',
+    figures: [],
     narration: {
       audioSrc: '/audio/take.mp3',
       durationInSeconds: 6,
