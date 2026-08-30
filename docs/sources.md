@@ -55,7 +55,7 @@ fails the run with a clear message, and `pnpm test` covers the same rules.
 | `ddrcommunity` | DDRCommunity | RSS 2.0 | ✅ | The only DDR-only source found. Highest signal-to-noise; needs no filter. Also covers BPL and tournament results. |
 | `bemaniwiki` | BEMANIWiki 2nd (RecentChanges) | RSS 2.0 | ✅ | Earliest signal that a DDR page changed. Filtered to DDR. |
 | `4gamer` | 4Gamer.net | RSS 1.0 | ✅ | Catches the rare DDR story that reaches general games media. Filtered. |
-| `bemani-youtube` | BEMANI CHANNEL (YouTube) | Atom | ❌ | **The feed works, but YouTube's robots.txt disallows it.** See below. |
+| `bemani-youtube` | BEMANI CHANNEL (YouTube) | youtube (API v3) | ❌ | Implemented; needs `YOUTUBE_API_KEY`. Official BPL video. See below. |
 | `bpl-official` | BEMANI PRO LEAGUE site | — | ❌ | Live, but publishes no feed of any kind. Manual route. |
 | `reddit-ddr` | r/DanceDanceRevolution | Atom | ❌ | DDR-specific and a good fit, but Reddit rate-limits datacenter IPs — a runner would mostly see 429. |
 | `fixture-*` | Sample feeds in `data/fixtures/` | fixture | ✅ | Exercise the pipeline in CI with no network access. |
@@ -72,25 +72,73 @@ through the *News candidate (manual)* issue template — or indirectly, since
 `ddrcommunity` and `bemaniwiki` both cover BPL. That is the intended route, not
 a gap: see the scraping policy below.
 
-### YouTube: the feed works and is still not enabled
+### YouTube: why the API and not the feed
 
-`https://www.youtube.com/feeds/videos.xml?channel_id=…` returns a valid Atom
-feed for the official BEMANI channel, where BPL matches are streamed. It is
-registered and **disabled**, because YouTube's `robots.txt` says:
+`https://www.youtube.com/feeds/videos.xml?channel_id=…` returns a perfectly good
+Atom feed for the official BEMANI channel, where BPL matches are streamed. This
+project does not use it, because YouTube's `robots.txt` says:
 
 ```
 User-agent: *
 Disallow: /feeds/videos.xml
 ```
 
-This project's own policy is that robots is checked before a source goes live.
-Enabling a feed the site asks automated clients not to fetch would make that
-policy decorative, so the entry stays off with the reason recorded next to it.
+The collection policy says robots is checked before a source goes live, and a
+policy that bends the first time it is inconvenient is not a policy. So official
+video comes through the **YouTube Data API v3** — a documented, first-party
+interface — via the `youtube` adapter.
 
-The compliant route is the **YouTube Data API v3** — an official, documented
-interface: `playlistItems.list` against the channel's uploads playlist, with a
-project API key. That needs a new adapter and a `YOUTUBE_API_KEY` secret, and is
-the right way to add official video as a source. Do not simply flip `enabled`.
+The adapter calls `playlistItems.list` on the channel's uploads playlist. That
+costs **1 quota unit** against a default of **10,000 per day**, so the
+four-hourly schedule spends about **6 units a day**. Quota is not a constraint
+here.
+
+#### Enabling it
+
+1. **Google Cloud Console** → create a project.
+2. **APIs & Services → Library** → enable **YouTube Data API v3**.
+3. **Credentials → Create credentials → API key**. Restrict the key to the
+   YouTube Data API v3 — an unrestricted key is a liability, not a convenience.
+4. Put it in `.env.local` as `YOUTUBE_API_KEY`, and add the same value as a
+   **GitHub Actions secret** named `YOUTUBE_API_KEY`. The workflow already
+   passes it through.
+5. Verify before enabling:
+
+   ```bash
+   pnpm news:collect --dry-run --source bemani-youtube
+   ```
+
+6. Flip `enabled: true` in `data/sources.yml`, in its own pull request.
+
+Until the key exists the source reports one warning per run and **every other
+source collects normally** — an unconfigured key is never able to break the
+newsroom.
+
+#### Configuring it
+
+```yaml
+    type: youtube
+    url: youtube-data-api-v3     # a label; the adapter builds the real request
+    options:
+      channelId: UCVbHFsn9ymFxkT7xsFVE17Q   # uploads playlist: UC… -> UU…
+      # or, for a curated playlist instead of uploads:
+      # playlistId: PL…
+```
+
+The API key never appears in `data/sources.yml`. It is read from the
+environment, which is why this needs its own adapter rather than the generic
+`json` one — that, and the fact that the watch URL is built from
+`resourceId.videoId` rather than read from a field.
+
+#### What is and is not verified
+
+The request path is verified against the live API: a missing key produces a
+per-source warning, and an invalid key surfaces Google's own error reason
+(`badRequest — API key not valid`) without echoing the key. The **success-path
+field mapping is verified against the documentation only**, since capturing a
+real response needs a valid key. `data/fixtures/youtube-playlist-items.sample.json`
+is hand-built to the documented shape and says so; replace it with a trimmed
+real capture once a key is available.
 
 ## Relevance filtering
 
@@ -129,6 +177,7 @@ bemaniwiki: 15 item(s) fetched, 15 filtered out as off-topic
 | `rss` | implemented | RSS 2.0, 0.9x **and RSS 1.0 (RDF)** — the last is still common on Japanese sites, and its `<item>` elements are siblings of `<channel>` rather than children |
 | `atom` | implemented | Atom 1.0 — same adapter; the two formats describe the same thing and publishers mix them |
 | `json` | implemented | JSON Feed, or any JSON endpoint via a field mapping |
+| `youtube` | implemented | YouTube Data API v3. A first-party API rather than a feed — see below |
 | `fixture` | implemented | Reads from `data/fixtures/`. How the pipeline is tested without touching the network |
 | `html` | **not implemented** | See the scraping policy below |
 | `manual` | **not implemented** | Use the *News candidate (manual)* issue template instead |

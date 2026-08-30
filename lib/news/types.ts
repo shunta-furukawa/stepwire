@@ -37,7 +37,14 @@ export interface CandidateNews {
 
 export type SourceCategory = 'official' | 'media' | 'community';
 
-export type SourceType = 'rss' | 'atom' | 'json' | 'html' | 'manual' | 'fixture';
+export type SourceType =
+  | 'rss'
+  | 'atom'
+  | 'json'
+  | 'youtube'
+  | 'html'
+  | 'manual'
+  | 'fixture';
 
 export interface SourceDefinition {
   id: string;

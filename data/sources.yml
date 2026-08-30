@@ -149,27 +149,36 @@ sources:
   # ---------------------------------------------------------------------------
   - id: bemani-youtube
     name: BEMANI CHANNEL (YouTube)
-    type: atom
-    url: https://www.youtube.com/feeds/videos.xml?channel_id=UCVbHFsn9ymFxkT7xsFVE17Q
+    type: youtube
+    # Not a URL: the youtube adapter builds the request itself, because the API
+    # key is a secret and must never appear in this committed file.
+    url: youtube-data-api-v3
     enabled: false
     category: official
     suggestedCategory: NEWS
     homepage: https://www.youtube.com/@bemaniproleague
     maxItems: 10
+    options:
+      # BEMANI CHANNEL. The adapter reads its uploads playlist (UC… -> UU…).
+      channelId: UCVbHFsn9ymFxkT7xsFVE17Q
     filter:
       include:
         - DanceDanceRevolution
         - DDR
         - BPL
+        - BEMANI PRO LEAGUE
     notes: >-
       KONAMI's official BEMANI channel, and where BEMANI PRO LEAGUE matches are
-      streamed. The feed works (verified 2026-08-30, HTTP 200, Atom), but
-      YouTube's robots.txt contains "Disallow: /feeds/videos.xml" for
-      "User-agent: *". This project's own collection policy says robots is
-      checked before a source is enabled, so it stays off. The compliant route is
-      the YouTube Data API v3 with a project API key (playlistItems.list on the
-      channel's uploads playlist), which would need a new adapter and a
-      YOUTUBE_API_KEY secret. Do not simply flip enabled to true.
+      streamed. Collected through the YouTube Data API v3, NOT the Atom feed at
+      /feeds/videos.xml, which YouTube's robots.txt disallows for all agents.
+      playlistItems.list costs 1 quota unit against a 10,000/day default, so the
+      four-hourly schedule spends about 6 units a day.
+      TO ENABLE: create a Google Cloud project, enable "YouTube Data API v3",
+      create an API key, then set YOUTUBE_API_KEY locally in .env.local and as a
+      GitHub Actions secret. Verify with
+      `pnpm news:collect --dry-run --source bemani-youtube`, then flip enabled to
+      true in its own PR. Until the key exists the source reports one warning per
+      run and collection of every other source is unaffected.
 
   - id: bpl-official
     name: BEMANI PRO LEAGUE (official site)

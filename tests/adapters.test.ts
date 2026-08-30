@@ -4,6 +4,12 @@ import { describe, expect, it } from 'vitest';
 import { parseFeed, stripHtml } from '../lib/news/adapters/feed';
 import { applyFilter, matchesFilter } from '../lib/news/filter';
 import { parseJsonItems } from '../lib/news/adapters/json';
+import {
+  extractApiError,
+  parsePlaylistItems,
+  resolvePlaylistId,
+  youtubeAdapter,
+} from '../lib/news/adapters/youtube';
 import { parseSources } from '../lib/news/sources';
 import { collectNews } from '../lib/news/collect';
 import { emptySeenIndex } from '../lib/news/dedupe';
@@ -123,6 +129,105 @@ describe('parseJsonItems', () => {
     });
     expect(items).toHaveLength(1);
     expect(items[0]!.title).toBe('B');
+  });
+});
+
+/**
+ * The YouTube adapter is verified against the documented response shape rather
+ * than a live capture: fetching a real response needs an API key this
+ * repository does not hold. These tests therefore prove the mapping and the
+ * failure modes, not that Google still returns what its documentation says.
+ */
+describe('youtube adapter', () => {
+  const payload = async () =>
+    JSON.parse(await fixture('youtube-playlist-items.sample.json'));
+
+  it('derives the uploads playlist from a channel id', () => {
+    // UC… → UU… is a documented property of channel ids.
+    expect(resolvePlaylistId({ channelId: 'UCVbHFsn9ymFxkT7xsFVE17Q' })).toBe(
+      'UUVbHFsn9ymFxkT7xsFVE17Q',
+    );
+  });
+
+  it('prefers an explicit playlist id over a channel id', () => {
+    expect(
+      resolvePlaylistId({ channelId: 'UCVbHFsn9ymFxkT7xsFVE17Q', playlistId: 'PLcurated' }),
+    ).toBe('PLcurated');
+  });
+
+  it('rejects options that identify nothing', () => {
+    expect(() => resolvePlaylistId({})).toThrow(/channelId or options.playlistId/);
+    expect(() => resolvePlaylistId({ channelId: 'not-a-channel' })).toThrow();
+  });
+
+  it('maps a playlist item to a watch URL, title, summary and date', async () => {
+    const items = parsePlaylistItems(await payload());
+    const first = items[0]!;
+    expect(first.url).toBe('https://www.youtube.com/watch?v=sampleVideo01');
+    expect(first.title).toContain('BEMANI PRO LEAGUE');
+    expect(first.summary).toContain('Invented match broadcast');
+    // contentDetails.videoPublishedAt wins over snippet.publishedAt: the latter
+    // is when the video joined the playlist, not when it was published.
+    expect(first.publishedAt).toBe('2026-08-28T09:00:00.000Z');
+    expect(first.raw?.videoId).toBe('sampleVideo01');
+  });
+
+  it('skips a private or deleted video rather than emitting a broken link', async () => {
+    const items = parsePlaylistItems(await payload());
+    expect(items).toHaveLength(3);
+    expect(items.every((item) => item.url.includes('watch?v='))).toBe(true);
+  });
+
+  it('tolerates an item with no date at all', async () => {
+    const items = parsePlaylistItems(await payload());
+    expect(items.at(-1)!.publishedAt).toBeUndefined();
+  });
+
+  it('fails loudly if the response shape changes', () => {
+    expect(() => parsePlaylistItems({ items: [{ snippet: {} }] })).toThrow(
+      /unexpected playlistItems response shape/,
+    );
+  });
+
+  it('reports a missing API key as a source error, not a crash', async () => {
+    const previous = process.env.YOUTUBE_API_KEY;
+    delete process.env.YOUTUBE_API_KEY;
+    try {
+      await expect(
+        youtubeAdapter.fetchItems(
+          {
+            id: 'yt',
+            name: 'YT',
+            type: 'youtube',
+            url: '',
+            enabled: true,
+            category: 'official',
+            suggestedCategory: 'NEWS',
+            maxItems: 10,
+            options: { channelId: 'UCVbHFsn9ymFxkT7xsFVE17Q' },
+          },
+          { fetch: (() => { throw new Error('must not be called'); }) as never, now: () => new Date() },
+        ),
+      ).rejects.toThrow(/YOUTUBE_API_KEY is not set/);
+    } finally {
+      if (previous !== undefined) process.env.YOUTUBE_API_KEY = previous;
+    }
+  });
+
+  it('surfaces Google\'s error reason without leaking the key', () => {
+    const body = JSON.stringify({
+      error: {
+        message: 'The request cannot be completed because you have exceeded your quota.',
+        errors: [{ reason: 'quotaExceeded' }],
+      },
+    });
+    const message = extractApiError(body);
+    expect(message).toContain('quotaExceeded');
+    expect(message).toContain('exceeded your quota');
+  });
+
+  it('returns undefined for a non-JSON error body', () => {
+    expect(extractApiError('<html>502</html>')).toBeUndefined();
   });
 });
 

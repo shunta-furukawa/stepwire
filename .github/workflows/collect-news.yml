@@ -70,6 +70,9 @@ jobs:
           # issue creation in this repository.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
+          # Optional. Only the `bemani-youtube` source needs it; if the secret
+          # is unset that source warns and the rest of the run is unaffected.
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: |
           set -o pipefail
           ARGS="--limit ${{ inputs.limit || '10' }}"

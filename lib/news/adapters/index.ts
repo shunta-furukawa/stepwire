@@ -1,6 +1,7 @@
 import type { SourceType } from '../types';
 import { atomAdapter, feedAdapter } from './feed';
 import { jsonAdapter } from './json';
+import { youtubeAdapter } from './youtube';
 import { fixtureAdapter } from './fixture';
 import type { AdapterContext, FetchLike, SourceAdapter } from './types';
 
@@ -19,11 +20,16 @@ export type { AdapterContext, FetchLike, SourceAdapter };
  *
  * `manual` — a human pasting a link needs an issue template, not a collector.
  * `.github/ISSUE_TEMPLATE/news-candidate.yml` is that path.
+ *
+ * `youtube` is a first-party API rather than a feed: YouTube's robots.txt
+ * disallows `/feeds/videos.xml`, so official video is collected through the
+ * documented Data API v3 instead. See `lib/news/adapters/youtube.ts`.
  */
 export const ADAPTERS: Partial<Record<SourceType, SourceAdapter>> = {
   rss: feedAdapter,
   atom: atomAdapter,
   json: jsonAdapter,
+  youtube: youtubeAdapter,
   fixture: fixtureAdapter,
 };
 

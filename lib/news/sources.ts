@@ -18,7 +18,7 @@ export const sourceSchema = z.object({
     .string()
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'source id must be lowercase kebab-case'),
   name: z.string().min(1),
-  type: z.enum(['rss', 'atom', 'json', 'html', 'manual', 'fixture']),
+  type: z.enum(['rss', 'atom', 'json', 'youtube', 'html', 'manual', 'fixture']),
   url: z.string().min(1),
   enabled: z.boolean().default(false),
   category: z.enum(['official', 'media', 'community']),

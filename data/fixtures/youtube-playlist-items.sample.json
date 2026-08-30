@@ -1,0 +1,58 @@
+{
+  "_comment": [
+    "SAMPLE — hand-built to the documented shape of YouTube Data API v3",
+    "playlistItems.list (part=snippet,contentDetails), NOT a capture of a live",
+    "response: obtaining one requires an API key, which this repository does not",
+    "hold. The field mapping in lib/news/adapters/youtube.ts is therefore",
+    "verified against the documentation, not against the live API. Once",
+    "YOUTUBE_API_KEY is configured, confirm with:",
+    "  pnpm news:collect --dry-run --source bemani-youtube",
+    "and replace this file with a real trimmed capture.",
+    "The videos below are invented."
+  ],
+  "kind": "youtube#playlistItemListResponse",
+  "pageInfo": { "totalResults": 4, "resultsPerPage": 4 },
+  "items": [
+    {
+      "kind": "youtube#playlistItem",
+      "snippet": {
+        "publishedAt": "2026-08-28T09:05:00Z",
+        "channelTitle": "SAMPLE CHANNEL",
+        "title": "SAMPLE: 【BEMANI PRO LEAGUE】DanceDanceRevolution 第1節",
+        "description": "Invented match broadcast used to exercise the adapter.\nSecond line of the description.",
+        "resourceId": { "kind": "youtube#video", "videoId": "sampleVideo01" }
+      },
+      "contentDetails": { "videoPublishedAt": "2026-08-28T09:00:00Z" }
+    },
+    {
+      "kind": "youtube#playlistItem",
+      "snippet": {
+        "publishedAt": "2026-08-27T12:00:00Z",
+        "channelTitle": "SAMPLE CHANNEL",
+        "title": "SAMPLE: a video about another game entirely",
+        "description": "Off-topic, so the source filter should remove it.",
+        "resourceId": { "kind": "youtube#video", "videoId": "sampleVideo02" }
+      },
+      "contentDetails": { "videoPublishedAt": "2026-08-27T12:00:00Z" }
+    },
+    {
+      "kind": "youtube#playlistItem",
+      "snippet": {
+        "publishedAt": "2026-08-26T00:00:00Z",
+        "channelTitle": "SAMPLE CHANNEL",
+        "title": "SAMPLE: a private or deleted video carries no resourceId",
+        "description": "Skipped rather than emitted as a broken link."
+      },
+      "contentDetails": {}
+    },
+    {
+      "kind": "youtube#playlistItem",
+      "snippet": {
+        "channelTitle": "SAMPLE CHANNEL",
+        "title": "SAMPLE: DDR WORLD 新曲紹介",
+        "description": "No date fields at all, which is a supported state.",
+        "resourceId": { "kind": "youtube#video", "videoId": "sampleVideo04" }
+      }
+    }
+  ]
+}
