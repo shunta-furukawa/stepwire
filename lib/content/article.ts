@@ -12,6 +12,11 @@ import {
   toPlainText,
   type Block,
 } from './markdown';
+import {
+  narrationPublicPath,
+  type Transcript,
+  type TranscriptCaption,
+} from './narration';
 
 /**
  * A parsed article: typed frontmatter plus the three STEPWIRE body sections,
@@ -39,6 +44,16 @@ export interface Article extends ArticleFrontmatter {
  * props, `--props` on the CLI, the render API payload), so they get plain
  * strings rather than the AST.
  */
+/** A narration track resolved for the video boundary. */
+export interface NarrationInput {
+  /** Public URL of the audio file, e.g. `/audio/foo.m4a`. */
+  audioSrc: string;
+  durationInSeconds: number;
+  language: string;
+  speaker?: string;
+  captions: TranscriptCaption[];
+}
+
 export interface ArticleVideoInput {
   slug: string;
   title: string;
@@ -53,6 +68,12 @@ export interface ArticleVideoInput {
   playerImpact: string;
   primarySource?: { publisher: string; title: string; url: string };
   video?: ArticleFrontmatter['video'];
+  /**
+   * Present only when the article has a recording AND a transcript. The video
+   * then plays the voice and follows its timings instead of deriving pacing
+   * from reading speed.
+   */
+  narration?: NarrationInput;
 }
 
 const HEADING_TO_KEY = new Map<string, SectionKey>(
@@ -155,7 +176,10 @@ export function articleCitations(article: Article): number[] {
   return [...new Set(all)].sort((a, b) => a - b);
 }
 
-export function toVideoInput(article: Article): ArticleVideoInput {
+export function toVideoInput(
+  article: Article,
+  transcript?: Transcript,
+): ArticleVideoInput {
   const primary = article.sources[0];
   return {
     slug: article.slug,
@@ -179,5 +203,18 @@ export function toVideoInput(article: Article): ArticleVideoInput {
         }
       : {}),
     ...(article.video ? { video: article.video } : {}),
+    // Narration needs both halves: a recording with no transcript cannot be
+    // subtitled or timed, so the video falls back to its silent form.
+    ...(article.narration && transcript
+      ? {
+          narration: {
+            audioSrc: narrationPublicPath(article.narration.audio),
+            durationInSeconds: transcript.durationInSeconds,
+            language: transcript.language,
+            ...(article.narration.speaker ? { speaker: article.narration.speaker } : {}),
+            captions: transcript.captions,
+          },
+        }
+      : {}),
   };
 }

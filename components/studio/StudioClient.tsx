@@ -328,6 +328,39 @@ export function StudioClient({
               {definition.usage}
             </p>
 
+            {/*
+             * Whether this article has a voice is the single most important
+             * thing about its video, so it is stated plainly rather than left
+             * to be inferred from the scene list.
+             */}
+            <div className="mt-lg border-t border-gray300 pt-md">
+              <p className="font-mono text-micro uppercase tracking-wide text-gray700">ナレーション</p>
+              {article.narration ? (
+                <>
+                  <p className="mt-xs font-display text-base font-bold">
+                    あり · {article.narration.durationInSeconds.toFixed(1)}秒
+                    {article.narration.speaker ? ` · ${article.narration.speaker}` : ''}
+                  </p>
+                  <p className="mt-xs font-body text-small leading-snug text-gray700">
+                    尺と場面の切り替わりは音声に従います。字幕は
+                    <code className="font-mono">content/transcripts/{article.slug}.json</code>
+                    を直接編集して直せます。
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="mt-xs font-display text-base font-bold text-gray700">なし（無音）</p>
+                  <p className="mt-xs font-body text-small leading-snug text-gray700">
+                    本文から組み立てた無音の動画です。声を入れるには録音を
+                    <code className="font-mono">public/audio/</code>
+                    に置き、記事に <code className="font-mono">narration.audio</code> を書いて
+                    <code className="font-mono">pnpm narration:transcribe {article.slug}</code>
+                    を実行します。
+                  </p>
+                </>
+              )}
+            </div>
+
             {article.fixture ? (
               <p className="mt-lg border-2 border-ink bg-ink px-md py-sm font-mono text-micro font-bold uppercase tracking-wider text-paper">
                 Sample fixture — do not publish this video

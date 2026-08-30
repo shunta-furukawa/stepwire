@@ -1,7 +1,8 @@
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { cache } from 'react';
-import { parseArticle, type Article } from './article';
+import { parseArticle, toVideoInput, type Article, type ArticleVideoInput } from './article';
+import { loadTranscript } from './narration';
 import type { Category } from './categories';
 
 /**
@@ -98,6 +99,16 @@ export async function getArticlesByCategories(categories: Category[]): Promise<A
 export async function getSyndicatableArticles(): Promise<Article[]> {
   const articles = await getArticles();
   return articles.filter((article) => !article.fixture);
+}
+
+/**
+ * Projects an article to its video input, attaching the transcript when the
+ * article has a recording. Everything that renders video goes through here, so
+ * no caller has to remember that narration is two files.
+ */
+export async function getVideoInput(article: Article): Promise<ArticleVideoInput> {
+  if (!article.narration) return toVideoInput(article);
+  return toVideoInput(article, await loadTranscript(article.slug));
 }
 
 export async function getAllTags(): Promise<{ tag: string; count: number }[]> {

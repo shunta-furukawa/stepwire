@@ -41,6 +41,7 @@ const SECTION_CAPTION: Record<string, string> = {
   data: 'BY THE NUMBERS',
   source: 'SOURCE',
   headline: 'HEADLINE',
+  narration: 'STEPWIRE',
 };
 
 function caption(scene: Scene): string {
@@ -432,6 +433,71 @@ export function OutroScene({ scene, orientation }: SceneProps) {
 
 // ---------------------------------------------------------------------------
 
+/**
+ * The narration scene — a page of subtitles carried by the speaker's own voice.
+ *
+ * The word being spoken right now is marked. This is the one moment in the
+ * system where the video is not a rendering of the article's prose but of the
+ * recording itself, so the treatment is deliberately plain: no motion, no
+ * decoration, nothing competing with the voice. The type is the subtitle, and
+ * the highlight is the only thing that moves.
+ */
+export function NarrationScene({ scene, orientation }: SceneProps) {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const l = layout(orientation);
+  const elapsedMs = (frame / fps) * 1000;
+  const tokens = scene.tokens ?? [];
+
+  return (
+    <AbsoluteFill style={{ background: color.offWhite }}>
+      <ScanLines opacity={0.035} />
+      <Card background="transparent" padding={l.padding}>
+        {/* The speaker's name, not a section label: this card is the voice. */}
+        <WireBar meta={scene.meta ?? 'STEPWIRE'} />
+
+        <p
+          style={{
+            ...textStyles.body,
+            fontSize: l.body,
+            color: color.gray700,
+            // Subtitles sit centred rather than pinned to a section heading —
+            // there is nothing else on the card competing for the eye.
+            margin: 'auto 0',
+            maxWidth: l.maxWidth,
+            textWrap: 'pretty',
+          }}
+        >
+          {tokens.length > 0
+            ? tokens.map((token, index) => {
+                const spoken = elapsedMs >= token.fromMs;
+                const speaking = spoken && elapsedMs < token.toMs;
+                return (
+                  <span
+                    key={`${token.text}-${index}`}
+                    style={{
+                      // Said already: black. Being said: reversed out on the
+                      // accent. Still ahead: grey.
+                      background: speaking ? color.signal : 'transparent',
+                      color: speaking ? color.paper : spoken ? color.ink : color.gray500,
+                      ...(speaking ? { padding: '0 0.08em' } : {}),
+                    }}
+                  >
+                    {token.text}
+                  </span>
+                );
+              })
+            : scene.text}
+        </p>
+
+        <ProgressRail index={scene.index} total={scene.total} />
+      </Card>
+    </AbsoluteFill>
+  );
+}
+
+// ---------------------------------------------------------------------------
+
 /** Scene type → component. Adding a scene type means adding one entry here. */
 export const SCENE_COMPONENTS: Record<Scene['type'], React.FC<SceneProps>> = {
   intro: IntroScene,
@@ -442,4 +508,5 @@ export const SCENE_COMPONENTS: Record<Scene['type'], React.FC<SceneProps>> = {
   data: DataScene,
   source: SourceScene,
   outro: OutroScene,
+  narration: NarrationScene,
 };

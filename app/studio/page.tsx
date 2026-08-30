@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import { getArticles } from '@/lib/content/loader';
-import { toVideoInput } from '@/lib/content/article';
+import { getArticles, getVideoInput } from '@/lib/content/loader';
 import { StudioClient } from '@/components/studio/StudioClient';
 
 /**
@@ -23,10 +22,12 @@ export default async function StudioPage({
 }) {
   const [{ article: requested }, articles] = await Promise.all([searchParams, getArticles()]);
 
-  const inputs = articles.map((item) => ({
-    ...toVideoInput(item),
-    fixture: item.fixture,
-  }));
+  const inputs = await Promise.all(
+    articles.map(async (item) => ({
+      ...(await getVideoInput(item)),
+      fixture: item.fixture,
+    })),
+  );
 
   const initialSlug =
     inputs.find((item) => item.slug === requested)?.slug ?? inputs[0]?.slug ?? '';

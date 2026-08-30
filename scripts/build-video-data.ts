@@ -12,8 +12,7 @@
  */
 import path from 'node:path';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { getArticles } from '../lib/content/loader';
-import { toVideoInput } from '../lib/content/article';
+import { getArticles, getVideoInput } from '../lib/content/loader';
 import { COMPOSITION_IDS } from '../lib/video/compositions';
 import { buildSceneSequence } from '../lib/video/scenes';
 import { formatDuration } from '../lib/video/timing';
@@ -31,7 +30,7 @@ async function main() {
   const index: { slug: string; composition: string; propsFile: string }[] = [];
 
   for (const article of articles) {
-    const videoInput = toVideoInput(article);
+    const videoInput = await getVideoInput(article);
 
     // One file per composition. A props file always matches the format it is
     // named for, so passing the wrong one is not an easy mistake to make.

@@ -41,6 +41,7 @@ pnpm news:collect --create-issues    # file candidates into the inbox
 
 pnpm video:studio                    # Remotion studio (scene design)
 pnpm video:render <slug>             # local render, no cloud, no cost
+pnpm narration:transcribe <slug>     # local Whisper; writes content/transcripts/
 ```
 
 Run `pnpm verify` before every commit. Never leave the tree failing.
@@ -108,6 +109,11 @@ verified by eye with `pnpm video:render`.
 - **Do not add a video CMS.** Video copy is derived from the article. If a video
   needs different wording, add a narrow override under `article.video`, never a
   parallel file.
+- **The article is the record; the recording is the performance.** A narrated
+  video plays the operator's voice and follows its timing. Wording may differ
+  between the two; facts may not. A recording is never a source — sourcing stays
+  entirely on the article, and `content/transcripts/*.json` is committed so
+  Whisper's mistakes can be corrected by hand.
 - **Keep dependencies minimal.** Prefer a small typed module over a library. Do
   not add a database, a CMS, a job queue, or a state-management framework.
 - **Keep AI at the boundary.** `lib/ai/` may be added later for drafting and

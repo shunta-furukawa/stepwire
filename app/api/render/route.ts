@@ -1,6 +1,5 @@
 import { after } from 'next/server';
-import { getArticleBySlug } from '@/lib/content/loader';
-import { toVideoInput } from '@/lib/content/article';
+import { getArticleBySlug, getVideoInput } from '@/lib/content/loader';
 import {
   makeRenderId,
   renderRequestSchema,
@@ -127,7 +126,7 @@ export async function POST(request: Request): Promise<Response> {
 
   const driverName = selectDriverName();
   const job = createJob({ renderId, articleSlug, composition, driver: driverName });
-  const videoInput = toVideoInput(article);
+  const videoInput = await getVideoInput(article);
 
   after(async () => {
     const log = (message: string) => {

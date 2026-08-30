@@ -1,5 +1,6 @@
-import type { ArticleVideoInput } from '../content/article';
+import type { ArticleVideoInput, NarrationInput } from '../content/article';
 import { toSentences } from '../content/markdown';
+import { pageCaptions } from './captions';
 import { visualLength } from './text';
 import { CATEGORY_META } from '../content/categories';
 import { formatDate } from '../format';
@@ -26,7 +27,9 @@ export type SceneType =
   | 'impact'
   | 'data'
   | 'source'
-  | 'outro';
+  | 'outro'
+  /** A page of spoken narration, subtitled in time with the voice. */
+  | 'narration';
 
 export interface Scene {
   /** Unique within a sequence, e.g. `context-2`. Also the override key. */
@@ -41,6 +44,12 @@ export interface Scene {
   meta?: string;
   /** `data` scenes only. */
   data?: { label: string; value: string }[];
+  /**
+   * `narration` scenes only: the tokens of this page with their timings,
+   * relative to the start of the scene, so a scene needs no knowledge of where
+   * it sits in the film to highlight the word currently being spoken.
+   */
+  tokens?: { text: string; fromMs: number; toMs: number }[];
   /** Position in the sequence, for the progress rail. */
   index: number;
   total: number;
@@ -51,6 +60,15 @@ export interface SceneSequence {
   durationInFrames: number;
   fps: number;
   composition: CompositionId;
+  /**
+   * Set when the film has a voice track: where the audio starts, and how long
+   * it runs. The composition mounts `<Audio>` over exactly this span.
+   */
+  narration?: {
+    audioSrc: string;
+    startFrame: number;
+    durationInFrames: number;
+  };
 }
 
 /** Section labels. Editorial voice, not field names. */
@@ -60,6 +78,8 @@ const LABELS = {
   impact: 'PLAYER IMPACT',
   data: 'BY THE NUMBERS',
 } as const;
+
+type Draft = Omit<Scene, 'index' | 'total'>;
 
 /**
  * Splits a section into cards.
@@ -146,8 +166,6 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
   },
 };
 
-type Draft = Omit<Scene, 'index' | 'total'>;
-
 function applyOverride(
   scene: Draft,
   overrides: ArticleVideoInput['video'],
@@ -166,6 +184,38 @@ function applyOverride(
         ? { durationInFrames: readingFrames(override.text, undefined, fps) }
         : {}),
   };
+}
+
+/**
+ * Turns a transcript into one scene per subtitle page.
+ *
+ * Scene durations are the speaker's own pacing — the page is held until the
+ * next one begins, so a subtitle never disappears while the voice continues.
+ * Nothing here estimates reading speed: the recording already decided it.
+ */
+function narrationScenes(narration: NarrationInput, fps: number): Draft[] {
+  const pages = pageCaptions(narration.captions);
+  const totalMs = narration.durationInSeconds * 1000;
+
+  return pages.map((page, index) => {
+    const nextStart = pages[index + 1]?.startMs ?? totalMs;
+    const durationMs = Math.max(nextStart - page.startMs, 200);
+
+    return {
+      id: `narration-${index + 1}`,
+      type: 'narration' as const,
+      durationInFrames: Math.max(1, Math.round((durationMs / 1000) * fps)),
+      text: page.text,
+      ...(narration.speaker ? { meta: narration.speaker } : {}),
+      // Token timings are rebased to the start of the page, so a scene can
+      // highlight the spoken word without knowing where it sits in the film.
+      tokens: page.tokens.map((token) => ({
+        text: token.text,
+        fromMs: token.fromMs - page.startMs,
+        toMs: token.toMs - page.startMs,
+      })),
+    };
+  });
 }
 
 export function buildSceneSequence(
@@ -194,11 +244,18 @@ export function buildSceneSequence(
     meta: article.summary,
   });
 
-  const sections = [
-    { type: 'news' as const, source: article.news, max: profile.maxChunks.news },
-    { type: 'context' as const, source: article.context, max: profile.maxChunks.context },
-    { type: 'impact' as const, source: article.playerImpact, max: profile.maxChunks.impact },
-  ];
+  // A narrated article replaces its three derived text sections with the
+  // recording. The written sections are the article's job; the voice is the
+  // video's. Duplicating both would say everything twice.
+  const narrated = article.narration !== undefined;
+
+  const sections = narrated
+    ? []
+    : [
+        { type: 'news' as const, source: article.news, max: profile.maxChunks.news },
+        { type: 'context' as const, source: article.context, max: profile.maxChunks.context },
+        { type: 'impact' as const, source: article.playerImpact, max: profile.maxChunks.impact },
+      ];
 
   for (const section of sections) {
     const cards = chunk(section.source, profile.budget, section.max);
@@ -213,6 +270,10 @@ export function buildSceneSequence(
         text,
       });
     });
+  }
+
+  if (article.narration) {
+    drafts.push(...narrationScenes(article.narration, fps));
   }
 
   if (article.video?.data && article.video.data.length > 0) {
@@ -247,7 +308,9 @@ export function buildSceneSequence(
     .map((scene) => applyOverride(scene, article.video, fps))
     .filter((scene): scene is Draft => scene !== null);
 
-  const trimmed = trimToBudget(overridden, target.max * fps);
+  // A narrated film is as long as the recording; trimming it would cut the
+  // speaker off mid-sentence. Only derived text is subject to the budget.
+  const trimmed = narrated ? overridden : trimToBudget(overridden, target.max * fps);
 
   const scenes: Scene[] = trimmed.map((scene, index) => ({
     ...scene,
@@ -255,11 +318,27 @@ export function buildSceneSequence(
     total: trimmed.length,
   }));
 
+  const durationInFrames = scenes.reduce((total, scene) => total + scene.durationInFrames, 0);
+  const firstNarration = scenes.findIndex((scene) => scene.type === 'narration');
+
   return {
     scenes,
-    durationInFrames: scenes.reduce((total, scene) => total + scene.durationInFrames, 0),
+    durationInFrames,
     fps,
     composition,
+    ...(article.narration && firstNarration !== -1
+      ? {
+          narration: {
+            audioSrc: article.narration.audioSrc,
+            startFrame: scenes
+              .slice(0, firstNarration)
+              .reduce((total, scene) => total + scene.durationInFrames, 0),
+            durationInFrames: scenes
+              .filter((scene) => scene.type === 'narration')
+              .reduce((total, scene) => total + scene.durationInFrames, 0),
+          },
+        }
+      : {}),
   };
 }
 

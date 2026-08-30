@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@remotion/media-utils':
+        specifier: 4.0.518
+        version: 4.0.518(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@remotion/player':
         specifier: 4.0.518
         version: 4.0.518(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -45,6 +48,9 @@ importers:
       '@remotion/cli':
         specifier: 4.0.518
         version: 4.0.518(@swc/helpers@0.5.23)(postcss@8.5.26)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@5.9.3)
+      '@remotion/install-whisper-cpp':
+        specifier: 4.0.518
+        version: 4.0.518
       '@remotion/renderer':
         specifier: 4.0.518
         version: 4.0.518(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -911,6 +917,9 @@ packages:
     resolution: {integrity: sha512-m9gJuCeI7oUz57slFVk1YBJqXVUUlBwaWalptkiBsoh7EQZbUbzjGotsDaoVCJ0arwNoMJK5cN5BE5asUsEHYg==}
     cpu: [x64]
     os: [win32]
+
+  '@remotion/install-whisper-cpp@4.0.518':
+    resolution: {integrity: sha512-Ef6CxZrXxRS8iykKOLKSLJKrj1xSNP/avse2U4ao9RIMzRnFPz7VwOEh1N07DgKokNzwitAZUuFO3CVJrv6pCQ==}
 
   '@remotion/licensing@4.0.518':
     resolution: {integrity: sha512-YoGKkBRlRRQrBvhgckJnUhfoEROTYkTxyPFSNnGMNtgrSgHI+3LM+Fvm538GtwOrBGyD6b/u3CCJt0Xt/Mm54Q==}
@@ -4350,6 +4359,10 @@ snapshots:
 
   '@remotion/compositor-win32-x64-msvc@4.0.518':
     optional: true
+
+  '@remotion/install-whisper-cpp@4.0.518':
+    dependencies:
+      '@remotion/captions': 4.0.518
 
   '@remotion/licensing@4.0.518': {}
 

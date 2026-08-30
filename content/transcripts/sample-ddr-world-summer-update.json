@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "language": "ja",
+  "durationInSeconds": 14.0,
+  "captions": [
+    {
+      "text": "はい、",
+      "startMs": 500,
+      "endMs": 800,
+      "timestampMs": 650,
+      "confidence": null
+    },
+    {
+      "text": "今回は",
+      "startMs": 830,
+      "endMs": 1350,
+      "timestampMs": 1090,
+      "confidence": null
+    },
+    {
+      "text": "DDR WORLDの",
+      "startMs": 1380,
+      "endMs": 2280,
+      "timestampMs": 1830,
+      "confidence": null
+    },
+    {
+      "text": "夏の",
+      "startMs": 2310,
+      "endMs": 2760,
+      "timestampMs": 2535,
+      "confidence": null
+    },
+    {
+      "text": "アップデートです。",
+      "startMs": 2790,
+      "endMs": 3740,
+      "timestampMs": 3265,
+      "confidence": null
+    },
+    {
+      "text": "リザルト画面に",
+      "startMs": 3770,
+      "endMs": 4720,
+      "timestampMs": 4245,
+      "confidence": null
+    },
+    {
+      "text": "パネル別の",
+      "startMs": 4750,
+      "endMs": 5550,
+      "timestampMs": 5150,
+      "confidence": null
+    },
+    {
+      "text": "精度表示が",
+      "startMs": 5580,
+      "endMs": 6380,
+      "timestampMs": 5980,
+      "confidence": null
+    },
+    {
+      "text": "付きました。",
+      "startMs": 6410,
+      "endMs": 7210,
+      "timestampMs": 6810,
+      "confidence": null
+    },
+    {
+      "text": "これ、",
+      "startMs": 7240,
+      "endMs": 7740,
+      "timestampMs": 7490,
+      "confidence": null
+    },
+    {
+      "text": "地味に",
+      "startMs": 7770,
+      "endMs": 8320,
+      "timestampMs": 8045,
+      "confidence": null
+    },
+    {
+      "text": "大きいと",
+      "startMs": 8350,
+      "endMs": 8950,
+      "timestampMs": 8650,
+      "confidence": null
+    },
+    {
+      "text": "思っていて、",
+      "startMs": 8980,
+      "endMs": 9780,
+      "timestampMs": 9380,
+      "confidence": null
+    },
+    {
+      "text": "どこで",
+      "startMs": 9810,
+      "endMs": 10310,
+      "timestampMs": 10060,
+      "confidence": null
+    },
+    {
+      "text": "崩れたかが",
+      "startMs": 10340,
+      "endMs": 11140,
+      "timestampMs": 10740,
+      "confidence": null
+    },
+    {
+      "text": "筐体側で",
+      "startMs": 11170,
+      "endMs": 11970,
+      "timestampMs": 11570,
+      "confidence": null
+    },
+    {
+      "text": "分かるように",
+      "startMs": 12000,
+      "endMs": 12850,
+      "timestampMs": 12425,
+      "confidence": null
+    },
+    {
+      "text": "なるんですよね。",
+      "startMs": 12880,
+      "endMs": 13880,
+      "timestampMs": 13380,
+      "confidence": null
+    }
+  ]
+}

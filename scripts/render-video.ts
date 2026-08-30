@@ -10,8 +10,7 @@
  */
 import path from 'node:path';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { getArticles } from '../lib/content/loader';
-import { toVideoInput } from '../lib/content/article';
+import { getArticles, getVideoInput } from '../lib/content/loader';
 import { isCompositionId, type CompositionId } from '../lib/video/compositions';
 import { buildSceneSequence } from '../lib/video/scenes';
 import { formatDuration } from '../lib/video/timing';
@@ -53,7 +52,7 @@ async function main() {
   }
   const composition: CompositionId = compositionArg;
 
-  const videoInput = toVideoInput(article);
+  const videoInput = await getVideoInput(article);
   const sequence = buildSceneSequence(videoInput, composition);
   const renderId = makeRenderId({
     articleSlug: article.slug,

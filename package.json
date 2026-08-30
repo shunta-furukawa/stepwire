@@ -23,9 +23,11 @@
     "video:data": "tsx scripts/build-video-data.ts",
     "video:studio": "pnpm video:data && remotion studio video/index.ts",
     "video:render": "tsx scripts/render-video.ts",
-    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm content:validate && pnpm build"
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm content:validate && pnpm build",
+    "narration:transcribe": "tsx scripts/transcribe.ts"
   },
   "dependencies": {
+    "@remotion/media-utils": "4.0.518",
     "@remotion/player": "4.0.518",
     "@vercel/blob": "2.8.0",
     "@vercel/sandbox": "3.2.1",
@@ -40,6 +42,7 @@
   "devDependencies": {
     "@remotion/bundler": "4.0.518",
     "@remotion/cli": "4.0.518",
+    "@remotion/install-whisper-cpp": "4.0.518",
     "@remotion/renderer": "4.0.518",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "22.19.2",

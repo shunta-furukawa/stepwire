@@ -88,6 +88,22 @@ export const videoOverrideSchema = z.object({
 });
 export type VideoOverride = z.infer<typeof videoOverrideSchema>;
 
+/**
+ * Narration. `audio` is a path under `public/`, so the same file serves the
+ * website and the Remotion render without a second copy.
+ *
+ * The transcript is found by convention at `content/transcripts/<slug>.json`
+ * and is not referenced here: one fewer thing to keep in sync.
+ */
+export const narrationSchema = z.object({
+  audio: z
+    .string()
+    .regex(/^\/?audio\/[\w.-]+\.(m4a|mp3|wav|webm|ogg)$/, 'audio must be a file under public/audio/'),
+  /** Who is speaking. Shown on the video's source card. */
+  speaker: z.string().min(1).optional(),
+});
+export type Narration = z.infer<typeof narrationSchema>;
+
 /** Frontmatter as authored in `content/**\/*.mdx`. */
 export const articleFrontmatterSchema = z.object({
   id: z.string().min(1),
@@ -109,6 +125,11 @@ export const articleFrontmatterSchema = z.object({
   heroImage: imageRefSchema.optional(),
   thumbnail: imageRefSchema.optional(),
   video: videoOverrideSchema.optional(),
+  /**
+   * The recording this article is spoken over. Optional — an article with no
+   * narration still produces a complete, silent video from its text.
+   */
+  narration: narrationSchema.optional(),
   status: z.enum(STATUSES),
   /**
    * Marks seeded sample content. Fixture articles are rendered with a visible

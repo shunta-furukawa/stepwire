@@ -32,3 +32,6 @@ out/
 *.log
 .idea/
 .vscode/
+
+# whisper.cpp and its models, installed on demand by `pnpm narration:transcribe`
+.whisper/

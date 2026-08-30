@@ -7,6 +7,88 @@ file, and no second copy of the copy.
 Article ──► buildSceneSequence() ──► Scene[] ──► Remotion ──► MP4
 ```
 
+## Two kinds of video
+
+An article produces one of two films, depending on whether it has a recording.
+
+| | Silent | Narrated |
+| --- | --- | --- |
+| Body | Cards derived from NEWS / CONTEXT / PLAYER IMPACT | Subtitle pages from the transcript |
+| Pacing | Estimated reading time | The speaker's own timing |
+| Length | Trimmed to the format's ceiling | As long as the recording |
+| Audio | none | the recording |
+
+Both open with the ident and headline and close with the source card and the
+outro. Everything else changes.
+
+### Why narration exists
+
+Writing an article from a transcript and then rendering a silent typography
+video sands off the thing that made it worth recording. So a recording is not
+only an input to the text — **it is the video's audio**. The article and the
+video stop being two renderings of the same prose and become two renderings of
+the same recording: the page gets the edited written record, the video gets the
+actual voice.
+
+The rule that keeps this honest:
+
+> **The article is the record. The recording is the performance.**
+> They may differ in wording. They may not differ in fact.
+
+Sourcing stays entirely on the article. A recording is never a source.
+
+### Adding narration to an article
+
+1. Put the recording in `public/audio/` — the same file then serves the website
+   and the render, with no second copy.
+2. Reference it in the article's frontmatter:
+
+   ```yaml
+   narration:
+     audio: audio/2026-08-24-summer-update.m4a
+     speaker: Mono ddr
+   ```
+
+3. Transcribe it:
+
+   ```bash
+   pnpm narration:transcribe sample-ddr-world-summer-update
+   ```
+
+   This runs **Whisper.cpp locally** — no API, no per-minute cost, no vendor.
+   The first run installs whisper.cpp and downloads a model into `.whisper/`
+   (git-ignored) and takes a while; later runs do not.
+
+4. **Read the transcript and fix it.** Whisper mishears DDR jargon constantly —
+   song titles, chart names, "DDR WORLD". `content/transcripts/<slug>.json` is
+   committed precisely so it can be corrected by hand; it is the subtitle track
+   a viewer reads, not a byproduct.
+
+5. `pnpm video:render <slug>`.
+
+The transcript is found by convention at `content/transcripts/<slug>.json` and
+is not named in the frontmatter — one fewer thing to keep in sync. An article
+with a recording but no transcript falls back to the silent form rather than
+rendering a video that cannot be subtitled or timed.
+
+### How the pages are cut
+
+`createTikTokStyleCaptions` from `@remotion/captions` was tried first and merged
+an entire fourteen-second take into a single page: it groups tokens that fall
+within a time window of each other, and continuous speech has no gaps wide
+enough to break on. Correct for its purpose, wrong for subtitles.
+
+`lib/video/captions.ts` pages on **sentence endings first**, falling back to a
+length or duration limit only when a speaker runs on, and breaking immediately
+on a real pause. Length is measured with `visualLength`, the same weighted
+measure the card budgets use, so one number describes a readable page in either
+script.
+
+Each page becomes one scene, held until the next page begins — so a subtitle
+never disappears while the voice continues. The audio is mounted over exactly
+the span the narration scenes occupy, so the ident plays silent before it and
+the recording is never clipped.
+
 ## How a video is built
 
 `lib/video/scenes.ts` turns an `ArticleVideoInput` into a scene sequence:
@@ -19,10 +101,16 @@ Article ──► buildSceneSequence() ──► Scene[] ──► Remotion ─�
 5. **Source** — the primary source. Never dropped.
 6. **Outro** — the wordmark and tagline.
 
-Each card's duration comes from its reading time (roughly 12 characters per
-second, plus time to register the card, clamped per format). **The length of a
-video is therefore a property of the article's content** — nobody types a
-duration anywhere. Remotion learns the total through `calculateMetadata`.
+Each card's duration comes from its reading time — roughly 12 weighted
+characters per second, plus time to register the card, clamped per format.
+"Weighted" is `visualLength`, which counts a CJK character twice, so the same
+number works out to ~12 Latin or ~6 Japanese characters per second.
+
+**The length of a video is therefore a property of the article's content** —
+nobody types a duration anywhere. Remotion learns the total through
+`calculateMetadata`.
+
+For a narrated article none of this applies: the recording decides.
 
 If the total exceeds the format's ceiling, `trimToBudget` drops trailing
 analysis cards. The intro, headline, first news card, source and outro are never
