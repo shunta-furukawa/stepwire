@@ -1,0 +1,144 @@
+import { z } from 'zod';
+import { CATEGORIES } from './categories';
+
+/**
+ * The STEPWIRE Article model.
+ *
+ * This schema is the contract shared by the website, the video compositions and
+ * the editorial tooling. Anything that both surfaces need lives here; nothing
+ * that only one surface needs does.
+ */
+
+export const IMPORTANCE = ['breaking', 'major', 'normal', 'minor'] as const;
+export type Importance = (typeof IMPORTANCE)[number];
+
+export const STATUSES = ['draft', 'review', 'published', 'archived'] as const;
+export type Status = (typeof STATUSES)[number];
+
+/**
+ * Source types. `official` is a first-party announcement (KONAMI, an arcade
+ * operator, an event organiser); `media` is reporting by another outlet;
+ * `community` is a community-run resource. AI output is never a source type —
+ * see `docs/editorial-workflow.md`.
+ */
+export const SOURCE_TYPES = [
+  'official',
+  'media',
+  'community',
+  'social',
+  'video',
+  'dataset',
+  'other',
+] as const;
+export type SourceType = (typeof SOURCE_TYPES)[number];
+
+const isoDateTime = z
+  .string()
+  .refine((value) => !Number.isNaN(Date.parse(value)), {
+    message: 'must be an ISO-8601 date or date-time string',
+  });
+
+export const sourceRefSchema = z.object({
+  title: z.string().min(1),
+  publisher: z.string().min(1),
+  url: z.url(),
+  publishedAt: isoDateTime.optional(),
+  type: z.enum(SOURCE_TYPES).optional(),
+});
+export type SourceRef = z.infer<typeof sourceRefSchema>;
+
+export const imageRefSchema = z.object({
+  src: z.string().min(1),
+  alt: z.string().min(1, 'every image needs alt text'),
+  credit: z.string().optional(),
+  width: z.number().int().positive().optional(),
+  height: z.number().int().positive().optional(),
+});
+export type ImageRef = z.infer<typeof imageRefSchema>;
+
+/**
+ * Optional per-article video overrides.
+ *
+ * The rule is: overrides are the exception. If a field is absent the video
+ * system derives it from the article body, which is what keeps the web article
+ * and the video from drifting apart. See `lib/video/scenes.ts`.
+ */
+export const videoOverrideSchema = z.object({
+  /** Replaces the on-screen headline when the article title is too long. */
+  headline: z.string().max(90).optional(),
+  /** A short opening line used by the intro scene. */
+  hook: z.string().max(120).optional(),
+  /** Per-scene overrides, keyed by scene id. */
+  scenes: z
+    .record(
+      z.string(),
+      z.object({
+        text: z.string().optional(),
+        /** Explicit duration in seconds; otherwise derived from text length. */
+        durationInSeconds: z.number().positive().max(30).optional(),
+        skip: z.boolean().optional(),
+      }),
+    )
+    .optional(),
+  /** Optional data readout rendered by `DataScene` (BPM, difficulty, etc.). */
+  data: z
+    .array(z.object({ label: z.string().min(1), value: z.string().min(1) }))
+    .max(4)
+    .optional(),
+});
+export type VideoOverride = z.infer<typeof videoOverrideSchema>;
+
+/** Frontmatter as authored in `content/**\/*.mdx`. */
+export const articleFrontmatterSchema = z.object({
+  id: z.string().min(1),
+  slug: z
+    .string()
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'slug must be lowercase kebab-case'),
+  title: z.string().min(1).max(140),
+  /** Used where the full title will not fit — nav, cards, video headline. */
+  shortTitle: z.string().max(70).optional(),
+  dek: z.string().max(240).optional(),
+  publishedAt: isoDateTime,
+  updatedAt: isoDateTime.optional(),
+  category: z.enum(CATEGORIES),
+  tags: z.array(z.string().min(1)).default([]),
+  importance: z.enum(IMPORTANCE).default('normal'),
+  /** One-sentence factual summary. Used for meta description and video. */
+  summary: z.string().min(1).max(320),
+  sources: z.array(sourceRefSchema).default([]),
+  heroImage: imageRefSchema.optional(),
+  thumbnail: imageRefSchema.optional(),
+  video: videoOverrideSchema.optional(),
+  status: z.enum(STATUSES),
+  /**
+   * Marks seeded sample content. Fixture articles are rendered with a visible
+   * banner and are excluded from the sitemap and the RSS feed so they can never
+   * be mistaken for reporting.
+   */
+  fixture: z.boolean().default(false),
+  /** Links the article back to the collector candidate it came from. */
+  collectorId: z.string().optional(),
+  /** The GitHub issue the article was drafted from, if any. */
+  sourceIssue: z.number().int().positive().optional(),
+});
+export type ArticleFrontmatter = z.infer<typeof articleFrontmatterSchema>;
+
+/**
+ * The three body sections. This split is the STEPWIRE format and it is enforced
+ * by the schema rather than left to authoring discipline:
+ *
+ *   news         — what happened. Reported fact. Must cite a source.
+ *   context      — why it is notable. Editorial analysis.
+ *   playerImpact — what changes for a player. Editorial analysis.
+ */
+export const SECTION_KEYS = ['news', 'context', 'playerImpact'] as const;
+export type SectionKey = (typeof SECTION_KEYS)[number];
+
+export const SECTION_HEADINGS: Record<SectionKey, string> = {
+  news: 'NEWS',
+  context: 'CONTEXT',
+  playerImpact: 'PLAYER IMPACT',
+};
+
+/** Categories whose articles are held to reported-news sourcing standards. */
+export const REPORTED_CATEGORIES = ['NEWS', 'UPDATE', 'EVENT', 'TOURNAMENT', 'CHARTS'] as const;

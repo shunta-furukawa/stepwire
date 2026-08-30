@@ -1,0 +1,128 @@
+import type { Block, InlineNode } from '@/lib/content/markdown';
+
+/**
+ * Renders the article-body AST as React.
+ *
+ * Nothing here uses `dangerouslySetInnerHTML`: the parser produces a typed tree
+ * and this component maps it to elements, so article bodies cannot inject
+ * markup even if a future draft comes from an automated source.
+ */
+
+function Inline({ nodes }: { nodes: InlineNode[] }) {
+  return (
+    <>
+      {nodes.map((node, index) => {
+        switch (node.type) {
+          case 'text':
+            return <span key={index}>{node.value}</span>;
+          case 'strong':
+            return (
+              <strong key={index} className="font-bold">
+                <Inline nodes={node.children} />
+              </strong>
+            );
+          case 'em':
+            return (
+              <em key={index}>
+                <Inline nodes={node.children} />
+              </em>
+            );
+          case 'code':
+            return (
+              <code key={index} className="bg-gray100 px-1 font-mono text-[0.9em]">
+                {node.value}
+              </code>
+            );
+          case 'link':
+            return (
+              <a
+                key={index}
+                href={node.href}
+                className="underline decoration-gray300 underline-offset-4 transition-colors hover:decoration-signal"
+                {...(node.href.startsWith('http')
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
+              >
+                <Inline nodes={node.children} />
+              </a>
+            );
+          case 'citation':
+            // The citation marker is the visible link between a claim and the
+            // source that supports it. It jumps to the numbered source entry.
+            return (
+              <a
+                key={index}
+                href={`#source-${node.index}`}
+                id={`citation-${node.index}`}
+                className="ml-[2px] inline-flex h-[15px] min-w-[15px] items-center justify-center border border-ink align-super font-mono text-[10px] leading-none transition-colors hover:bg-ink hover:text-paper"
+                aria-label={`Jump to source ${node.index}`}
+              >
+                {node.index}
+              </a>
+            );
+        }
+      })}
+    </>
+  );
+}
+
+export function Markdown({ blocks }: { blocks: Block[] }) {
+  return (
+    <div className="font-body text-lead leading-normal text-ink [&>*+*]:mt-lg">
+      {blocks.map((block, index) => {
+        switch (block.type) {
+          case 'paragraph':
+            return (
+              <p key={index}>
+                <Inline nodes={block.children} />
+              </p>
+            );
+          case 'heading': {
+            const Tag = block.level === 3 ? 'h3' : 'h4';
+            return (
+              <Tag
+                key={index}
+                className="font-display text-h4 font-bold uppercase tracking-tight"
+              >
+                <Inline nodes={block.children} />
+              </Tag>
+            );
+          }
+          case 'list': {
+            const Tag = block.ordered ? 'ol' : 'ul';
+            return (
+              <Tag
+                key={index}
+                className={
+                  block.ordered
+                    ? 'list-decimal space-y-sm pl-lg marker:font-mono marker:text-small'
+                    : 'list-none space-y-sm'
+                }
+              >
+                {block.items.map((item, itemIndex) => (
+                  <li
+                    key={itemIndex}
+                    className={block.ordered ? '' : 'relative pl-lg before:absolute before:left-0 before:top-[0.55em] before:h-[6px] before:w-[6px] before:bg-signal'}
+                  >
+                    <Inline nodes={item} />
+                  </li>
+                ))}
+              </Tag>
+            );
+          }
+          case 'blockquote':
+            return (
+              <blockquote
+                key={index}
+                className="border-l-4 border-ink pl-lg font-display text-h4 font-medium leading-tight tracking-tight"
+              >
+                <Inline nodes={block.children} />
+              </blockquote>
+            );
+          case 'rule':
+            return <hr key={index} className="border-gray300" />;
+        }
+      })}
+    </div>
+  );
+}

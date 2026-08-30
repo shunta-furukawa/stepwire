@@ -1,0 +1,55 @@
+{
+  "name": "stepwire",
+  "version": "0.1.0",
+  "private": true,
+  "description": "STEPWIRE — DDR News, Charts & Culture. A GitHub-centric newsroom: collection, editing, publishing and video generation from one structured content source.",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "content:validate": "tsx scripts/validate-content.ts",
+    "article:new": "tsx scripts/create-article.ts",
+    "article:from-issue": "tsx scripts/create-article.ts --from-issue",
+    "news:collect": "tsx scripts/collect-news.ts",
+    "video:data": "tsx scripts/build-video-data.ts",
+    "video:studio": "pnpm video:data && remotion studio video/index.ts",
+    "video:render": "tsx scripts/render-video.ts",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm content:validate && pnpm build"
+  },
+  "dependencies": {
+    "@remotion/player": "4.0.518",
+    "@vercel/blob": "2.8.0",
+    "@vercel/sandbox": "3.2.1",
+    "fast-xml-parser": "5.11.1",
+    "next": "16.3.3",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "remotion": "4.0.518",
+    "yaml": "2.9.0",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@remotion/bundler": "4.0.518",
+    "@remotion/cli": "4.0.518",
+    "@remotion/renderer": "4.0.518",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "22.19.2",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "eslint": "10.9.1",
+    "eslint-config-next": "16.3.3",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.13",
+    "typescript": "5.9.3",
+    "vitest": "4.1.11"
+  }
+}
