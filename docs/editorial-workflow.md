@@ -31,11 +31,27 @@ source is covered in [`sources.md`](./sources.md).
 
 ## 2. Inbox
 
-Open the issues labelled [`news-inbox`](../../issues?q=is%3Aissue+is%3Aopen+label%3Anews-inbox).
+Open the issues labelled [`news-inbox`](../../issues?q=is%3Aissue+is%3Aopen+label%3Anews-inbox),
+or read the same queue on the **wire board**:
+
+```bash
+pnpm dev     # → http://localhost:3000/studio/wire
+```
+
+The board shows every open candidate grouped by the day it happened, with its
+source, its summary and its suggested category visible without opening anything
+— which is what a list of issue titles cannot tell you. It reads the issues and
+writes nothing: there is no accept button, because accepting a candidate is
+`pnpm article:from-issue <n>` (a file and a diff) and dismissing one is closing
+the issue. Without `GITHUB_TOKEN` and `GITHUB_REPOSITORY` the board says so
+rather than failing.
 
 Each issue carries the headline, the source and its canonical URL, when it was
 published and collected, the source's own summary, the raw feed metadata, and
-the collector ID.
+the collector ID. It also carries a small machine-readable copy of those fields
+in an HTML comment, which is what the board reads; edit the prose freely, and an
+issue whose comment gets mangled still appears on the board from its title and
+labels alone.
 
 Labels are the machine's guess, not a decision:
 
@@ -202,7 +218,7 @@ reuses an existing render for unchanged content. Details in
 
 ```bash
 # see what came in
-open https://github.com/shunta-furukawa/stepwire/issues?q=label%3Anews-inbox
+pnpm dev                       # /studio/wire
 
 pnpm article:from-issue 42     # draft
 $EDITOR content/articles/...   # write

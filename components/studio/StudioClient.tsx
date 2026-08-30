@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Player } from '@remotion/player';
 import type { ArticleVideoInput } from '@/lib/content/article';
@@ -158,7 +159,7 @@ export function StudioClient({
           renderId: body.renderId,
           url: body.url,
           reused: body.reused,
-          log: ['reused an existing render — no new render was billed'],
+          log: ['既存のレンダリングを再利用しました — 追加の課金はありません'],
         });
         return;
       }
@@ -183,8 +184,14 @@ export function StudioClient({
       <div className="mx-auto max-w-[1180px] px-md py-3xl">
         <h1 className="font-display text-h2 font-black tracking-display sm:text-h1">Studio</h1>
         <p className="mt-md font-body text-lead text-gray700">
-          There are no published articles to render yet.
+          レンダリングできる公開記事がまだありません。
         </p>
+        <Link
+          href="/studio/wire"
+          className="mt-lg inline-block border-2 border-ink px-md py-sm font-mono text-micro uppercase tracking-wider hover:bg-ink hover:text-paper"
+        >
+          ワイヤー受信箱 →
+        </Link>
       </div>
     );
   }
@@ -195,15 +202,26 @@ export function StudioClient({
     <div className="mx-auto max-w-[1180px] px-md py-xl">
       <header className="border-b-4 border-ink pb-lg">
         <p className="font-mono text-micro font-bold uppercase tracking-wider text-signal">
-          Internal tool
+          社内ツール
         </p>
         <h1 className="mt-sm font-display text-h2 font-black leading-headline tracking-headline sm:text-h1">
-          Video studio
+          動画スタジオ
         </h1>
         <p className="mt-md max-w-[62ch] font-body text-lead leading-snug text-gray700">
-          Videos are derived from the article, not authored separately. To change what a video
-          says, edit the article — the scenes, the pacing and the length all follow.
+          動画は記事から導出されます。別に書くものではありません。動画の内容を変えるには記事を編集してください。
+          シーンも尺もペースも、それに追随します。
         </p>
+        <nav className="mt-lg flex flex-wrap gap-md font-mono text-micro uppercase tracking-wider">
+          <Link
+            href="/studio/wire"
+            className="border-2 border-ink px-md py-sm hover:bg-ink hover:text-paper"
+          >
+            ワイヤー受信箱 →
+          </Link>
+          <Link href="/" className="px-md py-sm text-gray700 hover:text-signal">
+            サイトへ戻る
+          </Link>
+        </nav>
       </header>
 
       <div className="grid gap-2xl pt-xl lg:grid-cols-[minmax(0,1fr)_380px]">
@@ -363,7 +381,7 @@ export function StudioClient({
 
             {article.fixture ? (
               <p className="mt-lg border-2 border-ink bg-ink px-md py-sm font-mono text-micro font-bold uppercase tracking-wider text-paper">
-                Sample fixture — do not publish this video
+                サンプル記事です — この動画を公開しないでください
               </p>
             ) : null}
           </section>
@@ -372,8 +390,8 @@ export function StudioClient({
             <SectionHeading id="render-heading" label="Render" as="h2" />
 
             <p className="mt-md font-body text-small leading-snug text-gray700">
-              Rendering runs on a cloud machine and costs money. The endpoint requires the
-              operator token, and an identical render is reused rather than billed twice.
+              レンダリングはクラウド上で実行され、費用が発生します。エンドポイントは運用トークンを要求し、
+              同一内容のレンダリングは再利用されるため二重に課金されません。
             </p>
 
             <label
@@ -459,7 +477,7 @@ export function StudioClient({
           <section aria-labelledby="local-heading">
             <SectionHeading id="local-heading" label="Render locally" as="h2" />
             <p className="mt-md font-body text-small leading-snug text-gray700">
-              No cloud account needed:
+              クラウドのアカウントは不要です。
             </p>
             <pre className="mt-sm overflow-x-auto border border-gray300 bg-paper p-md font-mono text-[11px]">
               {`pnpm video:render ${article.slug} \\\n  --composition ${composition}`}

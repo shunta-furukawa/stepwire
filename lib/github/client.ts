@@ -13,6 +13,8 @@ export interface GitHubIssue {
   html_url: string;
   state: string;
   labels: { name: string }[];
+  /** Present only on pull requests, which this API returns alongside issues. */
+  pull_request?: unknown;
 }
 
 export interface GitHubClientOptions {
@@ -92,17 +94,24 @@ export class GitHubClient {
   /**
    * Issues carrying a given label, newest first.
    *
-   * Used to rebuild the "already collected" set from GitHub itself, so the
-   * collector still deduplicates correctly even if the committed ledger is lost
-   * or a run failed before it could be written.
+   * The collector calls this with the default `state: 'all'` to rebuild its
+   * "already collected" set from GitHub itself, so deduplication still works if
+   * the committed ledger is lost or a run failed before writing it. The wire
+   * board calls it with `state: 'open'` — a closed issue is a decision already
+   * made, and the board is only about what is still undecided.
    */
-  async listIssuesByLabel(label: string, perPage = 100, pages = 3): Promise<GitHubIssue[]> {
+  async listIssuesByLabel(
+    label: string,
+    options: { perPage?: number; pages?: number; state?: 'open' | 'closed' | 'all' } = {},
+  ): Promise<GitHubIssue[]> {
+    const { perPage = 100, pages = 3, state = 'all' } = options;
     const all: GitHubIssue[] = [];
     for (let page = 1; page <= pages; page += 1) {
       const batch = await this.request<GitHubIssue[]>(
-        `/repos/${this.repository}/issues?labels=${encodeURIComponent(label)}&state=all&per_page=${perPage}&page=${page}`,
+        `/repos/${this.repository}/issues?labels=${encodeURIComponent(label)}&state=${state}&per_page=${perPage}&page=${page}`,
       );
-      all.push(...batch);
+      // The issues endpoint also returns pull requests; a PR is never inbox.
+      all.push(...batch.filter((issue) => issue.pull_request === undefined));
       if (batch.length < perPage) break;
     }
     return all;
@@ -138,5 +147,9 @@ export function clientFromEnv(
   const token = env.GITHUB_TOKEN;
   const repository = env.GITHUB_REPOSITORY;
   if (!token || !repository) return undefined;
-  return new GitHubClient({ token, repository });
+  // Actions sets `GITHUB_API_URL`, and it is not always api.github.com —
+  // GitHub Enterprise serves a different host. Honouring it also makes the
+  // client pointable at a local stub when developing against the inbox.
+  const baseUrl = env.GITHUB_API_URL;
+  return new GitHubClient({ token, repository, ...(baseUrl ? { baseUrl } : {}) });
 }

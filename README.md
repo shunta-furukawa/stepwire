@@ -142,6 +142,10 @@ it does not scrape. See [`docs/sources.md`](docs/sources.md).
 The collector never publishes. Its only output is a GitHub issue labelled
 `news-inbox` for a human to accept or ignore.
 
+Read that queue at **`/studio/wire`** — every open candidate grouped by the day
+it happened, with source, summary and suggested category on screen. It reads the
+issues and writes nothing; accepting is still `pnpm article:from-issue <n>`.
+
 ## Video preview
 
 ```bash

@@ -15,6 +15,17 @@ import { formatDateTime, hostnameOf } from '../format';
 
 export const COLLECTOR_ID_MARKER = 'STEPWIRE-COLLECTOR-ID:';
 
+/**
+ * The machine-readable half of an issue.
+ *
+ * The body above it is written for a human deciding on a phone. Re-parsing that
+ * prose to rebuild the candidate would be brittle in exactly the case that
+ * matters — an editor who edited the issue — so the fields the wire board needs
+ * are also emitted verbatim, in a comment, where an edit cannot silently change
+ * their meaning. One issue, two readers; still no second content store.
+ */
+export const CANDIDATE_MARKER = 'STEPWIRE-CANDIDATE:';
+
 export const LABELS = {
   inbox: 'news-inbox',
   needsReview: 'needs-review',
@@ -140,7 +151,28 @@ pnpm article:from-issue <issue-number>
 \`\`\`
 
 <!-- ${COLLECTOR_ID_MARKER} ${candidate.collectorId} -->
+<!-- ${CANDIDATE_MARKER} ${JSON.stringify(candidatePayload(candidate))} -->
 `;
+}
+
+/**
+ * The fields the wire board reads back. Deliberately not the whole candidate:
+ * `raw` is already in the body for a human, and repeating a feed's arbitrary
+ * metadata in a comment would make the issue enormous for no reader's benefit.
+ */
+function candidatePayload(candidate: CandidateNews) {
+  return {
+    collectorId: candidate.collectorId,
+    sourceId: candidate.sourceId,
+    sourceName: candidate.sourceName,
+    sourceCategory: candidate.sourceCategory,
+    suggestedCategory: candidate.suggestedCategory,
+    title: candidate.title,
+    url: candidate.url,
+    ...(candidate.summary ? { summary: candidate.summary } : {}),
+    ...(candidate.publishedAt ? { publishedAt: candidate.publishedAt } : {}),
+    collectedAt: candidate.collectedAt,
+  };
 }
 
 /** Recovers a collector id from an existing issue body. */
