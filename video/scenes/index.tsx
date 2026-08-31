@@ -1,6 +1,6 @@
 import React from 'react';
 import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
-import type { Scene } from '../../lib/video/scenes';
+import { SCENE_TONE, type Scene } from '../../lib/video/scenes';
 import { barFractions, formatBarValue } from '../../lib/content/figures';
 import { visualLength } from '../../lib/video/text';
 import { color, font, fontWeight, gap, leading, textStyles, tracking, type } from '../styles/theme';
@@ -260,15 +260,15 @@ function BodyScene({
 export function NewsScene(props: SceneProps) {
   // Reported fact sits on the deepest, plainest ground with a neutral rule:
   // nothing about how it is drawn editorialises it.
-  return <BodyScene {...props} ground={color.deep} accent={color.fg} tone="fact" />;
+  return <BodyScene {...props} ground={color.deep} accent={color.fg} tone={SCENE_TONE.news} />;
 }
 
 export function ContextScene(props: SceneProps) {
-  return <BodyScene {...props} ground={color.raised} accent={color.accent} tone="analysis" />;
+  return <BodyScene {...props} ground={color.raised} accent={color.accent} tone={SCENE_TONE.context} />;
 }
 
 export function ImpactScene(props: SceneProps) {
-  return <BodyScene {...props} ground={color.raised} accent={color.accent} tone="analysis" />;
+  return <BodyScene {...props} ground={color.raised} accent={color.accent} tone={SCENE_TONE.impact} />;
 }
 
 // ---------------------------------------------------------------------------

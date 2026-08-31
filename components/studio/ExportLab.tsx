@@ -5,6 +5,12 @@ import type { ArticleVideoInput } from '@/lib/content/article';
 import { buildSceneSequence } from '@/lib/video/scenes';
 import { COMPOSITIONS, type CompositionId } from '@/lib/video/compositions';
 import { drawScene } from '@/lib/video/canvas/draw';
+import {
+  decodeNarration,
+  encodeNarration,
+  pickAudioCodec,
+  type AudioCandidate,
+} from '@/lib/video/canvas/audio';
 
 /**
  * The export spike.
@@ -38,6 +44,7 @@ type Result = {
   bytes: number;
   url: string;
   codec: string;
+  audio: string;
 };
 
 /**
@@ -120,7 +127,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
   }, []);
 
   const run = useCallback(async () => {
-    if (!sequence) return;
+    if (!sequence || !article) return;
     setError('');
     setResult(null);
     setStatus('準備中…');
@@ -153,10 +160,41 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       const ctx = canvas.getContext('2d', { alpha: false });
       if (!ctx) throw new Error('2d コンテキストを取得できません');
 
+      // The narration is decoded before the muxer is built, because the muxer
+      // has to declare its audio track up front and cannot learn the sample
+      // rate later.
+      let audioCandidate: AudioCandidate | null = null;
+      let decoded: Awaited<ReturnType<typeof decodeNarration>> | null = null;
+      let audioNote = 'なし（無音の記事）';
+
+      if (article.narration) {
+        setStatus('音声を読み込み中…');
+        try {
+          decoded = await decodeNarration(article.narration.audioSrc);
+          audioCandidate = await pickAudioCodec(decoded.sampleRate, decoded.numberOfChannels);
+          audioNote = audioCandidate
+            ? `${audioCandidate.muxer.toUpperCase()} ${decoded.sampleRate}Hz`
+            : 'この端末は音声をエンコードできません';
+        } catch (audioError) {
+          // A missing recording must not cost the whole export: the film is
+          // still worth having silent, and the reason is worth reporting.
+          audioNote = audioError instanceof Error ? audioError.message : String(audioError);
+        }
+      }
+
       const target = new ArrayBufferTarget();
       const muxer = new Muxer({
         target,
         video: { codec: candidate.muxer, width: w, height: h },
+        ...(audioCandidate && decoded
+          ? {
+              audio: {
+                codec: audioCandidate.muxer,
+                sampleRate: audioCandidate.sampleRate,
+                numberOfChannels: audioCandidate.numberOfChannels,
+              },
+            }
+          : {}),
         fastStart: 'in-memory',
       });
 
@@ -182,7 +220,6 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       });
 
       const startedAt = performance.now();
-      const analysis = new Set(['context', 'impact']);
       let frameIndex = 0;
 
       for (const scene of sequence.scenes) {
@@ -191,7 +228,6 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
           drawScene(
             { ctx, width: w, height: h, progress: f / Math.max(1, scene.durationInFrames - 1) },
             scene,
-            analysis.has(scene.type) ? 'analysis' : 'fact',
           );
           const t1 = performance.now();
           drawMs += t1 - t0;
@@ -223,6 +259,17 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       await encoder.flush();
       encoder.close();
 
+      if (audioCandidate && decoded) {
+        setStatus('音声を書き出し中…');
+        await encodeNarration({
+          decoded,
+          candidate: audioCandidate,
+          offsetSeconds: (sequence.narration?.startFrame ?? 0) / sequence.fps,
+          durationSeconds: sequence.durationInFrames / sequence.fps,
+          onChunk: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
+        });
+      }
+
       const muxStart = performance.now();
       muxer.finalize();
       const muxMs = performance.now() - muxStart;
@@ -241,13 +288,14 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         bytes: blob.size,
         url: URL.createObjectURL(blob),
         codec: candidate.label,
+        audio: audioNote,
       });
       setStatus('');
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
       setStatus('');
     }
-  }, [definition, scale, sequence]);
+  }, [article, definition, scale, sequence]);
 
   if (!article || !sequence) {
     return <p className="font-body text-lead text-muted">記事がありません。</p>;
@@ -356,6 +404,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
           <h2 className="font-mono text-micro font-bold uppercase tracking-wider">結果</h2>
           <dl className="mt-md grid grid-cols-2 gap-x-md gap-y-sm font-mono text-micro">
             <Row label="コーデック" value={result.codec} ok={result.codec.startsWith('H.264')} />
+            <Row label="音声" value={result.audio} ok={/AAC|OPUS/.test(result.audio)} />
             <Row label="実時間" value={`${(result.totalMs / 1000).toFixed(1)}秒`} ok />
             <Row
               label="実時間比"

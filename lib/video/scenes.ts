@@ -1,4 +1,5 @@
 import type { ArticleVideoInput, NarrationInput } from '../content/article';
+import type { SceneType } from './scene-types';
 import type { Figure } from '../content/figures';
 import { toSentences } from '../content/markdown';
 import { pageCaptions } from './captions';
@@ -20,17 +21,7 @@ import { FPS, readingFrames, secondsToFrames, type DurationBounds } from './timi
  * produces a complete video.
  */
 
-export type SceneType =
-  | 'intro'
-  | 'headline'
-  | 'news'
-  | 'context'
-  | 'impact'
-  | 'figure'
-  | 'source'
-  | 'outro'
-  /** A page of spoken narration, subtitled in time with the voice. */
-  | 'narration';
+export type { SceneType } from './scene-types';
 
 export interface Scene {
   /** Unique within a sequence, e.g. `context-2`. Also the override key. */
@@ -71,6 +62,30 @@ export interface SceneSequence {
     durationInFrames: number;
   };
 }
+
+/**
+ * Which scenes are reported fact and which are STEPWIRE talking.
+ *
+ * Declared once because two renderers read it. The DOM compositions and the
+ * canvas renderer must not each decide that `impact` is analysis — the moment
+ * they disagree, one surface labels a claim differently from the other, which
+ * is the one thing this project's content model exists to prevent.
+ */
+export const SCENE_TONE: Record<SceneType, 'fact' | 'analysis'> = {
+  intro: 'fact',
+  headline: 'fact',
+  news: 'fact',
+  context: 'analysis',
+  impact: 'analysis',
+  // A figure draws declared data. The article decided what it means; the
+  // figure only shows it.
+  figure: 'fact',
+  source: 'fact',
+  outro: 'fact',
+  // Narration is the operator's own voice, and the article is the record it
+  // may differ in wording from. That is analysis by any honest reading.
+  narration: 'analysis',
+};
 
 /** Section labels. Editorial voice, not field names. */
 const LABELS = {
