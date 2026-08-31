@@ -103,7 +103,12 @@ async function detect(): Promise<Support> {
 }
 
 export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
-  const [slug, setSlug] = useState(articles[0]?.slug ?? '');
+  // Opens on an article that has a recording, if any: the lab's job includes
+  // proving the audio path, and defaulting to a silent article made "I exported
+  // and heard nothing" the expected result rather than a bug report.
+  const [slug, setSlug] = useState(
+    (articles.find((item) => item.narration) ?? articles[0])?.slug ?? '',
+  );
   // Landscape is the delivery format; the phone is the editing surface, not the
   // output shape. It is also the safer encode: 1080x1920 is an unusual geometry
   // for a hardware H.264 encoder, and 1920x1080 is the one every device ships.
@@ -172,9 +177,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         try {
           decoded = await decodeNarration(article.narration.audioSrc);
           audioCandidate = await pickAudioCodec(decoded.sampleRate, decoded.numberOfChannels);
-          audioNote = audioCandidate
-            ? `${audioCandidate.muxer.toUpperCase()} ${decoded.sampleRate}Hz`
-            : 'この端末は音声をエンコードできません';
+          if (!audioCandidate) audioNote = 'この端末は音声をエンコードできません';
         } catch (audioError) {
           // A missing recording must not cost the whole export: the film is
           // still worth having silent, and the reason is worth reporting.
@@ -261,13 +264,26 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
 
       if (audioCandidate && decoded) {
         setStatus('音声を書き出し中…');
-        await encodeNarration({
-          decoded,
-          candidate: audioCandidate,
-          offsetSeconds: (sequence.narration?.startFrame ?? 0) / sequence.fps,
-          durationSeconds: sequence.durationInFrames / sequence.fps,
-          onChunk: (chunk, meta) => muxer.addAudioChunk(chunk, meta),
-        });
+        try {
+          const audio = await encodeNarration({
+            decoded,
+            candidate: audioCandidate,
+            offsetSeconds: (sequence.narration?.startFrame ?? 0) / sequence.fps,
+            durationSeconds: sequence.durationInFrames / sequence.fps,
+          });
+          for (const { chunk, meta } of audio.chunks) muxer.addAudioChunk(chunk, meta);
+          audioNote =
+            audioCandidate.muxer === 'aac'
+              ? `AAC · ${audio.chunks.length}チャンク · ${audio.format}`
+              : // Opus is legal inside an MP4 and Safari and QuickTime both
+                // refuse to decode it, so the file plays and is silent — the
+                // exact symptom this label has to stop being a mystery.
+                `OPUS（Safari/QuickTimeでは無音になります） · ${audio.chunks.length}チャンク`;
+        } catch (audioError) {
+          // The video is still worth having. What is not acceptable is
+          // reporting success and handing back a silent file.
+          audioNote = audioError instanceof Error ? audioError.message : String(audioError);
+        }
       }
 
       const muxStart = performance.now();
@@ -342,6 +358,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         >
           {articles.map((item) => (
             <option key={item.slug} value={item.slug}>
+              {item.narration ? '🎙 ' : ''}
               {item.shortTitle ?? item.title}
             </option>
           ))}
@@ -383,6 +400,20 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
           {seconds.toFixed(1)}秒 @ {sequence.fps}fps
         </p>
 
+        {/* Only one sample article carries a recording, and "I exported and
+            there was no sound" is the same sentence whether the bug is in the
+            encoder or the article simply has no voice. The difference is
+            stated before the button, not after. */}
+        <p
+          className={`border-l-2 pl-md font-mono text-micro leading-snug ${
+            article.narration ? 'border-accent text-accent' : 'border-line-strong text-muted'
+          }`}
+        >
+          {article.narration
+            ? `録音あり — ${article.narration.audioSrc}`
+            : 'この記事に録音はありません。書き出しても無音です。'}
+        </p>
+
         <button
           type="button"
           onClick={run}
@@ -404,7 +435,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
           <h2 className="font-mono text-micro font-bold uppercase tracking-wider">結果</h2>
           <dl className="mt-md grid grid-cols-2 gap-x-md gap-y-sm font-mono text-micro">
             <Row label="コーデック" value={result.codec} ok={result.codec.startsWith('H.264')} />
-            <Row label="音声" value={result.audio} ok={/AAC|OPUS/.test(result.audio)} />
+            <Row label="音声" value={result.audio} ok={result.audio.startsWith('AAC')} />
             <Row label="実時間" value={`${(result.totalMs / 1000).toFixed(1)}秒`} ok />
             <Row
               label="実時間比"
