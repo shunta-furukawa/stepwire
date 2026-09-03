@@ -46,14 +46,38 @@ STEPWIRE の動画に使う BGM と効果音を、どこから、どの条件で
 
    ```yaml
    bgm:
-     src: audio/bgm/shining-star.mp3
-     credit: '音楽：魔王魂'
-     gain: 0.3
+     src: audio/bgm/macleod-getting-it-done.mp3
+     credit: '"Getting it Done" Kevin MacLeod (incompetech.com) · CC BY 4.0'
+     gain: 0.4
    ```
 
 3. `pnpm content:validate` を通す。`credit` が無ければここで止まる。
-4. 書き出した動画の最後のカードに `MUSIC: 音楽：魔王魂` が出ていることを目で確かめる。
+4. 書き出した動画の最後のカードに `MUSIC: "Getting it Done" …` が出ていることを目で確かめる。
    YouTube に上げるなら概要欄にも同じ行を書く。CC BY の作者はそこを見る。
 
-`content/fixtures/` のサンプルが鳴らしている `sample-loop.wav` は合成音で、
-どのライブラリの音でもない。fixture が本物の楽曲を鳴らしてはいけない。
+## 投入済み
+
+`public/audio/bgm/` にあるのは Kevin MacLeod の三曲。どれも CC BY 4.0 で、
+公開リポジトリに置くこと自体が許されるのはこのライセンスだけだから
+（魔王魂・効果音ラボ・DOVA は曲単体の再配布を禁じている）。
+フロントマターにはこの一行をそのまま書く。アウトロにはこの一行が印字される。
+
+| ファイル | 役割 | `credit` に書く一行 | `gain` |
+| --- | --- | --- | --- |
+| `macleod-getting-it-done.mp3` | 通常ニュース（UPDATE / CHART の既定） | `"Getting it Done" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.4 |
+| `macleod-neon-laser-horizon.mp3` | 大会・速報 | `"Neon Laser Horizon" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.42 |
+| `macleod-deliberate-thought.mp3` | カルチャー・特集 | `"Deliberate Thought" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.8 |
+
+`gain` は三曲の音量差（RMS で -13 / -14 / -21 dB）を揃えて、打鍵音の下に
+-22 dB 前後で敷くための値（打鍵音のピークは -0.5 dB）。曲を足すときは同じ基準で決める。
+
+YouTube などの概要欄には incompetech が指定する定型文を貼る。
+
+```
+"Getting it Done" Kevin MacLeod (incompetech.com)
+Licensed under Creative Commons: By Attribution 4.0 License
+http://creativecommons.org/licenses/by/4.0/
+```
+
+fixture が本物の楽曲を鳴らすのは構わない。fixture が偽ってはいけないのは
+ニュースであって、音楽のクレジットは本物のまま正直に書く。

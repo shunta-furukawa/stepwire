@@ -54,10 +54,13 @@ to license and lose. Music comes from the article:
 
 ```yaml
 bgm:
-  src: audio/bgm/my-track.wav     # under public/audio/bgm/
-  credit: 'Where it is from and why it may be used'
-  gain: 0.3
+  src: audio/bgm/macleod-getting-it-done.mp3   # under public/audio/bgm/
+  credit: '"Getting it Done" Kevin MacLeod (incompetech.com) · CC BY 4.0'
+  gain: 0.4
 ```
+
+Three tracks ship with the repository, one per register — see
+`docs/audio-sources.md` for which is which and the exact credit line.
 
 `credit` is required. **What goes under a STEPWIRE video is an editorial and a
 legal decision the software does not make.** A game's own tracks in a public
