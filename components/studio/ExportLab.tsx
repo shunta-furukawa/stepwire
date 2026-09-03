@@ -10,6 +10,7 @@ import {
   encodeNarration,
   pickAudioCodec,
   verifyAudio,
+  withDecoderConfig,
   type AudioCandidate,
 } from '@/lib/video/canvas/audio';
 
@@ -49,6 +50,8 @@ type Result = {
   /** What a decoder finds in the file we just wrote. */
   verified: string;
   verifiedOk: boolean;
+  /** The narration alone, as its own file — see `audioOnlyUrl` below. */
+  audioUrl: string;
 };
 
 /**
@@ -175,6 +178,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       let audioCandidate: AudioCandidate | null = null;
       let decoded: Awaited<ReturnType<typeof decodeNarration>> | null = null;
       let audioNote = 'なし（無音の記事）';
+      let audioBlob: Blob | null = null;
 
       if (article.narration) {
         setStatus('音声を読み込み中…');
@@ -275,10 +279,44 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
             offsetSeconds: (sequence.narration?.startFrame ?? 0) / sequence.fps,
             durationSeconds: sequence.durationInFrames / sequence.fps,
           });
-          for (const { chunk, meta } of audio.chunks) muxer.addAudioChunk(chunk, meta);
+          // Safari's AAC encoder emits no decoder description, and the muxer
+          // turns that into a zero-length one rather than complaining.
+          let synthesised = false;
+          const withConfig = audio.chunks.map(({ chunk, meta }) => {
+            const patched = withDecoderConfig(meta, audioCandidate!);
+            synthesised = synthesised || patched.synthesised;
+            return { chunk, meta: patched.meta };
+          });
+
+          for (const { chunk, meta } of withConfig) muxer.addAudioChunk(chunk, meta);
+
+          // The same track, muxed again on its own.
+          //
+          // Because the check that was supposed to settle this could not:
+          // `decodeAudioData` was handed the finished MP4, and Safari refuses
+          // an MP4 that carries video however sound its audio is. The result
+          // was "Decoding failed" for a file that may be perfectly fine. An
+          // audio-only MP4 is what that API expects, and it is also something
+          // the operator can simply press play on.
+          const audioTarget = new ArrayBufferTarget();
+          const audioMuxer = new Muxer({
+            target: audioTarget,
+            audio: {
+              codec: audioCandidate.muxer,
+              sampleRate: audioCandidate.sampleRate,
+              numberOfChannels: audioCandidate.numberOfChannels,
+            },
+            fastStart: 'in-memory',
+          });
+          for (const { chunk, meta } of withConfig) audioMuxer.addAudioChunk(chunk, meta);
+          audioMuxer.finalize();
+          audioBlob = new Blob([audioTarget.buffer], { type: 'audio/mp4' });
+
           audioNote =
             audioCandidate.muxer === 'aac'
-              ? `AAC · ${audio.chunks.length}チャンク · ${audio.format}`
+              ? `AAC · ${audio.chunks.length}チャンク · ${audio.format}${
+                  synthesised ? ' · esds補完' : ''
+                }`
               : // Opus is legal inside an MP4 and Safari and QuickTime both
                 // refuse to decode it, so the file plays and is silent — the
                 // exact symptom this label has to stop being a mystery.
@@ -300,9 +338,13 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       // Open what we just wrote and measure it. Every layer above can report
       // success and still produce a silent file.
       setStatus('出力を検証中…');
-      const verdict = article.narration
-        ? await verifyAudio(blob)
-        : { audible: false, span: '', detail: '録音のない記事です' };
+      const verdict = audioBlob
+        ? await verifyAudio(audioBlob)
+        : {
+            audible: false,
+            span: '',
+            detail: article.narration ? '音声トラックを作れませんでした' : '録音のない記事です',
+          };
 
       if (encodedChunks === 0) throw new Error('エンコーダが1フレームも出力しませんでした');
 
@@ -316,8 +358,9 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         url: URL.createObjectURL(blob),
         codec: candidate.label,
         audio: audioNote,
-        verified: verdict.detail,
+        verified: `${audioCandidate?.muxer.toUpperCase() ?? '—'} / ${verdict.detail}`,
         verifiedOk: verdict.audible,
+        audioUrl: audioBlob ? URL.createObjectURL(audioBlob) : '',
       });
       setStatus('');
     } catch (e) {
@@ -476,6 +519,25 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
               </span>
             ) : null}
           </p>
+
+          {/* The decisive test: the narration on its own, with a play button.
+              A number can be argued with; this either makes a sound or it does
+              not. */}
+          {result.audioUrl ? (
+            <div className="mt-md">
+              <p className="font-mono text-micro uppercase tracking-wide text-muted">
+                音声だけを再生（これが鳴るなら音声は正しい）
+              </p>
+              <audio src={result.audioUrl} controls className="mt-sm w-full" />
+              <a
+                href={result.audioUrl}
+                download={`${slug}-narration.mp4`}
+                className="mt-sm block border border-line px-md py-sm text-center font-mono text-micro uppercase tracking-wider text-muted hover:text-accent"
+              >
+                音声だけを保存
+              </a>
+            </div>
+          ) : null}
 
           {/* Playing it back is the quality check the numbers cannot make. */}
           <video

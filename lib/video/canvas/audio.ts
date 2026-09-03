@@ -286,3 +286,64 @@ export async function verifyAudio(blob: Blob): Promise<AudioVerdict> {
     };
   }
 }
+
+/** The sampling frequency table AudioSpecificConfig indexes into. */
+const AAC_RATES = [96000, 88200, 64000, 48000, 44100, 32000, 24000, 22050, 16000, 12000, 11025, 8000, 7350];
+
+/**
+ * The two bytes an AAC track needs to be decodable, built by hand.
+ *
+ * An MP4's `esds` box carries an AudioSpecificConfig, and the muxer takes it
+ * from `EncodedAudioChunkMetadata.decoderConfig.description`. When an encoder
+ * does not supply one — Safari does not — the muxer reaches for `undefined`,
+ * `new Uint8Array(undefined)` yields an empty array rather than throwing, and
+ * the file gets an AAC track with a zero-length config. Every layer reports
+ * success; nothing can play the result. This is that failure, in two bytes.
+ *
+ *   5 bits  audioObjectType        2 = AAC-LC
+ *   4 bits  samplingFrequencyIndex
+ *   4 bits  channelConfiguration
+ *   3 bits  frameLengthFlag, dependsOnCoreCoder, extensionFlag — all zero
+ */
+export function audioSpecificConfig(sampleRate: number, channels: number): Uint8Array {
+  const index = AAC_RATES.indexOf(sampleRate);
+  if (index === -1) {
+    throw new Error(`AACが扱えないサンプリングレートです: ${sampleRate}Hz`);
+  }
+
+  const objectType = 2;
+  return new Uint8Array([
+    (objectType << 3) | (index >> 1),
+    ((index & 1) << 7) | (channels << 3),
+  ]);
+}
+
+/**
+ * Fills in a missing decoder description, and says whether it had to.
+ *
+ * Returned rather than mutated because the metadata is the encoder's, and
+ * because "did this device supply one" is worth reporting: it is the difference
+ * between a browser quirk we have worked around and a bug we have not found.
+ */
+export function withDecoderConfig(
+  meta: EncodedAudioChunkMetadata | undefined,
+  candidate: AudioCandidate,
+): { meta: EncodedAudioChunkMetadata | undefined; synthesised: boolean } {
+  if (candidate.muxer !== 'aac') return { meta, synthesised: false };
+  if (meta?.decoderConfig?.description) return { meta, synthesised: false };
+
+  const description = audioSpecificConfig(candidate.sampleRate, candidate.numberOfChannels);
+  return {
+    meta: {
+      ...meta,
+      decoderConfig: {
+        codec: candidate.codec,
+        sampleRate: candidate.sampleRate,
+        numberOfChannels: candidate.numberOfChannels,
+        ...meta?.decoderConfig,
+        description,
+      },
+    },
+    synthesised: true,
+  };
+}
