@@ -9,6 +9,7 @@ import {
   decodeNarration,
   encodeNarration,
   pickAudioCodec,
+  verifyAudio,
   type AudioCandidate,
 } from '@/lib/video/canvas/audio';
 
@@ -45,6 +46,9 @@ type Result = {
   url: string;
   codec: string;
   audio: string;
+  /** What a decoder finds in the file we just wrote. */
+  verified: string;
+  verifiedOk: boolean;
 };
 
 /**
@@ -293,6 +297,13 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       const blob = new Blob([target.buffer], { type: 'video/mp4' });
       const totalMs = performance.now() - startedAt;
 
+      // Open what we just wrote and measure it. Every layer above can report
+      // success and still produce a silent file.
+      setStatus('出力を検証中…');
+      const verdict = article.narration
+        ? await verifyAudio(blob)
+        : { audible: false, span: '', detail: '録音のない記事です' };
+
       if (encodedChunks === 0) throw new Error('エンコーダが1フレームも出力しませんでした');
 
       setResult({
@@ -305,6 +316,8 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         url: URL.createObjectURL(blob),
         codec: candidate.label,
         audio: audioNote,
+        verified: verdict.detail,
+        verifiedOk: verdict.audible,
       });
       setStatus('');
     } catch (e) {
@@ -447,6 +460,22 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
             <Row label="多重化" value={`${result.muxMs.toFixed(0)}ms`} ok />
             <Row label="サイズ" value={`${(result.bytes / 1024 / 1024).toFixed(1)} MB`} ok />
           </dl>
+
+          {/* The verdict from decoding the output, which is the only statement
+              here that is about the file rather than about the process. */}
+          <p
+            className={`mt-md border-l-2 pl-md font-mono text-micro leading-snug ${
+              result.verifiedOk ? 'border-accent text-accent' : 'border-accent-hot text-accent-hot'
+            }`}
+          >
+            {result.verified}
+            {result.verifiedOk ? (
+              <span className="mt-xs block text-muted">
+                ファイルに音は入っています。聞こえない場合は本体側面のマナースイッチを確認してください
+                — iPhoneはインライン再生の動画をこれで消音します。
+              </span>
+            ) : null}
+          </p>
 
           {/* Playing it back is the quality check the numbers cannot make. */}
           <video

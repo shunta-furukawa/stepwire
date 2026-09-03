@@ -219,3 +219,70 @@ async function encodeWith(
 
   return { chunks, seconds: written / sampleRate, format };
 }
+
+export interface AudioVerdict {
+  /** True when a decoder found an audio track and it is not pure silence. */
+  audible: boolean;
+  /** Seconds where the track has signal, as `5–19`. Empty when silent. */
+  span: string;
+  detail: string;
+}
+
+/**
+ * Checks the file we just produced for sound.
+ *
+ * Because every layer in this chain can succeed and still hand back a silent
+ * video: an encoder that emits chunks a muxer writes into a track no decoder
+ * accepts is, to every API involved, a success. The only honest test is to open
+ * the output and listen to it, which is what this does numerically.
+ *
+ * It also separates the two things "I can't hear it" can mean. If the track is
+ * audible here and silent on the phone, the file is fine and the playback is
+ * not — an iPhone's ring/silent switch mutes inline video, and that has nothing
+ * to do with the encoder.
+ */
+export async function verifyAudio(blob: Blob): Promise<AudioVerdict> {
+  try {
+    const context = new OfflineAudioContext({
+      length: 1,
+      sampleRate: 48_000,
+      numberOfChannels: 2,
+    });
+    const buffer = await context.decodeAudioData(await blob.arrayBuffer());
+    const samples = buffer.getChannelData(0);
+    const rate = buffer.sampleRate;
+
+    const loud: number[] = [];
+    for (let second = 0; second < Math.ceil(buffer.duration); second += 1) {
+      let sum = 0;
+      let count = 0;
+      for (let i = second * rate; i < Math.min((second + 1) * rate, samples.length); i += 1) {
+        sum += samples[i]! * samples[i]!;
+        count += 1;
+      }
+      if (Math.sqrt(sum / Math.max(1, count)) > 0.005) loud.push(second);
+    }
+
+    if (loud.length === 0) {
+      return {
+        audible: false,
+        span: '',
+        detail: `音声トラックはあるが全編無音（${buffer.duration.toFixed(1)}秒）`,
+      };
+    }
+
+    return {
+      audible: true,
+      span: `${loud[0]}–${loud.at(-1)}秒`,
+      detail: `音声を検出（${loud[0]}–${loud.at(-1)}秒 / 全${buffer.duration.toFixed(1)}秒）`,
+    };
+  } catch (error) {
+    // A decode failure here is itself the answer: the track exists but nothing
+    // on this device can play it, which is what Opus in an MP4 looks like.
+    return {
+      audible: false,
+      span: '',
+      detail: `音声トラックを復号できません: ${error instanceof Error ? error.message : String(error)}`,
+    };
+  }
+}
