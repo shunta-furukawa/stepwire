@@ -50,6 +50,7 @@ const article: ArticleVideoInput = {
     url: 'https://example.com/a',
   },
   figures: [],
+  media: [],
 };
 
 describe('timing', () => {
@@ -128,13 +129,56 @@ describe('composition registry', () => {
 });
 
 describe('buildSceneSequence', () => {
-  it('always opens with an ident and headline and closes with source and outro', () => {
+  it('opens on the headline and closes with source and outro', () => {
+    // No ident up front: a feed gives a film two seconds to earn the next two,
+    // and a brand ident spends them on the brand. The ident is the sign-off.
     const sequence = buildSceneSequence(article, 'STEPWIRE_SHORT');
     const types = sequence.scenes.map((scene) => scene.type);
-    expect(types[0]).toBe('intro');
-    expect(types[1]).toBe('headline');
+    expect(types[0]).toBe('headline');
+    expect(types).not.toContain('intro');
     expect(types.at(-2)).toBe('source');
     expect(types.at(-1)).toBe('outro');
+  });
+
+  it('carries the category and date on the headline, where the ident had them', () => {
+    const headline = buildSceneSequence(article, 'STEPWIRE_SHORT').scenes[0]!;
+    expect(headline.kicker).toContain('2026.08.30');
+  });
+
+  it('types every card, and holds it after the last character', () => {
+    for (const scene of buildSceneSequence(article, 'STEPWIRE_NEWS').scenes) {
+      if (!['headline', 'news', 'context', 'impact'].includes(scene.type)) continue;
+      expect(scene.reveal, scene.id).toBeDefined();
+      expect(scene.durationInFrames).toBe(scene.reveal!.revealFrames + scene.reveal!.holdFrames);
+      expect(scene.reveal!.units).toBe([...scene.text!].length);
+    }
+  });
+
+  it('puts the images after the reported fact and before the analysis', () => {
+    const withImages: ArticleVideoInput = {
+      ...article,
+      media: [
+        { src: 'images/a.png', alt: 'a', credit: 'A' },
+        { src: 'images/b.png', alt: 'b', credit: 'B' },
+      ],
+    };
+    const types = buildSceneSequence(withImages, 'STEPWIRE_NEWS').scenes.map((s) => s.type);
+    const lastNews = types.lastIndexOf('news');
+    const firstImage = types.indexOf('image');
+    const firstContext = types.indexOf('context');
+    expect(firstImage).toBeGreaterThan(lastNews);
+    expect(firstImage).toBeLessThan(firstContext);
+    expect(types.filter((t) => t === 'image')).toHaveLength(2);
+  });
+
+  it('puts the hero image behind the headline and carries its credit', () => {
+    const withHero: ArticleVideoInput = {
+      ...article,
+      heroImage: { src: 'images/hero.png', alt: 'hero', credit: 'Photo: X' },
+    };
+    const headline = buildSceneSequence(withHero, 'STEPWIRE_NEWS').scenes[0]!;
+    expect(headline.image?.src).toBe('images/hero.png');
+    expect(headline.image?.credit).toBe('Photo: X');
   });
 
   it('derives a scene from each of the three article sections', () => {
@@ -282,12 +326,12 @@ describe('buildSceneSequence', () => {
     const sequence = buildSceneSequence(
       {
         ...article,
-        video: { scenes: { intro: { durationInSeconds: 3 } } },
+        video: { scenes: { source: { durationInSeconds: 3 } } },
       },
       'STEPWIRE_SHORT',
     );
-    const intro = sequence.scenes.find((scene) => scene.id === 'intro');
-    expect(intro?.durationInFrames).toBe(90);
+    const source = sequence.scenes.find((scene) => scene.id === 'source');
+    expect(source?.durationInFrames).toBe(90);
   });
 
   it('drops a scene marked skip', () => {

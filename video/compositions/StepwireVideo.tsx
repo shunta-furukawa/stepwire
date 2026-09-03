@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, Audio, Sequence, Series, staticFile } from 'remotion';
+import { AbsoluteFill, Series } from 'remotion';
 import type { ArticleVideoInput } from '../../lib/content/article';
 import { buildSceneSequence } from '../../lib/video/scenes';
 import {
@@ -31,22 +31,6 @@ export const StepwireVideo: React.FC<StepwireVideoProps> = ({ article, compositi
 
   return (
     <AbsoluteFill style={{ background: color.surface, fontFamily: font.display }}>
-      {/*
-       * The voice, mounted over exactly the span its subtitle pages occupy.
-       * The ident and headline play silent before it, and the source and outro
-       * after — so the recording is never clipped and never starts under the
-       * logo.
-       */}
-      {sequence.narration ? (
-        <Sequence
-          from={sequence.narration.startFrame}
-          durationInFrames={sequence.narration.durationInFrames}
-          name="narration audio"
-        >
-          <Audio src={staticFile(sequence.narration.audioSrc)} />
-        </Sequence>
-      ) : null}
-
       <Series>
         {sequence.scenes.map((scene) => {
           const Component = SCENE_COMPONENTS[scene.type];

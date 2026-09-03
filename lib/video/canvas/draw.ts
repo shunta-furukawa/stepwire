@@ -1,4 +1,5 @@
 import { SCENE_TONE, type Scene, type SceneType } from '../scenes';
+import { revealedText, visibleUnits } from '../reveal';
 import { barFractions, formatBarValue } from '../../content/figures';
 import { visualLength } from '../text';
 import { color, font, fontSize, tracking } from '../../design/tokens';
@@ -23,9 +24,9 @@ import { wrapText } from './text';
  * drifting, but nothing yet asserts that a scene looks the same in both. That
  * is the open risk of this approach, not a detail.
  *
- * SCOPE: this is the export spike. It draws intro, headline, body and source
- * scenes well enough to measure encode throughput and judge quality on a real
- * phone. Figures, narration and the outro fall back to a plain card.
+ * Images are an input, not something this fetches: `DrawContext.images` is a
+ * cache the caller fills before the first frame, because a frame renderer that
+ * awaits the network is a frame renderer that drops frames.
  */
 
 /**
@@ -43,8 +44,12 @@ export interface DrawContext {
   ctx: CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
   width: number;
   height: number;
-  /** Progress through this scene, 0 to 1. Drives the same reveals as the DOM. */
+  /** Progress through this scene, 0 to 1. Drives fades and bar reveals. */
   progress: number;
+  /** Frame within this scene. Drives the typed reveal, which is per frame. */
+  frame: number;
+  /** Decoded images by `src`, loaded by the caller before rendering starts. */
+  images: ReadonlyMap<string, CanvasImageSource>;
 }
 
 function scaled(width: number, height: number) {
@@ -95,6 +100,32 @@ function drawFacets(d: DrawContext) {
     }
   }
   ctx.restore();
+}
+
+/**
+ * An image filling the frame, cropped rather than letterboxed, then darkened
+ * so type over it stays legible. `dim` is the darkness at the bottom, where
+ * the copy sits; the top keeps more of the picture.
+ */
+function drawBackdrop(d: DrawContext, src: string, dim: number) {
+  const { ctx, width, height } = d;
+  const image = d.images.get(src);
+  if (!image) return false;
+
+  const iw = 'width' in image ? Number(image.width) : width;
+  const ih = 'height' in image ? Number(image.height) : height;
+  const scale = Math.max(width / iw, height / ih);
+  const dw = iw * scale;
+  const dh = ih * scale;
+  ctx.drawImage(image, (width - dw) / 2, (height - dh) / 2, dw, dh);
+
+  const gradient = ctx.createLinearGradient(0, height, 0, 0);
+  gradient.addColorStop(0, `rgba(10,10,11,${dim})`);
+  gradient.addColorStop(0.3, `rgba(10,10,11,${dim})`);
+  gradient.addColorStop(1, `rgba(10,10,11,${dim * 0.55})`);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
+  return true;
 }
 
 /** The persistent masthead. Same content as `WireBar`. */
@@ -216,13 +247,47 @@ function layoutBody(d: DrawContext, text: string, size: number, weight = 500) {
 
 type BodyLayout = ReturnType<typeof layoutBody>;
 
-function paintBody(d: DrawContext, layout: BodyLayout, top: number, fill: string = color.fg) {
+/**
+ * Paints laid-out copy, typed up to this frame when the scene has a reveal.
+ *
+ * The lines were wrapped from the FULL text, so what has been typed is drawn
+ * by walking the same lines and stopping — the layout never shifts as
+ * characters land, which is what makes the effect read as typing rather than
+ * as reflowing.
+ */
+function paintBody(
+  d: DrawContext,
+  layout: BodyLayout,
+  top: number,
+  fill: string = color.fg,
+  scene?: Scene,
+) {
   const { ctx } = d;
   ctx.font = fontOf(layout.weight, layout.size, font.display);
   ctx.fillStyle = fill;
-  layout.lines.forEach((line, i) => {
-    ctx.fillText(line, layout.x, top + layout.size + i * layout.lineHeight);
-  });
+
+  const limit = scene?.reveal ? visibleUnits(scene.reveal, d.frame) : Number.POSITIVE_INFINITY;
+  const done = !scene?.reveal || limit >= scene.reveal.units;
+  let remaining = limit;
+
+  for (let i = 0; i < layout.lines.length && remaining > 0; i += 1) {
+    const line = layout.lines[i]!;
+    const shown = remaining >= [...line].length ? line : revealedText(line, remaining);
+    const y = top + layout.size + i * layout.lineHeight;
+    ctx.fillText(shown, layout.x, y);
+    remaining -= [...line].length;
+    // Wrapping consumed a trailing space that the text still counts.
+    if (remaining > 0 && i < layout.lines.length - 1) remaining -= 1;
+
+    if (!done && remaining <= 0) {
+      // The cursor, blinking, after the last typed character.
+      if (Math.floor(d.frame / 4) % 2 === 0) {
+        ctx.fillStyle = color.accent;
+        ctx.fillRect(layout.x + ctx.measureText(shown).width + layout.size * 0.1, y - layout.size * 0.85, layout.size * 0.08, layout.size);
+        ctx.fillStyle = fill;
+      }
+    }
+  }
   return layout.blockHeight;
 }
 
@@ -265,6 +330,16 @@ const drawCard: Drawer = (d, scene) => {
   const tone = SCENE_TONE[scene.type];
   const { top, bottom } = contentBand(d);
 
+  if (scene.type === 'headline' && scene.image) {
+    drawBackdrop(d, scene.image.src, 0.82);
+    drawWireBar(d, scene.kicker);
+    if (scene.image.credit) {
+      ctx.font = fontOf(400, px(fontSize.small * 3), font.mono);
+      ctx.fillStyle = color.faint;
+      drawTracked(ctx, scene.image.credit, px(120), height - px(150) - px(40), px(3));
+    }
+  }
+
   const isHeadline = scene.type === 'headline';
   const bodySize = px(fontSize[isHeadline ? 'h2' : 'h4'] * 3);
   const body = scene.text ? layoutBody(d, scene.text, bodySize, isHeadline ? 900 : 500) : null;
@@ -288,7 +363,7 @@ const drawCard: Drawer = (d, scene) => {
     cursor += markHeight + markGap;
   }
 
-  if (body) cursor += paintBody(d, body, cursor);
+  if (body) cursor += paintBody(d, body, cursor, color.fg, scene);
   if (meta) paintBody(d, meta, cursor + metaGap, color.muted);
 };
 
@@ -445,10 +520,11 @@ const drawFigure: Drawer = (d, scene) => {
 };
 
 /**
- * A subtitle page, with the word currently being spoken lit.
+ * A transcript page, typed.
  *
- * The tokens carry timings rebased to the start of the scene, so this needs no
- * knowledge of where it sits in the film — the same contract the DOM scene has.
+ * This is the operator talking, so it sits on the analysis ground with the
+ * accent mark — but it types like every other card. The recording was the
+ * script; nothing here is timed to a voice.
  */
 const drawNarration: Drawer = (d, scene) => {
   const { ctx, width, height } = d;
@@ -458,35 +534,63 @@ const drawNarration: Drawer = (d, scene) => {
 
   const size = px(fontSize[width > height ? 'h3' : 'h4'] * 3);
   const layout = layoutBody(d, scene.text, size, 700);
-  const startY = Math.max(top, top + (bottom - top - layout.blockHeight) / 2);
+  const markHeight = px(8) + px(60);
+  const startY = Math.max(top, top + (bottom - top - layout.blockHeight - markHeight) / 2);
 
-  // Which token is being spoken now, in milliseconds into this page.
-  const elapsedMs = d.progress * (scene.durationInFrames / 30) * 1000;
-  const spokenUpTo = (scene.tokens ?? []).reduce(
-    (chars, token) => (token.toMs <= elapsedMs ? chars + token.text.length : chars),
-    0,
-  );
+  ctx.fillStyle = color.accent;
+  ctx.fillRect(px(120), startY, px(96), px(8));
+  paintBody(d, layout, startY + markHeight, color.fg, scene);
+};
 
-  let drawn = 0;
-  ctx.font = fontOf(700, size, font.display);
-  layout.lines.forEach((line, i) => {
-    const y = startY + size + i * layout.lineHeight;
-    let cursor = layout.x;
-    for (const char of line) {
-      // Spoken text is full strength; what is still to come is dimmed. The
-      // effect is a read-along, not a highlight box.
-      ctx.fillStyle = drawn < spokenUpTo ? color.fg : color.faint;
-      ctx.fillText(char, cursor, y);
-      cursor += ctx.measureText(char).width;
-      drawn += 1;
-    }
-  });
+/**
+ * An image the article carries, full-bleed, with its credit.
+ *
+ * The credit is drawn in the accent and never omitted: a jacket or a post in a
+ * published video is a quotation, and the line under it is what makes it one.
+ */
+const drawImage: Drawer = (d, scene) => {
+  const { ctx, width, height } = d;
+  const px = scaled(width, height);
+  const image = scene.image;
+  if (!image) return;
 
-  if (scene.meta) {
+  const shown = drawBackdrop(d, image.src, 0.35);
+  drawWireBar(d, image.kind?.toUpperCase());
+  if (!shown) {
+    // The image failed to load. Say so on the frame rather than export a
+    // black card the operator only discovers after posting.
     ctx.font = fontOf(400, px(fontSize.small * 3), font.mono);
-    ctx.fillStyle = color.accent;
-    drawTracked(ctx, scene.meta, layout.x, bottom, px(4));
+    ctx.fillStyle = color.accentHot;
+    drawTracked(ctx, `IMAGE MISSING: ${image.src}`, px(120), height / 2, px(3));
   }
+
+  const enter = Math.min(1, d.progress * 4);
+  const creditSize = px(fontSize.small * 3);
+  const layout = scene.text ? layoutBody(d, scene.text, px(fontSize.h4 * 3), 700) : null;
+
+  // The caption and credit sit on a solid band, not on the picture. A post
+  // screenshot always has text near its bottom edge, and a gradient over it
+  // was not enough to keep the two apart.
+  const pad = px(36);
+  const bandHeight = pad + (layout ? layout.blockHeight + px(24) : 0) + creditSize + pad;
+  const bandTop = height - px(150) - px(40) - bandHeight;
+  ctx.globalAlpha = enter * 0.92;
+  ctx.fillStyle = color.deep;
+  ctx.fillRect(0, bandTop, width, bandHeight);
+  ctx.globalAlpha = enter;
+  ctx.fillStyle = color.accent;
+  ctx.fillRect(px(120), bandTop, px(8), bandHeight);
+
+  let y = bandTop + pad;
+  if (layout) {
+    layout.x += px(36);
+    paintBody(d, layout, y - layout.size * 0.15, color.fg);
+    y += layout.blockHeight + px(24);
+  }
+  ctx.font = fontOf(400, creditSize, font.mono);
+  ctx.fillStyle = color.accent;
+  drawTracked(ctx, image.credit, px(120) + px(36), y + creditSize * 0.8, creditSize * tracking.wider);
+  ctx.globalAlpha = 1;
 };
 
 /**
@@ -499,7 +603,6 @@ const drawNarration: Drawer = (d, scene) => {
  * the preview showed.
  */
 const DRAWERS: Record<SceneType, Drawer> = {
-  intro: drawIdent,
   outro: drawIdent,
   headline: drawCard,
   news: drawCard,
@@ -508,6 +611,7 @@ const DRAWERS: Record<SceneType, Drawer> = {
   figure: drawFigure,
   source: drawSource,
   narration: drawNarration,
+  image: drawImage,
 };
 
 /** The band content may occupy: below the masthead, above the progress rail. */
@@ -524,15 +628,21 @@ function contentBand(d: DrawContext) {
  */
 export function drawScene(d: DrawContext, scene: Scene) {
   const { ctx, width, height } = d;
-  const ident = scene.type === 'intro' || scene.type === 'outro';
+  const ident = scene.type === 'outro';
+  // Scenes that paint their own backdrop draw the masthead themselves, after
+  // the picture, so it sits on top of it.
+  const ownsBackdrop = scene.type === 'image' || (scene.type === 'headline' && scene.image);
 
   ctx.fillStyle = ident || SCENE_TONE[scene.type] === 'fact' ? color.deep : color.raised;
   ctx.fillRect(0, 0, width, height);
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
-  drawFacets(d);
+  ctx.globalAlpha = 1;
+  if (!ownsBackdrop) drawFacets(d);
 
-  if (!ident) drawWireBar(d, scene.type === 'source' ? undefined : scene.label);
+  if (!ident && !ownsBackdrop) {
+    drawWireBar(d, scene.type === 'headline' ? scene.kicker : scene.type === 'source' ? undefined : scene.label);
+  }
 
   DRAWERS[scene.type](d, scene);
   drawProgressRail(d, scene.index, scene.total);

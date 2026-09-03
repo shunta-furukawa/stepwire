@@ -6,13 +6,14 @@ import { buildSceneSequence } from '@/lib/video/scenes';
 import { COMPOSITIONS, type CompositionId } from '@/lib/video/compositions';
 import { drawScene } from '@/lib/video/canvas/draw';
 import {
-  decodeNarration,
-  encodeNarration,
+  decodeAudio,
+  encodePcm,
   pickAudioCodec,
   verifyAudio,
   withDecoderConfig,
   type AudioCandidate,
 } from '@/lib/video/canvas/audio';
+import { mixSoundtrack } from '@/lib/video/canvas/mix';
 
 /**
  * The export spike.
@@ -110,11 +111,11 @@ async function detect(): Promise<Support> {
 }
 
 export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
-  // Opens on an article that has a recording, if any: the lab's job includes
-  // proving the audio path, and defaulting to a silent article made "I exported
-  // and heard nothing" the expected result rather than a bug report.
+  // Opens on the article with the most in it — music, then images — so the
+  // first export exercises the whole pipeline rather than the plainest case.
   const [slug, setSlug] = useState(
-    (articles.find((item) => item.narration) ?? articles[0])?.slug ?? '',
+    (articles.find((item) => item.bgm) ?? articles.find((item) => item.media.length) ?? articles[0])
+      ?.slug ?? '',
   );
   // Landscape is the delivery format; the phone is the editing surface, not the
   // output shape. It is also the safer encode: 1080x1920 is an unusual geometry
@@ -172,24 +173,43 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       const ctx = canvas.getContext('2d', { alpha: false });
       if (!ctx) throw new Error('2d コンテキストを取得できません');
 
-      // The narration is decoded before the muxer is built, because the muxer
-      // has to declare its audio track up front and cannot learn the sample
-      // rate later.
-      let audioCandidate: AudioCandidate | null = null;
-      let decoded: Awaited<ReturnType<typeof decodeNarration>> | null = null;
-      let audioNote = 'なし（無音の記事）';
-      let audioBlob: Blob | null = null;
+      // Every image, decoded before the first frame. A frame renderer that
+      // awaits the network drops frames; this one is handed a cache.
+      setStatus('画像を読み込み中…');
+      const images = new Map<string, CanvasImageSource>();
+      const sources = new Set<string>();
+      for (const scene of sequence.scenes) if (scene.image) sources.add(scene.image.src);
+      await Promise.all(
+        [...sources].map(async (src) => {
+          try {
+            const response = await fetch(`/${src.replace(/^\//, '')}`);
+            if (!response.ok) return;
+            images.set(src, await createImageBitmap(await response.blob()));
+          } catch {
+            // A missing image is drawn as a labelled gap by the renderer, not
+            // as a failed export.
+          }
+        }),
+      );
 
-      if (article.narration) {
-        setStatus('音声を読み込み中…');
+      // The soundtrack: ticks over music. The muxer has to declare the audio
+      // track up front, so the sample rate is fixed here and the mix is built
+      // to it.
+      const SAMPLE_RATE = 48_000;
+      const audioCandidate: AudioCandidate | null = await pickAudioCodec(SAMPLE_RATE, 1);
+      let audioNote = audioCandidate ? '' : 'この端末は音声をエンコードできません';
+      let audioBlob: Blob | null = null;
+      let bgm: { buffer: AudioBuffer; gain: number } | undefined;
+      let bgmNote = 'なし';
+
+      if (article.bgm) {
+        setStatus('BGMを読み込み中…');
         try {
-          decoded = await decodeNarration(article.narration.audioSrc);
-          audioCandidate = await pickAudioCodec(decoded.sampleRate, decoded.numberOfChannels);
-          if (!audioCandidate) audioNote = 'この端末は音声をエンコードできません';
-        } catch (audioError) {
-          // A missing recording must not cost the whole export: the film is
-          // still worth having silent, and the reason is worth reporting.
-          audioNote = audioError instanceof Error ? audioError.message : String(audioError);
+          const decoded = await decodeAudio(article.bgm.src.startsWith('/') ? article.bgm.src : `/${article.bgm.src}`);
+          bgm = { buffer: decoded.buffer, gain: article.bgm.gain };
+          bgmNote = `${article.bgm.src} · ${decoded.durationInSeconds.toFixed(1)}秒ループ · gain ${article.bgm.gain}`;
+        } catch (bgmError) {
+          bgmNote = `読み込めません: ${bgmError instanceof Error ? bgmError.message : String(bgmError)}`;
         }
       }
 
@@ -197,7 +217,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       const muxer = new Muxer({
         target,
         video: { codec: candidate.muxer, width: w, height: h },
-        ...(audioCandidate && decoded
+        ...(audioCandidate
           ? {
               audio: {
                 codec: audioCandidate.muxer,
@@ -237,7 +257,14 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         for (let f = 0; f < scene.durationInFrames; f += 1) {
           const t0 = performance.now();
           drawScene(
-            { ctx, width: w, height: h, progress: f / Math.max(1, scene.durationInFrames - 1) },
+            {
+              ctx,
+              width: w,
+              height: h,
+              frame: f,
+              progress: f / Math.max(1, scene.durationInFrames - 1),
+              images,
+            },
             scene,
           );
           const t1 = performance.now();
@@ -270,15 +297,12 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       await encoder.flush();
       encoder.close();
 
-      if (audioCandidate && decoded) {
-        setStatus('音声を書き出し中…');
+      if (audioCandidate) {
+        setStatus('効果音とBGMを合成中…');
         try {
-          const audio = await encodeNarration({
-            decoded,
-            candidate: audioCandidate,
-            offsetSeconds: (sequence.narration?.startFrame ?? 0) / sequence.fps,
-            durationSeconds: sequence.durationInFrames / sequence.fps,
-          });
+          const soundtrack = mixSoundtrack({ sequence, sampleRate: SAMPLE_RATE, bgm });
+          const audio = await encodePcm({ samples: soundtrack.samples, candidate: audioCandidate });
+
           // Safari's AAC encoder emits no decoder description, and the muxer
           // turns that into a zero-length one rather than complaining.
           let synthesised = false;
@@ -287,25 +311,15 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
             synthesised = synthesised || patched.synthesised;
             return { chunk, meta: patched.meta };
           });
-
           for (const { chunk, meta } of withConfig) muxer.addAudioChunk(chunk, meta);
 
-          // The same track, muxed again on its own.
-          //
-          // Because the check that was supposed to settle this could not:
-          // `decodeAudioData` was handed the finished MP4, and Safari refuses
-          // an MP4 that carries video however sound its audio is. The result
-          // was "Decoding failed" for a file that may be perfectly fine. An
-          // audio-only MP4 is what that API expects, and it is also something
-          // the operator can simply press play on.
+          // The same track on its own, for the verifier and for a play button:
+          // `decodeAudioData` refuses an MP4 that carries video, however sound
+          // its audio, and a play button either makes a sound or it does not.
           const audioTarget = new ArrayBufferTarget();
           const audioMuxer = new Muxer({
             target: audioTarget,
-            audio: {
-              codec: audioCandidate.muxer,
-              sampleRate: audioCandidate.sampleRate,
-              numberOfChannels: audioCandidate.numberOfChannels,
-            },
+            audio: { codec: audioCandidate.muxer, sampleRate: SAMPLE_RATE, numberOfChannels: 1 },
             fastStart: 'in-memory',
           });
           for (const { chunk, meta } of withConfig) audioMuxer.addAudioChunk(chunk, meta);
@@ -313,14 +327,9 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
           audioBlob = new Blob([audioTarget.buffer], { type: 'audio/mp4' });
 
           audioNote =
-            audioCandidate.muxer === 'aac'
-              ? `AAC · ${audio.chunks.length}チャンク · ${audio.format}${
-                  synthesised ? ' · esds補完' : ''
-                }`
-              : // Opus is legal inside an MP4 and Safari and QuickTime both
-                // refuse to decode it, so the file plays and is silent — the
-                // exact symptom this label has to stop being a mystery.
-                `OPUS（Safari/QuickTimeでは無音になります） · ${audio.chunks.length}チャンク`;
+            `${audioCandidate.muxer === 'aac' ? 'AAC' : 'OPUS（Safari/QuickTimeでは無音）'}` +
+            ` · 効果音 ${soundtrack.ticks}回 · BGM ${bgm ? 'あり' : 'なし'}` +
+            `${synthesised ? ' · esds補完' : ''}`;
         } catch (audioError) {
           // The video is still worth having. What is not acceptable is
           // reporting success and handing back a silent file.
@@ -340,11 +349,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       setStatus('出力を検証中…');
       const verdict = audioBlob
         ? await verifyAudio(audioBlob)
-        : {
-            audible: false,
-            span: '',
-            detail: article.narration ? '音声トラックを作れませんでした' : '録音のない記事です',
-          };
+        : { audible: false, span: '', detail: '音声トラックを作れませんでした' };
 
       if (encodedChunks === 0) throw new Error('エンコーダが1フレームも出力しませんでした');
 
@@ -358,7 +363,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         url: URL.createObjectURL(blob),
         codec: candidate.label,
         audio: audioNote,
-        verified: `${audioCandidate?.muxer.toUpperCase() ?? '—'} / ${verdict.detail}`,
+        verified: `${audioCandidate?.muxer.toUpperCase() ?? '—'} / ${verdict.detail} / BGM: ${bgmNote}`,
         verifiedOk: verdict.audible,
         audioUrl: audioBlob ? URL.createObjectURL(audioBlob) : '',
       });
@@ -414,7 +419,8 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         >
           {articles.map((item) => (
             <option key={item.slug} value={item.slug}>
-              {item.narration ? '🎙 ' : ''}
+              {item.media.length || item.heroImage ? '🖼 ' : ''}
+              {item.bgm ? '♪ ' : ''}
               {item.shortTitle ?? item.title}
             </option>
           ))}
@@ -456,19 +462,24 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
           {seconds.toFixed(1)}秒 @ {sequence.fps}fps
         </p>
 
-        {/* Only one sample article carries a recording, and "I exported and
-            there was no sound" is the same sentence whether the bug is in the
-            encoder or the article simply has no voice. The difference is
-            stated before the button, not after. */}
-        <p
-          className={`border-l-2 pl-md font-mono text-micro leading-snug ${
-            article.narration ? 'border-accent text-accent' : 'border-line-strong text-muted'
-          }`}
-        >
-          {article.narration
-            ? `録音あり — ${article.narration.audioSrc}`
-            : 'この記事に録音はありません。書き出しても無音です。'}
-        </p>
+        {/* What this article brings to the film, stated before the button:
+            "I exported and it was plain" is the same sentence whether a bug
+            dropped the pictures or the article never had any. */}
+        <dl className="grid grid-cols-[auto_1fr] gap-x-md gap-y-xs border-l-2 border-line-strong pl-md font-mono text-micro leading-snug">
+          <dt className="text-muted">画像</dt>
+          <dd className={article.media.length || article.heroImage ? 'text-accent' : 'text-muted'}>
+            {article.heroImage ? 'ヒーロー + ' : ''}
+            {article.media.length}枚
+          </dd>
+          <dt className="text-muted">BGM</dt>
+          <dd className={article.bgm ? 'text-accent' : 'text-muted'}>
+            {article.bgm ? article.bgm.src : 'なし（効果音のみ）'}
+          </dd>
+          <dt className="text-muted">台本</dt>
+          <dd className="text-muted">
+            {article.narration ? '録音の文字起こしを表示（声は入りません）' : '記事本文を表示'}
+          </dd>
+        </dl>
 
         <button
           type="button"
@@ -491,7 +502,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
           <h2 className="font-mono text-micro font-bold uppercase tracking-wider">結果</h2>
           <dl className="mt-md grid grid-cols-2 gap-x-md gap-y-sm font-mono text-micro">
             <Row label="コーデック" value={result.codec} ok={result.codec.startsWith('H.264')} />
-            <Row label="音声" value={result.audio} ok={result.audio.startsWith('AAC')} />
+            <Row label="音" value={result.audio} ok={result.audio.startsWith('AAC')} />
             <Row label="実時間" value={`${(result.totalMs / 1000).toFixed(1)}秒`} ok />
             <Row
               label="実時間比"
@@ -526,12 +537,12 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
           {result.audioUrl ? (
             <div className="mt-md">
               <p className="font-mono text-micro uppercase tracking-wide text-muted">
-                音声だけを再生（これが鳴るなら音声は正しい）
+                音だけを再生（効果音とBGM）
               </p>
               <audio src={result.audioUrl} controls className="mt-sm w-full" />
               <a
                 href={result.audioUrl}
-                download={`${slug}-narration.mp4`}
+                download={`${slug}-soundtrack.mp4`}
                 className="mt-sm block border border-line px-md py-sm text-center font-mono text-micro uppercase tracking-wider text-muted hover:text-accent"
               >
                 音声だけを保存

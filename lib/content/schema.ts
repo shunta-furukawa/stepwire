@@ -58,6 +58,44 @@ export const imageRefSchema = z.object({
 export type ImageRef = z.infer<typeof imageRefSchema>;
 
 /**
+ * An image the article carries into the video.
+ *
+ * `credit` is required here where it is optional on `heroImage`: a jacket, a
+ * screenshot or somebody's post in a published video is a quotation, and a
+ * quotation without attribution is not one. The validator refuses the article
+ * rather than the video quietly omitting the line.
+ */
+export const mediaSchema = imageRefSchema.extend({
+  src: z
+    .string()
+    .regex(/^\/?images\/[\w./-]+\.(png|jpg|jpeg|webp)$/, 'media must be a file under public/images/'),
+  credit: z.string().min(1, 'every media image needs a credit — it is a quotation'),
+  /** Shown under the image. What the reader is looking at, not what it means. */
+  caption: z.string().max(120).optional(),
+  /** A hint for how the video frames it. */
+  kind: z.enum(['jacket', 'screenshot', 'post', 'photo']).optional(),
+});
+export type MediaRef = z.infer<typeof mediaSchema>;
+
+/**
+ * Music under the video.
+ *
+ * The file is the operator's responsibility, and the schema says so by
+ * requiring a credit: what goes under a STEPWIRE video is an editorial and a
+ * legal decision, not something the system fetches. A game's own tracks in a
+ * public video are a rights question the software cannot answer.
+ */
+export const bgmSchema = z.object({
+  src: z
+    .string()
+    .regex(/^\/?audio\/bgm\/[\w.-]+\.(m4a|mp3|wav|ogg)$/, 'bgm must be a file under public/audio/bgm/'),
+  credit: z.string().min(1, 'bgm needs a credit — say what it is and where it may be used'),
+  /** Level under the effects, 0–1. Music is a bed, not the point. */
+  gain: z.number().min(0).max(1).default(0.35),
+});
+export type Bgm = z.infer<typeof bgmSchema>;
+
+/**
  * Optional per-article video overrides.
  *
  * The rule is: overrides are the exception. If a field is absent the video
@@ -126,6 +164,10 @@ export const articleFrontmatterSchema = z.object({
   figures: z.array(figureSchema).max(3).default([]),
   heroImage: imageRefSchema.optional(),
   thumbnail: imageRefSchema.optional(),
+  /** Images the video shows, in order. See `mediaSchema`. */
+  media: z.array(mediaSchema).max(6).default([]),
+  /** Music under the video. See `bgmSchema`. */
+  bgm: bgmSchema.optional(),
   video: videoOverrideSchema.optional(),
   /**
    * The recording this article is spoken over. Optional — an article with no

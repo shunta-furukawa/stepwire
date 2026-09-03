@@ -1,14 +1,13 @@
 import React from 'react';
-import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
+import { AbsoluteFill, Img, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { SCENE_TONE, type Scene } from '../../lib/video/scenes';
+import { revealedText, visibleUnits } from '../../lib/video/reveal';
 import { barFractions, formatBarValue } from '../../lib/content/figures';
 import { visualLength } from '../../lib/video/text';
 import { color, font, fontWeight, gap, leading, textStyles, tracking, type } from '../styles/theme';
 import {
   Arrow,
-  BodyText,
   Card,
-  KineticText,
   LabelChip,
   PanelGrid,
   ProgressRail,
@@ -75,108 +74,81 @@ function layout(orientation: SceneProps['orientation']) {
 
 // ---------------------------------------------------------------------------
 
-export function IntroScene({ scene, orientation }: SceneProps) {
-  const frame = useCurrentFrame();
-  const { durationInFrames } = useVideoConfig();
-  const l = layout(orientation);
+// ---------------------------------------------------------------------------
 
-  // The wordmark assembles: STEP arrives from the left, WIRE from the right,
-  // and they meet on a rule. The "wire transmission" idea as a single gesture.
-  const assemble = easeOut(frame / 16);
-  const ruleWidth = interpolate(easeOut((frame - 8) / 14), [0, 1], [0, 100], {
-    extrapolateRight: 'clamp',
-  });
-  const exit = interpolate(frame, [durationInFrames - 6, durationInFrames], [1, 0], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+/**
+ * Typed copy — the game text box.
+ *
+ * Which characters are on screen at this frame comes from the scene's reveal
+ * plan, never from an easing curve chosen here: the canvas renderer and the
+ * tick track read the same plan, so a character lands on the same frame its
+ * tick sounds, on every surface.
+ */
+function Typed({
+  scene,
+  style,
+  color: fill = color.fg,
+}: {
+  scene: Scene;
+  style: React.CSSProperties;
+  color?: string;
+}) {
+  const frame = useCurrentFrame();
+  const text = scene.text ?? '';
+  const shown = scene.reveal ? revealedText(text, visibleUnits(scene.reveal, frame)) : text;
+  const done = !scene.reveal || visibleUnits(scene.reveal, frame) >= scene.reveal.units;
 
   return (
-    <AbsoluteFill style={{ background: color.deep, opacity: exit }}>
-      <PanelGrid opacity={0.14} stroke={color.fg} />
-      <ScanLines opacity={0.08} />
-      <Card background="transparent" padding={l.padding}>
-        <div />
-        <div style={{ textAlign: 'center' }}>
-          <span
-            style={{
-              ...textStyles.display,
-              display: 'block',
-              fontSize: l.wordmark,
-              color: color.fg,
-              transform: `translateX(${(1 - assemble) * -14}%)`,
-              opacity: assemble,
-            }}
-          >
-            STEP
-          </span>
-          <span
-            style={{
-              display: 'block',
-              height: 8,
-              width: `${ruleWidth}%`,
-              margin: `${gap.sm}px auto`,
-              background: color.accent,
-            }}
-          />
-          <span
-            style={{
-              ...textStyles.display,
-              display: 'block',
-              fontSize: l.wordmark,
-              color: color.fg,
-              transform: `translateX(${(1 - assemble) * 14}%)`,
-              opacity: assemble,
-            }}
-          >
-            WIRE
-          </span>
-          {scene.text ? (
-            <p
-              style={{
-                ...textStyles.meta,
-                marginTop: gap.lg,
-                color: color.muted,
-                fontSize: type.base,
-                opacity: easeOut((frame - 14) / 10),
-              }}
-            >
-              {scene.text}
-            </p>
-          ) : null}
-        </div>
-        <p style={{ ...textStyles.meta, color: color.faint, textAlign: 'center' }}>
-          {scene.meta}
-        </p>
-      </Card>
-    </AbsoluteFill>
+    <p style={{ ...style, color: fill, margin: 0, whiteSpace: 'pre-wrap' }}>
+      {shown}
+      {/* A cursor while typing, gone when the line is complete. */}
+      {!done ? (
+        <span style={{ color: color.accent, opacity: Math.floor(frame / 4) % 2 ? 1 : 0.2 }}>▍</span>
+      ) : null}
+    </p>
   );
 }
 
-// ---------------------------------------------------------------------------
+/** Full-bleed image with a darkening so type stays legible over it. */
+function Backdrop({ src, dim }: { src: string; dim: number }) {
+  return (
+    <>
+      <Img
+        src={staticFile(src.replace(/^\//, ''))}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: `linear-gradient(to top, rgba(10,10,11,${dim}) 30%, rgba(10,10,11,${dim * 0.55}) 100%)`,
+        }}
+      />
+    </>
+  );
+}
 
 export function HeadlineScene({ scene, orientation }: SceneProps) {
   const l = layout(orientation);
   const enter = useEnter(10, 4);
 
   return (
-    <AbsoluteFill style={{ background: color.surface }}>
-      <ScanLines opacity={0.04} />
+    <AbsoluteFill style={{ background: color.deep }}>
+      {scene.image ? <Backdrop src={scene.image.src} dim={0.82} /> : <ScanLines opacity={0.04} />}
       <Card background="transparent" padding={l.padding}>
-        <WireBar meta={caption(scene)} />
+        <WireBar meta={scene.kicker} />
 
         <div>
           <Arrow direction="up" size={type.h2} />
           <div style={{ marginTop: gap.md }}>
-            <KineticText
-              text={scene.text ?? ''}
-              fontSize={l.headline}
-              stagger={2}
-              delay={2}
-              // The display style is tuned for the Latin wordmark; a headline
-              // that may be Japanese needs its tracking relaxed.
+            <Typed
+              scene={scene}
               style={{
+                ...textStyles.display,
+                fontSize: l.headline,
                 maxWidth: l.maxWidth,
+                // The display style is tuned for the Latin wordmark; a headline
+                // that may be Japanese needs its tracking relaxed.
                 letterSpacing: `${tracking.headline}em`,
                 lineHeight: leading.headline,
               }}
@@ -198,7 +170,14 @@ export function HeadlineScene({ scene, orientation }: SceneProps) {
           ) : null}
         </div>
 
-        <ProgressRail index={scene.index} total={scene.total} />
+        <div>
+          {scene.image?.credit ? (
+            <p style={{ ...textStyles.meta, color: color.faint, margin: `0 0 ${gap.md}px` }}>
+              {scene.image.credit}
+            </p>
+          ) : null}
+          <ProgressRail index={scene.index} total={scene.total} />
+        </div>
       </Card>
     </AbsoluteFill>
   );
@@ -243,11 +222,14 @@ function BodyScene({
               }}
             />
           )}
-          <BodyText
-            text={scene.text ?? ''}
-            fontSize={l.body}
-            color={color.fg}
-            maxWidth={l.maxWidth}
+          <Typed
+            scene={scene}
+            style={{
+              ...textStyles.body,
+              fontSize: l.body,
+              maxWidth: l.maxWidth,
+              lineHeight: leading.tight,
+            }}
           />
         </div>
 
@@ -625,52 +607,82 @@ export function OutroScene({ scene, orientation }: SceneProps) {
  * the highlight is the only thing that moves.
  */
 export function NarrationScene({ scene, orientation }: SceneProps) {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
   const l = layout(orientation);
-  const elapsedMs = (frame / fps) * 1000;
-  const tokens = scene.tokens ?? [];
 
   return (
-    <AbsoluteFill style={{ background: color.surface }}>
+    <AbsoluteFill style={{ background: color.raised }}>
       <ScanLines opacity={0.035} />
       <Card background="transparent" padding={l.padding}>
-        {/* The speaker's name, not a section label: this card is the voice. */}
+        {/* The speaker's name, not a section label: this card is the voice —
+            typed, not played. The recording was the script. */}
         <WireBar meta={scene.meta ?? 'STEPWIRE'} />
 
-        <p
+        <div style={{ margin: 'auto 0' }}>
+          <div style={{ width: 96, height: 8, background: color.accent, marginBottom: gap.lg }} />
+          <Typed
+            scene={scene}
+            style={{
+              ...textStyles.body,
+              fontSize: l.body,
+              fontWeight: fontWeight.bold,
+              maxWidth: l.maxWidth,
+              lineHeight: leading.tight,
+            }}
+          />
+        </div>
+
+        <ProgressRail index={scene.index} total={scene.total} />
+      </Card>
+    </AbsoluteFill>
+  );
+}
+
+/**
+ * An image the article carries, full-bleed, with its credit.
+ *
+ * The credit is not optional and not small enough to miss: a jacket or a post
+ * in a published video is a quotation, and the line under it is what makes it
+ * one.
+ */
+export function ImageScene({ scene, orientation }: SceneProps) {
+  const l = layout(orientation);
+  const enter = useEnter(8, 0);
+  const image = scene.image;
+
+  return (
+    <AbsoluteFill style={{ background: color.deep }}>
+      {image ? <Backdrop src={image.src} dim={0.35} /> : null}
+      <Card background="transparent" padding={l.padding}>
+        <WireBar meta={image?.kind?.toUpperCase()} />
+
+        {/* Caption and credit on a solid band, not on the picture: a post
+            screenshot always has text near its bottom edge. */}
+        <div
           style={{
-            ...textStyles.body,
-            fontSize: l.body,
-            color: color.muted,
-            // Subtitles sit centred rather than pinned to a section heading —
-            // there is nothing else on the card competing for the eye.
-            margin: 'auto 0',
-            maxWidth: l.maxWidth,
-            textWrap: 'pretty',
+            ...enter,
+            background: `${color.deep}EB`,
+            borderLeft: `8px solid ${color.accent}`,
+            padding: `${gap.md}px ${gap.lg}px`,
+            margin: `0 -${l.padding}px`,
+            paddingLeft: l.padding + gap.md,
           }}
         >
-          {tokens.length > 0
-            ? tokens.map((token, index) => {
-                const spoken = elapsedMs >= token.fromMs;
-                const speaking = spoken && elapsedMs < token.toMs;
-                return (
-                  <span
-                    key={`${token.text}-${index}`}
-                    style={{
-                      // Said already: black. Being said: reversed out on the
-                      // accent. Still ahead: grey.
-                      background: speaking ? color.accent : 'transparent',
-                      color: speaking ? color.onAccent : spoken ? color.fg : color.faint,
-                      ...(speaking ? { padding: '0 0.08em' } : {}),
-                    }}
-                  >
-                    {token.text}
-                  </span>
-                );
-              })
-            : scene.text}
-        </p>
+          {scene.text ? (
+            <p
+              style={{
+                ...textStyles.body,
+                fontSize: type.h4,
+                fontWeight: fontWeight.bold,
+                color: color.fg,
+                maxWidth: l.maxWidth,
+                margin: `0 0 ${gap.sm}px`,
+              }}
+            >
+              {scene.text}
+            </p>
+          ) : null}
+          <p style={{ ...textStyles.meta, color: color.accent, margin: 0 }}>{scene.meta}</p>
+        </div>
 
         <ProgressRail index={scene.index} total={scene.total} />
       </Card>
@@ -682,7 +694,6 @@ export function NarrationScene({ scene, orientation }: SceneProps) {
 
 /** Scene type → component. Adding a scene type means adding one entry here. */
 export const SCENE_COMPONENTS: Record<Scene['type'], React.FC<SceneProps>> = {
-  intro: IntroScene,
   headline: HeadlineScene,
   news: NewsScene,
   context: ContextScene,
@@ -691,4 +702,5 @@ export const SCENE_COMPONENTS: Record<Scene['type'], React.FC<SceneProps>> = {
   source: SourceScene,
   outro: OutroScene,
   narration: NarrationScene,
+  image: ImageScene,
 };

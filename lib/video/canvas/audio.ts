@@ -1,14 +1,10 @@
 /**
- * The narration track, encoded in the browser.
+ * Audio, encoded in the browser.
  *
- * A silent export of a narrated article is not the same video with a piece
- * missing — it is the wrong video. The recording IS the film's audio, so the
- * on-device path has to carry it or it cannot replace the server render.
- *
- * The chain: fetch the file the website already serves → `decodeAudioData`
- * (which handles mp3, m4a and wav without a parser of our own) → slice into
- * `AudioData` → `AudioEncoder` → the muxer. Nothing here re-encodes anything
- * the browser cannot already play.
+ * The chain: PCM in a `Float32Array` (mixed by `mix.ts`) → `AudioData` →
+ * `AudioEncoder` → the muxer, with `decodeAudioData` on the way in for any
+ * music file the article names. Nothing here plays a voice: the recording is
+ * the script, and the soundtrack is ticks over music.
  */
 
 /** AAC-LC. The only audio codec an MP4 can rely on everywhere. */
@@ -49,14 +45,14 @@ export async function pickAudioCodec(
   return null;
 }
 
-export interface DecodedNarration {
+export interface DecodedAudio {
   buffer: AudioBuffer;
   sampleRate: number;
   numberOfChannels: number;
   durationInSeconds: number;
 }
 
-export async function decodeNarration(src: string): Promise<DecodedNarration> {
+export async function decodeAudio(src: string): Promise<DecodedAudio> {
   const response = await fetch(src);
   if (!response.ok) throw new Error(`音声を取得できません (${response.status}): ${src}`);
   const bytes = await response.arrayBuffer();
@@ -75,12 +71,9 @@ export async function decodeNarration(src: string): Promise<DecodedNarration> {
 }
 
 export interface EncodeAudioOptions {
-  decoded: DecodedNarration;
+  /** Mono PCM, -1..1, at `candidate.sampleRate`. */
+  samples: Float32Array;
   candidate: AudioCandidate;
-  /** Seconds of silence before the voice starts — the ident plays silent. */
-  offsetSeconds: number;
-  /** The film's length. Audio past this is dropped rather than trailing it. */
-  durationSeconds: number;
 }
 
 export interface EncodedAudio {
@@ -109,15 +102,8 @@ const FORMATS: AudioSampleFormat[] = ['f32-planar', 'f32'];
 /** One AudioData per this many frames. Small enough to stay responsive. */
 const CHUNK_FRAMES = 1024;
 
-/**
- * Encodes the narration, placed at its offset within the film.
- *
- * The offset is real silence rather than a timestamp shift: a muxer given a
- * first sample at t=5s produces a file that some players treat as starting at
- * 5s and others as starting at 0. Writing the silence removes the ambiguity for
- * the cost of a few hundred KB before compression.
- */
-export async function encodeNarration(options: EncodeAudioOptions): Promise<EncodedAudio> {
+/** Encodes a mono PCM buffer as the film's audio track. */
+export async function encodePcm(options: EncodeAudioOptions): Promise<EncodedAudio> {
   let lastError: Error | null = null;
 
   for (const format of FORMATS) {
@@ -135,7 +121,7 @@ async function encodeWith(
   options: EncodeAudioOptions,
   format: AudioSampleFormat,
 ): Promise<EncodedAudio> {
-  const { decoded, candidate, offsetSeconds, durationSeconds } = options;
+  const { samples, candidate } = options;
   const { sampleRate, numberOfChannels } = candidate;
 
   const chunks: EncodedAudio['chunks'] = [];
@@ -160,13 +146,7 @@ async function encodeWith(
 
   encoder.configure({ codec: candidate.codec, sampleRate, numberOfChannels, bitrate: 128_000 });
 
-  const totalFrames = Math.floor(durationSeconds * sampleRate);
-  const offsetFrames = Math.floor(offsetSeconds * sampleRate);
-  const source = decoded.buffer;
-  const channels = Array.from({ length: numberOfChannels }, (_, channel) =>
-    source.getChannelData(Math.min(channel, source.numberOfChannels - 1)),
-  );
-
+  const totalFrames = samples.length;
   const scratch = new Float32Array(CHUNK_FRAMES * numberOfChannels);
   let written = 0;
 
@@ -175,12 +155,11 @@ async function encodeWith(
     scratch.fill(0, 0, frames * numberOfChannels);
 
     for (let i = 0; i < frames; i += 1) {
-      const sourceIndex = written + i - offsetFrames;
-      if (sourceIndex < 0 || sourceIndex >= source.length) continue;
+      const sample = samples[written + i] ?? 0;
       for (let channel = 0; channel < numberOfChannels; channel += 1) {
         // Planar lays each channel end to end; interleaved alternates them.
         const at = format === 'f32-planar' ? channel * frames + i : i * numberOfChannels + channel;
-        scratch[at] = channels[channel]![sourceIndex] ?? 0;
+        scratch[at] = sample;
       }
     }
 

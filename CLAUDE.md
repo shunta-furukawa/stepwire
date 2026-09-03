@@ -119,11 +119,19 @@ verified by eye with `pnpm video:render`.
 - **Do not add a video CMS.** Video copy is derived from the article. If a video
   needs different wording, add a narrow override under `article.video`, never a
   parallel file.
-- **The article is the record; the recording is the performance.** A narrated
-  video plays the operator's voice and follows its timing. Wording may differ
-  between the two; facts may not. A recording is never a source — sourcing stays
-  entirely on the article, and `content/transcripts/*.json` is committed so
-  Whisper's mistakes can be corrected by hand.
+- **The recording is the script, not the soundtrack.** The operator talks, the
+  words are transcribed into `content/transcripts/*.json`, and the video TYPES
+  them. The voice never reaches the film. Sourcing stays entirely on the
+  article; a recording is never a source.
+- **Copy types; it does not appear.** Every card's characters land on the
+  cadence in `lib/video/reveal.ts`, and a tick sounds as they do. Both renderers
+  and the tick track read that one plan. No renderer decides when a character
+  appears.
+- **Images and music are quotations, and the rights are editorial.** `media`
+  and `bgm` require a `credit` or the article fails validation. The system
+  never fetches a picture or a track; the operator puts a file under `public/`
+  and answers for it. A game's own music in a public video is a rights question
+  software cannot settle.
 - **Keep dependencies minimal.** Prefer a small typed module over a library. Do
   not add a database, a CMS, a job queue, or a state-management framework.
 - **Keep AI at the boundary.** `lib/ai/` may be added later for drafting and

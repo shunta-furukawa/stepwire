@@ -35,6 +35,7 @@ export const SAMPLE_ARTICLE: ArticleVideoInput = {
     title: 'SAMPLE SOURCE — 実在しない告知',
     url: 'https://example.com/stepwire/fixtures/summer-update',
   },
+  media: [],
   figures: [
     {
       kind: 'stat',

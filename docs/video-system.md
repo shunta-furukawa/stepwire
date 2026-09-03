@@ -21,96 +21,90 @@ An article produces one of two films, depending on whether it has a recording.
 Both open with the ident and headline and close with the source card and the
 outro. Everything else changes.
 
-### Why narration exists
+### The recording is the script
 
-Writing an article from a transcript and then rendering a silent typography
-video sands off the thing that made it worth recording. So a recording is not
-only an input to the text — **it is the video's audio**. The article and the
-video stop being two renderings of the same prose and become two renderings of
-the same recording: the page gets the edited written record, the video gets the
-actual voice.
-
-The rule that keeps this honest:
-
-> **The article is the record. The recording is the performance.**
-> They may differ in wording. They may not differ in fact.
+The operator talks to the phone; the words are transcribed; the video types
+them. **The voice itself never reaches the film.** This is what the operator
+asked for, and it removes the one place the article and the video were allowed
+to differ in wording: the transcript is edited into the article, and the video
+derives from that, like everything else.
 
 Sourcing stays entirely on the article. A recording is never a source.
 
-### Adding narration to an article
+```bash
+pnpm narration:transcribe <slug>     # local Whisper; writes content/transcripts/
+```
 
-1. Put the recording in `public/audio/` — the same file then serves the website
-   and the render, with no second copy.
-2. Reference it in the article's frontmatter:
+**Read the transcript and fix it.** Whisper mishears DDR jargon constantly.
 
-   ```yaml
-   narration:
-     audio: audio/2026-08-24-summer-update.m4a
-     speaker: MONO DDR
-   ```
+### The text box
 
-3. Transcribe it:
+Copy does not appear; it types. Each character lands on a fixed cadence
+(`lib/video/reveal.ts`: two frames per character for a headline, one for body)
+and a tick sounds as it lands — the rhythm-game register the brand sits in.
+The cadence is the single source of timing: both renderers and the tick track
+read the same `RevealPlan`, so a character lands on the frame its tick sounds,
+on every surface.
 
-   ```bash
-   pnpm narration:transcribe sample-ddr-world-summer-update
-   ```
+### The soundtrack
 
-   This runs **Whisper.cpp locally** — no API, no per-minute cost, no vendor.
-   The first run installs whisper.cpp and downloads a model into `.whisper/`
-   (git-ignored) and takes a while; later runs do not.
+Ticks over music, mixed on the device (`lib/video/canvas/mix.ts`). The ticks
+are synthesised, not sampled — twenty lines of arithmetic rather than an asset
+to license and lose. Music comes from the article:
 
-4. **Read the transcript and fix it.** Whisper mishears DDR jargon constantly —
-   song titles, chart names, "DDR WORLD". `content/transcripts/<slug>.json` is
-   committed precisely so it can be corrected by hand; it is the subtitle track
-   a viewer reads, not a byproduct.
+```yaml
+bgm:
+  src: audio/bgm/my-track.wav     # under public/audio/bgm/
+  credit: 'Where it is from and why it may be used'
+  gain: 0.3
+```
 
-5. `pnpm video:render <slug>`.
+`credit` is required. **What goes under a STEPWIRE video is an editorial and a
+legal decision the software does not make.** A game's own tracks in a public
+video will be matched by Content ID, and Japan has no general fair-use defence.
+The mechanism is here; the file is the operator's.
 
-The transcript is found by convention at `content/transcripts/<slug>.json` and
-is not named in the frontmatter — one fewer thing to keep in sync. An article
-with a recording but no transcript falls back to the silent form rather than
-rendering a video that cannot be subtitled or timed.
+### Images
 
-### How the pages are cut
+```yaml
+heroImage:                          # behind the opening headline
+  src: images/hero.png
+  alt: …
+  credit: …
+media:                              # shown after the reported fact
+  - src: images/jacket.png
+    alt: …
+    credit: '© … / 公式サイトより'   # required
+    caption: …
+    kind: jacket                    # jacket · screenshot · post · photo
+```
 
-`createTikTokStyleCaptions` from `@remotion/captions` was tried first and merged
-an entire fourteen-second take into a single page: it groups tokens that fall
-within a time window of each other, and continuous speech has no gaps wide
-enough to break on. Correct for its purpose, wrong for subtitles.
-
-`lib/video/captions.ts` pages on **sentence endings first**, falling back to a
-length or duration limit only when a speaker runs on, and breaking immediately
-on a real pause. Length is measured with `visualLength`, the same weighted
-measure the card budgets use, so one number describes a readable page in either
-script.
-
-Each page becomes one scene, held until the next page begins — so a subtitle
-never disappears while the voice continues. The audio is mounted over exactly
-the span the narration scenes occupy, so the ident plays silent before it and
-the recording is never clipped.
+A jacket, a screenshot or somebody's post in a published video is a quotation,
+and the credit is what makes it one. The validator refuses an article without
+one rather than the video quietly omitting the line.
 
 ## How a video is built
 
 `lib/video/scenes.ts` turns an `ArticleVideoInput` into a scene sequence:
 
-1. **Intro** — the ident, with the category and date.
-2. **Headline** — `video.headline` ?? `shortTitle` ?? `title`, with the summary.
-3. **News / Context / Impact** — each section is split on sentence boundaries
-   and packed into cards up to a per-format character budget.
-4. **Figures** — one scene per entry in the article's `figures`, if any.
-5. **Source** — the primary source. Never dropped.
-6. **Outro** — the wordmark and tagline.
+1. **Headline** — first, over the hero image, with category and date as the
+   kicker. No ident up front: a feed gives a film two seconds to earn the next
+   two, and an ident spends them on the brand. The ident is the sign-off.
+2. **News** — the reported fact, split on sentence boundaries into typed cards.
+3. **Images** — `media`, in order: what the story is about, shown before anyone
+   says what it means.
+4. **Context / Impact** — the analysis, typed.
+5. **Figures** — one scene per entry in the article's `figures`, if any.
+6. **Source** — the primary source. Never dropped.
+7. **Outro** — the wordmark and tagline.
 
-Each card's duration comes from its reading time — roughly 12 weighted
-characters per second, plus time to register the card, clamped per format.
-"Weighted" is `visualLength`, which counts a CJK character twice, so the same
-number works out to ~12 Latin or ~6 Japanese characters per second.
+A typed card's duration is its reveal plus a hold: characters × cadence, then
+the greater of 1.4s or 90% of the reveal, so a long card is read as well as
+watched.
 
 **The length of a video is therefore a property of the article's content** —
 nobody types a duration anywhere. Remotion learns the total through
 `calculateMetadata`.
-
-For a narrated article none of this applies: the recording decides.
 
 If the total exceeds the format's ceiling, `trimToBudget` drops trailing
 analysis cards. The intro, headline, first news card, source and outro are never

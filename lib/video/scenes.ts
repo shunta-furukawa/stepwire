@@ -1,13 +1,15 @@
 import type { ArticleVideoInput, NarrationInput } from '../content/article';
 import type { SceneType } from './scene-types';
 import type { Figure } from '../content/figures';
+import type { MediaRef } from '../content/schema';
+import { planReveal, type RevealPlan } from './reveal';
 import { toSentences } from '../content/markdown';
 import { pageCaptions } from './captions';
 import { visualLength } from './text';
 import { CATEGORY_META } from '../content/categories';
 import { formatDate } from '../format';
 import { COMPOSITIONS, type CompositionId } from './compositions';
-import { FPS, readingFrames, secondsToFrames, type DurationBounds } from './timing';
+import { FPS, secondsToFrames, type DurationBounds } from './timing';
 
 /**
  * Article → scene sequence.
@@ -36,12 +38,16 @@ export interface Scene {
   meta?: string;
   /** `figure` scenes only. */
   figure?: Figure;
+  /** `image` scenes, and the headline when the article has a hero. */
+  image?: MediaRef;
+  /** The small line above a headline: category and date. */
+  kicker?: string;
   /**
-   * `narration` scenes only: the tokens of this page with their timings,
-   * relative to the start of the scene, so a scene needs no knowledge of where
-   * it sits in the film to highlight the word currently being spoken.
+   * When each character of `text` lands, and when a tick sounds. Present on
+   * every scene that types its copy; both renderers and the sound generator
+   * read it, and none of them computes its own.
    */
-  tokens?: { text: string; fromMs: number; toMs: number }[];
+  reveal?: RevealPlan;
   /** Position in the sequence, for the progress rail. */
   index: number;
   total: number;
@@ -52,15 +58,6 @@ export interface SceneSequence {
   durationInFrames: number;
   fps: number;
   composition: CompositionId;
-  /**
-   * Set when the film has a voice track: where the audio starts, and how long
-   * it runs. The composition mounts `<Audio>` over exactly this span.
-   */
-  narration?: {
-    audioSrc: string;
-    startFrame: number;
-    durationInFrames: number;
-  };
 }
 
 /**
@@ -72,9 +69,10 @@ export interface SceneSequence {
  * is the one thing this project's content model exists to prevent.
  */
 export const SCENE_TONE: Record<SceneType, 'fact' | 'analysis'> = {
-  intro: 'fact',
   headline: 'fact',
   news: 'fact',
+  // An image is shown, not argued. What it means is the analysis around it.
+  image: 'fact',
   context: 'analysis',
   impact: 'analysis',
   // A figure draws declared data. The article decided what it means; the
@@ -152,11 +150,11 @@ interface FormatProfile {
   /** Maximum cards per section. */
   maxChunks: { news: number; context: number; impact: number };
   bounds: DurationBounds;
-  introSeconds: number;
   headlineBounds: DurationBounds;
   sourceSeconds: number;
   outroSeconds: number;
   figureSeconds: number;
+  imageSeconds: number;
 }
 
 const PROFILES: Record<CompositionId, FormatProfile> = {
@@ -166,11 +164,11 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
     budget: 150,
     maxChunks: { news: 2, context: 2, impact: 2 },
     bounds: { min: 2.2, max: 6 },
-    introSeconds: 1.6,
     headlineBounds: { min: 2.4, max: 5 },
     sourceSeconds: 2.2,
     outroSeconds: 2,
     figureSeconds: 3,
+    imageSeconds: 2.6,
   },
   // Landscape: watched, not scrolled past. Room for the full argument, but a
   // 16:9 frame has less vertical space per card than its width suggests, so the
@@ -179,11 +177,11 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
     budget: 200,
     maxChunks: { news: 3, context: 3, impact: 3 },
     bounds: { min: 2.5, max: 8 },
-    introSeconds: 2,
     headlineBounds: { min: 3, max: 6 },
     sourceSeconds: 3,
     outroSeconds: 2.5,
     figureSeconds: 3.5,
+    imageSeconds: 3,
   },
 };
 
@@ -199,44 +197,43 @@ function applyOverride(
   return {
     ...scene,
     ...(override.text ? { text: override.text } : {}),
+    ...(override.text && scene.reveal ? typed(override.text, scene.type === 'headline' ? 'headline' : 'body', fps) : {}),
     ...(override.durationInSeconds
       ? { durationInFrames: secondsToFrames(override.durationInSeconds, fps) }
-      : override.text
-        ? { durationInFrames: readingFrames(override.text, undefined, fps) }
-        : {}),
+      : {}),
   };
 }
 
 /**
- * Turns a transcript into one scene per subtitle page.
+ * Turns a transcript into text cards.
  *
- * Scene durations are the speaker's own pacing — the page is held until the
- * next one begins, so a subtitle never disappears while the voice continues.
- * Nothing here estimates reading speed: the recording already decided it.
+ * The recording is the SCRIPT, not the soundtrack: the operator talks, the
+ * words are transcribed, and the video types them. So a transcript page is
+ * paced like any other card — by its reveal — and carries no audio timings.
+ * The voice itself never reaches the film; that is what the operator asked
+ * for, and it removes the one place where the article and the video were
+ * allowed to differ in wording.
  */
 function narrationScenes(narration: NarrationInput, fps: number): Draft[] {
   const pages = pageCaptions(narration.captions);
-  const totalMs = narration.durationInSeconds * 1000;
 
   return pages.map((page, index) => {
-    const nextStart = pages[index + 1]?.startMs ?? totalMs;
-    const durationMs = Math.max(nextStart - page.startMs, 200);
-
+    const reveal = planReveal(page.text, 'body', fps);
     return {
       id: `narration-${index + 1}`,
       type: 'narration' as const,
-      durationInFrames: Math.max(1, Math.round((durationMs / 1000) * fps)),
+      durationInFrames: reveal.revealFrames + reveal.holdFrames,
       text: page.text,
+      reveal,
       ...(narration.speaker ? { meta: narration.speaker } : {}),
-      // Token timings are rebased to the start of the page, so a scene can
-      // highlight the spoken word without knowing where it sits in the film.
-      tokens: page.tokens.map((token) => ({
-        text: token.text,
-        fromMs: token.fromMs - page.startMs,
-        toMs: token.toMs - page.startMs,
-      })),
     };
   });
+}
+
+/** A card that types its copy: duration is the reveal plus a hold. */
+function typed(text: string, kind: 'headline' | 'body', fps: number) {
+  const reveal = planReveal(text, kind, fps);
+  return { reveal, durationInFrames: reveal.revealFrames + reveal.holdFrames };
 }
 
 export function buildSceneSequence(
@@ -249,20 +246,19 @@ export function buildSceneSequence(
   const headline = article.video?.headline ?? article.shortTitle ?? article.title;
   const drafts: Draft[] = [];
 
-  drafts.push({
-    id: 'intro',
-    type: 'intro',
-    durationInFrames: secondsToFrames(profile.introSeconds, fps),
-    meta: `${CATEGORY_META[article.category].label.toUpperCase()} · ${formatDate(article.publishedAt)}`,
-    ...(article.video?.hook ? { text: article.video.hook } : {}),
-  });
-
+  // The headline opens, over the hero image when there is one. A feed gives a
+  // film about two seconds to earn the next two; a brand ident spends them on
+  // the brand. The kicker carries what the ident used to say.
   drafts.push({
     id: 'headline',
     type: 'headline',
-    durationInFrames: readingFrames(headline, profile.headlineBounds, fps),
+    ...typed(headline, 'headline', fps),
     text: headline,
     meta: article.summary,
+    kicker: `${CATEGORY_META[article.category].label.toUpperCase()} · ${formatDate(article.publishedAt)}`,
+    ...(article.heroImage
+      ? { image: { ...article.heroImage, credit: article.heroImage.credit ?? '' } }
+      : {}),
   });
 
   // A narrated article replaces its three derived text sections with the
@@ -284,17 +280,43 @@ export function buildSceneSequence(
       drafts.push({
         id: cards.length > 1 ? `${section.type}-${position + 1}` : section.type,
         type: section.type,
-        durationInFrames: readingFrames(text, profile.bounds, fps),
+        ...typed(text, 'body', fps),
         // Only the first card of a section carries the label; repeating it on
         // every card would read as a new section each time.
         ...(position === 0 ? { label: LABELS[section.type] } : {}),
         text,
       });
     });
+
+    // The images follow the reported fact and precede the analysis: they are
+    // what the story is about, shown before anyone says what it means.
+    if (section.type === 'news') {
+      article.media.forEach((image, index) => {
+        drafts.push({
+          id: article.media.length > 1 ? `image-${index + 1}` : 'image',
+          type: 'image',
+          durationInFrames: secondsToFrames(profile.imageSeconds, fps),
+          image,
+          ...(image.caption ? { text: image.caption } : {}),
+          meta: image.credit,
+        });
+      });
+    }
   }
 
   if (article.narration) {
     drafts.push(...narrationScenes(article.narration, fps));
+    // A narrated article has no news section for the images to follow.
+    article.media.forEach((image, index) => {
+      drafts.push({
+        id: article.media.length > 1 ? `image-${index + 1}` : 'image',
+        type: 'image',
+        durationInFrames: secondsToFrames(profile.imageSeconds, fps),
+        image,
+        ...(image.caption ? { text: image.caption } : {}),
+        meta: image.credit,
+      });
+    });
   }
 
   // One scene per figure. A figure with more rows needs longer on screen, so
@@ -334,9 +356,7 @@ export function buildSceneSequence(
     .map((scene) => applyOverride(scene, article.video, fps))
     .filter((scene): scene is Draft => scene !== null);
 
-  // A narrated film is as long as the recording; trimming it would cut the
-  // speaker off mid-sentence. Only derived text is subject to the budget.
-  const trimmed = narrated ? overridden : trimToBudget(overridden, target.max * fps);
+  const trimmed = trimToBudget(overridden, target.max * fps);
 
   const scenes: Scene[] = trimmed.map((scene, index) => ({
     ...scene,
@@ -344,27 +364,11 @@ export function buildSceneSequence(
     total: trimmed.length,
   }));
 
-  const durationInFrames = scenes.reduce((total, scene) => total + scene.durationInFrames, 0);
-  const firstNarration = scenes.findIndex((scene) => scene.type === 'narration');
-
   return {
     scenes,
-    durationInFrames,
+    durationInFrames: scenes.reduce((total, scene) => total + scene.durationInFrames, 0),
     fps,
     composition,
-    ...(article.narration && firstNarration !== -1
-      ? {
-          narration: {
-            audioSrc: article.narration.audioSrc,
-            startFrame: scenes
-              .slice(0, firstNarration)
-              .reduce((total, scene) => total + scene.durationInFrames, 0),
-            durationInFrames: scenes
-              .filter((scene) => scene.type === 'narration')
-              .reduce((total, scene) => total + scene.durationInFrames, 0),
-          },
-        }
-      : {}),
   };
 }
 
@@ -384,10 +388,9 @@ function trimToBudget(scenes: Draft[], maxFrames: number): Draft[] {
 
   const result = [...scenes];
   const droppable = (scene: Draft, list: Draft[]) => {
-    if (scene.type !== 'context' && scene.type !== 'impact' && scene.type !== 'news') {
-      return false;
-    }
-    // Never drop the only remaining card of a section.
+    const kinds: SceneType[] = ['context', 'impact', 'news', 'narration', 'image'];
+    if (!kinds.includes(scene.type)) return false;
+    // Never drop the only remaining card of a section, nor the only image.
     return list.filter((other) => other.type === scene.type).length > 1;
   };
 

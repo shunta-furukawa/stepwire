@@ -13,6 +13,7 @@ import {
   type Block,
 } from './markdown';
 import type { Figure } from './figures';
+import type { Bgm, ImageRef, MediaRef } from './schema';
 import {
   narrationPublicPath,
   type Transcript,
@@ -69,6 +70,12 @@ export interface ArticleVideoInput {
   playerImpact: string;
   primarySource?: { publisher: string; title: string; url: string };
   figures: Figure[];
+  /** Behind the opening headline, when the article has one. */
+  heroImage?: ImageRef;
+  /** Images the video shows, in order, each with its credit. */
+  media: MediaRef[];
+  /** Music under the film. The file and its rights are the operator's. */
+  bgm?: Bgm;
   video?: ArticleFrontmatter['video'];
   /**
    * Present only when the article has a recording AND a transcript. The video
@@ -193,6 +200,9 @@ export function toVideoInput(
     importance: article.importance,
     publishedAt: article.publishedAt,
     figures: article.figures,
+    ...(article.heroImage ? { heroImage: article.heroImage } : {}),
+    media: article.media,
+    ...(article.bgm ? { bgm: article.bgm } : {}),
     news: article.sections.news.text,
     context: article.sections.context.text,
     playerImpact: article.sections.playerImpact.text,

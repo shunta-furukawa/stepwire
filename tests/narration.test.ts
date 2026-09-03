@@ -135,6 +135,7 @@ describe('narrated scene sequence', () => {
     context: '本文のコンテクスト。',
     playerImpact: '本文の影響。',
     figures: [],
+    media: [],
     narration: {
       audioSrc: '/audio/take.mp3',
       durationInSeconds: 6,
@@ -147,75 +148,32 @@ describe('narrated scene sequence', () => {
     },
   };
 
-  it('replaces the derived text sections with the recording', () => {
+  it('replaces the three text sections with the transcript', () => {
     const types = buildSceneSequence(article, 'STEPWIRE_SHORT').scenes.map((s) => s.type);
-    // The written sections are the article's job; the voice is the video's.
-    // Rendering both would say everything twice.
+    expect(types).toContain('narration');
     expect(types).not.toContain('news');
     expect(types).not.toContain('context');
     expect(types).not.toContain('impact');
-    expect(types.filter((t) => t === 'narration').length).toBeGreaterThan(0);
   });
 
-  it('still opens with the ident and headline and closes with source and outro', () => {
-    const types = buildSceneSequence(article, 'STEPWIRE_SHORT').scenes.map((s) => s.type);
-    expect(types[0]).toBe('intro');
-    expect(types[1]).toBe('headline');
-    expect(types.at(-2)).toBe('source');
-    expect(types.at(-1)).toBe('outro');
-  });
-
-  it('mounts the audio over exactly the narration span', () => {
-    const sequence = buildSceneSequence(article, 'STEPWIRE_SHORT');
-    const scenes = sequence.scenes;
-    const firstNarration = scenes.findIndex((s) => s.type === 'narration');
-    const expectedStart = scenes
-      .slice(0, firstNarration)
-      .reduce((total, s) => total + s.durationInFrames, 0);
-
-    expect(sequence.narration?.audioSrc).toBe('/audio/take.mp3');
-    expect(sequence.narration?.startFrame).toBe(expectedStart);
-    expect(sequence.narration?.durationInFrames).toBe(
-      scenes.filter((s) => s.type === 'narration').reduce((t, s) => t + s.durationInFrames, 0),
-    );
-  });
-
-  it('rebases token timings to the start of their page', () => {
-    const first = buildSceneSequence(article, 'STEPWIRE_SHORT').scenes.find(
+  it('types the transcript rather than timing it to the recording', () => {
+    // The recording is the script, not the soundtrack: a page is paced by its
+    // reveal like any other card, and carries no audio timings.
+    const pages = buildSceneSequence(article, 'STEPWIRE_SHORT').scenes.filter(
       (s) => s.type === 'narration',
     );
-    // A scene highlights the spoken word without knowing where it sits.
-    expect(first?.tokens?.[0]?.fromMs).toBe(0);
+    expect(pages.length).toBeGreaterThan(0);
+    for (const page of pages) {
+      expect(page.reveal).toBeDefined();
+      expect(page.durationInFrames).toBe(page.reveal!.revealFrames + page.reveal!.holdFrames);
+      expect(page).not.toHaveProperty('tokens');
+    }
   });
 
-  it('carries the speaker onto the card', () => {
+  it('names the speaker on each page', () => {
     const first = buildSceneSequence(article, 'STEPWIRE_SHORT').scenes.find(
       (s) => s.type === 'narration',
     );
     expect(first?.meta).toBe('MONO DDR');
-  });
-
-  it('is not cut short by the format budget', () => {
-    // Trimming a narrated film would cut the speaker off mid-sentence.
-    const long: ArticleVideoInput = {
-      ...article,
-      narration: {
-        ...article.narration!,
-        durationInSeconds: 300,
-        captions: Array.from({ length: 60 }, (_, i) =>
-          caption('話し続けています。', i * 4000, i * 4000 + 3500),
-        ),
-      },
-    };
-    const sequence = buildSceneSequence(long, 'STEPWIRE_SHORT');
-    expect(sequence.durationInFrames / sequence.fps).toBeGreaterThan(45);
-  });
-
-  it('falls back to the silent derived form without narration', () => {
-    const silent = { ...article };
-    delete silent.narration;
-    const types = buildSceneSequence(silent, 'STEPWIRE_SHORT').scenes.map((s) => s.type);
-    expect(types).toContain('news');
-    expect(types).not.toContain('narration');
   });
 });
