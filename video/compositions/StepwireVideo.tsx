@@ -1,7 +1,10 @@
 import React from 'react';
-import { AbsoluteFill, Series } from 'remotion';
+import { AbsoluteFill, Series, useCurrentFrame } from 'remotion';
 import type { ArticleVideoInput } from '../../lib/content/article';
-import { buildSceneSequence } from '../../lib/video/scenes';
+import { buildSceneSequence, sceneStartFrames } from '../../lib/video/scenes';
+import { backdropDim, backdropZoom, sceneGround } from '../../lib/video/ground';
+import { Backdrop } from '../components/Backdrop';
+import { FieldLayer } from '../components/FieldLayer';
 import {
   COMPOSITIONS,
   COMPOSITION_IDS,
@@ -29,8 +32,30 @@ export const StepwireVideo: React.FC<StepwireVideoProps> = ({ article, compositi
   const definition = getComposition(composition);
   const sequence = buildSceneSequence(article, composition, definition.fps);
 
+  // The stack under the film — ground, picture, field — is painted here, once,
+  // for whichever scene this frame belongs to. The scenes themselves are
+  // transparent. It is the same order the canvas renderer paints, from the
+  // same `lib/video/ground.ts`, which is what keeps the preview honest about
+  // the export.
+  const frame = useCurrentFrame();
+  const starts = sceneStartFrames(sequence);
+  let index = 0;
+  starts.forEach((start, i) => {
+    if (start <= frame) index = i;
+  });
+  const current = sequence.scenes[index];
+  const sceneFrame = frame - (starts[index] ?? 0);
+  const dim = current ? backdropDim(current) : null;
+  const progress = current ? sceneFrame / Math.max(1, current.durationInFrames - 1) : 0;
+
   return (
-    <AbsoluteFill style={{ background: color.surface, fontFamily: font.display }}>
+    <AbsoluteFill
+      style={{ background: current ? sceneGround(current) : color.surface, fontFamily: font.display }}
+    >
+      {current?.image && dim !== null ? (
+        <Backdrop src={current.image.src} dim={dim} zoom={backdropZoom(progress)} />
+      ) : null}
+      {current ? <FieldLayer scene={current} sceneFrame={sceneFrame} /> : null}
       <Series>
         {sequence.scenes.map((scene) => {
           const Component = SCENE_COMPONENTS[scene.type];

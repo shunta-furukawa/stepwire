@@ -5,6 +5,8 @@ import type { ArticleVideoInput } from '@/lib/content/article';
 import { buildSceneSequence } from '@/lib/video/scenes';
 import { COMPOSITIONS, type CompositionId } from '@/lib/video/compositions';
 import { drawScene } from '@/lib/video/canvas/draw';
+import { fieldState } from '@/lib/video/field-plan';
+import type { Field } from '@/lib/video/field';
 import {
   decodeAudio,
   encodePcm,
@@ -32,6 +34,8 @@ type Support = {
   videoEncoder: boolean;
   videoFrame: boolean;
   offscreenCanvas: boolean;
+  /** WebGL2, which the particle field is drawn with. */
+  webgl2: boolean;
   /** `VideoEncoder.isConfigSupported` for the exact config we would use. */
   h264: 'yes' | 'no' | 'unknown';
   /** The best codec this device actually offers. */
@@ -41,6 +45,9 @@ type Support = {
 type Result = {
   frames: number;
   drawMs: number;
+  /** Time in the WebGL field, separately: it is the new cost. */
+  fieldMs: number;
+  field: string;
   encodeMs: number;
   muxMs: number;
   totalMs: number;
@@ -97,6 +104,7 @@ async function detect(): Promise<Support> {
     videoEncoder,
     videoFrame: typeof globalThis.VideoFrame !== 'undefined',
     offscreenCanvas: typeof globalThis.OffscreenCanvas !== 'undefined',
+    webgl2: document.createElement('canvas').getContext('webgl2') !== null,
     h264: 'unknown',
     codec: '',
   };
@@ -192,6 +200,23 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         }),
       );
 
+      // The particle field, on its own WebGL canvas, composited into each
+      // frame by the renderer. Without WebGL the film is plainer, not absent.
+      setStatus('パーティクルを準備中…');
+      let field: Field | null = null;
+      let fieldCanvas: HTMLCanvasElement | undefined;
+      let fieldNote = 'WebGL';
+      try {
+        const { createField } = await import('@/lib/video/field');
+        const glCanvas = document.createElement('canvas');
+        glCanvas.width = w;
+        glCanvas.height = h;
+        field = createField({ canvas: glCanvas, width: w, height: h });
+        fieldCanvas = glCanvas;
+      } catch (fieldError) {
+        fieldNote = `なし（${fieldError instanceof Error ? fieldError.message : String(fieldError)}）`;
+      }
+
       // The soundtrack: ticks over music. The muxer has to declare the audio
       // track up front, so the sample rate is fixed here and the mix is built
       // to it.
@@ -230,6 +255,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       });
 
       let drawMs = 0;
+      let fieldMs = 0;
       let encodeMs = 0;
       let encodedChunks = 0;
 
@@ -255,7 +281,10 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
 
       for (const scene of sequence.scenes) {
         for (let f = 0; f < scene.durationInFrames; f += 1) {
+          const tf = performance.now();
+          field?.render(fieldState(scene, f, frameIndex, sequence.fps));
           const t0 = performance.now();
+          fieldMs += t0 - tf;
           drawScene(
             {
               ctx,
@@ -264,6 +293,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
               frame: f,
               progress: f / Math.max(1, scene.durationInFrames - 1),
               images,
+              field: fieldCanvas,
             },
             scene,
           );
@@ -294,6 +324,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       }
 
       setStatus('書き出し中…');
+      field?.dispose();
       await encoder.flush();
       encoder.close();
 
@@ -356,6 +387,8 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
       setResult({
         frames: frameIndex,
         drawMs,
+        fieldMs,
+        field: fieldNote,
         encodeMs,
         muxMs,
         totalMs,
@@ -389,6 +422,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
             <Row label="VideoEncoder" value={support.videoEncoder ? 'あり' : 'なし'} ok={support.videoEncoder} />
             <Row label="VideoFrame" value={support.videoFrame ? 'あり' : 'なし'} ok={support.videoFrame} />
             <Row label="OffscreenCanvas" value={support.offscreenCanvas ? 'あり' : 'なし'} ok={support.offscreenCanvas} />
+            <Row label="WebGL2" value={support.webgl2 ? 'あり' : 'なし'} ok={support.webgl2} />
             <Row
               label={`H.264 ${definition.width}×${definition.height}`}
               value={support.h264 === 'yes' ? 'あり' : 'なし'}
@@ -510,6 +544,7 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
               ok={result.totalMs / 1000 < seconds}
             />
             <Row label="描画" value={`${(result.drawMs / result.frames).toFixed(1)}ms/f`} ok />
+            <Row label="パーティクル" value={`${(result.fieldMs / result.frames).toFixed(1)}ms/f · ${result.field}`} ok={result.field === 'WebGL'} />
             <Row label="エンコード" value={`${(result.encodeMs / result.frames).toFixed(1)}ms/f`} ok />
             <Row label="多重化" value={`${result.muxMs.toFixed(0)}ms`} ok />
             <Row label="サイズ" value={`${(result.bytes / 1024 / 1024).toFixed(1)} MB`} ok />

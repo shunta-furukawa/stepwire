@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, Img, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
+import { AbsoluteFill, useCurrentFrame, useVideoConfig } from 'remotion';
 import { SCENE_TONE, type Scene } from '../../lib/video/scenes';
 import { revealedText, visibleUnits } from '../../lib/video/reveal';
 import { barFractions, formatBarValue } from '../../lib/content/figures';
@@ -109,32 +109,20 @@ function Typed({
   );
 }
 
-/** Full-bleed image with a darkening so type stays legible over it. */
-function Backdrop({ src, dim }: { src: string; dim: number }) {
-  return (
-    <>
-      <Img
-        src={staticFile(src.replace(/^\//, ''))}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: `linear-gradient(to top, rgba(10,10,11,${dim}) 30%, rgba(10,10,11,${dim * 0.55}) 100%)`,
-        }}
-      />
-    </>
-  );
-}
+/**
+ * Every scene is transparent. The ground, the picture and the particle field
+ * are painted once, under the whole film, by the composition root — the same
+ * stack the canvas renderer paints, from the same `lib/video/ground.ts`.
+ */
+const TRANSPARENT = { background: 'transparent' } as const;
 
 export function HeadlineScene({ scene, orientation }: SceneProps) {
   const l = layout(orientation);
   const enter = useEnter(10, 4);
 
   return (
-    <AbsoluteFill style={{ background: color.deep }}>
-      {scene.image ? <Backdrop src={scene.image.src} dim={0.82} /> : <ScanLines opacity={0.04} />}
+    <AbsoluteFill style={TRANSPARENT}>
+      {scene.image ? null : <ScanLines opacity={0.04} />}
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={scene.kicker} />
 
@@ -194,14 +182,13 @@ export function HeadlineScene({ scene, orientation }: SceneProps) {
 function BodyScene({
   scene,
   orientation,
-  ground,
   accent,
   tone,
-}: SceneProps & { ground: string; accent: string; tone: 'fact' | 'analysis' }) {
+}: SceneProps & { accent: string; tone: 'fact' | 'analysis' }) {
   const l = layout(orientation);
 
   return (
-    <AbsoluteFill style={{ background: ground }}>
+    <AbsoluteFill style={TRANSPARENT}>
       <PanelGrid opacity={0.09} />
       <ScanLines opacity={0.05} />
       <Card background="transparent" padding={l.padding}>
@@ -242,15 +229,15 @@ function BodyScene({
 export function NewsScene(props: SceneProps) {
   // Reported fact sits on the deepest, plainest ground with a neutral rule:
   // nothing about how it is drawn editorialises it.
-  return <BodyScene {...props} ground={color.deep} accent={color.fg} tone={SCENE_TONE.news} />;
+  return <BodyScene {...props} accent={color.fg} tone={SCENE_TONE.news} />;
 }
 
 export function ContextScene(props: SceneProps) {
-  return <BodyScene {...props} ground={color.raised} accent={color.accent} tone={SCENE_TONE.context} />;
+  return <BodyScene {...props} accent={color.accent} tone={SCENE_TONE.context} />;
 }
 
 export function ImpactScene(props: SceneProps) {
-  return <BodyScene {...props} ground={color.raised} accent={color.accent} tone={SCENE_TONE.impact} />;
+  return <BodyScene {...props} accent={color.accent} tone={SCENE_TONE.impact} />;
 }
 
 // ---------------------------------------------------------------------------
@@ -269,7 +256,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
   const l = layout(orientation);
   const figure = scene.figure;
 
-  if (!figure) return <AbsoluteFill style={{ background: color.surface }} />;
+  if (!figure) return <AbsoluteFill style={TRANSPARENT} />;
 
   /** Rows arrive one after another, in the order they are read. */
   const rowProgress = (index: number) => easeOut((frame - index * 4) / 12);
@@ -307,7 +294,7 @@ export function FigureScene({ scene, orientation }: SceneProps) {
   );
 
   return (
-    <AbsoluteFill style={{ background: color.surface }}>
+    <AbsoluteFill style={TRANSPARENT}>
       <PanelGrid opacity={0.1} />
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={caption(scene)} />
@@ -512,7 +499,7 @@ export function SourceScene({ scene, orientation }: SceneProps) {
   const enter = useEnter(10);
 
   return (
-    <AbsoluteFill style={{ background: color.surface }}>
+    <AbsoluteFill style={TRANSPARENT}>
       <ScanLines opacity={0.04} />
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={caption(scene)} />
@@ -549,7 +536,7 @@ export function OutroScene({ scene, orientation }: SceneProps) {
   const enter = easeOut(frame / 12);
 
   return (
-    <AbsoluteFill style={{ background: color.deep }}>
+    <AbsoluteFill style={TRANSPARENT}>
       <PanelGrid opacity={0.14} stroke={color.fg} />
       <ScanLines opacity={0.08} />
       <Card background="transparent" padding={l.padding}>
@@ -579,16 +566,29 @@ export function OutroScene({ scene, orientation }: SceneProps) {
             {scene.meta}
           </p>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: gap.md }}>
-          {(['left', 'down', 'up', 'right'] as const).map((direction, index) => (
-            <Arrow
-              key={direction}
-              direction={direction}
-              size={type.h3}
-              fill={index % 2 === 0 ? color.fg : color.accent}
-              style={{ opacity: easeOut((frame - 6 - index * 3) / 10) }}
-            />
-          ))}
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: gap.md }}>
+            {(['left', 'down', 'up', 'right'] as const).map((direction, index) => (
+              <Arrow
+                key={direction}
+                direction={direction}
+                size={type.h3}
+                fill={index % 2 === 0 ? color.fg : color.accent}
+                style={{ opacity: easeOut((frame - 6 - index * 3) / 10) }}
+              />
+            ))}
+          </div>
+          {/* Credits on the card, not only in a description: an attribution
+              licence asks for them where a viewer can find them. */}
+          {scene.credits ? (
+            <div style={{ marginTop: gap.lg, opacity: enter }}>
+              {scene.credits.map((line) => (
+                <p key={line} style={{ ...textStyles.meta, fontSize: type.micro, color: color.faint, margin: 0 }}>
+                  {line}
+                </p>
+              ))}
+            </div>
+          ) : null}
         </div>
       </Card>
     </AbsoluteFill>
@@ -610,7 +610,7 @@ export function NarrationScene({ scene, orientation }: SceneProps) {
   const l = layout(orientation);
 
   return (
-    <AbsoluteFill style={{ background: color.raised }}>
+    <AbsoluteFill style={TRANSPARENT}>
       <ScanLines opacity={0.035} />
       <Card background="transparent" padding={l.padding}>
         {/* The speaker's name, not a section label: this card is the voice —
@@ -650,8 +650,7 @@ export function ImageScene({ scene, orientation }: SceneProps) {
   const image = scene.image;
 
   return (
-    <AbsoluteFill style={{ background: color.deep }}>
-      {image ? <Backdrop src={image.src} dim={0.35} /> : null}
+    <AbsoluteFill style={TRANSPARENT}>
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={image?.kind?.toUpperCase()} />
 
@@ -663,7 +662,9 @@ export function ImageScene({ scene, orientation }: SceneProps) {
             background: `${color.deep}EB`,
             borderLeft: `8px solid ${color.accent}`,
             padding: `${gap.md}px ${gap.lg}px`,
-            margin: `0 -${l.padding}px`,
+            // Anchored just above the rail, where the canvas renderer puts it:
+            // a band mid-frame sits across whatever the picture is showing.
+            margin: `auto -${l.padding}px ${gap.lg}px`,
             paddingLeft: l.padding + gap.md,
           }}
         >

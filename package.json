@@ -29,6 +29,7 @@
   "dependencies": {
     "@remotion/media-utils": "4.0.518",
     "@remotion/player": "4.0.518",
+    "@types/three": "0.184.0",
     "@vercel/blob": "2.8.0",
     "@vercel/sandbox": "3.2.1",
     "fast-xml-parser": "5.11.1",
@@ -37,6 +38,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "remotion": "4.0.518",
+    "three": "0.184.0",
     "yaml": "2.9.0",
     "zod": "4.5.4"
   },

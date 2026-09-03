@@ -134,6 +134,15 @@ verified by eye with `pnpm video:render`.
   software cannot settle.
 - **Keep dependencies minimal.** Prefer a small typed module over a library. Do
   not add a database, a CMS, a job queue, or a state-management framework.
+  `three` is the one exception, and only `lib/video/field.ts` may import it.
+- **The field is a function of the frame.** `lib/video/field-plan.ts` decides
+  what the particle field does on a frame; `field.ts` paints it. Nothing in the
+  field reads a clock or `Math.random`, and the ground under every scene comes
+  from `lib/video/ground.ts` in both renderers — see `docs/video-system.md`.
+- **Free music still needs its credit on the card.** `docs/audio-sources.md`
+  lists libraries whose only condition is attribution. The outro prints every
+  credit the film owes; the operator still downloads the file and reads the
+  licence.
 - **Keep AI at the boundary.** `lib/ai/` may be added later for drafting and
   triage. Collection, editing, publishing and rendering must all keep working
   with it absent, and no core module may import a vendor SDK.

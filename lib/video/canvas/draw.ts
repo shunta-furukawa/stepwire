@@ -4,6 +4,7 @@ import { barFractions, formatBarValue } from '../../content/figures';
 import { visualLength } from '../text';
 import { color, font, fontSize, tracking } from '../../design/tokens';
 import { wrapText } from './text';
+import { backdropDim, backdropZoom, sceneGround } from '../ground';
 
 /**
  * A canvas renderer for STEPWIRE scenes.
@@ -50,6 +51,12 @@ export interface DrawContext {
   frame: number;
   /** Decoded images by `src`, loaded by the caller before rendering starts. */
   images: ReadonlyMap<string, CanvasImageSource>;
+  /**
+   * The particle field for this frame, already rendered (`lib/video/field.ts`).
+   * Drawn between the picture and the copy. Optional: a frame without it is
+   * a plainer frame, not a broken one.
+   */
+  field?: CanvasImageSource;
 }
 
 function scaled(width: number, height: number) {
@@ -114,7 +121,7 @@ function drawBackdrop(d: DrawContext, src: string, dim: number) {
 
   const iw = 'width' in image ? Number(image.width) : width;
   const ih = 'height' in image ? Number(image.height) : height;
-  const scale = Math.max(width / iw, height / ih);
+  const scale = Math.max(width / iw, height / ih) * backdropZoom(d.progress);
   const dw = iw * scale;
   const dh = ih * scale;
   ctx.drawImage(image, (width - dw) / 2, (height - dh) / 2, dw, dh);
@@ -310,16 +317,36 @@ const drawIdent: Drawer = (d, scene) => {
   const total = step + ctx.measureText('WIRE').width;
   const left = width / 2 - total / 2;
 
+  // The credits, bottom-left above the rail: small, but on the card, because
+  // an attribution licence asks for exactly that. The wordmark lifts to make
+  // room, so four lines of credit never run into the tagline.
+  const creditSize = px(fontSize.micro * 3);
+  const creditLead = creditSize * 1.6;
+  const credits = scene.credits ?? [];
+  const lift = credits.length > 0 ? (credits.length * creditLead) / 2 + px(24) : 0;
+  const mid = height / 2 - lift;
+
   ctx.fillStyle = color.fg;
-  ctx.fillText('STEP', left, height / 2);
+  ctx.fillText('STEP', left, mid);
   ctx.fillStyle = color.accent;
-  ctx.fillText('WIRE', left + step, height / 2);
-  ctx.fillRect(left, height / 2 + px(40), total * Math.min(1, d.progress * 2), px(10));
+  ctx.fillText('WIRE', left + step, mid);
+  ctx.fillRect(left, mid + px(40), total * Math.min(1, d.progress * 2), px(10));
 
   if (scene.meta) {
     ctx.font = fontOf(400, px(fontSize.small * 3), font.mono);
     ctx.fillStyle = color.muted;
-    drawTracked(ctx, scene.meta.toUpperCase(), left, height / 2 + px(140), px(4));
+    drawTracked(ctx, scene.meta.toUpperCase(), left, mid + px(140), px(4));
+  }
+
+  if (credits.length > 0) {
+    ctx.font = fontOf(400, creditSize, font.mono);
+    ctx.fillStyle = color.faint;
+    ctx.globalAlpha = Math.min(1, d.progress * 3);
+    credits.forEach((line, i) => {
+      const y = height - px(150) - px(48) - (credits.length - 1 - i) * creditLead;
+      drawTracked(ctx, line, px(120), y, px(2));
+    });
+    ctx.globalAlpha = 1;
   }
 };
 
@@ -331,7 +358,7 @@ const drawCard: Drawer = (d, scene) => {
   const { top, bottom } = contentBand(d);
 
   if (scene.type === 'headline' && scene.image) {
-    drawBackdrop(d, scene.image.src, 0.82);
+    // Over a picture the masthead is drawn here, after it, so it sits on top.
     drawWireBar(d, scene.kicker);
     if (scene.image.credit) {
       ctx.font = fontOf(400, px(fontSize.small * 3), font.mono);
@@ -554,7 +581,7 @@ const drawImage: Drawer = (d, scene) => {
   const image = scene.image;
   if (!image) return;
 
-  const shown = drawBackdrop(d, image.src, 0.35);
+  const shown = d.images.has(image.src);
   drawWireBar(d, image.kind?.toUpperCase());
   if (!shown) {
     // The image failed to load. Say so on the frame rather than export a
@@ -629,16 +656,21 @@ function contentBand(d: DrawContext) {
 export function drawScene(d: DrawContext, scene: Scene) {
   const { ctx, width, height } = d;
   const ident = scene.type === 'outro';
-  // Scenes that paint their own backdrop draw the masthead themselves, after
-  // the picture, so it sits on top of it.
-  const ownsBackdrop = scene.type === 'image' || (scene.type === 'headline' && scene.image);
+  // The stack under every card, in the order `lib/video/ground.ts` fixes:
+  // ground, picture, field, copy. Scenes over a picture draw the masthead
+  // themselves, after it, so it sits on top.
+  const dim = backdropDim(scene);
+  const ownsBackdrop = dim !== null;
 
-  ctx.fillStyle = ident || SCENE_TONE[scene.type] === 'fact' ? color.deep : color.raised;
+  ctx.fillStyle = sceneGround(scene);
   ctx.fillRect(0, 0, width, height);
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
   ctx.globalAlpha = 1;
-  if (!ownsBackdrop) drawFacets(d);
+  if (dim !== null && scene.image) drawBackdrop(d, scene.image.src, dim);
+  else drawFacets(d);
+  // Sparks in front of the world and behind the words.
+  if (d.field) ctx.drawImage(d.field, 0, 0, width, height);
 
   if (!ident && !ownsBackdrop) {
     drawWireBar(d, scene.type === 'headline' ? scene.kicker : scene.type === 'source' ? undefined : scene.label);

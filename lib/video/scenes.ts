@@ -43,6 +43,12 @@ export interface Scene {
   /** The small line above a headline: category and date. */
   kicker?: string;
   /**
+   * `outro` only: every credit the film owes, one line each. Pictures and
+   * music are quotations, and a licence that asks for attribution asks for it
+   * where a viewer can find it — the last card is that place.
+   */
+  credits?: string[];
+  /**
    * When each character of `text` lands, and when a tick sounds. Present on
    * every scene that types its copy; both renderers and the sound generator
    * read it, and none of them computes its own.
@@ -345,11 +351,21 @@ export function buildSceneSequence(
     meta: formatDate(article.publishedAt),
   });
 
+  const credits = [
+    ...new Set(
+      [article.heroImage?.credit, ...article.media.map((image) => image.credit)].filter(
+        (credit): credit is string => Boolean(credit),
+      ),
+    ),
+  ].map((credit) => `IMAGE: ${credit}`);
+  if (article.bgm) credits.push(`MUSIC: ${article.bgm.credit}`);
+
   drafts.push({
     id: 'outro',
     type: 'outro',
     durationInFrames: secondsToFrames(profile.outroSeconds, fps),
     meta: 'DDR News, Charts & Culture.',
+    ...(credits.length > 0 ? { credits } : {}),
   });
 
   const overridden = drafts

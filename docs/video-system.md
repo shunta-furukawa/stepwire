@@ -83,6 +83,28 @@ A jacket, a screenshot or somebody's post in a published video is a quotation,
 and the credit is what makes it one. The validator refuses an article without
 one rather than the video quietly omitting the line.
 
+### The field
+
+Behind every card is a field of low-poly facets and sparks, drawn with WebGL
+(`lib/video/field.ts`, the one module that imports `three`). It is the brand's
+facet texture given depth: outlines in the off-white, a few filled in the lime,
+sparks that rise and twinkle, a burst on every cut. Nothing else — no third
+colour, no blur.
+
+The field is a **function of the frame**. `lib/video/field-plan.ts` turns a
+scene and a frame number into a small state (time, energy, burst, enter), and
+`field.ts` paints that state; it never reads a clock. Rendering frame 240 twice
+gives the same pixels, scrubbing backwards is correct, and the preview shows the
+export. `FIELD_ENERGY` decides how lively the field is behind each scene type:
+loud on the headline, quiet under a card being read.
+
+The stack under every card is fixed in `lib/video/ground.ts` and painted in the
+same order by both renderers: ground, the article's picture (with a slow push
+in), the field, then the copy. In the DOM composition that stack lives at the
+root (`StepwireVideo.tsx`) and the scenes are transparent; on canvas,
+`drawScene` paints it before the drawer runs. Without WebGL the film is
+plainer, not absent.
+
 ## How a video is built
 
 `lib/video/scenes.ts` turns an `ArticleVideoInput` into a scene sequence:
@@ -273,6 +295,8 @@ Shared primitives live in `video/components/primitives.tsx`:
 | `ProgressRail` | The step timeline, doing real work: how much is left |
 | `ScanLines` | Wire transmission, as texture |
 | `WireBar` | The persistent masthead, instead of a watermark |
+| `Backdrop` | The article's picture, full-bleed, darkened where the copy sits |
+| `FieldLayer` | The particle field (`lib/video/field.ts`) as a layer under the scene |
 | `KineticText` | Word-by-word reveal — emphasis, not busywork |
 | `LabelChip` · `BodyText` · `Card` | Layout and typography |
 

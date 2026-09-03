@@ -47,6 +47,36 @@ describe('the two renderers', () => {
     expect(SCENE_TONE.impact).toBe('analysis');
   });
 
+  it('both paint the ground from the shared rule, and neither paints its own', async () => {
+    // The ground, the picture and the field are one stack, decided in
+    // `lib/video/ground.ts`. A scene that sets its own background covers the
+    // field on one surface and not the other.
+    const dom = await readFile(DOM, 'utf8');
+    const canvas = await readFile(CANVAS, 'utf8');
+    const root = await readFile(path.join(process.cwd(), 'video', 'compositions', 'StepwireVideo.tsx'), 'utf8');
+
+    expect(dom).not.toMatch(/<AbsoluteFill style=\{\{ background: color\./);
+    expect(root).toMatch(/sceneGround\(/);
+    expect(root).toMatch(/<FieldLayer/);
+    expect(canvas).toMatch(/sceneGround\(/);
+    expect(canvas).toMatch(/d\.field/);
+  });
+
+  it('keeps three.js behind one module', async () => {
+    // `three` is the largest dependency in the project and the only one that
+    // draws. One importer means one place the palette rule and the
+    // frame-purity rule can be checked.
+    const { execSync } = await import('node:child_process');
+    const hits = execSync(
+      "grep -rl --include='*.ts' --include='*.tsx' -E \"from 'three'\" lib video components app scripts",
+      { cwd: process.cwd(), encoding: 'utf8' },
+    )
+      .trim()
+      .split('\n')
+      .filter(Boolean);
+    expect(hits).toEqual(['lib/video/field.ts']);
+  });
+
   it('neither renderer hardcodes a tone beside the shared registry', async () => {
     // The DOM scenes used to pass tone="analysis" as a literal. Once two files
     // can each answer the question, they can each answer it differently.
