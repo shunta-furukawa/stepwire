@@ -51,8 +51,8 @@ export interface Scene {
   credits?: string[];
   /**
    * When each character of `text` lands, and when a tick sounds. Present on
-   * every scene that types its copy; both renderers and the sound generator
-   * read it, and none of them computes its own.
+   * every scene that types its copy; the renderer and the sound generator
+   * read it, and neither computes its own.
    */
   reveal?: RevealPlan;
   /** Position in the sequence, for the progress rail. */
@@ -70,10 +70,10 @@ export interface SceneSequence {
 /**
  * Which scenes are reported fact and which are STEPWIRE talking.
  *
- * Declared once because two renderers read it. The DOM compositions and the
- * canvas renderer must not each decide that `impact` is analysis — the moment
- * they disagree, one surface labels a claim differently from the other, which
- * is the one thing this project's content model exists to prevent.
+ * Declared once because the page and the film both read it. Neither must
+ * decide on its own that `impact` is analysis — the moment they disagree, one
+ * surface labels a claim differently from the other, which is the one thing
+ * this project's content model exists to prevent.
  */
 export const SCENE_TONE: Record<SceneType, 'fact' | 'analysis'> = {
   headline: 'fact',

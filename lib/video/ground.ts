@@ -4,11 +4,11 @@ import { color } from '../design/tokens';
 /**
  * What is behind a scene, decided once.
  *
- * Both renderers paint the same stack under every card: a ground, then the
+ * The renderer paints one stack under every card: a ground, then the
  * article's picture if the scene has one, then the particle field, then the
  * copy. The ground colour and how far a picture is darkened used to be chosen
- * inside each renderer's scene code, which is two places to be wrong. They are
- * answered here, and the renderers ask.
+ * inside each scene's drawing code, which is many places to be wrong. They are
+ * answered here, and the drawers ask.
  */
 
 /** Reported fact sits on the deepest ground; analysis is raised off it. */

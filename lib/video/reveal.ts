@@ -3,9 +3,9 @@
  *
  * The video's copy does not appear; it types. Each character lands on a fixed
  * cadence and a tick sounds as it does, which is the rhythm-game register the
- * whole brand sits in. Two renderers and one sound generator all have to agree
- * on exactly which frame each character lands, so the timing lives here and
- * nowhere else. Nothing in a renderer decides when a character appears.
+ * whole brand sits in. The renderer and the sound generator have to agree on
+ * exactly which frame each character lands, so the timing lives here and
+ * nowhere else. Nothing in the renderer decides when a character appears.
  *
  * The cadence is per CHARACTER, not per word or per break unit: a typewriter
  * is what the operator asked for, and a typewriter does not know about words.

@@ -56,9 +56,8 @@ Pull request → CI → merge
       │
       ├──────────────────────────┬──────────────────────────┐
       ▼                          ▼                          ▼
-  Website (Vercel)      Studio preview (/studio)      /api/render
-                                                      → Vercel Sandbox
-                                                      → Vercel Blob
+  Website (Vercel)      Studio (/studio): preview, export, thumbnail, post copy
+                        — drawn and encoded on the operator's device
 ```
 
 One Article drives both the web page and the video. Nothing is written twice.
@@ -77,10 +76,9 @@ lib/
   content/    schema · markdown · parsing · validation · loading
   news/       source registry · adapters · normalisation · deduplication
   github/     minimal REST client
-  video/      composition registry · scene derivation · drivers · guards
+  video/      composition registry · scene derivation · reveal · field · canvas renderer
   design/     tokens.ts — the one source of brand tokens
-video/        Remotion root, compositions, scenes, primitives
-scripts/      collect-news · create-article · validate-content · render-video
+scripts/      collect-news · create-article · validate-content · transcribe
 docs/         architecture · editorial-workflow · sources · video-system · figures
 ```
 
@@ -147,23 +145,16 @@ Read that queue at **`/studio/wire`** — every open candidate grouped by the da
 it happened, with source, summary and suggested category on screen. It reads the
 issues and writes nothing; accepting is still `pnpm article:from-issue <n>`.
 
-## Video preview
+## Video
 
 ```bash
-pnpm dev            # → /studio — article selector, player, render controls
-pnpm video:studio   # → Remotion Studio, for scene design
+pnpm dev            # → /studio — pick an article, scrub the preview, export
 ```
 
-## Video rendering
-
-```bash
-pnpm video:render <slug>                              # local: free, no account
-pnpm video:render <slug> --composition STEPWIRE_NEWS
-```
-
-Cloud rendering goes through `/api/render` (Vercel Sandbox → Vercel Blob) and is
-guarded by an operator token, a rate limit and content-addressed duplicate
-prevention. See [`docs/video-system.md`](docs/video-system.md).
+The film is drawn on a canvas and encoded with WebCodecs in the browser —
+on a phone, at 1920×1080, in about a quarter of real time. The same page
+makes the thumbnail and the title, description and hashtags to post with.
+Nothing renders on a server. See [`docs/video-system.md`](docs/video-system.md).
 
 ---
 
@@ -178,10 +169,6 @@ prevention. See [`docs/video-system.md`](docs/video-system.md).
    | Variable | Needed for | Notes |
    | --- | --- | --- |
    | `NEXT_PUBLIC_SITE_URL` | custom domain | Otherwise derived from the Vercel URL |
-   | `STEPWIRE_RENDER_TOKEN` | rendering | `openssl rand -hex 32`. Without it `/api/render` is disabled |
-   | `VERCEL_TOKEN` | cloud rendering | Account → Tokens |
-   | `VERCEL_TEAM_ID` | cloud rendering | Team → General |
-   | `VERCEL_PROJECT_ID` | cloud rendering | Project → General |
    | `STEPWIRE_INCLUDE_FIXTURES` | production | Set to `false` to drop the sample articles |
 
    Cloud rendering needs all three Vercel variables; with any missing, the API
@@ -214,9 +201,8 @@ adapter.
 | `pnpm article:from-issue <n>` | Scaffold a draft from an inbox issue |
 | `pnpm news:collect --dry-run` | Collect from fixtures; file nothing |
 | `pnpm news:collect --create-issues` | Collect and open issues |
-| `pnpm video:studio` | Remotion Studio |
-| `pnpm video:data` | Write Remotion props files for real articles |
-| `pnpm video:render <slug>` | Render locally to `video/out/` |
+| `pnpm article:from-post <url>` | Scaffold a draft from a post on X |
+| `pnpm narration:transcribe <slug>` | Transcribe a recording locally |
 
 ---
 
@@ -224,18 +210,13 @@ adapter.
 
 Honest about what this MVP does not do yet.
 
-- **The render rate limiter is per-instance.** With several serverless instances
-  the effective ceiling is higher than configured. The shared-secret gate is the
-  real cost control; the limiter is behind an interface for when a shared store
-  is warranted.
-- **Render job status is in memory.** Polling can report `unknown` if it lands
-  on a different instance. Harmless — the finished file is found in storage,
-  which is authoritative.
+- **Export needs WebCodecs.** Safari on iOS 17+, Chrome and Edge have it;
+  Firefox does not yet. Without it `/studio` says so and exports nothing.
 - **The collection ledger is a committed JSON file.** Fine at a few candidates a
   day. At higher volume, deduplicate against issue search alone and drop it.
 - **No HTML adapter.** Deliberate. See the scraping policy in `docs/sources.md`.
-- **Video type uses a system font stack**, so metrics vary slightly by render
-  platform. `@remotion/google-fonts` is the upgrade path.
+- **Video type uses a system font stack**, so metrics vary slightly between
+  the phone that exports and the machine that previews.
 - **No AI yet.** `lib/ai/` is a reserved boundary, not an implementation.
 - **Article images are not yet used.** `heroImage` and `thumbnail` exist in the
   schema and validate, but no article template renders them.

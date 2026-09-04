@@ -37,9 +37,8 @@ Pull request → CI (lint, typecheck, test, content validation, build) → merge
       │
       ├────────────────────────┬───────────────────────────┐
       ▼                        ▼                           ▼
-Static website           Remotion Player            /api/render
-(Vercel)                 (/studio preview)          → Vercel Sandbox
-                                                    → Vercel Blob → URL
+Static website           /studio on the phone        thumbnail + post copy
+(Vercel)                 preview → WebCodecs → MP4    (same page, same article)
 ```
 
 ## Decisions
@@ -120,26 +119,19 @@ Categories are distinguished by glyph and typography rather than colour, so the
 accent keeps meaning "this is important" instead of "this is an update". The
 palette has exactly one hue to spend, so it is spent on one thing.
 
-### Two render drivers behind one interface
+### The film is made on the device
 
-`local` runs Remotion in-process; `sandbox` runs it on a Vercel machine.
+The first design rendered video on a server: Remotion in a Vercel Sandbox,
+guarded by a token, a rate limit and content-addressed duplicate prevention,
+because every render cost money. Then the phone turned out to have everything
+a render needs — a canvas, WebCodecs, a hardware H.264 encoder — and to be
+faster than the sandbox. So the server path is gone, and with it the cost, the
+guards, the second renderer and the drift between them.
 
-A Remotion render needs headless Chrome, minutes of CPU and hundreds of
-megabytes — none of which belong in a serverless function. But requiring a cloud
-account to see your own design change would make iteration miserable and the
-bill silly. So both exist, `/api/render` does not know which it is using, and
-`selectDriverName()` falls back to local when the cloud is not fully configured.
-
-### Duplicate render prevention lives in blob storage
-
-The render id is a hash of (slug, composition, content hash). Before rendering,
-the API asks Vercel Blob whether that object already exists.
-
-The in-memory job registry (`lib/video/jobs.ts`) serves progress polling only.
-Serverless instances share no memory, so anything that must be correct across
-instances has to be checked against shared state — and storage is the shared
-state we already have. Losing the registry costs a progress bar; it never costs
-a duplicate render.
+What remains is one renderer (`lib/video/canvas/draw.ts`) that both previews
+and exports, a soundtrack mixed in the browser, and a page (`/studio`) that
+does not need the server for anything but the article. Nothing in the
+deployment can start a render; there is nothing to protect.
 
 ### AI is a boundary, not a dependency
 
@@ -171,19 +163,15 @@ See "Current limits" in `README.md`. The ones with architectural weight:
 - The collection ledger is a committed JSON file. Fine at a handful of
   candidates per day; if collection volume grows, deduplicate against issue
   search alone and drop the file.
-- Video type uses a system font stack. It removes a network dependency from both
-  the web build and the headless render, at the cost of exact cross-platform
-  metrics. `@remotion/google-fonts` is the upgrade path if that matters.
+- Video type uses a system font stack. The film is drawn on the operator's
+  device, which has a Japanese face; a webfont would add a network dependency
+  to an export that otherwise needs none, at the cost of exact metrics.
 
 ## Deviations from the original brief
 
 - `app/stories/` was not created. Story categories are covered by the four desks
   (`/news`, `/charts`, `/data`, `/culture`), which matches the brief's own
   information architecture and its instruction to merge pages in the MVP.
-- Composition ids are `STEPWIRE_SHORT` / `STEPWIRE_NEWS` everywhere a person or
-  the API sees them. Remotion forbids underscores in composition ids, so each
-  definition also carries a `remotionId` used only when registering and
-  rendering.
 - Article files use the `.mdx` extension as specified, but are parsed as the
   Markdown subset above. The extension is kept so MDX components can be enabled
   later without renaming published content.

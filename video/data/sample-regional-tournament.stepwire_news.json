@@ -1,0 +1,21 @@
+{
+  "article": {
+    "slug": "sample-regional-tournament",
+    "title": "【SAMPLE】地区予選、誰も対策していなかったタイブレークで決着",
+    "shortTitle": "【SAMPLE】予選、タイブレークで決着",
+    "dek": "STEPWIREのサンプルとして置かれている架空の大会レポートです。",
+    "summary": "架空の地区予選が、両者同スコアの末にランダム選曲のタイブレークで決着した。",
+    "category": "TOURNAMENT",
+    "importance": "normal",
+    "publishedAt": "2026-08-29T23:15:00+09:00",
+    "news": "サンプル記事です。 この大会は開催されていません。\n\n架空のシナリオでは、地区予選の決勝が3曲すべてで同スコアとなり、どちらの選手も練習していなかったランダム選曲のタイブレークに突入しました。",
+    "context": "タイブレークの規定は、ルールセットの中でもっとも議論されないくせに、もっともタイトルを左右しやすい部分です。ランダム選曲は広さを、固定曲は準備を評価します。どちらが間違いというわけではありません。ただ、シーンはそれが必要になる前にどちらを選ぶか決めておくべきで、決勝の最中に決めるべきではありません。",
+    "playerImpact": "実務的には、今季ブラケットに出るなら練習リストを組む前にタイブレーク条項を読むこと。\n\n構造的には、これは主催者にルールセットの早期公開を促す類のケースです。それは全員にとって良いことですし、STEPWIREが記録を残していきたい種類の変化でもあります。",
+    "primarySource": {
+      "publisher": "STEPWIRE Fixtures",
+      "title": "SAMPLE SOURCE — 架空のイベントレポート",
+      "url": "https://example.com/stepwire/fixtures/qualifier"
+    }
+  },
+  "composition": "STEPWIRE_NEWS"
+}

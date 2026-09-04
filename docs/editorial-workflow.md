@@ -210,19 +210,14 @@ The video is derived from the article you just published. Nothing to rewrite.
 - **STEPWIRE_SHORT** (1080×1920) — Shorts, Reels, TikTok, X
 - **STEPWIRE_NEWS** (1920×1080) — YouTube, embeds
 
-Preview it in the studio. If a line reads badly on screen, the fix is usually to
-improve the article's wording, which improves both surfaces at once. Reach for
-`article.video` overrides only when the surfaces genuinely differ.
+Preview it in `/studio`, scrubbing the slider. If a line reads badly on screen,
+the fix is usually to improve the article's wording, which improves both
+surfaces at once. Reach for `article.video` overrides only when the surfaces
+genuinely differ.
 
-Rendering costs money, so:
-
-```bash
-pnpm video:render <slug>                              # local, free, no account
-pnpm video:render <slug> --composition STEPWIRE_NEWS
-```
-
-Cloud rendering (the studio's **Render** button) needs the operator token and
-reuses an existing render for unchanged content. Details in
+Then export on the phone: the same page encodes the MP4 on the device, makes
+the thumbnail, and hands over the title, description and hashtags to post
+with. Nothing renders on a server and nothing costs money. Details in
 [`video-system.md`](./video-system.md).
 
 ---

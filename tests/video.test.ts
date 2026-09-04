@@ -3,8 +3,6 @@ import type { ArticleVideoInput } from '../lib/content/article';
 import { buildSceneSequence, sceneStartFrames } from '../lib/video/scenes';
 import { COMPOSITIONS, COMPOSITION_IDS, isCompositionId } from '../lib/video/compositions';
 import { formatDuration, framesToSeconds, readingSeconds, secondsToFrames } from '../lib/video/timing';
-import { makeRenderId, renderObjectPath, renderRequestSchema } from '../lib/video/render-request';
-import { authorizeRender, createMemoryRateLimiter, RENDER_TOKEN_HEADER } from '../lib/video/guard';
 import { needsSpaceBetween, splitForReveal, visualLength } from '../lib/video/text';
 import {
   barFractions,
@@ -114,12 +112,6 @@ describe('composition registry', () => {
     expect(COMPOSITION_IDS).toEqual(['STEPWIRE_SHORT', 'STEPWIRE_NEWS']);
     expect(COMPOSITIONS.STEPWIRE_SHORT).toMatchObject({ width: 1080, height: 1920, fps: 30 });
     expect(COMPOSITIONS.STEPWIRE_NEWS).toMatchObject({ width: 1920, height: 1080, fps: 30 });
-  });
-
-  it('uses Remotion-legal ids, which may not contain underscores', () => {
-    for (const id of COMPOSITION_IDS) {
-      expect(COMPOSITIONS[id].remotionId).toMatch(/^[a-zA-Z0-9-]+$/);
-    }
   });
 
   it('recognises only known composition ids', () => {
@@ -408,84 +400,6 @@ describe('sceneStartFrames', () => {
     expect(offsets.at(-1)! + sequence.scenes.at(-1)!.durationInFrames).toBe(
       sequence.durationInFrames,
     );
-  });
-});
-
-describe('render request', () => {
-  it('validates a well-formed request', () => {
-    const parsed = renderRequestSchema.parse({
-      articleSlug: 'a-test-article',
-      composition: 'STEPWIRE_SHORT',
-    });
-    expect(parsed.force).toBe(false);
-  });
-
-  it('rejects an unknown composition or a malformed slug', () => {
-    expect(
-      renderRequestSchema.safeParse({ articleSlug: 'a', composition: 'NOPE' }).success,
-    ).toBe(false);
-    expect(
-      renderRequestSchema.safeParse({ articleSlug: 'Not A Slug', composition: 'STEPWIRE_SHORT' })
-        .success,
-    ).toBe(false);
-  });
-
-  it('produces a stable id that changes with the content hash', () => {
-    const base = { articleSlug: 'a', composition: 'STEPWIRE_SHORT', contentHash: 'abc' };
-    expect(makeRenderId(base)).toBe(makeRenderId(base));
-    expect(makeRenderId(base)).not.toBe(makeRenderId({ ...base, contentHash: 'def' }));
-    expect(makeRenderId(base)).not.toBe(
-      makeRenderId({ ...base, composition: 'STEPWIRE_NEWS' }),
-    );
-  });
-
-  it('maps a render id to a blob path', () => {
-    expect(renderObjectPath('abc')).toBe('renders/abc.mp4');
-  });
-});
-
-describe('authorizeRender', () => {
-  const headers = (token?: string) =>
-    new Headers(token ? { [RENDER_TOKEN_HEADER]: token } : {});
-
-  it('fails closed when no token is configured', () => {
-    const result = authorizeRender(headers('anything'), {});
-    expect(result).toMatchObject({ ok: false, status: 503 });
-  });
-
-  it('rejects a missing token', () => {
-    const result = authorizeRender(headers(), {
-      STEPWIRE_RENDER_TOKEN: 'secret',
-    });
-    expect(result).toMatchObject({ ok: false, status: 401 });
-  });
-
-  it('rejects a wrong token, including one of a different length', () => {
-    const env = { STEPWIRE_RENDER_TOKEN: 'secret' };
-    expect(authorizeRender(headers('wrong!'), env)).toMatchObject({ ok: false, status: 403 });
-    expect(authorizeRender(headers('s'), env)).toMatchObject({ ok: false, status: 403 });
-  });
-
-  it('accepts the configured token', () => {
-    const result = authorizeRender(headers('secret'), {
-      STEPWIRE_RENDER_TOKEN: 'secret',
-    });
-    expect(result.ok).toBe(true);
-  });
-});
-
-describe('rate limiter', () => {
-  it('allows up to the limit and then refuses', async () => {
-    const limiter = createMemoryRateLimiter(2, 60_000);
-    expect((await limiter.check('k')).allowed).toBe(true);
-    expect((await limiter.check('k')).allowed).toBe(true);
-    expect((await limiter.check('k')).allowed).toBe(false);
-  });
-
-  it('keys are independent', async () => {
-    const limiter = createMemoryRateLimiter(1, 60_000);
-    expect((await limiter.check('a')).allowed).toBe(true);
-    expect((await limiter.check('b')).allowed).toBe(true);
   });
 });
 

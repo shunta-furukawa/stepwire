@@ -124,7 +124,7 @@ export type VideoOverride = z.infer<typeof videoOverrideSchema>;
 
 /**
  * Narration. `audio` is a path under `public/`, so the same file serves the
- * website and the Remotion render without a second copy.
+ * website and the transcription without a second copy.
  *
  * The transcript is found by convention at `content/transcripts/<slug>.json`
  * and is not referenced here: one fewer thing to keep in sync.

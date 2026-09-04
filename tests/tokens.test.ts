@@ -2,7 +2,6 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { color, difficulty, fontSize, motion, space, video } from '../lib/design/tokens';
-import { SCALE, type } from '../video/styles/theme';
 
 /**
  * The guard that keeps one brand across two renderers.
@@ -70,12 +69,6 @@ describe('design tokens', () => {
   it('mirrors the brand easing curve into the Tailwind theme', async () => {
     const variables = await themeVariables();
     expect(variables.get('ease-brand')).toBe(motion.easeCss);
-  });
-
-  it('derives the video type scale from the same tokens', () => {
-    expect(type.h1).toBe(fontSize.h1 * SCALE);
-    expect(type.display).toBe(fontSize.display * SCALE);
-    expect(type.micro).toBe(fontSize.micro * SCALE);
   });
 
   it('keeps the ramp monochrome, with the accent as the only hue', () => {

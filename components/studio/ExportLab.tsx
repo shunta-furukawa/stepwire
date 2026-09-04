@@ -18,6 +18,8 @@ import {
 import { mixSoundtrack } from '@/lib/video/canvas/mix';
 import { postCopy } from '@/lib/video/post-copy';
 import { ThumbnailPanel } from '@/components/studio/ThumbnailPanel';
+import { PreviewPanel } from '@/components/studio/PreviewPanel';
+import { loadImages } from '@/lib/video/canvas/images';
 
 /**
  * The export spike.
@@ -186,20 +188,8 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
       // Every image, decoded before the first frame. A frame renderer that
       // awaits the network drops frames; this one is handed a cache.
       setStatus('画像を読み込み中…');
-      const images = new Map<string, CanvasImageSource>();
-      const sources = new Set<string>();
-      for (const scene of sequence.scenes) if (scene.image) sources.add(scene.image.src);
-      await Promise.all(
-        [...sources].map(async (src) => {
-          try {
-            const response = await fetch(`/${src.replace(/^\//, '')}`);
-            if (!response.ok) return;
-            images.set(src, await createImageBitmap(await response.blob()));
-          } catch {
-            // A missing image is drawn as a labelled gap by the renderer, not
-            // as a failed export.
-          }
-        }),
+      const images = await loadImages(
+        sequence.scenes.flatMap((scene) => (scene.image ? [scene.image.src] : [])),
       );
 
       // The particle field, on its own WebGL canvas, composited into each
@@ -526,6 +516,8 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
           {status === '' ? 'この端末で書き出す' : status}
         </button>
       </section>
+
+      <PreviewPanel sequence={sequence} definition={definition} />
 
       {error ? (
         <p className="border-2 border-accent-hot bg-raised p-md font-mono text-micro leading-snug text-accent-hot">

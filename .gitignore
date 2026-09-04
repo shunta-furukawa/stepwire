@@ -13,8 +13,6 @@ build/
 dist/
 
 # remotion
-video/out/
-video/data/*.json
 
 # local render output
 out/

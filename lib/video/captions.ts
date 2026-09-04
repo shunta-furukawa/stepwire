@@ -4,7 +4,7 @@ import { visualLength } from './text';
 /**
  * Groups a transcript's captions into subtitle pages.
  *
- * `createTikTokStyleCaptions` from `@remotion/captions` was tried first and
+ * A library's TikTok-style caption grouper was tried first and
  * merged an entire fourteen-second take into one page: it groups tokens that
  * fall within a time window of each other, and continuous speech has no gaps
  * wide enough to break on. Correct for its purpose, wrong for subtitles.

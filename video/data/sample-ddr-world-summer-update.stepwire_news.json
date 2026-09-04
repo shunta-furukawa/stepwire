@@ -1,0 +1,168 @@
+{
+  "article": {
+    "slug": "sample-ddr-world-summer-update",
+    "title": "【SAMPLE】DDR WORLD、夏のアップデートでスコア表示を刷新",
+    "shortTitle": "【SAMPLE】夏の更新でスコア表示刷新",
+    "dek": "STEPWIREのレイアウトと動画システムを開発するための架空のサンプル記事です。ここに書かれた出来事は起きていません。",
+    "summary": "架空の夏アップデートで、リザルト画面にパネル別の精度表示が追加され、上位4譜面が調整された。",
+    "category": "UPDATE",
+    "importance": "major",
+    "publishedAt": "2026-08-24T09:00:00+09:00",
+    "news": "この記事はサンプルです。STEPWIREのレイアウト、コンテンツパイプライン、動画システムを、報道と誤認されうるものを公開せずに開発するために置かれています。\n\n架空のシナリオでは、DDR WORLDの夏アップデートがリザルト画面にパネル別の精度表示を追加し、難易度表の上位にある4譜面を調整しました。 この表示は、スコアを判定の内訳だけでなくパネル単位で分解します。",
+    "context": "リザルト画面はこれまで、プレイヤーに「どれだけ良かったか」は教えても、「どこで崩れたか」は教えてくれませんでした。パネル別の内訳は、その診断を外部のトラッカーから筐体そのものへ移します。\n\nこの種の変更で面白いのは機能そのものではありません。プレイした場所で構造化された練習データが生まれ始めるということです。コミュニティが上達をどう語るかを組み替えるのは、たいていこの種の変化です。",
+    "playerImpact": "クリアを詰めているプレイヤーにとっての実際的な変化は、落ちた run が漠然とした感覚ではなく特定のパネルを指すようになることです。当面の影響はスコアよりも練習の組み立てに出るはずです。\n\n調整された4譜面が効いてくるのは、難易度帯の境目にいるプレイヤーです。そこでは小さなレート変更が、そもそも挑む価値があるかどうかを決めてしまいます。",
+    "primarySource": {
+      "publisher": "STEPWIRE Fixtures",
+      "title": "SAMPLE SOURCE — 実在しない告知",
+      "url": "https://example.com/stepwire/fixtures/summer-update"
+    },
+    "video": {
+      "hook": "読めるリザルト画面",
+      "data": [
+        {
+          "label": "調整譜面",
+          "value": "4"
+        },
+        {
+          "label": "新表示",
+          "value": "パネル別"
+        }
+      ]
+    },
+    "narration": {
+      "audioSrc": "/audio/sample-narration.mp3",
+      "durationInSeconds": 14,
+      "language": "ja",
+      "speaker": "MONO DDR",
+      "captions": [
+        {
+          "text": "はい、",
+          "startMs": 500,
+          "endMs": 800,
+          "timestampMs": 650,
+          "confidence": null
+        },
+        {
+          "text": "今回は",
+          "startMs": 830,
+          "endMs": 1350,
+          "timestampMs": 1090,
+          "confidence": null
+        },
+        {
+          "text": "DDR WORLDの",
+          "startMs": 1380,
+          "endMs": 2280,
+          "timestampMs": 1830,
+          "confidence": null
+        },
+        {
+          "text": "夏の",
+          "startMs": 2310,
+          "endMs": 2760,
+          "timestampMs": 2535,
+          "confidence": null
+        },
+        {
+          "text": "アップデートです。",
+          "startMs": 2790,
+          "endMs": 3740,
+          "timestampMs": 3265,
+          "confidence": null
+        },
+        {
+          "text": "リザルト画面に",
+          "startMs": 3770,
+          "endMs": 4720,
+          "timestampMs": 4245,
+          "confidence": null
+        },
+        {
+          "text": "パネル別の",
+          "startMs": 4750,
+          "endMs": 5550,
+          "timestampMs": 5150,
+          "confidence": null
+        },
+        {
+          "text": "精度表示が",
+          "startMs": 5580,
+          "endMs": 6380,
+          "timestampMs": 5980,
+          "confidence": null
+        },
+        {
+          "text": "付きました。",
+          "startMs": 6410,
+          "endMs": 7210,
+          "timestampMs": 6810,
+          "confidence": null
+        },
+        {
+          "text": "これ、",
+          "startMs": 7240,
+          "endMs": 7740,
+          "timestampMs": 7490,
+          "confidence": null
+        },
+        {
+          "text": "地味に",
+          "startMs": 7770,
+          "endMs": 8320,
+          "timestampMs": 8045,
+          "confidence": null
+        },
+        {
+          "text": "大きいと",
+          "startMs": 8350,
+          "endMs": 8950,
+          "timestampMs": 8650,
+          "confidence": null
+        },
+        {
+          "text": "思っていて、",
+          "startMs": 8980,
+          "endMs": 9780,
+          "timestampMs": 9380,
+          "confidence": null
+        },
+        {
+          "text": "どこで",
+          "startMs": 9810,
+          "endMs": 10310,
+          "timestampMs": 10060,
+          "confidence": null
+        },
+        {
+          "text": "崩れたかが",
+          "startMs": 10340,
+          "endMs": 11140,
+          "timestampMs": 10740,
+          "confidence": null
+        },
+        {
+          "text": "筐体側で",
+          "startMs": 11170,
+          "endMs": 11970,
+          "timestampMs": 11570,
+          "confidence": null
+        },
+        {
+          "text": "分かるように",
+          "startMs": 12000,
+          "endMs": 12850,
+          "timestampMs": 12425,
+          "confidence": null
+        },
+        {
+          "text": "なるんですよね。",
+          "startMs": 12880,
+          "endMs": 13880,
+          "timestampMs": 13380,
+          "confidence": null
+        }
+      ]
+    }
+  },
+  "composition": "STEPWIRE_NEWS"
+}

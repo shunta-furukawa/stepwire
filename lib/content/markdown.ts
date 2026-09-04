@@ -4,7 +4,7 @@
  * Why not a Markdown library?
  *
  *  1. The same body text has to render as React on the website *and* as plain
- *     text inside Remotion video scenes. Parsing once to an AST gives both
+ *     text on the video's cards. Parsing once to an AST gives both
  *     surfaces the same content, which is the core constraint of this project.
  *  2. STEPWIRE adds one syntax that no Markdown parser knows about: the
  *     citation marker `[^1]`, which binds a sentence in the body to an entry in

@@ -1,11 +1,11 @@
 /**
  * STEPWIRE brand tokens — the single source of truth for the visual system.
  *
- * These values are consumed by two very different renderers:
+ * These values are consumed by two very different surfaces:
  *   1. The website, through the CSS custom properties declared in
  *      `app/globals.css` (Tailwind v4 `@theme`).
- *   2. The Remotion video compositions, which use inline styles and therefore
- *      import this module directly.
+ *   2. The video renderer (`lib/video/canvas/`), which paints a canvas and
+ *      therefore imports this module directly.
  *
  * `tests/tokens.test.ts` asserts that `app/globals.css` and this module stay in
  * sync, so a token can never drift between web and video.
@@ -188,7 +188,7 @@ export const border = {
 
 /**
  * Motion constants. Durations are in milliseconds for the web and are converted
- * to frames by `lib/video/timing.ts` for Remotion, so a transition feels the
+ * to frames by `lib/video/timing.ts` for the film, so a transition feels the
  * same on both surfaces.
  */
 export const motion = {

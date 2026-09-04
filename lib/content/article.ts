@@ -42,9 +42,8 @@ export interface Article extends ArticleFrontmatter {
 /**
  * Video-safe projection of an article.
  *
- * Remotion compositions receive props over a serialisation boundary (studio
- * props, `--props` on the CLI, the render API payload), so they get plain
- * strings rather than the AST.
+ * The studio receives this over a serialisation boundary (server component to
+ * client island), so it gets plain strings and blocks rather than the AST.
  */
 /** A narration track resolved for the video boundary. */
 export interface NarrationInput {

@@ -13,7 +13,7 @@ Detailed guides live in `docs/`. This file holds the standing rules only.
 sources.yml → collector → GitHub Issue → human review → content/*.mdx → PR → merge
                                                              │
                                               ┌──────────────┴──────────────┐
-                                          website (Vercel)          video (Remotion)
+                                          website (Vercel)     video (/studio, on the device)
 ```
 
 One Article is the source of truth for both the web page and the video. There is
@@ -23,9 +23,9 @@ no second content store, and there must never be one.
   committed; the mechanism stays for tests and for sample content later)
 - `lib/content/` schema, parsing, validation, loading
 - `lib/news/` source registry, adapters, normalisation, deduplication
-- `lib/video/` composition registry, scene derivation, render drivers, guards
+- `lib/video/` composition registry, scene derivation, reveal timing, the field;
+  `lib/video/canvas/` the one renderer, the soundtrack, the thumbnail, the export
 - `lib/design/tokens.ts` the one source of brand tokens
-- `video/` Remotion root, compositions, scenes, primitives
 - `app/` Next.js App Router · `components/` server components (studio is the
   only client island)
 
@@ -43,8 +43,7 @@ pnpm article:from-post https://x.com/DDR_573/status/…   # official oEmbed, no 
 pnpm news:collect --dry-run          # fixtures only, no network, no issues
 pnpm news:collect --create-issues    # file candidates into the inbox
 
-pnpm video:studio                    # Remotion studio (scene design)
-pnpm video:render <slug>             # local render, no cloud, no cost
+pnpm dev                             # /studio: preview, export, thumbnail, post copy — all on the device
 pnpm narration:transcribe <slug>     # local Whisper; writes content/transcripts/
 ```
 
@@ -100,7 +99,7 @@ pnpm lint && pnpm typecheck && pnpm test && pnpm content:validate && pnpm build
 
 Tests are pure logic and run in about a second. **Never write a test that
 renders a video** — scene derivation is tested as data, and the rendering is
-verified by eye with `pnpm video:render`.
+verified by eye in `/studio`, whose preview is the export renderer at a frame.
 
 ## Important constraints
 
@@ -121,11 +120,11 @@ verified by eye with `pnpm video:render`.
 - **The collector never publishes.** Its only output is a GitHub issue for a
   human to accept or ignore. It also never labels anything `priority:breaking`;
   that is an editorial judgement.
-- **Rendering costs money.** `/api/render` fails closed without
-  `STEPWIRE_RENDER_TOKEN`. Duplicate prevention is the Blob existence check —
-  it is the only state shared across serverless instances, so do not replace it
-  with in-memory bookkeeping. Do not bulk-render while iterating; use
-  `pnpm video:render` locally.
+- **Nothing renders on a server.** The film, the thumbnail and the soundtrack
+  are made in the browser (`lib/video/canvas/`, WebCodecs) on the operator's
+  phone, and nothing in the deployment can start a render or spend money. Do
+  not add a server-side renderer, a render queue or a cloud encode path; the
+  on-device one was measured faster and it is free.
 - **Do not add a video CMS.** Video copy is derived from the article. If a video
   needs different wording, add a narrow override under `article.video`, never a
   parallel file.
@@ -134,9 +133,9 @@ verified by eye with `pnpm video:render`.
   them. The voice never reaches the film. Sourcing stays entirely on the
   article; a recording is never a source.
 - **Copy types; it does not appear.** Every card's characters land on the
-  cadence in `lib/video/reveal.ts`, and a tick sounds as they do. Both renderers
-  and the tick track read that one plan. No renderer decides when a character
-  appears.
+  cadence in `lib/video/reveal.ts`, and a tick sounds as they do. The renderer
+  and the tick track read that one plan. The renderer never decides when a
+  character appears.
 - **Images and music are quotations, and the rights are editorial.** `media`
   and `bgm` require a `credit` or the article fails validation. The system
   never fetches a picture or a track; the operator puts a file under `public/`
@@ -148,7 +147,7 @@ verified by eye with `pnpm video:render`.
 - **The field is a function of the frame.** `lib/video/field-plan.ts` decides
   what the particle field does on a frame; `field.ts` paints it. Nothing in the
   field reads a clock or `Math.random`, and the ground under every scene comes
-  from `lib/video/ground.ts` in both renderers — see `docs/video-system.md`.
+  from `lib/video/ground.ts` — see `docs/video-system.md`.
 - **Free music still needs its credit on the card.** `docs/audio-sources.md`
   lists libraries whose only condition is attribution. The outro prints every
   credit the film owes; the operator still downloads the file and reads the

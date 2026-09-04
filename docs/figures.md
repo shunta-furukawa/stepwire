@@ -9,8 +9,8 @@ into the frontmatter, reviewed in a pull request like any other claim, and
 rendered deterministically on both surfaces.
 
 ```
-frontmatter.figures ──┬──► components/Figure.tsx   (the page)
-                      └──► video/scenes/index.tsx  (the video)
+frontmatter.figures ──┬──► components/Figure.tsx        (the page)
+                      └──► lib/video/canvas/draw.ts    (the video)
 ```
 
 Both read the same rows and both size their bars with `barFractions()` from

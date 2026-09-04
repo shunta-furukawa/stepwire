@@ -2,7 +2,7 @@
  * Text shaping for video headlines.
  *
  * Pure string logic, so it lives beside the rest of the scene derivation rather
- * than inside a Remotion component — and can be tested without rendering.
+ * than inside the renderer — and can be tested without rendering.
  */
 
 const CJK_RANGE = /[\u3000-\u303F\u3040-\u30FF\u3400-\u4DBF\u4E00-\u9FFF\uFF00-\uFFEF]/;

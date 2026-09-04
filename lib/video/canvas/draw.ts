@@ -8,23 +8,17 @@ import { typedLines, wrapText } from './text';
 import { backdropDim, backdropZoom, sceneGround } from '../ground';
 
 /**
- * A canvas renderer for STEPWIRE scenes.
+ * The renderer for STEPWIRE scenes.
  *
- * The React compositions and this draw the SAME `Scene[]`, which is the project's
- * one structural idea applied once more: the article feeds the page and the
- * video, and now the scene feeds the DOM renderer and the canvas one. Neither
- * is authored; both are derived.
+ * It draws a `Scene[]` derived from the article — the project's one structural
+ * idea applied once more: the article feeds the page and the video, and the
+ * scene feeds this. Nothing here is authored; all of it is derived.
  *
- * Why a second renderer exists at all: a browser cannot encode DOM. Exporting a
- * video on the device means producing pixels the WebCodecs `VideoEncoder` can
- * take, and the only thing in a browser that produces pixels on demand is a
- * canvas. Rasterising the DOM instead would mean a screenshot library and its
- * approximations; drawing from the data is exact.
- *
- * The cost is real and worth stating: two renderers can drift. `tests/` covers
- * the line breaking, and `tests/tokens.test.ts` already stops the palette
- * drifting, but nothing yet asserts that a scene looks the same in both. That
- * is the open risk of this approach, not a detail.
+ * Why a canvas: a browser cannot encode DOM. Exporting a video on the device
+ * means producing pixels the WebCodecs `VideoEncoder` can take, and the only
+ * thing in a browser that produces pixels on demand is a canvas. There used to
+ * be a DOM renderer beside this one for previewing, and the two could drift;
+ * the preview now draws with this, at a frame, so there is nothing to drift.
  *
  * Images are an input, not something this fetches: `DrawContext.images` is a
  * cache the caller fills before the first frame, because a frame renderer that
@@ -32,13 +26,12 @@ import { backdropDim, backdropZoom, sceneGround } from '../ground';
  */
 
 /**
- * Design units, in the same 1080-class space the DOM theme uses.
+ * Design units: the web type scale times three, in a 1080-class space.
  *
  * Scaled by the SHORT edge, not the width: a 16:9 frame is constrained by its
  * height, and scaling by width made every glyph 1.78x too large and ran the
  * body copy off the bottom of the frame. Both formats have a 1080 short edge,
- * so this reduces to 1.0 for each — which is exactly what `SCALE = 3` in
- * `video/styles/theme.ts` assumes.
+ * so this reduces to 1.0 for each.
  */
 const BASE_SHORT_EDGE = 1080;
 
@@ -754,11 +747,9 @@ const drawImage: Drawer = (d, scene) => {
 /**
  * Every scene type, drawn.
  *
- * A `Record<SceneType, …>` rather than a switch: adding a scene to the film now
- * fails to compile until the canvas renderer can draw it, which is the only
- * cheap guarantee available that the two renderers stay in step. The
- * alternative — a default case — would silently export a video missing a scene
- * the preview showed.
+ * A `Record<SceneType, …>` rather than a switch: adding a scene to the film
+ * fails to compile until the renderer can draw it. The alternative — a default
+ * case — would silently export a video with a scene missing.
  */
 const DRAWERS: Record<SceneType, Drawer> = {
   outro: drawIdent,

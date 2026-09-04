@@ -1,0 +1,32 @@
+[
+  {
+    "slug": "sample-regional-tournament",
+    "composition": "STEPWIRE_SHORT",
+    "propsFile": "video/data/sample-regional-tournament.json"
+  },
+  {
+    "slug": "sample-regional-tournament",
+    "composition": "STEPWIRE_NEWS",
+    "propsFile": "video/data/sample-regional-tournament.stepwire_news.json"
+  },
+  {
+    "slug": "sample-new-chart-pack",
+    "composition": "STEPWIRE_SHORT",
+    "propsFile": "video/data/sample-new-chart-pack.json"
+  },
+  {
+    "slug": "sample-new-chart-pack",
+    "composition": "STEPWIRE_NEWS",
+    "propsFile": "video/data/sample-new-chart-pack.stepwire_news.json"
+  },
+  {
+    "slug": "sample-ddr-world-summer-update",
+    "composition": "STEPWIRE_SHORT",
+    "propsFile": "video/data/sample-ddr-world-summer-update.json"
+  },
+  {
+    "slug": "sample-ddr-world-summer-update",
+    "composition": "STEPWIRE_NEWS",
+    "propsFile": "video/data/sample-ddr-world-summer-update.stepwire_news.json"
+  }
+]

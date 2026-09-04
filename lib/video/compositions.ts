@@ -3,19 +3,12 @@ import { video } from '../design/tokens';
 /**
  * Composition registry.
  *
- * Defined here rather than inside `video/Root.tsx` because the Next.js studio,
- * the render API and the Remotion root all need to agree on the same list, and
- * only Remotion can import Remotion.
+ * The formats a film can take. The studio, the scene builder and the
+ * exporter all read this one list.
  */
 export const COMPOSITIONS = {
   STEPWIRE_SHORT: {
     id: 'STEPWIRE_SHORT',
-    /**
-     * Remotion composition ids may not contain underscores, but STEPWIRE_SHORT
-     * is the name the API, the studio and the docs use. The public name stays;
-     * `remotionId` is what gets registered and passed to the renderer.
-     */
-    remotionId: 'STEPWIRE-SHORT',
     label: 'Short (vertical)',
     width: video.formats.STEPWIRE_SHORT.width,
     height: video.formats.STEPWIRE_SHORT.height,
@@ -28,7 +21,6 @@ export const COMPOSITIONS = {
   },
   STEPWIRE_NEWS: {
     id: 'STEPWIRE_NEWS',
-    remotionId: 'STEPWIRE-NEWS',
     label: 'News (landscape)',
     width: video.formats.STEPWIRE_NEWS.width,
     height: video.formats.STEPWIRE_NEWS.height,
