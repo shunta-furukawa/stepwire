@@ -73,9 +73,9 @@ const SECTION_LABELS: Record<
   (typeof SECTION_KEYS)[number],
   { index: string; heading: string; kind: string }
 > = {
-  news: { index: '01', heading: 'ニュース', kind: '報道' },
-  context: { index: '02', heading: 'コンテクスト', kind: 'STEPWIREの分析' },
-  playerImpact: { index: '03', heading: 'プレイヤーへの影響', kind: 'STEPWIREの分析' },
+  news: { index: '01', heading: 'ニュース', kind: '出典つき' },
+  context: { index: '02', heading: 'コンテクスト', kind: 'MONO DDRの言葉' },
+  playerImpact: { index: '03', heading: 'プレイヤーへの影響', kind: 'MONO DDRの言葉' },
 };
 
 export default async function ArticlePage({

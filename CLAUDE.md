@@ -1,6 +1,8 @@
 # CLAUDE.md
 
-STEPWIRE — a DDR news wire and archive, operated by MONO DDR. This repository is
+STEPWIRE — MONO DDR's DDR session blog and archive: what moved in the scene,
+with sources, and what the operator played, in the operator's own words. It is
+not a news organisation, and its copy must not talk like one. This repository is
 the CMS, the editorial workflow and the video studio, not just the website.
 
 Detailed guides live in `docs/`. This file holds the standing rules only.

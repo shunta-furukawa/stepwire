@@ -32,7 +32,7 @@ export const CATEGORY_META: Record<
   Category,
   { glyph: string; label: string; blurb: string }
 > = {
-  NEWS: { glyph: '▲', label: 'ニュース', blurb: 'DDRをめぐる報道。' },
+  NEWS: { glyph: '▲', label: 'ニュース', blurb: 'DDRをめぐる動き。' },
   UPDATE: { glyph: '▶', label: 'アップデート', blurb: 'ゲーム・筐体・サービスの更新。' },
   CHARTS: { glyph: '◀', label: '譜面', blurb: '新曲、新譜面、難易度の変更。' },
   EVENT: { glyph: '▼', label: 'イベント', blurb: 'ロケテスト、キャンペーン、ゲーム内イベント。' },
@@ -48,7 +48,7 @@ export const SECTIONS = [
     slug: 'news',
     label: 'ニュース',
     categories: ['NEWS', 'UPDATE', 'EVENT', 'TOURNAMENT'] as Category[],
-    description: 'DDRの報道。ゲームの更新、イベント、そして競技シーン。',
+    description: 'DDRの動き。ゲームの更新、イベント、そして競技シーン。'
   },
   {
     slug: 'charts',

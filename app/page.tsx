@@ -64,7 +64,7 @@ export default async function HomePage() {
 
           <aside className="space-y-2xl">
             <section aria-labelledby="desks-heading">
-              <SectionHeading id="desks-heading" label="DESKS" description="担当領域" as="h2" />
+              <SectionHeading id="desks-heading" label="SECTIONS" description="読みもの" as="h2" />
               <ul className="mt-md space-y-md">
                 {SECTIONS.map((section) => (
                   <li key={section.slug}>
@@ -104,13 +104,13 @@ export default async function HomePage() {
               <SectionHeading id="wire-heading" label="STEPWIREの読み方" as="h2" />
               <ol className="mt-md space-y-md font-mono text-micro uppercase tracking-wide">
                 <li>
-                  <span className="text-accent">01</span> NEWS — 何が起きたか。出典つき。
+                  <span className="text-accent">01</span> NEWS — シーンで何が起きたか。出典つき。
                 </li>
                 <li>
-                  <span className="text-accent">02</span> CONTEXT — なぜ注目なのか。
+                  <span className="text-accent">02</span> SESSION — その日、何を踏んでどうだったか。
                 </li>
                 <li>
-                  <span className="text-accent">03</span> PLAYER IMPACT — あなたに何が変わるか。
+                  <span className="text-accent">03</span> PICKUP — 記録に残すプレイと、その譜面の話。
                 </li>
               </ol>
             </section>

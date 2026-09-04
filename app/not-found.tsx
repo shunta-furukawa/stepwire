@@ -17,7 +17,7 @@ export default function NotFound() {
         href="/"
         className="mt-xl inline-block border-2 border-line-strong px-lg py-sm font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-accent hover:text-on-accent"
       >
-        ← ワイヤーに戻る
+        ← トップに戻る
       </Link>
     </div>
   );

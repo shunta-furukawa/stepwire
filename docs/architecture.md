@@ -1,6 +1,6 @@
 # Architecture
 
-STEPWIRE is a newsroom that happens to be a Git repository. This document
+STEPWIRE is a one-person session blog that happens to be a Git repository. This document
 records the shape of the system and, more usefully, the reasoning behind the
 decisions that would be expensive to reverse.
 

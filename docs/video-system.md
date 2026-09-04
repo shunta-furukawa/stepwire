@@ -319,7 +319,7 @@ Shared primitives live in `video/components/primitives.tsx`:
 
 Reported fact carries a neutral label chip; editorial analysis carries a lime
 one. That is the same fact/analysis distinction the website draws with its
-報道 / STEPWIREの分析 labels — the video does not invent its own vocabulary.
+出典つき / MONO DDRの言葉 labels — the video does not invent its own vocabulary.
 
 Fact also sits on the deepest ground and analysis on a raised one, but the chip
 is what actually carries the distinction: on a dark-first palette the two

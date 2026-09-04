@@ -2,7 +2,7 @@
   "name": "stepwire",
   "version": "0.1.0",
   "private": true,
-  "description": "STEPWIRE — DDR News, Charts & Culture. A GitHub-centric newsroom: collection, editing, publishing and video generation from one structured content source.",
+  "description": "STEPWIRE — DDR Sessions, Charts & Culture. MONO DDR's session blog as a Git repository: collection, drafting, publishing and video generation from one structured content source.",
   "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=22"

@@ -10,6 +10,7 @@ import { CATEGORY_META } from '../content/categories';
 import { formatDate } from '../format';
 import { COMPOSITIONS, type CompositionId } from './compositions';
 import { FPS, secondsToFrames, type DurationBounds } from './timing';
+import { site } from '../site';
 
 /**
  * Article → scene sequence.
@@ -415,7 +416,7 @@ export function buildSceneSequence(
     id: 'outro',
     type: 'outro',
     durationInFrames: secondsToFrames(profile.outroSeconds, fps),
-    meta: 'DDR News, Charts & Culture.',
+    meta: site.tagline,
     ...(credits.length > 0 ? { credits } : {}),
   });
 

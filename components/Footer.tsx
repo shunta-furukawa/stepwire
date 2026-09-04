@@ -13,7 +13,7 @@ export function Footer() {
             {site.tagline}
           </p>
           <p className="mt-lg max-w-[52ch] font-body text-small leading-snug text-muted">
-            DanceDanceRevolutionの独立系ニュースワイヤー兼アーカイブ。運営は{site.operator}。
+            {site.operator}のDanceDanceRevolutionセッションブログ兼アーカイブ。
             KONAMIとは無関係で、提携も承認も受けていません。
           </p>
         </div>

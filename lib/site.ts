@@ -2,10 +2,10 @@
 export const site = {
   name: 'STEPWIRE',
   /** The brand line stays in English: it is a wordmark, not a sentence. */
-  tagline: 'DDR News, Charts & Culture.',
-  taglineJa: 'DDRのニュース、譜面、カルチャー。',
+  tagline: 'DDR Sessions, Charts & Culture.',
+  taglineJa: 'MONO DDRのDDRセッションブログ。',
   description:
-    'STEPWIREは、DanceDanceRevolutionを扱う独立系のニュース／カルチャーメディアです。ゲームの更新、新曲と新譜面、イベント、大会、譜面データ、そして筐体のまわりにあるコミュニティを記録します。',
+    'STEPWIREは、MONO DDRのDanceDanceRevolutionセッションブログです。解禁や大会などシーンの動きを出典つきで書き留め、その日に何を踏んでどうだったかを、本人の言葉で記録します。',
   operator: 'MONO DDR',
   locale: 'ja',
   /**

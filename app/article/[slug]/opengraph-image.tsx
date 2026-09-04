@@ -1,3 +1,4 @@
+import { site } from '@/lib/site';
 import { ImageResponse } from 'next/og';
 import { getArticleBySlug, getArticles } from '@/lib/content/loader';
 import { CATEGORY_META } from '@/lib/content/categories';
@@ -103,7 +104,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             letterSpacing: '0.12em',
           }}
         >
-          <div style={{ display: 'flex' }}>DDR NEWS, CHARTS &amp; CULTURE.</div>
+          <div style={{ display: 'flex' }}>{site.tagline.toUpperCase()}</div>
           <div style={{ display: 'flex', color: color.faint }}>
             {article ? formatDate(article.publishedAt) : ''}
           </div>

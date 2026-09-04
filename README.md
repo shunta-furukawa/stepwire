@@ -1,13 +1,14 @@
 # STEPWIRE
 
-**DDR News, Charts & Culture.**
+**DDR Sessions, Charts & Culture.**
 
-An independent news and culture wire for DanceDanceRevolution, operated by
-MONO DDR. Not affiliated with, endorsed by, or connected to KONAMI.
+MONO DDR's DanceDanceRevolution session blog: what moved in the scene, with
+sources, and what the operator played that day, in the operator's own words.
+Not affiliated with, endorsed by, or connected to KONAMI.
 
-This repository is not just the website. It is the whole newsroom: the source
-registry, the editorial inbox, the content store, the publishing pipeline and
-the video studio.
+This repository is not just the website. It is the whole workshop: the source
+registry, the inbox, the content store, the publishing pipeline and the video
+studio.
 
 ---
 

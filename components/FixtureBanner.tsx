@@ -27,7 +27,7 @@ export function FixtureBanner({ compact = false }: { compact?: boolean }) {
       <p className="mt-sm font-body text-base leading-snug text-fg">
         この記事は、STEPWIREのレイアウトと動画システムを開発するための
         <strong>架空のサンプル</strong>です。ここに書かれた出来事・出典・数値はすべて作られたもので、
-        報道ではありません。サンプル記事はRSSフィードとサイトマップから除外されています。
+        実際の出来事の記録ではありません。サンプル記事はRSSフィードとサイトマップから除外されています。
       </p>
     </aside>
   );
