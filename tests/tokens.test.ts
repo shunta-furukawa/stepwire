@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { color, fontSize, motion, space, video } from '../lib/design/tokens';
+import { color, difficulty, fontSize, motion, space, video } from '../lib/design/tokens';
 import { SCALE, type } from '../video/styles/theme';
 
 /**
@@ -150,6 +150,18 @@ describe('colour contrast (WCAG 2.1)', () => {
     expect(contrast(color.fg, color.raised)).toBeGreaterThanOrEqual(AA);
     expect(contrast(color.muted, color.raised)).toBeGreaterThanOrEqual(AA);
     expect(contrast(color.faint, color.raised)).toBeGreaterThanOrEqual(AA);
+  });
+
+  it('meets AA for the badge text on every difficulty colour', () => {
+    // The five game colours are the one exception to the single hue, and the
+    // exception does not extend to being unreadable: the badge prints
+    // `onAccent` on each, and each has to carry it.
+    for (const [name, hex] of Object.entries(difficulty)) {
+      expect(contrast(color.onAccent, hex), name).toBeGreaterThanOrEqual(AA);
+    }
+    // Five distinct hues, none of them the accent: a quotation, not a theme.
+    expect(new Set(Object.values(difficulty)).size).toBe(5);
+    expect(Object.values(difficulty)).not.toContain(color.accent);
   });
 
   it('meets AA for every text tone on the deepest block', () => {

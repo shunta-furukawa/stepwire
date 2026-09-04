@@ -289,7 +289,9 @@ export function buildSceneSequence(
         ...typed(text, 'body', fps),
         // Only the first card of a section carries the label; repeating it on
         // every card would read as a new section each time.
-        ...(position === 0 ? { label: LABELS[section.type] } : {}),
+        ...(position === 0
+          ? { label: article.labels?.[section.type === 'impact' ? 'playerImpact' : section.type] ?? LABELS[section.type] }
+          : {}),
         text,
       });
     });

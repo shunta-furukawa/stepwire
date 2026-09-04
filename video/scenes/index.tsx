@@ -2,9 +2,10 @@ import React from 'react';
 import { AbsoluteFill, useCurrentFrame, useVideoConfig } from 'remotion';
 import { SCENE_TONE, type Scene } from '../../lib/video/scenes';
 import { revealedText, visibleUnits } from '../../lib/video/reveal';
-import { barFractions, formatBarValue } from '../../lib/content/figures';
+import { barFractions, difficultyLabel, formatBarValue, formatScore } from '../../lib/content/figures';
 import { visualLength } from '../../lib/video/text';
-import { color, font, fontWeight, gap, leading, textStyles, tracking, type } from '../styles/theme';
+import { color,
+  difficulty, font, fontWeight, gap, leading, textStyles, tracking, type } from '../styles/theme';
 import {
   Arrow,
   Card,
@@ -411,6 +412,89 @@ export function FigureScene({ scene, orientation }: SceneProps) {
                 );
               })()
             : null}
+
+          {figure.kind === 'plays' ? (
+            <div style={{ display: 'grid', gridTemplateColumns: 'max-content 1fr max-content', columnGap: gap.md }}>
+              {figure.items.map((entry, index) => {
+                const progress = rowProgress(index);
+                // Twelve rows have to fit above the rail; the row shrinks
+                // before the frame overflows.
+                const dense = figure.items.length > 6;
+                const size = dense ? type.small : type.base;
+                return (
+                  <div
+                    key={`${entry.song}-${index}`}
+                    style={{
+                      gridColumn: '1 / -1',
+                      display: 'grid',
+                      gridTemplateColumns: 'subgrid',
+                      alignItems: 'center',
+                      padding: `${dense ? gap.xs : gap.sm}px 0`,
+                      borderBottom: `2px solid ${color.line}`,
+                      opacity: progress,
+                      transform: `translateX(${(1 - progress) * 12}px)`,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: font.mono,
+                        fontSize: size * 0.62,
+                        fontWeight: fontWeight.bold,
+                        letterSpacing: `${tracking.wider}em`,
+                        padding: `${gap.xs * 0.6}px ${gap.sm}px`,
+                        background: difficulty[entry.difficulty],
+                        color: color.onAccent,
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {difficultyLabel(entry)}
+                    </span>
+                    <span style={{ minWidth: 0, overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                      <span
+                        style={{
+                          ...textStyles.body,
+                          fontSize: size,
+                          fontWeight: entry.highlight ? fontWeight.black : fontWeight.medium,
+                          letterSpacing: `${tracking.headline}em`,
+                        }}
+                      >
+                        {entry.song}
+                      </span>
+                      {entry.note ? (
+                        <span style={{ ...textStyles.meta, marginLeft: gap.sm, color: color.muted }}>
+                          {entry.note}
+                        </span>
+                      ) : null}
+                    </span>
+                    <span style={{ textAlign: 'right', whiteSpace: 'nowrap' }}>
+                      <span
+                        style={{
+                          fontFamily: font.mono,
+                          fontSize: size,
+                          fontWeight: entry.highlight ? fontWeight.bold : fontWeight.medium,
+                          fontVariantNumeric: 'tabular-nums',
+                        }}
+                      >
+                        {formatScore(entry.score)}
+                      </span>
+                      {entry.rank ? (
+                        <span
+                          style={{
+                            ...textStyles.meta,
+                            marginLeft: gap.sm,
+                            fontWeight: fontWeight.bold,
+                            color: entry.rank === 'AAA' ? color.accent : color.muted,
+                          }}
+                        >
+                          {entry.rank}
+                        </span>
+                      ) : null}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : null}
 
           {figure.kind === 'timeline' ? (
             // One grid for the whole timeline rather than one per row, so the

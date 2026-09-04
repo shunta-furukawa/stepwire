@@ -35,7 +35,7 @@ would be information the article omits.
 
 ## The three kinds
 
-An article may carry up to three figures.
+An article may carry up to three figures, of four kinds.
 
 ### `stat` — headline numbers
 
@@ -98,6 +98,29 @@ figures:
         label: ランダム選曲で決着
         highlight: true
 ```
+
+### `plays` — a session log, or the results the story is about
+
+```yaml
+figures:
+  - kind: plays
+    title: 9月3日のセッション
+    items:
+      - song: "I'll Be With You"
+        difficulty: EXPERT        # BEGINNER · BASIC · DIFFICULT · EXPERT · CHALLENGE
+        level: 13                 # optional — the play-data list omits it
+        score: 999200
+        rank: AAA                 # as the game grades it
+        note: PERFECT FULL COMBO  # or a time of day, or a caveat
+        highlight: true
+```
+
+One row per play, up to twelve, exactly as a result screen or the play-data
+page shows it. The difficulty badge is printed in the game's own colour
+(`difficulty` in `lib/design/tokens.ts`) — the one place a second hue is
+allowed, because EXPERT is green to a player before it is a word. The level
+is optional: the e-amusement play list does not show it, a result photo does.
+`AAA` is set in the accent; every other rank in `muted`.
 
 ## Sourcing
 

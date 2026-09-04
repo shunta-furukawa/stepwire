@@ -86,16 +86,64 @@ export const timelineFigureSchema = z.object({
     .max(6),
 });
 
+/** DDR's five difficulties, in the game's order. */
+export const DIFFICULTIES = ['BEGINNER', 'BASIC', 'DIFFICULT', 'EXPERT', 'CHALLENGE'] as const;
+export type DifficultyName = (typeof DIFFICULTIES)[number];
+
+/**
+ * A list of plays: a session log, or the results the story is about.
+ *
+ * Each row is what a result screen or the play-data page shows — the chart,
+ * the score, the rank — and nothing the screen did not. The level is optional
+ * because the play-data list omits it; the operator adds it from the result
+ * photo when it is there to be read.
+ */
+export const playsFigureSchema = z.object({
+  kind: z.literal('plays'),
+  ...baseFigure,
+  items: z
+    .array(
+      z.object({
+        song: z.string().min(1).max(40),
+        difficulty: z.enum(DIFFICULTIES),
+        /** 1–19, when known. */
+        level: z.number().int().min(1).max(19).optional(),
+        style: z.enum(['SINGLE', 'DOUBLE']).default('SINGLE'),
+        score: z.number().int().min(0).max(1_000_000),
+        /** As the game grades it: AAA, AA+, A, E. */
+        rank: z.string().min(1).max(4).optional(),
+        /** Full-combo kind, a time of day, a caveat. */
+        note: z.string().min(1).max(40).optional(),
+        highlight: z.boolean().optional(),
+      }),
+    )
+    .min(1)
+    .max(12),
+});
+
 export const figureSchema = z.discriminatedUnion('kind', [
   statFigureSchema,
   barsFigureSchema,
   timelineFigureSchema,
+  playsFigureSchema,
 ]);
 
 export type Figure = z.infer<typeof figureSchema>;
 export type StatFigure = z.infer<typeof statFigureSchema>;
 export type BarsFigure = z.infer<typeof barsFigureSchema>;
 export type TimelineFigure = z.infer<typeof timelineFigureSchema>;
+export type PlaysFigure = z.infer<typeof playsFigureSchema>;
+export type PlayRow = PlaysFigure['items'][number];
+
+/** `EXPERT 15`, or `EXPERT` when the level is not known. */
+export function difficultyLabel(row: Pick<PlayRow, 'difficulty' | 'level'>): string {
+  return row.level === undefined ? row.difficulty : `${row.difficulty} ${row.level}`;
+}
+
+/** `998550` → `998,550`. The game prints it without the comma; readers want it. */
+export function formatScore(score: number): string {
+  return score.toLocaleString('en-US');
+}
 
 /**
  * Bar lengths as fractions of the longest bar.

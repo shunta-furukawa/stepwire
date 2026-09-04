@@ -1,11 +1,15 @@
 import {
   barFractions,
+  difficultyLabel,
   formatBarValue,
+  formatScore,
   type BarsFigure,
   type Figure as FigureData,
+  type PlaysFigure,
   type StatFigure,
   type TimelineFigure,
 } from '@/lib/content/figures';
+import { color, difficulty } from '@/lib/design/tokens';
 
 /**
  * Figures on the page.
@@ -35,6 +39,7 @@ export function Figure({ figure }: { figure: FigureData }) {
         {figure.kind === 'stat' ? <StatRows figure={figure} /> : null}
         {figure.kind === 'bars' ? <BarRows figure={figure} /> : null}
         {figure.kind === 'timeline' ? <TimelineRows figure={figure} /> : null}
+        {figure.kind === 'plays' ? <PlayRows figure={figure} /> : null}
       </div>
 
       {figure.caption ? (
@@ -134,6 +139,63 @@ function TimelineRows({ figure }: { figure: TimelineFigure }) {
             </p>
             {item.note ? (
               <p className="mt-xs font-mono text-micro leading-snug text-muted">{item.note}</p>
+            ) : null}
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+/**
+ * The difficulty badge, in the game's own colour.
+ *
+ * Inline style rather than a Tailwind class on purpose: these five colours
+ * are a quotation of DDR's, not part of the theme, and giving them utility
+ * classes would invite them onto things that are not a difficulty.
+ */
+export function DifficultyBadge({ row }: { row: PlaysFigure['items'][number] }) {
+  return (
+    <span
+      className="inline-block whitespace-nowrap px-sm py-[3px] font-mono text-[10px] font-bold uppercase leading-none tracking-wider"
+      style={{ background: difficulty[row.difficulty], color: color.onAccent }}
+    >
+      {difficultyLabel(row)}
+    </span>
+  );
+}
+
+function PlayRows({ figure }: { figure: PlaysFigure }) {
+  return (
+    <ol className="divide-y divide-line">
+      {figure.items.map((item, index) => (
+        <li
+          key={`${item.song}-${index}`}
+          className="grid grid-cols-[max-content_minmax(0,1fr)_max-content] items-center gap-x-md py-sm"
+        >
+          <DifficultyBadge row={item} />
+          <div className="min-w-0">
+            <p
+              className={`truncate font-display text-base leading-snug ${
+                item.highlight ? 'font-bold' : 'font-medium'
+              }`}
+            >
+              {item.song}
+            </p>
+            {item.note ? (
+              <p className="font-mono text-micro leading-snug text-muted">{item.note}</p>
+            ) : null}
+          </div>
+          <div className="text-right">
+            <p className="font-mono text-base tabular-nums leading-snug">{formatScore(item.score)}</p>
+            {item.rank ? (
+              <p
+                className={`font-mono text-micro font-bold leading-snug ${
+                  item.rank === 'AAA' ? 'text-accent' : 'text-muted'
+                }`}
+              >
+                {item.rank}
+              </p>
             ) : null}
           </div>
         </li>

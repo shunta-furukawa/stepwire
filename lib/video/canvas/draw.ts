@@ -1,8 +1,8 @@
 import { SCENE_TONE, type Scene, type SceneType } from '../scenes';
 import { visibleUnits } from '../reveal';
-import { barFractions, formatBarValue } from '../../content/figures';
+import { barFractions, difficultyLabel, formatBarValue, formatScore } from '../../content/figures';
 import { visualLength } from '../text';
-import { color, font, fontSize, tracking } from '../../design/tokens';
+import { color, difficulty, font, fontSize, tracking } from '../../design/tokens';
 import { typedLines, wrapText } from './text';
 import { backdropDim, backdropZoom, sceneGround } from '../ground';
 
@@ -494,6 +494,76 @@ const drawFigure: Drawer = (d, scene) => {
       // always the true one.
       ctx.fillStyle = item.highlight ? color.accent : color.muted;
       ctx.fillRect(x, barY, w * (fractions[i] ?? 0) * reveal, px(18));
+      ctx.globalAlpha = 1;
+    });
+    return;
+  }
+
+  if (figure.kind === 'plays') {
+    // Rows share the band; twelve of them shrink rather than overflow.
+    const dense = figure.items.length > 6;
+    const size = px(fontSize[dense ? 'small' : 'base'] * 3);
+    const rowHeight = Math.min(size + px(dense ? 26 : 44), (bottom - top - px(40)) / figure.items.length);
+    cursor = Math.max(top, top + (bottom - top - rowHeight * figure.items.length) / 2);
+    const badgeSize = size * 0.62;
+    const badgePad = px(14);
+    const noteSize = px(fontSize.micro * 3);
+
+    figure.items.forEach((item, i) => {
+      const reveal = Math.min(1, Math.max(0, d.progress * 3 - i * 0.1));
+      if (reveal <= 0) return;
+      const y = cursor + i * rowHeight;
+      const mid = y + rowHeight / 2;
+      ctx.globalAlpha = reveal;
+      ctx.textBaseline = 'middle';
+
+      // The badge, in the game's colour for the difficulty.
+      ctx.font = fontOf(700, badgeSize, font.mono);
+      const label = difficultyLabel(item);
+      const spacing = badgeSize * tracking.wider;
+      const labelWidth = [...label].reduce((t, ch) => t + ctx.measureText(ch).width + spacing, 0);
+      const badgeHeight = badgeSize + px(12);
+      ctx.fillStyle = difficulty[item.difficulty];
+      ctx.fillRect(x, mid - badgeHeight / 2, labelWidth + badgePad * 2, badgeHeight);
+      ctx.fillStyle = color.onAccent;
+      drawTracked(ctx, label, x + badgePad, mid, spacing);
+
+      // Rank, then score, from the right edge in.
+      let right = x + w;
+      if (item.rank) {
+        ctx.font = fontOf(700, px(fontSize.small * 3), font.mono);
+        const rankWidth = ctx.measureText(item.rank).width;
+        ctx.fillStyle = item.rank === 'AAA' ? color.accent : color.muted;
+        ctx.fillText(item.rank, right - rankWidth, mid);
+        right -= rankWidth + px(24);
+      }
+      ctx.font = fontOf(item.highlight ? 700 : 500, size, font.mono);
+      ctx.fillStyle = color.fg;
+      const score = formatScore(item.score);
+      const scoreWidth = ctx.measureText(score).width;
+      ctx.fillText(score, right - scoreWidth, mid);
+      right -= scoreWidth + px(28);
+
+      // The song and its note, clipped to the room between badge and score.
+      const songX = x + labelWidth + badgePad * 2 + px(28);
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(songX, y, Math.max(0, right - songX), rowHeight);
+      ctx.clip();
+      ctx.font = fontOf(item.highlight ? 900 : 500, size, font.display);
+      ctx.fillStyle = color.fg;
+      ctx.fillText(item.song, songX, mid);
+      if (item.note) {
+        const songWidth = ctx.measureText(item.song).width;
+        ctx.font = fontOf(400, noteSize, font.mono);
+        ctx.fillStyle = color.muted;
+        ctx.fillText(item.note, songX + songWidth + px(20), mid);
+      }
+      ctx.restore();
+
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = color.line;
+      ctx.fillRect(x, y + rowHeight - px(2), w, px(2));
       ctx.globalAlpha = 1;
     });
     return;

@@ -173,7 +173,7 @@ export default async function ArticlePage({
                     id={`section-${key}`}
                     className="font-display text-h4 font-black tracking-tight"
                   >
-                    {meta.heading}
+                    {article.labels?.[key] ?? meta.heading}
                     <span className="ml-sm font-mono text-micro font-normal tracking-wider text-muted">
                       {section.heading}
                     </span>
@@ -202,7 +202,7 @@ export default async function ArticlePage({
                 <li key={key}>
                   <a href={`#${key}`} className="hover:text-accent">
                     <span className="text-muted">{SECTION_LABELS[key].index}</span>{' '}
-                    {SECTION_LABELS[key].heading}
+                    {article.labels?.[key] ?? SECTION_LABELS[key].heading}
                   </a>
                 </li>
               ))}

@@ -69,6 +69,26 @@ export const color = {
   onAccent: '#0A0A0B',
 } as const;
 
+/**
+ * The five difficulty colours, quoted from the game.
+ *
+ * The one exception to "greyscale plus one hue", and a narrow one: these are
+ * not STEPWIRE's colours, they are DDR's, and a player reads EXPERT as green
+ * and CHALLENGE as purple before reading the word. Printing them in the lime
+ * would be less clear, not more consistent. They appear on the difficulty
+ * badge and nowhere else — never on text, never on a rule, never as accent.
+ *
+ * Lightened just enough that `onAccent` text meets AA on each; the test checks.
+ */
+export const difficulty = {
+  BEGINNER: '#2FCDEB',
+  BASIC: '#F4B33D',
+  DIFFICULT: '#EE5158',
+  EXPERT: '#41C245',
+  CHALLENGE: '#B76DF2',
+} as const;
+export type Difficulty = keyof typeof difficulty;
+
 export const font = {
   /**
    * Display + UI.

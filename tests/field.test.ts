@@ -3,6 +3,7 @@ import type { ArticleVideoInput } from '../lib/content/article';
 import { FIELD_ENERGY, fieldState, seeded } from '../lib/video/field-plan';
 import { backdropDim, backdropZoom, sceneGround } from '../lib/video/ground';
 import { buildSceneSequence } from '../lib/video/scenes';
+import { difficultyLabel, figureSchema, formatScore } from '../lib/content/figures';
 import { SCENE_TYPES } from '../lib/video/scene-types';
 import { color } from '../lib/design/tokens';
 
@@ -117,5 +118,39 @@ describe('credits on the last card', () => {
   it('carries none when the film owes none', () => {
     const outro = buildSceneSequence(article, 'STEPWIRE_NEWS').scenes.at(-1)!;
     expect(outro.credits).toBeUndefined();
+  });
+});
+
+describe('plays figure', () => {
+  it('labels a chart the way the game does', () => {
+    expect(difficultyLabel({ difficulty: 'EXPERT', level: 15 })).toBe('EXPERT 15');
+    expect(difficultyLabel({ difficulty: 'CHALLENGE' })).toBe('CHALLENGE');
+    expect(formatScore(998550)).toBe('998,550');
+  });
+
+  it('accepts a session log and refuses a score the game cannot give', () => {
+    const ok = figureSchema.safeParse({
+      kind: 'plays',
+      items: [{ song: 'eyesight', difficulty: 'EXPERT', level: 15, score: 998550, rank: 'AAA' }],
+    });
+    expect(ok.success).toBe(true);
+    if (ok.success && ok.data.kind === 'plays') expect(ok.data.items[0]?.style).toBe('SINGLE');
+    expect(
+      figureSchema.safeParse({ kind: 'plays', items: [{ song: 'x', difficulty: 'EXPERT', score: 1_000_001 }] }).success,
+    ).toBe(false);
+    expect(
+      figureSchema.safeParse({ kind: 'plays', items: [{ song: 'x', difficulty: 'HEAVY', score: 1 }] }).success,
+    ).toBe(false);
+  });
+
+  it('renames a section on the card when the article asks', () => {
+    const sequence = buildSceneSequence(
+      { ...article, labels: { context: 'SESSION', playerImpact: 'PICKUP' } },
+      'STEPWIRE_NEWS',
+    );
+    const labels = sequence.scenes.filter((s) => s.label).map((s) => s.label);
+    expect(labels).toContain('SESSION');
+    expect(labels).toContain('PICKUP');
+    expect(labels).toContain('WHAT HAPPENED');
   });
 });

@@ -162,6 +162,19 @@ export const articleFrontmatterSchema = z.object({
    * system infers.
    */
   figures: z.array(figureSchema).max(3).default([]),
+  /**
+   * What the three sections are called on this article, when the defaults
+   * (NEWS / CONTEXT / PLAYER IMPACT) do not fit — a session write-up calls its
+   * middle SESSION and its last PICKUP. The sections themselves, and which is
+   * fact and which is analysis, do not change; only the word on the card.
+   */
+  labels: z
+    .object({
+      news: z.string().min(1).max(24).optional(),
+      context: z.string().min(1).max(24).optional(),
+      playerImpact: z.string().min(1).max(24).optional(),
+    })
+    .optional(),
   heroImage: imageRefSchema.optional(),
   thumbnail: imageRefSchema.optional(),
   /** Images the video shows, in order. See `mediaSchema`. */

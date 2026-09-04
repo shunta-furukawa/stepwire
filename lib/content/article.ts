@@ -70,6 +70,8 @@ export interface ArticleVideoInput {
   playerImpact: string;
   primarySource?: { publisher: string; title: string; url: string };
   figures: Figure[];
+  /** Section names on the cards, when the article renames them. */
+  labels?: ArticleFrontmatter['labels'];
   /** Behind the opening headline, when the article has one. */
   heroImage?: ImageRef;
   /** Images the video shows, in order, each with its credit. */
@@ -200,6 +202,7 @@ export function toVideoInput(
     importance: article.importance,
     publishedAt: article.publishedAt,
     figures: article.figures,
+    ...(article.labels ? { labels: article.labels } : {}),
     ...(article.heroImage ? { heroImage: article.heroImage } : {}),
     media: article.media,
     ...(article.bgm ? { bgm: article.bgm } : {}),

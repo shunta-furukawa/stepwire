@@ -1,6 +1,7 @@
 import {
   border,
   color,
+  difficulty,
   font,
   fontSize,
   fontWeight,
@@ -64,7 +65,7 @@ export const gap = {
   xxl: space['2xl'] * SCALE,
 } as const;
 
-export { color, font, fontWeight, tracking, leading, border };
+export { color, difficulty, font, fontWeight, tracking, leading, border };
 
 /** Recurring text styles, so a scene never re-specifies the brand. */
 export const textStyles = {

@@ -17,7 +17,8 @@ sources.yml → collector → GitHub Issue → human review → content/*.mdx �
 One Article is the source of truth for both the web page and the video. There is
 no second content store, and there must never be one.
 
-- `content/articles/` real articles · `content/fixtures/` labelled samples
+- `content/articles/` real articles · `content/fixtures/` labelled samples (none
+  committed; the mechanism stays for tests and for sample content later)
 - `lib/content/` schema, parsing, validation, loading
 - `lib/news/` source registry, adapters, normalisation, deduplication
 - `lib/video/` composition registry, scene derivation, render drivers, guards
@@ -108,7 +109,9 @@ verified by eye with `pnpm video:render`.
 - **The palette is greyscale plus one hue.** Black ground, off-white type, and
   the MONO DDR lime (`accent`, with `accentHot` for live and breaking). Alert
   and data are separated by *form* — a filled chip that pulses versus accent
-  text — never by adding a second hue. Token names describe the role
+  text — never by adding a second hue. The one exception is `difficulty` in
+  the tokens: DDR's five difficulty colours, quoted on the difficulty badge of
+  a `plays` figure and nowhere else. Token names describe the role
   (`surface`, `raised`, `fg`, `muted`, `line`), never the pigment: a name like
   `ink` stops being true the moment the ground flips.
 - **No HTML scraping.** Official feeds, official APIs and public feeds only. A
