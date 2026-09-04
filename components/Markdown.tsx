@@ -121,6 +121,27 @@ export function Markdown({ blocks }: { blocks: Block[] }) {
             );
           case 'rule':
             return <hr key={index} className="border-line" />;
+          case 'image':
+            return (
+              <figure key={index} className="border-2 border-line-strong bg-raised p-sm">
+                {/* Operator-supplied files under public/, shown as they are: no
+                    optimiser may resample a result screen's digits. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/${block.src.replace(/^\//, '')}`}
+                  alt={block.alt}
+                  loading="lazy"
+                  className="mx-auto max-h-[70vh] w-auto max-w-full"
+                />
+                {block.caption || block.credit ? (
+                  <figcaption className="mt-sm font-mono text-micro leading-snug text-muted">
+                    {block.caption}
+                    {block.caption && block.credit ? ' — ' : ''}
+                    {block.credit ? <span className="text-accent">{block.credit}</span> : null}
+                  </figcaption>
+                ) : null}
+              </figure>
+            );
         }
       })}
     </div>

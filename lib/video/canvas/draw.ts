@@ -1,4 +1,5 @@
 import { SCENE_TONE, type Scene, type SceneType } from '../scenes';
+import type { MediaRef } from '../../content/schema';
 import { visibleUnits } from '../reveal';
 import { barFractions, difficultyLabel, formatBarValue, formatScore } from '../../content/figures';
 import { visualLength } from '../text';
@@ -239,12 +240,12 @@ function drawLabelChip(d: DrawContext, label: string, tone: 'fact' | 'analysis',
  * placed: the DOM version gets vertical centring from flexbox, and a canvas
  * gets it by computing the height first.
  */
-function layoutBody(d: DrawContext, text: string, size: number, weight = 500) {
+function layoutBody(d: DrawContext, text: string, size: number, weight = 500, measure?: number) {
   const { ctx, width, height } = d;
   const px = scaled(width, height);
   const x = px(120);
   // A 16:9 frame is wider than its measure should be; the DOM caps it at 82%.
-  const maxWidth = Math.min(width - x * 2, width * (width > height ? 0.82 : 1));
+  const maxWidth = measure ?? Math.min(width - x * 2, width * (width > height ? 0.82 : 1));
 
   ctx.font = fontOf(weight, size, font.display);
   const lines = wrapText(text, maxWidth, (line) => ctx.measureText(line).width);
@@ -346,12 +347,66 @@ const drawIdent: Drawer = (d, scene) => {
   }
 };
 
+/**
+ * The picture a body card carries, as a panel beside (landscape) or above
+ * (portrait) the copy — not behind it. A result photo is the point of the
+ * card, so it is shown whole and lit, and the words keep their own ground.
+ */
+function drawPanel(d: DrawContext, image: MediaRef) {
+  const { ctx, width, height } = d;
+  const px = scaled(width, height);
+  const { top, bottom } = contentBand(d);
+  const landscape = width > height;
+  const creditSize = px(fontSize.micro * 3);
+  const creditRoom = creditSize * 2;
+
+  const panel = landscape
+    ? { w: (width - px(240)) * 0.4, h: bottom - top - px(20) - creditRoom }
+    : { w: width - px(240), h: (bottom - top) * 0.46 - creditRoom };
+  const x = landscape ? width - px(120) - panel.w : px(120);
+  const y = top;
+
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x, y, panel.w, panel.h);
+  ctx.clip();
+  const source = d.images.get(image.src);
+  if (source) {
+    const iw = 'width' in source ? Number(source.width) : panel.w;
+    const ih = 'height' in source ? Number(source.height) : panel.h;
+    const scale = Math.max(panel.w / iw, panel.h / ih) * backdropZoom(d.progress);
+    ctx.drawImage(source, x + (panel.w - iw * scale) / 2, y + (panel.h - ih * scale) / 2, iw * scale, ih * scale);
+  } else {
+    ctx.fillStyle = color.raised;
+    ctx.fillRect(x, y, panel.w, panel.h);
+    ctx.font = fontOf(400, creditSize, font.mono);
+    ctx.fillStyle = color.accentHot;
+    drawTracked(ctx, `IMAGE MISSING: ${image.src}`, x + px(20), y + panel.h / 2, px(2));
+  }
+  ctx.restore();
+
+  ctx.strokeStyle = color.lineStrong;
+  ctx.lineWidth = Math.max(1, px(2));
+  ctx.strokeRect(x, y, panel.w, panel.h);
+
+  ctx.font = fontOf(400, creditSize, font.mono);
+  ctx.fillStyle = color.faint;
+  drawTracked(ctx, image.credit, x, y + panel.h + creditSize * 1.4, creditSize * tracking.wide);
+
+  return landscape
+    ? { measure: x - px(120) - px(56), top, bottom }
+    : { measure: undefined, top: y + panel.h + creditRoom + px(20), bottom };
+}
+
 /** A body card: label chip or accent mark, then copy, centred in the band. */
 const drawCard: Drawer = (d, scene) => {
   const { ctx, width, height } = d;
   const px = scaled(width, height);
   const tone = SCENE_TONE[scene.type];
-  const { top, bottom } = contentBand(d);
+  const band = contentBand(d);
+  const panel = scene.type !== 'headline' && scene.image ? drawPanel(d, scene.image) : null;
+  const top = panel?.top ?? band.top;
+  const bottom = panel?.bottom ?? band.bottom;
 
   if (scene.type === 'headline' && scene.image) {
     // Over a picture the masthead is drawn here, after it, so it sits on top.
@@ -365,7 +420,7 @@ const drawCard: Drawer = (d, scene) => {
 
   const isHeadline = scene.type === 'headline';
   const bodySize = px(fontSize[isHeadline ? 'h2' : 'h4'] * 3);
-  const body = scene.text ? layoutBody(d, scene.text, bodySize, isHeadline ? 900 : 500) : null;
+  const body = scene.text ? layoutBody(d, scene.text, bodySize, isHeadline ? 900 : 500, panel?.measure) : null;
   const meta = isHeadline && scene.meta ? layoutBody(d, scene.meta, px(fontSize.lead * 2.4), 400) : null;
 
   const markHeight = isHeadline ? 0 : scene.label ? measureLabelChip(d) : px(8);

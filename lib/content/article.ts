@@ -56,6 +56,11 @@ export interface NarrationInput {
   captions: TranscriptCaption[];
 }
 
+/** One unit of a section as the video sees it: words, or a picture. */
+export type VideoBlock =
+  | { kind: 'paragraph'; text: string }
+  | { kind: 'image'; media: MediaRef };
+
 export interface ArticleVideoInput {
   slug: string;
   title: string;
@@ -72,6 +77,12 @@ export interface ArticleVideoInput {
   figures: Figure[];
   /** Section names on the cards, when the article renames them. */
   labels?: ArticleFrontmatter['labels'];
+  /**
+   * The sections as blocks, so the video knows which paragraph a picture
+   * belongs to. `news` / `context` / `playerImpact` above stay as the plain
+   * text for callers that only need words.
+   */
+  blocks?: Record<SectionKey, VideoBlock[]>;
   /** Behind the opening headline, when the article has one. */
   heroImage?: ImageRef;
   /** Images the video shows, in order, each with its credit. */
@@ -172,6 +183,27 @@ export function parseArticle(raw: string, options: ParseOptions): Article {
     }),
   ) as Record<SectionKey, ArticleSection>;
 
+  // A picture in the prose is a quotation like any other, so it has to be one
+  // the frontmatter declared with a credit. Binding it here means the page and
+  // the video read the caption and the credit from one place.
+  for (const key of SECTION_KEYS) {
+    for (const block of sections[key].blocks) {
+      if (block.type !== 'image') continue;
+      const media = frontmatter.media.find(
+        (item) => item.src.replace(/^\//, '') === block.src.replace(/^\//, ''),
+      );
+      if (!media) {
+        throw new Error(
+          `## ${SECTION_HEADINGS[key]} shows ${block.src}, which is not declared in media — every picture needs a credit`,
+        );
+      }
+      block.src = media.src;
+      if (!block.alt) block.alt = media.alt;
+      block.credit = media.credit;
+      if (media.caption) block.caption = media.caption;
+    }
+  }
+
   return {
     ...frontmatter,
     fixture: frontmatter.fixture || options.forceFixture === true,
@@ -185,6 +217,20 @@ export function parseArticle(raw: string, options: ParseOptions): Article {
 export function articleCitations(article: Article): number[] {
   const all = SECTION_KEYS.flatMap((key) => collectCitations(article.sections[key].blocks));
   return [...new Set(all)].sort((a, b) => a - b);
+}
+
+function toVideoBlocks(article: Article, key: SectionKey): VideoBlock[] {
+  const out: VideoBlock[] = [];
+  for (const block of article.sections[key].blocks) {
+    if (block.type === 'image') {
+      const media = article.media.find((item) => item.src === block.src);
+      if (media) out.push({ kind: 'image', media });
+      continue;
+    }
+    const text = toPlainText([block]);
+    if (text) out.push({ kind: 'paragraph', text });
+  }
+  return out;
 }
 
 export function toVideoInput(
@@ -209,6 +255,11 @@ export function toVideoInput(
     news: article.sections.news.text,
     context: article.sections.context.text,
     playerImpact: article.sections.playerImpact.text,
+    blocks: {
+      news: toVideoBlocks(article, 'news'),
+      context: toVideoBlocks(article, 'context'),
+      playerImpact: toVideoBlocks(article, 'playerImpact'),
+    },
     ...(primary
       ? {
           primarySource: {

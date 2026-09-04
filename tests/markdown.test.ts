@@ -181,3 +181,17 @@ describe('toSentences', () => {
     ]);
   });
 });
+
+describe('image blocks', () => {
+  it('reads a picture on its own line and keeps it out of the plain text', async () => {
+    const { parseMarkdown, toPlainText } = await import('../lib/content/markdown');
+    const blocks = parseMarkdown('Before.\n\n![a result](images/articles/x/result.jpg)\n\nAfter.');
+    expect(blocks.map((b) => b.type)).toEqual(['paragraph', 'image', 'paragraph']);
+    const image = blocks[1]!;
+    if (image.type !== 'image') throw new Error('expected an image block');
+    expect(image.src).toBe('images/articles/x/result.jpg');
+    expect(image.alt).toBe('a result');
+    // The words of the section are the words; a picture adds none.
+    expect(toPlainText(blocks)).toBe('Before.\n\nAfter.');
+  });
+});

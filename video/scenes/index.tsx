@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, useCurrentFrame, useVideoConfig } from 'remotion';
+import { AbsoluteFill, Img, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { SCENE_TONE, type Scene } from '../../lib/video/scenes';
 import { revealedText, visibleUnits } from '../../lib/video/reveal';
 import { barFractions, difficultyLabel, formatBarValue, formatScore } from '../../lib/content/figures';
@@ -180,6 +180,34 @@ export function HeadlineScene({ scene, orientation }: SceneProps) {
  * (a raised ground). The elevation is the same fact/analysis distinction the
  * website draws with its section labels.
  */
+/**
+ * The picture a body card carries — beside the copy in landscape, above it in
+ * portrait. Shown whole and lit, with its credit, because a result photo is
+ * what the card is about; the words keep their own ground.
+ */
+function Panel({ image, orientation }: { image: NonNullable<Scene['image']>; orientation: SceneProps['orientation'] }) {
+  const frame = useCurrentFrame();
+  const landscape = orientation !== 'vertical';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: gap.sm, ...(landscape ? { width: '40%', alignSelf: 'stretch' } : { height: '46%' }) }}>
+      <div style={{ position: 'relative', flex: 1, overflow: 'hidden', border: `2px solid ${color.lineStrong}` }}>
+        <Img
+          src={staticFile(image.src.replace(/^\//, ''))}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            transform: `scale(${1 + Math.min(0.06, frame / 3000)})`,
+          }}
+        />
+      </div>
+      <p style={{ ...textStyles.meta, fontSize: type.micro, color: color.faint, margin: 0 }}>{image.credit}</p>
+    </div>
+  );
+}
+
 function BodyScene({
   scene,
   orientation,
@@ -187,6 +215,7 @@ function BodyScene({
   tone,
 }: SceneProps & { accent: string; tone: 'fact' | 'analysis' }) {
   const l = layout(orientation);
+  const landscape = orientation !== 'vertical';
 
   return (
     <AbsoluteFill style={TRANSPARENT}>
@@ -195,7 +224,15 @@ function BodyScene({
       <Card background="transparent" padding={l.padding}>
         <WireBar meta={caption(scene)} />
 
-        <div>
+        <div
+          style={
+            scene.image
+              ? { display: 'flex', flexDirection: landscape ? 'row' : 'column', gap: gap.xl, alignItems: landscape ? 'center' : 'stretch', flex: 1, minHeight: 0 }
+              : undefined
+          }
+        >
+          {scene.image && !landscape ? <Panel image={scene.image} orientation={orientation} /> : null}
+        <div style={scene.image ? { flex: 1, minWidth: 0 } : undefined}>
           {scene.label ? (
             <div style={{ marginBottom: gap.lg }}>
               <LabelChip tone={tone}>{scene.label}</LabelChip>
@@ -215,10 +252,12 @@ function BodyScene({
             style={{
               ...textStyles.body,
               fontSize: l.body,
-              maxWidth: l.maxWidth,
+              maxWidth: scene.image ? '100%' : l.maxWidth,
               lineHeight: leading.tight,
             }}
           />
+        </div>
+          {scene.image && landscape ? <Panel image={scene.image} orientation={orientation} /> : null}
         </div>
 
         <ProgressRail index={scene.index} total={scene.total} />

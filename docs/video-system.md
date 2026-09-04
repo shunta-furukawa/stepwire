@@ -82,6 +82,20 @@ media:                              # shown after the reported fact
     kind: jacket                    # jacket · screenshot · post · photo
 ```
 
+A picture can also be placed in the prose, on a line of its own:
+
+```md
+![](images/articles/2026-09-03-esw-7th-mca/result-decryption.jpg)
+
+新曲3曲で一番きつかったのは「Decryption」だった。…
+```
+
+It must name a `media` entry (that is where the credit lives). In the video it
+rides with the paragraph after it — a panel beside the copy in landscape,
+above it in portrait — so the operator talks about a result while the result
+is on screen. Pictures the prose never places still get their own card after
+the reported fact.
+
 A jacket, a screenshot or somebody's post in a published video is a quotation,
 and the credit is what makes it one. The validator refuses an article without
 one rather than the video quietly omitting the line.

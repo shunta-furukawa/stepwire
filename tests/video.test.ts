@@ -562,3 +562,51 @@ describe('figures', () => {
     expect(formatBarValue({ ...barsFigure, unit: undefined }, 300)).toBe('300');
   });
 });
+
+describe('pictures placed in the prose', () => {
+  it('ride with the paragraph after them and leave the gallery', () => {
+    const shot = { src: 'images/a.png', alt: 'a', credit: 'A' };
+    const other = { src: 'images/b.png', alt: 'b', credit: 'B' };
+    const sequence = buildSceneSequence(
+      {
+        ...article,
+        media: [shot, other],
+        blocks: {
+          news: [{ kind: 'paragraph', text: article.news }],
+          context: [
+            { kind: 'paragraph', text: 'Before the picture.' },
+            { kind: 'image', media: shot },
+            { kind: 'paragraph', text: 'About the picture.' },
+          ],
+          playerImpact: [{ kind: 'paragraph', text: article.playerImpact }],
+        },
+      },
+      'STEPWIRE_NEWS',
+    );
+    const context = sequence.scenes.filter((s) => s.type === 'context');
+    expect(context[0]?.image).toBeUndefined();
+    expect(context[1]?.image?.src).toBe('images/a.png');
+    expect(context[1]?.text).toBe('About the picture.');
+    // Only the unplaced picture gets a gallery card.
+    const gallery = sequence.scenes.filter((s) => s.type === 'image').map((s) => s.image?.src);
+    expect(gallery).toEqual(['images/b.png']);
+  });
+
+  it('gives a trailing picture to the paragraph before it', () => {
+    const shot = { src: 'images/a.png', alt: 'a', credit: 'A' };
+    const sequence = buildSceneSequence(
+      {
+        ...article,
+        media: [shot],
+        blocks: {
+          news: [{ kind: 'paragraph', text: article.news }],
+          context: [{ kind: 'paragraph', text: 'Only words.' }, { kind: 'image', media: shot }],
+          playerImpact: [{ kind: 'paragraph', text: article.playerImpact }],
+        },
+      },
+      'STEPWIRE_NEWS',
+    );
+    expect(sequence.scenes.find((s) => s.type === 'context')?.image?.src).toBe('images/a.png');
+    expect(sequence.scenes.some((s) => s.type === 'image')).toBe(false);
+  });
+});

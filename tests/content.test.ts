@@ -219,3 +219,57 @@ describe('toVideoInput', () => {
     expect(JSON.parse(JSON.stringify(input))).toEqual(input);
   });
 });
+
+describe('pictures in the prose', () => {
+  const source = (body: string, media = true) => `---
+id: 20260903-pictures
+slug: pictures-in-the-prose
+title: 'Pictures'
+publishedAt: '2026-09-03T12:00:00+09:00'
+category: CHARTS
+summary: 'A summary.'
+status: review
+sources:
+  - title: 'A'
+    publisher: 'B'
+    url: https://example.com/a
+${media ? `media:
+  - src: images/articles/x/result.jpg
+    alt: 'the result'
+    credit: 'MONO DDR'
+    caption: 'A caption'
+` : ''}---
+
+## NEWS
+
+Fact.[^1]
+
+## CONTEXT
+
+![](images/articles/x/result.jpg)
+
+Words about the result.
+
+## PLAYER IMPACT
+
+More words.
+`;
+
+  it('binds an inline picture to its media entry, credit included', async () => {
+    const { parseArticle, toVideoInput } = await import('../lib/content/article');
+    const article = parseArticle(source(''), { filePath: 'x.mdx' });
+    const image = article.sections.context.blocks.find((b) => b.type === 'image');
+    if (!image || image.type !== 'image') throw new Error('expected an image block');
+    expect(image.credit).toBe('MONO DDR');
+    expect(image.caption).toBe('A caption');
+    expect(image.alt).toBe('the result');
+
+    const blocks = toVideoInput(article).blocks!.context;
+    expect(blocks.map((b) => b.kind)).toEqual(['image', 'paragraph']);
+  });
+
+  it('refuses a picture the frontmatter never declared', async () => {
+    const { parseArticle } = await import('../lib/content/article');
+    expect(() => parseArticle(source('', false), { filePath: 'x.mdx' })).toThrow(/not declared in media/);
+  });
+});

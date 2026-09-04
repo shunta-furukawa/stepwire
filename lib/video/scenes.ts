@@ -1,4 +1,4 @@
-import type { ArticleVideoInput, NarrationInput } from '../content/article';
+import type { ArticleVideoInput, NarrationInput, VideoBlock } from '../content/article';
 import type { SceneType } from './scene-types';
 import type { Figure } from '../content/figures';
 import type { MediaRef } from '../content/schema';
@@ -275,33 +275,70 @@ export function buildSceneSequence(
   const sections = narrated
     ? []
     : [
-        { type: 'news' as const, source: article.news, max: profile.maxChunks.news },
-        { type: 'context' as const, source: article.context, max: profile.maxChunks.context },
-        { type: 'impact' as const, source: article.playerImpact, max: profile.maxChunks.impact },
+        { type: 'news' as const, key: 'news' as const, source: article.news, max: profile.maxChunks.news },
+        { type: 'context' as const, key: 'context' as const, source: article.context, max: profile.maxChunks.context },
+        { type: 'impact' as const, key: 'playerImpact' as const, source: article.playerImpact, max: profile.maxChunks.impact },
       ];
 
+  // A picture placed in the prose is shown WITH the paragraph after it, on
+  // that paragraph's cards, rather than in the gallery after the fact: the
+  // operator talks about a result while the result is on screen. Pictures the
+  // prose never places still get their own card in the gallery.
+  const placed = new Set<string>();
   for (const section of sections) {
-    const cards = chunk(section.source, profile.budget, section.max);
-    cards.forEach((text, position) => {
+    for (const block of article.blocks?.[section.key] ?? []) {
+      if (block.kind === 'image') placed.add(block.media.src);
+    }
+  }
+  const gallery = article.media.filter((image) => !placed.has(image.src));
+
+  for (const section of sections) {
+    const blocks: VideoBlock[] = article.blocks?.[section.key] ?? [
+      { kind: 'paragraph', text: section.source },
+    ];
+    const cards: Draft[] = [];
+    let pending: MediaRef | undefined;
+
+    for (const block of blocks) {
+      if (block.kind === 'image') {
+        pending = block.media;
+        continue;
+      }
+      if (cards.length >= section.max) break;
+      // Chunked per paragraph, not per section: a paragraph break is a break
+      // the author chose, and a picture is bound to a paragraph.
+      for (const text of chunk(block.text, profile.budget, section.max - cards.length)) {
+        cards.push({
+          id: section.type,
+          type: section.type,
+          ...typed(text, 'body', fps),
+          text,
+          ...(pending ? { image: pending } : {}),
+        });
+      }
+      pending = undefined;
+    }
+    // A picture with nothing after it belongs to what came before it.
+    if (pending && cards.length > 0) cards[cards.length - 1]!.image = pending;
+
+    cards.forEach((card, position) => {
       drafts.push({
+        ...card,
         id: cards.length > 1 ? `${section.type}-${position + 1}` : section.type,
-        type: section.type,
-        ...typed(text, 'body', fps),
         // Only the first card of a section carries the label; repeating it on
         // every card would read as a new section each time.
         ...(position === 0
-          ? { label: article.labels?.[section.type === 'impact' ? 'playerImpact' : section.type] ?? LABELS[section.type] }
+          ? { label: article.labels?.[section.key] ?? LABELS[section.type] }
           : {}),
-        text,
       });
     });
 
-    // The images follow the reported fact and precede the analysis: they are
+    // The gallery follows the reported fact and precedes the analysis: they are
     // what the story is about, shown before anyone says what it means.
     if (section.type === 'news') {
-      article.media.forEach((image, index) => {
+      gallery.forEach((image, index) => {
         drafts.push({
-          id: article.media.length > 1 ? `image-${index + 1}` : 'image',
+          id: gallery.length > 1 ? `image-${index + 1}` : 'image',
           type: 'image',
           durationInFrames: secondsToFrames(profile.imageSeconds, fps),
           image,

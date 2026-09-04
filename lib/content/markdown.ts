@@ -30,7 +30,14 @@ export type Block =
   | { type: 'heading'; level: 3 | 4; children: InlineNode[] }
   | { type: 'list'; ordered: boolean; items: InlineNode[][] }
   | { type: 'blockquote'; children: InlineNode[] }
-  | { type: 'rule' };
+  | { type: 'rule' }
+  /**
+   * A picture in the flow of the prose: `![alt](images/…)` alone on a line.
+   * It must name a `media` entry of the article — that is where the credit
+   * lives — and `parseArticle` fills `caption` and `credit` from it. In the
+   * video the picture rides with the paragraph that follows it.
+   */
+  | { type: 'image'; src: string; alt: string; caption?: string; credit?: string };
 
 const INLINE_PATTERN =
   /(\*\*[^*]+\*\*)|(\*[^*]+\*)|(`[^`]+`)|(\[\^(\d+)\])|(\[[^\]]+\]\([^)\s]+\))/;
@@ -136,6 +143,14 @@ export function parseMarkdown(source: string): Block[] {
       continue;
     }
 
+    const image = /^!\[([^\]]*)\]\(([^)\s]+)\)$/.exec(trimmed);
+    if (image) {
+      flushParagraph(paragraph);
+      blocks.push({ type: 'image', src: image[2]!, alt: image[1]!.trim() });
+      index += 1;
+      continue;
+    }
+
     const heading = /^(#{3,4})\s+(.*)$/.exec(trimmed);
     if (heading) {
       flushParagraph(paragraph);
@@ -187,6 +202,8 @@ function inlineChildren(node: InlineNode): InlineNode[] {
 }
 
 function blockInlines(block: Block): InlineNode[] {
+  // A picture has no words; its caption is metadata, not prose.
+  if (block.type === 'image') return [];
   switch (block.type) {
     case 'paragraph':
     case 'heading':
