@@ -35,7 +35,9 @@ export const COMPOSITIONS = {
     fps: video.fps,
     orientation: 'landscape',
     aspectRatio: '16:9',
-    targetSeconds: { min: 35, max: 90 },
+    // Long enough for a session write-up with a card per chart; a Short is
+    // the format that has to be brief, and it has its own ceiling.
+    targetSeconds: { min: 35, max: 150 },
     usage: 'YouTube · web embed',
   },
 } as const;

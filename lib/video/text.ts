@@ -55,3 +55,48 @@ export function needsSpaceBetween(current: string, next: string | undefined): bo
   if (!next) return false;
   return !CJK_RANGE.test(current.slice(-1)) && !CJK_RANGE.test(next.charAt(0));
 }
+
+/**
+ * Lines a text will take in a column, estimated from weighted length: a CJK
+ * glyph is an em, a Latin character about half of one. The DOM cannot measure
+ * before it lays out, so it estimates; the canvas measures exactly. Both err
+ * on the side of one line too many, which is the side a card can afford.
+ */
+export function estimateLines(text: string, size: number, measure: number): number {
+  const halfEmsPerLine = Math.max(1, Math.floor(measure / (size * 0.5)));
+  return text
+    .split('\n')
+    .reduce((lines, para) => lines + Math.max(1, Math.ceil(visualLength(para) / halfEmsPerLine)), 0);
+}
+
+export interface FitOptions {
+  /** The size the card would like to set the copy at. */
+  size: number;
+  /** Column width in the same units as `size`. */
+  measure: number;
+  /** Vertical room for the copy, same units. */
+  height: number;
+  /** Line height as a multiple of `size`. */
+  lineHeight: number;
+  /** How far the copy may shrink, as a fraction of `size`. */
+  floor?: number;
+}
+
+/**
+ * The largest size at which the copy fits its room, stepping down from the
+ * wanted size. A card whose copy runs through the progress rail is a broken
+ * frame, and the operator finds out after posting; a card set a size smaller
+ * is a card. The floor stops a paragraph that could never fit from shrinking
+ * to nothing — past it, the writing is the problem, not the type.
+ */
+export function fitBodySize(text: string, options: FitOptions): number {
+  const { size, measure, height, lineHeight, floor = 0.6 } = options;
+  let candidate = size;
+  while (
+    candidate > size * floor &&
+    estimateLines(text, candidate, measure) * candidate * lineHeight > height
+  ) {
+    candidate *= 0.92;
+  }
+  return Math.max(candidate, size * floor);
+}

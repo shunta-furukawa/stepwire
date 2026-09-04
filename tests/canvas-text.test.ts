@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { toBreakUnits, typedLines, wrapText } from '../lib/video/canvas/text';
+import { estimateLines, fitBodySize } from '../lib/video/text';
 
 /**
  * A canvas has no line breaking, so the video's browser renderer has to do it.
@@ -116,5 +117,27 @@ describe('typedLines', () => {
   it('stops at the typed character and never past the text', () => {
     expect(typedLines('abc', ['abc'], 0)).toEqual([]);
     expect(typedLines('abc', ['abc'], 99)).toEqual(['abc']);
+  });
+});
+
+describe('fitBodySize', () => {
+  it('leaves copy that fits alone and shrinks copy that does not', () => {
+    const short = 'ひとこと。';
+    const long = 'あ'.repeat(200);
+    expect(fitBodySize(short, { size: 66, measure: 1300, height: 480, lineHeight: 1.35 })).toBe(66);
+    const fitted = fitBodySize(long, { size: 66, measure: 1300, height: 480, lineHeight: 1.35 });
+    expect(fitted).toBeLessThan(66);
+    expect(estimateLines(long, fitted, 1300) * fitted * 1.35).toBeLessThanOrEqual(480 + 1);
+  });
+
+  it('never shrinks past the floor', () => {
+    const endless = 'あ'.repeat(5000);
+    expect(fitBodySize(endless, { size: 66, measure: 1300, height: 480, lineHeight: 1.35 })).toBeCloseTo(66 * 0.6);
+  });
+
+  it('counts a CJK glyph as an em and a Latin character as half', () => {
+    expect(estimateLines('あ'.repeat(10), 10, 100)).toBe(1);
+    expect(estimateLines('あ'.repeat(11), 10, 100)).toBe(2);
+    expect(estimateLines('a'.repeat(20), 10, 100)).toBe(1);
   });
 });

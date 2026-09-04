@@ -3,7 +3,7 @@ import { AbsoluteFill, Img, staticFile, useCurrentFrame, useVideoConfig } from '
 import { SCENE_TONE, type Scene } from '../../lib/video/scenes';
 import { revealedText, visibleUnits } from '../../lib/video/reveal';
 import { barFractions, difficultyLabel, formatBarValue, formatScore } from '../../lib/content/figures';
-import { visualLength } from '../../lib/video/text';
+import { fitBodySize, visualLength } from '../../lib/video/text';
 import { color,
   difficulty, font, fontWeight, gap, leading, textStyles, tracking, type } from '../styles/theme';
 import {
@@ -216,6 +216,17 @@ function BodyScene({
 }: SceneProps & { accent: string; tone: 'fact' | 'analysis' }) {
   const l = layout(orientation);
   const landscape = orientation !== 'vertical';
+  const { width, height } = useVideoConfig();
+
+  // The same fit the canvas renderer measures for, estimated: the room above
+  // the rail, minus the chip, in a column the picture may have narrowed.
+  const contentWidth = width - l.padding * 2;
+  const measure = scene.image && landscape ? contentWidth * 0.56 : contentWidth * (landscape ? 0.82 : 1);
+  const band = height - 440;
+  const room = (scene.image && !landscape ? band * 0.5 : band) - (scene.label ? 156 : 68);
+  const bodySize = scene.text
+    ? fitBodySize(scene.text, { size: l.body, measure, height: room, lineHeight: leading.tight })
+    : l.body;
 
   return (
     <AbsoluteFill style={TRANSPARENT}>
@@ -251,7 +262,7 @@ function BodyScene({
             scene={scene}
             style={{
               ...textStyles.body,
-              fontSize: l.body,
+              fontSize: bodySize,
               maxWidth: scene.image ? '100%' : l.maxWidth,
               lineHeight: leading.tight,
             }}

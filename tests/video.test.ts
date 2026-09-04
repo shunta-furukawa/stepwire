@@ -610,3 +610,34 @@ describe('pictures placed in the prose', () => {
     expect(sequence.scenes.some((s) => s.type === 'image')).toBe(false);
   });
 });
+
+describe('pictures beside copy', () => {
+  it('gives a card with a picture a smaller budget, and keeps every paragraph', () => {
+    const para = '一文がここにある。'.repeat(12);
+    const withPictures: ArticleVideoInput = {
+      ...article,
+      media: [{ src: 'images/a.png', alt: 'a', credit: 'A' }],
+      blocks: {
+        news: [{ kind: 'paragraph', text: article.news }],
+        context: [
+          { kind: 'image', media: { src: 'images/a.png', alt: 'a', credit: 'A' } },
+          { kind: 'paragraph', text: para },
+          { kind: 'paragraph', text: '二つ目。' },
+          { kind: 'paragraph', text: '三つ目。' },
+          { kind: 'paragraph', text: '四つ目。' },
+        ],
+        playerImpact: [{ kind: 'paragraph', text: article.playerImpact }],
+      },
+    };
+    const scenes = buildSceneSequence(withPictures, 'STEPWIRE_NEWS').scenes;
+    const context = scenes.filter((s) => s.type === 'context');
+    // The pictured paragraph split into more, smaller cards than it would
+    // have at full measure; the three short paragraphs after it survived.
+    const pictured = context.filter((s) => s.image);
+    expect(pictured.length).toBeGreaterThanOrEqual(2);
+    for (const card of pictured) expect(card.text!.length).toBeLessThan(120);
+    expect(context.map((s) => s.text)).toEqual(expect.arrayContaining(['二つ目。', '三つ目。', '四つ目。']));
+    // A placed picture is not repeated in the gallery.
+    expect(scenes.filter((s) => s.type === 'image')).toHaveLength(0);
+  });
+});

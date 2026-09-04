@@ -419,13 +419,23 @@ const drawCard: Drawer = (d, scene) => {
   }
 
   const isHeadline = scene.type === 'headline';
-  const bodySize = px(fontSize[isHeadline ? 'h2' : 'h4'] * 3);
-  const body = scene.text ? layoutBody(d, scene.text, bodySize, isHeadline ? 900 : 500, panel?.measure) : null;
   const meta = isHeadline && scene.meta ? layoutBody(d, scene.meta, px(fontSize.lead * 2.4), 400) : null;
 
   const markHeight = isHeadline ? 0 : scene.label ? measureLabelChip(d) : px(8);
   const markGap = isHeadline ? 0 : px(60);
   const metaGap = meta ? px(50) : 0;
+
+  // The copy is measured, and shrunk until it fits above the rail. A card
+  // that runs through the rail is a broken frame; a card a size smaller is
+  // a card. The floor matches `fitBodySize`, which the DOM estimates with.
+  const wanted = px(fontSize[isHeadline ? 'h2' : 'h4'] * 3);
+  const room = bottom - top - markHeight - markGap - metaGap - (meta?.blockHeight ?? 0);
+  let bodySize = wanted;
+  let body = scene.text ? layoutBody(d, scene.text, bodySize, isHeadline ? 900 : 500, panel?.measure) : null;
+  while (body && body.blockHeight > room && bodySize > wanted * 0.6) {
+    bodySize = Math.max(wanted * 0.6, bodySize * 0.92);
+    body = layoutBody(d, scene.text!, bodySize, isHeadline ? 900 : 500, panel?.measure);
+  }
   const blockHeight =
     markHeight + markGap + (body?.blockHeight ?? 0) + metaGap + (meta?.blockHeight ?? 0);
 

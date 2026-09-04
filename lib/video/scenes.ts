@@ -155,6 +155,12 @@ interface FormatProfile {
   budget: number;
   /** Maximum cards per section. */
   maxChunks: { news: number; context: number; impact: number };
+  /**
+   * Share of `budget` a card gets when a picture sits beside its copy. The
+   * column is narrower (landscape) or shorter (portrait), and a card sized
+   * for the full measure runs through the rail.
+   */
+  pictureBudget: number;
   bounds: DurationBounds;
   headlineBounds: DurationBounds;
   sourceSeconds: number;
@@ -168,7 +174,8 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
   // card, fewer cards, hard ceiling on total length.
   STEPWIRE_SHORT: {
     budget: 150,
-    maxChunks: { news: 2, context: 2, impact: 2 },
+    maxChunks: { news: 3, context: 4, impact: 4 },
+    pictureBudget: 0.5,
     bounds: { min: 2.2, max: 6 },
     headlineBounds: { min: 2.4, max: 5 },
     sourceSeconds: 2.2,
@@ -181,7 +188,11 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
   // budget is only modestly larger than the vertical one.
   STEPWIRE_NEWS: {
     budget: 200,
-    maxChunks: { news: 3, context: 3, impact: 3 },
+    // Generous: a session write-up has a paragraph per chart, and a paragraph
+    // dropped for a cap is a paragraph the operator wrote for nothing. The
+    // format's duration ceiling, not this, is what keeps a film short.
+    maxChunks: { news: 4, context: 8, impact: 8 },
+    pictureBudget: 0.65,
     bounds: { min: 2.5, max: 8 },
     headlineBounds: { min: 3, max: 6 },
     sourceSeconds: 3,
@@ -307,7 +318,8 @@ export function buildSceneSequence(
       if (cards.length >= section.max) break;
       // Chunked per paragraph, not per section: a paragraph break is a break
       // the author chose, and a picture is bound to a paragraph.
-      for (const text of chunk(block.text, profile.budget, section.max - cards.length)) {
+      const budget = pending ? Math.round(profile.budget * profile.pictureBudget) : profile.budget;
+      for (const text of chunk(block.text, budget, section.max - cards.length)) {
         cards.push({
           id: section.type,
           type: section.type,
