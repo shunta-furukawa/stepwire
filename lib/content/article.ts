@@ -74,6 +74,9 @@ export interface ArticleVideoInput {
   context: string;
   playerImpact: string;
   primarySource?: { publisher: string; title: string; url: string };
+  /** Every source, for the post description; `primarySource` is the first. */
+  sources?: { publisher: string; title: string; url: string }[];
+  tags?: string[];
   figures: Figure[];
   /** Section names on the cards, when the article renames them. */
   labels?: ArticleFrontmatter['labels'];
@@ -248,6 +251,8 @@ export function toVideoInput(
     importance: article.importance,
     publishedAt: article.publishedAt,
     figures: article.figures,
+    tags: article.tags,
+    sources: article.sources.map((s) => ({ publisher: s.publisher, title: s.title, url: s.url })),
     ...(article.labels ? { labels: article.labels } : {}),
     ...(article.heroImage ? { heroImage: article.heroImage } : {}),
     media: article.media,

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getStudioArticles, getVideoInput } from '@/lib/content/loader';
 import { ExportLab } from '@/components/studio/ExportLab';
+import { site } from '@/lib/site';
 
 /**
  * `/studio/lab` — the export spike.
@@ -42,7 +43,7 @@ export default async function LabPage() {
       </header>
 
       <div className="pt-xl">
-        <ExportLab articles={inputs} />
+        <ExportLab articles={inputs} siteUrl={site.url} />
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ import {
   type AudioCandidate,
 } from '@/lib/video/canvas/audio';
 import { mixSoundtrack } from '@/lib/video/canvas/mix';
+import { postCopy } from '@/lib/video/post-copy';
 
 /**
  * The export spike.
@@ -118,7 +119,7 @@ async function detect(): Promise<Support> {
   return support;
 }
 
-export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
+export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]; siteUrl: string }) {
   // Opens on the article with the most in it — music, then images — so the
   // first export exercises the whole pipeline rather than the plainest case.
   const [slug, setSlug] = useState(
@@ -602,10 +603,77 @@ export function ExportLab({ articles }: { articles: ArticleVideoInput[] }) {
         </section>
       ) : null}
 
+      {article ? <PostCopyPanel article={article} siteUrl={siteUrl} /> : null}
+
       {/* Off-screen but in the DOM: an OffscreenCanvas would be faster, and is
           the next thing to try if these numbers are close. */}
       <canvas ref={canvasRef} className="sr-only" />
     </div>
+  );
+}
+
+/**
+ * The words that go with the film: title, description, hashtags, each a tap
+ * from the clipboard. Derived from the article, so the description carries
+ * the same sources and credits the film does — and the phone never has to
+ * retype a licence line.
+ */
+function PostCopyPanel({ article, siteUrl }: { article: ArticleVideoInput; siteUrl: string }) {
+  const copy = useMemo(
+    () => postCopy(article, `${siteUrl.replace(/\/$/, '')}/article/${article.slug}`),
+    [article, siteUrl],
+  );
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const copyToClipboard = useCallback(async (key: string, text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(key);
+      setTimeout(() => setCopied((current) => (current === key ? null : current)), 1600);
+    } catch {
+      // Clipboard access needs a user gesture and a secure context; the
+      // text is on screen to select by hand either way.
+      setCopied(`${key}:failed`);
+    }
+  }, []);
+
+  const blocks: { key: string; label: string; text: string; rows: number }[] = [
+    { key: 'title', label: 'タイトル', text: copy.title, rows: 2 },
+    { key: 'description', label: '概要欄', text: copy.description, rows: 12 },
+    { key: 'hashtags', label: 'ハッシュタグ', text: copy.hashtags, rows: 2 },
+  ];
+
+  return (
+    <section className="mt-xl space-y-md border-2 border-line-strong bg-raised p-md" aria-labelledby="post-copy-heading">
+      <h2 id="post-copy-heading" className="font-mono text-micro font-bold uppercase tracking-wider">
+        投稿用テキスト
+        <span className="ml-sm font-normal text-muted">記事から生成 · 出典とクレジット入り</span>
+      </h2>
+      {blocks.map((block) => (
+        <div key={block.key}>
+          <div className="flex items-center justify-between">
+            <label className="font-mono text-micro uppercase tracking-wide text-muted" htmlFor={`post-${block.key}`}>
+              {block.label}
+            </label>
+            <button
+              type="button"
+              onClick={() => copyToClipboard(block.key, block.text)}
+              className="border-2 border-line-strong px-md py-xs font-mono text-micro uppercase tracking-wider hover:bg-accent hover:text-on-accent"
+            >
+              {copied === block.key ? 'コピーしました' : copied === `${block.key}:failed` ? 'コピーできません' : 'コピー'}
+            </button>
+          </div>
+          <textarea
+            id={`post-${block.key}`}
+            readOnly
+            rows={block.rows}
+            value={block.text}
+            onFocus={(event) => event.currentTarget.select()}
+            className="mt-xs w-full resize-y border-2 border-line bg-deep px-md py-sm font-body text-small leading-snug text-fg"
+          />
+        </div>
+      ))}
+    </section>
   );
 }
 
