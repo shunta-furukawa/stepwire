@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { toBreakUnits, wrapText } from '../lib/video/canvas/text';
+import { toBreakUnits, typedLines, wrapText } from '../lib/video/canvas/text';
 
 /**
  * A canvas has no line breaking, so the video's browser renderer has to do it.
@@ -94,5 +94,27 @@ describe('wrapText', () => {
       'は300で',
       'す',
     ]);
+  });
+});
+
+describe('typedLines', () => {
+  it('charges a break only where the text has whitespace', () => {
+    // Latin: the wrap dropped the space, and the typed count includes it.
+    const latin = 'alpha beta gamma';
+    const latinLines = ['alpha', 'beta', 'gamma'];
+    expect(typedLines(latin, latinLines, 7)).toEqual(['alpha', 'b']);
+    expect(typedLines(latin, latinLines, 16)).toEqual(['alpha', 'beta', 'gamma']);
+
+    // Japanese: nothing was dropped at the break, so nothing is charged. The
+    // old arithmetic lost the last character of every wrapped line here.
+    const ja = 'EXTRA SAVIORに7th MCAの3曲';
+    const jaLines = ['EXTRA SAVIORに7th MCAの3', '曲'];
+    expect(typedLines(ja, jaLines, [...ja].length)).toEqual(jaLines);
+    expect(typedLines(ja, jaLines, [...ja].length - 1)).toEqual(['EXTRA SAVIORに7th MCAの3']);
+  });
+
+  it('stops at the typed character and never past the text', () => {
+    expect(typedLines('abc', ['abc'], 0)).toEqual([]);
+    expect(typedLines('abc', ['abc'], 99)).toEqual(['abc']);
   });
 });

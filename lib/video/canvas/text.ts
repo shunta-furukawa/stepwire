@@ -130,3 +130,35 @@ export function wrapText(text: string, maxWidth: number, measure: Measure): stri
   if (line.length > 0) lines.push(line.trimEnd());
   return lines;
 }
+
+/**
+ * How much of each wrapped line is on screen when `limit` characters of the
+ * text have been typed.
+ *
+ * The lines were wrapped from the full text, so typing walks the same lines
+ * and stops. The one subtlety is the break itself: wrapping Latin text
+ * consumes a space at each break, which the typed count still includes;
+ * wrapping Japanese consumes nothing. The break is charged only when the
+ * source text actually has whitespace there — assuming a space at every break
+ * silently loses the last character of every wrapped Japanese line.
+ */
+export function typedLines(text: string, lines: string[], limit: number): string[] {
+  const chars = [...text];
+  let position = 0;
+  let remaining = limit;
+  const shown: string[] = [];
+
+  for (const line of lines) {
+    if (remaining <= 0) break;
+    const units = [...line];
+    shown.push(remaining >= units.length ? line : units.slice(0, remaining).join(''));
+    remaining -= units.length;
+    position += units.length;
+    // Whitespace the wrap dropped between this line and the next.
+    while (position < chars.length && /\s/.test(chars[position]!)) {
+      position += 1;
+      remaining -= 1;
+    }
+  }
+  return shown;
+}

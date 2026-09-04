@@ -1,9 +1,9 @@
 import { SCENE_TONE, type Scene, type SceneType } from '../scenes';
-import { revealedText, visibleUnits } from '../reveal';
+import { visibleUnits } from '../reveal';
 import { barFractions, formatBarValue } from '../../content/figures';
 import { visualLength } from '../text';
 import { color, font, fontSize, tracking } from '../../design/tokens';
-import { wrapText } from './text';
+import { typedLines, wrapText } from './text';
 import { backdropDim, backdropZoom, sceneGround } from '../ground';
 
 /**
@@ -249,7 +249,7 @@ function layoutBody(d: DrawContext, text: string, size: number, weight = 500) {
   ctx.font = fontOf(weight, size, font.display);
   const lines = wrapText(text, maxWidth, (line) => ctx.measureText(line).width);
   const lineHeight = size * 1.35;
-  return { lines, lineHeight, x, size, weight, blockHeight: lines.length * lineHeight };
+  return { text, lines, lineHeight, x, size, weight, blockHeight: lines.length * lineHeight };
 }
 
 type BodyLayout = ReturnType<typeof layoutBody>;
@@ -275,18 +275,14 @@ function paintBody(
 
   const limit = scene?.reveal ? visibleUnits(scene.reveal, d.frame) : Number.POSITIVE_INFINITY;
   const done = !scene?.reveal || limit >= scene.reveal.units;
-  let remaining = limit;
+  const shownLines = typedLines(layout.text, layout.lines, limit);
 
-  for (let i = 0; i < layout.lines.length && remaining > 0; i += 1) {
-    const line = layout.lines[i]!;
-    const shown = remaining >= [...line].length ? line : revealedText(line, remaining);
+  for (let i = 0; i < shownLines.length; i += 1) {
+    const shown = shownLines[i]!;
     const y = top + layout.size + i * layout.lineHeight;
     ctx.fillText(shown, layout.x, y);
-    remaining -= [...line].length;
-    // Wrapping consumed a trailing space that the text still counts.
-    if (remaining > 0 && i < layout.lines.length - 1) remaining -= 1;
 
-    if (!done && remaining <= 0) {
+    if (!done && i === shownLines.length - 1) {
       // The cursor, blinking, after the last typed character.
       if (Math.floor(d.frame / 4) % 2 === 0) {
         ctx.fillStyle = color.accent;

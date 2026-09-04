@@ -19,7 +19,7 @@ import { SectionHeading } from '@/components/SectionHeading';
  * timeline would only create a second place for the content to live.
  */
 
-type StudioArticle = ArticleVideoInput & { fixture: boolean };
+type StudioArticle = ArticleVideoInput & { fixture: boolean; status: string };
 
 interface RenderState {
   status: 'idle' | 'starting' | 'running' | 'complete' | 'failed';
@@ -318,7 +318,7 @@ export function StudioClient({
             >
               {articles.map((item) => (
                 <option key={item.slug} value={item.slug}>
-                  {item.fixture ? '[SAMPLE] ' : ''}
+                  {item.fixture ? '[SAMPLE] ' : item.status !== 'published' ? `[${item.status.toUpperCase()}] ` : ''}
                   {item.shortTitle ?? item.title}
                 </option>
               ))}

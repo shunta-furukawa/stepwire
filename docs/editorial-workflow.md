@@ -103,6 +103,19 @@ Without an issue:
 pnpm article:new --title "Headline here" --category UPDATE
 ```
 
+From a post on X — the story starts with an announcement or a result someone
+posted:
+
+```bash
+pnpm article:from-post https://x.com/DDR_573/status/… --category CHARTS
+```
+
+This reads the post through X's official oEmbed API (no scraping, no key),
+fills in the source with the author and date, and quotes the post into NEWS as
+a starting point. The post's picture is not fetched: save it under
+`public/images/` yourself and declare it with a credit. The division of labour
+when Claude does the drafting is in [`handoff.md`](./handoff.md).
+
 Then write the three sections. They are the format, and the split is enforced by
 the schema:
 

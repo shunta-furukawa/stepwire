@@ -83,6 +83,20 @@ export const getArticles = cache(async (): Promise<Article[]> => {
   );
 });
 
+/**
+ * Everything the studio may preview: drafts and reviews as well as what is
+ * published. The website never sees these — `getArticles` is what it reads —
+ * but the operator has to watch a draft's film before deciding to publish it,
+ * or the review step is a review of the text alone.
+ */
+export const getStudioArticles = cache(async (): Promise<Article[]> => {
+  const all = await loadAllArticles();
+  const includeFixtures = fixturesEnabled();
+  return all.filter(
+    (article) => article.status !== 'archived' && (includeFixtures || !article.fixture),
+  );
+});
+
 export const getArticleBySlug = cache(
   async (slug: string): Promise<Article | undefined> => {
     const articles = await getArticles();

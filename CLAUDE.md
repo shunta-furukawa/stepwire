@@ -35,6 +35,7 @@ pnpm verify              # lint + typecheck + test + content:validate + build
 pnpm content:validate    # editorial gate
 pnpm article:new --title "Headline" --category UPDATE
 pnpm article:from-issue 42
+pnpm article:from-post https://x.com/DDR_573/status/…   # official oEmbed, no scraping
 
 pnpm news:collect --dry-run          # fixtures only, no network, no issues
 pnpm news:collect --create-issues    # file candidates into the inbox
@@ -61,6 +62,10 @@ sections, always in this order:
   The website labels which is which and readers rely on it.
 - **Every published report cites a source.** `[^1]` markers bind a claim to an
   entry in `sources`. `pnpm content:validate` fails the build otherwise.
+- **Claude drafts; MONO DDR publishes.** Material comes in as post URLs, words
+  and photos (`docs/handoff.md`); the draft goes out at `status: review`, and
+  only the operator sets `published`. Nothing in CONTEXT or PLAYER IMPACT is
+  the operator's opinion unless the operator said it.
 - **AI output is never a source.** A source is something a reader can check: a
   first-party announcement, a published report, a community record, a dataset.
 - **A figure is written, never inferred.** `figures` in the frontmatter declares

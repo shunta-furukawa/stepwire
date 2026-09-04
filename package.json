@@ -19,6 +19,7 @@
     "content:validate": "tsx scripts/validate-content.ts",
     "article:new": "tsx scripts/create-article.ts",
     "article:from-issue": "tsx scripts/create-article.ts --from-issue",
+    "article:from-post": "tsx scripts/create-article.ts --from-post",
     "news:collect": "tsx scripts/collect-news.ts",
     "video:data": "tsx scripts/build-video-data.ts",
     "video:studio": "pnpm video:data && remotion studio video/index.ts",

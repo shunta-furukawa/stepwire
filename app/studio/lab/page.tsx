@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { getArticles, getVideoInput } from '@/lib/content/loader';
+import { getStudioArticles, getVideoInput } from '@/lib/content/loader';
 import { ExportLab } from '@/components/studio/ExportLab';
 
 /**
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 };
 
 export default async function LabPage() {
-  const articles = await getArticles();
+  const articles = await getStudioArticles();
   const inputs = await Promise.all(articles.map((item) => getVideoInput(item)));
 
   return (

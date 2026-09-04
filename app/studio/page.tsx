@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getArticles, getVideoInput } from '@/lib/content/loader';
+import { getStudioArticles, getVideoInput } from '@/lib/content/loader';
 import { StudioClient } from '@/components/studio/StudioClient';
 
 /**
@@ -20,12 +20,13 @@ export default async function StudioPage({
 }: {
   searchParams: Promise<{ article?: string }>;
 }) {
-  const [{ article: requested }, articles] = await Promise.all([searchParams, getArticles()]);
+  const [{ article: requested }, articles] = await Promise.all([searchParams, getStudioArticles()]);
 
   const inputs = await Promise.all(
     articles.map(async (item) => ({
       ...(await getVideoInput(item)),
       fixture: item.fixture,
+      status: item.status,
     })),
   );
 

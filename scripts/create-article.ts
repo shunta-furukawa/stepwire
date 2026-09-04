@@ -3,6 +3,7 @@
  *
  *   pnpm article:new --title "Headline here" --category UPDATE
  *   pnpm article:from-issue 42
+ *   pnpm article:from-post https://x.com/DDR_573/status/…  [--category CHARTS]
  *
  * The output is a draft, never a publication: `status: draft` keeps it off the
  * site until an editor changes it and merges the pull request. The point of
@@ -16,6 +17,7 @@ import { SECTION_HEADINGS, SECTION_KEYS } from '../lib/content/schema';
 import { slugify, toDateStamp } from '../lib/format';
 import { clientFromEnv } from '../lib/github/client';
 import { parseCollectorId } from '../lib/news/issue';
+import { fetchXPost, X_POST_URL, type XPost } from '../lib/news/oembed';
 
 interface DraftInput {
   title: string;
@@ -28,6 +30,8 @@ interface DraftInput {
   sourceTitle?: string;
   collectorId?: string;
   issueNumber?: number;
+  /** The post the article starts from, when it starts from one. */
+  post?: XPost;
 }
 
 function flag(argv: string[], name: string): string | undefined {
@@ -47,7 +51,13 @@ function renderDraft(input: DraftInput): { filename: string; contents: string } 
   const slug = input.slug ?? slugify(input.title);
   const stamp = toDateStamp(publishedAt);
 
-  const sources = input.sourceUrl
+  const sources = input.post
+    ? `sources:
+  - title: ${yamlString(input.post.text.split('\n')[0] ?? input.title)}
+    publisher: ${yamlString(`${input.post.author} (@${input.post.handle})`)}
+    url: ${input.post.url}${input.post.date ? `\n    publishedAt: '${input.post.date}'` : ''}
+    type: ${input.post.handle.toUpperCase() === 'DDR_573' ? 'official' : 'social'}`
+    : input.sourceUrl
     ? `sources:
   - title: ${yamlString(input.sourceTitle ?? input.title)}
     publisher: ${yamlString(input.sourcePublisher ?? 'TODO: publisher')}
@@ -65,7 +75,18 @@ function renderDraft(input: DraftInput): { filename: string; contents: string } 
     const heading = `## ${SECTION_HEADINGS[key]}`;
     switch (key) {
       case 'news':
-        return `${heading}
+        return input.post
+          ? `${heading}
+
+${input.post.author}（@${input.post.handle}）は${input.post.date ? `${Number(input.post.date.slice(5, 7))}月${Number(input.post.date.slice(8, 10))}日` : 'TODO: 日付'}、次のように投稿した。[^1]
+
+${input.post.text
+  .split('\n')
+  .map((line) => `> ${line}`)
+  .join('\n')}
+
+TODO: 投稿の事実を地の文に書き直す。投稿に無いことは書かない。`
+          : `${heading}
 
 TODO: what happened, in reported fact. Cite the source with a marker like this.[^1]`;
       case 'context':
@@ -90,7 +111,18 @@ importance: normal
 summary: ${yamlString(input.summary ?? 'TODO: one factual sentence.')}
 status: draft
 ${input.collectorId ? `collectorId: ${input.collectorId}\n` : ''}${input.issueNumber ? `sourceIssue: ${input.issueNumber}\n` : ''}${sources}
----
+${
+  input.post
+    ? `# The post's picture is not fetched. Save it under public/images/ and
+# declare it here with its credit, or delete this block.
+# media:
+#   - src: images/articles/${stamp}-${slug.slice(0, 24).replace(/-+$/, '')}/post.jpg
+#     alt: 'TODO'
+#     kind: post
+#     credit: '@${input.post.handle} の投稿より'
+`
+    : ''
+}---
 
 ${body}
 `;
@@ -153,7 +185,32 @@ async function main() {
 
   let input: DraftInput;
 
-  if (!Number.isNaN(issueNumber) && issueNumber > 0) {
+  const fromPostIndex = argv.indexOf('--from-post');
+  const postUrl = fromPostIndex !== -1 ? argv[fromPostIndex + 1] : undefined;
+
+  if (postUrl) {
+    if (!X_POST_URL.test(postUrl)) {
+      console.error(`error: not a post URL: ${postUrl}\n`);
+      process.exit(1);
+    }
+    const post = await fetchXPost(postUrl);
+    const category = (flag(argv, 'category')?.toUpperCase() ?? 'NEWS') as Category;
+    if (!(CATEGORIES as readonly string[]).includes(category)) {
+      console.error(`error: unknown category "${category}". One of: ${CATEGORIES.join(', ')}\n`);
+      process.exit(1);
+    }
+    // The first line of the post is a headline more often than not; it is a
+    // placeholder either way, and the file name comes from the slug.
+    const firstLine = post.text.split('\n')[0]?.replace(/[【】]/g, '').trim();
+    input = {
+      title: flag(argv, 'title') ?? (firstLine || `${post.author}の投稿`),
+      category,
+      ...(flag(argv, 'slug') ? { slug: flag(argv, 'slug')! } : { slug: `${post.handle.toLowerCase()}-${post.id}` }),
+      summary: post.text.replace(/\s+/g, ' ').slice(0, 300),
+      post,
+    };
+    console.log(`drafting from @${post.handle}: ${post.text.split('\n')[0]}`);
+  } else if (!Number.isNaN(issueNumber) && issueNumber > 0) {
     const github = clientFromEnv();
     if (!github) {
       console.error(
@@ -182,7 +239,8 @@ async function main() {
       console.error(
         'usage:\n' +
           '  pnpm article:new --title "Headline" [--category UPDATE] [--slug custom-slug]\n' +
-          '  pnpm article:from-issue <issue-number>\n',
+          '  pnpm article:from-issue <issue-number>\n' +
+          '  pnpm article:from-post <x.com/…/status/…> [--category CHARTS] [--title "…"]\n',
       );
       process.exit(1);
     }
