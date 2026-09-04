@@ -242,12 +242,6 @@ export default async function ArticlePage({
             </section>
           ) : null}
 
-          <Link
-            href={{ pathname: '/studio', query: { article: article.slug } }}
-            className="block border-2 border-line-strong px-md py-sm text-center font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-accent hover:text-on-accent"
-          >
-            動画スタジオで開く →
-          </Link>
         </aside>
       </div>
 
