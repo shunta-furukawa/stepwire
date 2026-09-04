@@ -17,6 +17,7 @@ import {
 } from '@/lib/video/canvas/audio';
 import { mixSoundtrack } from '@/lib/video/canvas/mix';
 import { postCopy } from '@/lib/video/post-copy';
+import { ThumbnailPanel } from '@/components/studio/ThumbnailPanel';
 
 /**
  * The export spike.
@@ -603,6 +604,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
         </section>
       ) : null}
 
+      {article ? <ThumbnailPanel article={article} /> : null}
       {article ? <PostCopyPanel article={article} siteUrl={siteUrl} /> : null}
 
       {/* Off-screen but in the DOM: an OffscreenCanvas would be faster, and is
