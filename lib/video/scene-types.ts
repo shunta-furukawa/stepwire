@@ -12,6 +12,7 @@
  */
 export const SCENE_TYPES = [
   'stats',
+  'turn',
   'headline',
   'news',
   'image',

@@ -283,6 +283,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
               width: w,
               height: h,
               frame: f,
+              fps: sequence.fps,
               progress: f / Math.max(1, scene.durationInFrames - 1),
               images,
               field: fieldCanvas,

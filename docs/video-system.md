@@ -155,6 +155,16 @@ this order: ground, the article's picture (with a slow push in), the field,
 then the copy. `drawScene` paints it before the scene's drawer runs. Without
 WebGL the film is plainer, not absent.
 
+### The conversation cards
+
+A paragraph that opens `WIRE: …` or `MONO: …` becomes a `turn` card: the
+speaker's face and name over the words, on the analysis ground, typed like
+every other card. WIRE's face (`lib/design/wire.ts`) takes the mood the
+writer wrote — `WIRE(grin): …` — and blinks and floats as a function of the
+frame; MONO's mark holds still. A picture placed before a turn rides with
+it, as with a paragraph. Turn cards count against the section's card cap
+and are dropped under budget like the paragraphs they replace.
+
 ## How a video is built
 
 `lib/video/scenes.ts` turns an `ArticleVideoInput` into a scene sequence:

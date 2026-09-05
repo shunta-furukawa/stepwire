@@ -98,6 +98,7 @@ export function PreviewPanel({
           width: definition.width,
           height: definition.height,
           frame: sceneFrame,
+          fps: sequence.fps,
           progress: sceneFrame / Math.max(1, scene.durationInFrames - 1),
           images: imagesRef.current,
           ...(gl ? { field: gl.canvas } : {}),

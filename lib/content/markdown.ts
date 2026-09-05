@@ -17,6 +17,8 @@
  * `[^n]` citations.
  */
 
+import { parseTurnPrefix, type Mood, type Speaker } from './dialogue';
+
 export type InlineNode =
   | { type: 'text'; value: string }
   | { type: 'strong'; children: InlineNode[] }
@@ -27,6 +29,11 @@ export type InlineNode =
 
 export type Block =
   | { type: 'paragraph'; children: InlineNode[] }
+  /**
+   * One turn of the session conversation: `WIRE(grin): …` or `MONO: …` at
+   * the head of a paragraph. See `dialogue.ts` for who may say what.
+   */
+  | { type: 'turn'; speaker: Speaker; mood: Mood; children: InlineNode[] }
   | { type: 'heading'; level: 3 | 4; children: InlineNode[] }
   | { type: 'list'; ordered: boolean; items: InlineNode[][] }
   | { type: 'blockquote'; children: InlineNode[] }
@@ -120,7 +127,13 @@ export function parseMarkdown(source: string): Block[] {
 
   const flushParagraph = (buffer: string[]) => {
     if (buffer.length === 0) return;
-    blocks.push({ type: 'paragraph', children: parseInline(joinWrappedLines(buffer)) });
+    const text = joinWrappedLines(buffer);
+    const turn = parseTurnPrefix(text);
+    if (turn) {
+      blocks.push({ type: 'turn', speaker: turn.speaker, mood: turn.mood, children: parseInline(turn.rest) });
+    } else {
+      blocks.push({ type: 'paragraph', children: parseInline(text) });
+    }
     buffer.length = 0;
   };
 
@@ -206,6 +219,7 @@ function blockInlines(block: Block): InlineNode[] {
   if (block.type === 'image') return [];
   switch (block.type) {
     case 'paragraph':
+    case 'turn':
     case 'heading':
     case 'blockquote':
       return block.children;
@@ -253,8 +267,16 @@ function inlineToText(nodes: InlineNode[]): string {
  * which is why the video never needs its own copy of the article body.
  */
 export function toPlainText(blocks: Block[]): string {
+  // A turn keeps its speaker in plain text — a feed reader or a screen reader
+  // has no avatar to tell the two voices apart.
   return blocks
-    .map((block) => (block.type === 'rule' ? '' : inlineToText(blockInlines(block))))
+    .map((block) =>
+      block.type === 'rule'
+        ? ''
+        : block.type === 'turn'
+          ? `${block.speaker}: ${inlineToText(block.children)}`
+          : inlineToText(blockInlines(block)),
+    )
     .filter((text) => text.trim().length > 0)
     .join('\n\n')
     .replace(/[ \t]+/g, ' ')

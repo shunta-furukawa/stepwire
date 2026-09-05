@@ -6,6 +6,7 @@ import { visualLength } from '../text';
 import { color, difficulty, flareEx, font, fontSize, tracking } from '../../design/tokens';
 import { typedLines, wrapText } from './text';
 import { backdropDim, backdropZoom, sceneGround } from '../ground';
+import { drawMono, drawWire } from './face';
 
 /**
  * The renderer for STEPWIRE scenes.
@@ -43,6 +44,8 @@ export interface DrawContext {
   progress: number;
   /** Frame within this scene. Drives the typed reveal, which is per frame. */
   frame: number;
+  /** Frames per second, for motion that is written in seconds (a blink). */
+  fps?: number;
   /** Decoded images by `src`, loaded by the caller before rendering starts. */
   images: ReadonlyMap<string, CanvasImageSource>;
   /**
@@ -452,6 +455,74 @@ const drawCard: Drawer = (d, scene) => {
 
   if (body) cursor += paintBody(d, body, cursor, color.fg, scene);
   if (meta) paintBody(d, meta, cursor + metaGap, color.muted);
+};
+
+/**
+ * One turn of the conversation: the speaker over the words.
+ *
+ * The same card as `drawCard` — a picture panel if the turn has one, the
+ * copy measured and shrunk to fit — with a face and a name where the section
+ * mark would be. WIRE blinks and floats as a function of the frame; MONO's
+ * mark holds still, because it is a mark and not a face.
+ */
+const drawTurn: Drawer = (d, scene) => {
+  const { ctx, width, height } = d;
+  const px = scaled(width, height);
+  const band = contentBand(d);
+  const panel = scene.image ? drawPanel(d, scene.image) : null;
+  const top = panel?.top ?? band.top;
+  const bottom = panel?.bottom ?? band.bottom;
+  const speaker = scene.speaker ?? 'WIRE';
+
+  const labelHeight = scene.label ? measureLabelChip(d) + px(40) : 0;
+  const avatar = px(132);
+  const headGap = px(36);
+
+  const wanted = px(fontSize.h4 * 3);
+  const room = bottom - top - labelHeight - avatar - headGap;
+  let bodySize = wanted;
+  let body = scene.text ? layoutBody(d, scene.text, bodySize, 500, panel?.measure) : null;
+  while (body && body.blockHeight > room && bodySize > wanted * 0.6) {
+    bodySize = Math.max(wanted * 0.6, bodySize * 0.92);
+    body = layoutBody(d, scene.text ?? '', bodySize, 500, panel?.measure);
+  }
+  const blockHeight = labelHeight + avatar + headGap + (body?.blockHeight ?? 0);
+  let cursor = Math.max(top, top + (bottom - top - blockHeight) / 2);
+
+  if (scene.label) {
+    drawLabelChip(d, scene.label, 'analysis', cursor);
+    cursor += labelHeight;
+  }
+
+  const x = px(120);
+  const t = d.frame / (d.fps ?? 30);
+  if (speaker === 'WIRE') drawWire(ctx, x, cursor, avatar, scene.mood ?? 'neutral', t);
+  else drawMono(ctx, x, cursor, avatar);
+
+  // The name, as a chip beside the face: filled in the accent for WIRE, in
+  // the type colour for MONO, so the two are told apart at a glance and by
+  // form as well as by hue.
+  const nameSize = px(fontSize.small * 3);
+  const nameX = x + avatar + px(28);
+  drawChip(
+    d,
+    speaker,
+    nameX,
+    cursor + avatar / 2 - (nameSize + px(16)) / 2,
+    speaker === 'WIRE' ? color.accent : color.fg,
+    color.onAccent,
+    nameSize,
+  );
+  if (speaker === 'WIRE') {
+    ctx.font = fontOf(400, px(fontSize.micro * 3), font.mono);
+    ctx.fillStyle = color.faint;
+    ctx.textBaseline = 'middle';
+    drawTracked(ctx, 'ASSISTANT AI', nameX + px(150), cursor + avatar / 2, px(fontSize.micro * 3) * tracking.wider);
+    ctx.textBaseline = 'alphabetic';
+  }
+  cursor += avatar + headGap;
+
+  if (body) paintBody(d, body, cursor, color.fg, scene);
 };
 
 /** The source card. The brand rule above it is the one place it is loud. */
@@ -1156,6 +1227,7 @@ const drawStats: Drawer = (d, scene) => {
 const DRAWERS: Record<SceneType, Drawer> = {
   outro: drawIdent,
   stats: drawStats,
+  turn: drawTurn,
   headline: drawCard,
   news: drawCard,
   context: drawCard,

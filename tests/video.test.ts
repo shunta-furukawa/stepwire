@@ -164,6 +164,33 @@ describe('buildSceneSequence', () => {
     expect(sequence.scenes.map((scene) => scene.type)).not.toContain('headline');
   });
 
+  it('turns a conversation into turn cards that carry the speaker and the mood', () => {
+    const sequence = buildSceneSequence(
+      {
+        ...article,
+        blocks: {
+          news: [{ kind: 'paragraph', text: article.news }],
+          context: [
+            { kind: 'turn', speaker: 'WIRE', mood: 'grin', text: 'まずコンディションはどうだった？' },
+            { kind: 'image', media: { src: 'images/a.jpg', alt: 'a', credit: 'MONO DDR', kind: 'photo' } },
+            { kind: 'turn', speaker: 'MONO', mood: 'neutral', text: '正直、悪かったです。' },
+          ],
+          playerImpact: [{ kind: 'paragraph', text: article.playerImpact }],
+        },
+      },
+      'STEPWIRE_NEWS',
+    );
+    const turns = sequence.scenes.filter((scene) => scene.type === 'turn');
+    expect(turns.map((scene) => scene.speaker)).toEqual(['WIRE', 'MONO']);
+    expect(turns[0]?.mood).toBe('grin');
+    // The first card of the section carries its label; the picture rides
+    // with the turn after it.
+    expect(turns[0]?.label).toBeDefined();
+    expect(turns[1]?.label).toBeUndefined();
+    expect(turns[1]?.image?.src).toBe('images/a.jpg');
+    expect(turns.every((scene) => scene.reveal)).toBe(true);
+  });
+
   it('types every card, and holds it after the last character', () => {
     for (const scene of buildSceneSequence(article, 'STEPWIRE_NEWS').scenes) {
       if (!['headline', 'news', 'context', 'impact'].includes(scene.type)) continue;

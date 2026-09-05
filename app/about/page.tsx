@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { site } from '@/lib/site';
 import { SectionHeading } from '@/components/SectionHeading';
 import { Wordmark } from '@/components/Wordmark';
+import { WireFace } from '@/components/Faces';
 
 export const metadata: Metadata = {
   title: 'STEPWIREについて',
@@ -36,6 +37,19 @@ export default function AboutPage() {
                 検証できなくなる。だからここでは、外の出来事を書くときは必ず出典を引き、
                 URLは永続します。<strong>出典そのものが消えても、記録が残るように。</strong>
               </p>
+            </div>
+          </section>
+
+          <section aria-labelledby="wire-heading">
+            <SectionHeading id="wire-heading" label="WIREについて" />
+            <div className="mt-lg grid gap-lg sm:grid-cols-[120px_minmax(0,1fr)]">
+              <WireFace mood="grin" className="h-[120px] w-[120px]" />
+              <div className="max-w-[62ch] space-y-lg font-body text-lead leading-normal">
+                {/* One line per paragraph: JSX turns a source line break into a
+                    space, and Japanese has no space to put there. */}
+                <p>WIREは、STEPWIREのアシスタントAIです。セッションの振り返りは、私とWIREの会話として書いています。WIREはログと数字を持っていて、質問する側。私はそれに答える側です。</p>
+                <p>WIREはAIで、そのことを隠しません。記事と動画のWIREの発言には「ASSISTANT AI」と添えてあります。WIREは踏んだことがなく、踏んだふりもしません。感想を言うのは私で、WIREが言うのは質問と集計です。WIREの発言が出典になることもありません。</p>
+              </div>
             </div>
           </section>
 

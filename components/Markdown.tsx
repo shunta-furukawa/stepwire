@@ -1,4 +1,5 @@
 import type { Block, InlineNode } from '@/lib/content/markdown';
+import { MonoMark, WireFace } from '@/components/Faces';
 
 /**
  * Renders the article-body AST as React.
@@ -76,6 +77,29 @@ export function Markdown({ blocks }: { blocks: Block[] }) {
               <p key={index}>
                 <Inline nodes={block.children} />
               </p>
+            );
+          case 'turn':
+            // A line of the conversation: the speaker beside the words. The
+            // name is text, not only a face, so the split survives styles off.
+            return (
+              <div key={index} className="grid grid-cols-[52px_minmax(0,1fr)] gap-x-md">
+                {block.speaker === 'WIRE' ? (
+                  <WireFace mood={block.mood} className="h-[52px] w-[52px]" />
+                ) : (
+                  <MonoMark className="h-[52px] w-[52px]" />
+                )}
+                <div className="min-w-0 pt-[2px]">
+                  <p className="font-mono text-micro font-bold uppercase tracking-wider">
+                    <span className={block.speaker === 'WIRE' ? 'text-accent' : 'text-fg'}>{block.speaker}</span>
+                    {block.speaker === 'WIRE' ? (
+                      <span className="ml-sm font-normal text-faint">ASSISTANT AI</span>
+                    ) : null}
+                  </p>
+                  <p className="mt-xs">
+                    <Inline nodes={block.children} />
+                  </p>
+                </div>
+              </div>
             );
           case 'heading': {
             const Tag = block.level === 3 ? 'h3' : 'h4';

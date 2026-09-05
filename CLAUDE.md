@@ -68,6 +68,12 @@ sections, always in this order:
   and photos (`docs/handoff.md`); the draft goes out at `status: review`, and
   only the operator sets `published`. Nothing in CONTEXT or PLAYER IMPACT is
   the operator's opinion unless the operator said it.
+- **The session is a conversation, and WIRE is an AI.** SESSION and PICKUP
+  are told as turns — `WIRE: …` asks and counts, `MONO: …` answers — and the
+  page and the film label WIRE `ASSISTANT AI`. A MONO line is the operator's
+  words; a WIRE line is a question or a count, never MONO's feeling, and
+  never a source. `docs/wire.md` is the character; `lib/content/dialogue.ts`
+  is the model.
 - **AI output is never a source.** A source is something a reader can check: a
   first-party announcement, a published report, a community record, a dataset.
 - **A figure is written, never inferred.** `figures` in the frontmatter declares

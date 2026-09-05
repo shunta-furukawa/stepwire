@@ -4,6 +4,7 @@ import type { Figure } from '../content/figures';
 import type { MediaRef } from '../content/schema';
 import { planReveal, type RevealPlan } from './reveal';
 import { sessionStats, type SessionStats } from './session-stats';
+import type { Mood, Speaker } from '../content/dialogue';
 import { toSentences } from '../content/markdown';
 import { pageCaptions } from './captions';
 import { visualLength } from './text';
@@ -42,6 +43,9 @@ export interface Scene {
   figure?: Figure;
   /** `stats` scenes only: the session, counted. */
   stats?: SessionStats;
+  /** `turn` scenes only: who is talking, and WIRE's face while doing it. */
+  speaker?: Speaker;
+  mood?: Mood;
   /** `image` scenes, and the headline when the article has a hero. */
   image?: MediaRef;
   /** The small line above a headline: category and date. */
@@ -81,6 +85,7 @@ export interface SceneSequence {
 export const SCENE_TONE: Record<SceneType, 'fact' | 'analysis'> = {
   // Counts of declared plays. Nothing in it is an opinion.
   stats: 'fact',
+  turn: 'analysis',
   headline: 'fact',
   news: 'fact',
   // An image is shown, not argued. What it means is the analysis around it.
@@ -182,7 +187,7 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
   // card, fewer cards, hard ceiling on total length.
   STEPWIRE_SHORT: {
     budget: 150,
-    maxChunks: { news: 3, context: 4, impact: 4 },
+    maxChunks: { news: 3, context: 6, impact: 6 },
     pictureBudget: 0.5,
     bounds: { min: 2.2, max: 6 },
     headlineBounds: { min: 2.4, max: 5 },
@@ -200,7 +205,7 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
     // Generous: a session write-up has a paragraph per chart, and a paragraph
     // dropped for a cap is a paragraph the operator wrote for nothing. The
     // format's duration ceiling, not this, is what keeps a film short.
-    maxChunks: { news: 4, context: 8, impact: 8 },
+    maxChunks: { news: 4, context: 12, impact: 12 },
     pictureBudget: 0.65,
     bounds: { min: 2.5, max: 8 },
     headlineBounds: { min: 3, max: 6 },
@@ -349,9 +354,12 @@ export function buildSceneSequence(
       for (const text of chunk(block.text, budget, section.max - cards.length)) {
         cards.push({
           id: section.type,
-          type: section.type,
+          // A turn is its own kind of card — a face and a name over the
+          // words — but it counts against the section it sits in.
+          type: block.kind === 'turn' ? 'turn' : section.type,
           ...typed(text, 'body', fps),
           text,
+          ...(block.kind === 'turn' ? { speaker: block.speaker, mood: block.mood } : {}),
           ...(pending ? { image: pending } : {}),
         });
       }
@@ -482,7 +490,7 @@ function trimToBudget(scenes: Draft[], maxFrames: number): Draft[] {
 
   const result = [...scenes];
   const droppable = (scene: Draft, list: Draft[]) => {
-    const kinds: SceneType[] = ['context', 'impact', 'news', 'narration', 'image'];
+    const kinds: SceneType[] = ['context', 'impact', 'turn', 'news', 'narration', 'image'];
     if (!kinds.includes(scene.type)) return false;
     // Never drop the only remaining card of a section, nor the only image.
     return list.filter((other) => other.type === scene.type).length > 1;

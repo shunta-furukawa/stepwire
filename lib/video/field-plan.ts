@@ -43,6 +43,8 @@ export const FIELD_ENERGY: Record<SceneType, number> = {
   context: 0.4,
   impact: 0.4,
   narration: 0.4,
+  // A conversation is a body card with a face on it: as quiet as one.
+  turn: 0.4,
   figure: 0.3,
   source: 0.25,
 };

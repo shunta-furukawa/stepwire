@@ -12,6 +12,7 @@ import {
   toPlainText,
   type Block,
 } from './markdown';
+import type { Mood, Speaker } from './dialogue';
 import type { Figure } from './figures';
 import type { Bgm, ImageRef, MediaRef, Session } from './schema';
 import {
@@ -58,6 +59,7 @@ export interface NarrationInput {
 /** One unit of a section as the video sees it: words, or a picture. */
 export type VideoBlock =
   | { kind: 'paragraph'; text: string }
+  | { kind: 'turn'; speaker: Speaker; mood: Mood; text: string }
   | { kind: 'image'; media: MediaRef };
 
 export interface ArticleVideoInput {
@@ -229,6 +231,12 @@ function toVideoBlocks(article: Article, key: SectionKey): VideoBlock[] {
     if (block.type === 'image') {
       const media = article.media.find((item) => item.src === block.src);
       if (media) out.push({ kind: 'image', media });
+      continue;
+    }
+    if (block.type === 'turn') {
+      // The speaker is shown by the card, not typed into it.
+      const text = toPlainText([{ type: 'paragraph', children: block.children }]);
+      if (text) out.push({ kind: 'turn', speaker: block.speaker, mood: block.mood, text });
       continue;
     }
     const text = toPlainText([block]);

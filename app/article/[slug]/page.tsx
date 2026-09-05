@@ -163,6 +163,10 @@ export default async function ArticlePage({
           {SECTION_KEYS.map((key) => {
             const section = article.sections[key];
             const meta = SECTION_LABELS[key];
+            // A section told as a conversation says so: the reader should know
+            // that one of the two voices is an assistant AI before reading it.
+            const conversation = section.blocks.some((block) => block.type === 'turn');
+            const kind = conversation ? 'MONO × WIRE の会話' : meta.kind;
             return (
               <section key={key} aria-labelledby={`section-${key}`} className="scroll-mt-24" id={key}>
                 <div className="flex items-baseline gap-md border-b-2 border-line-strong pb-sm">
@@ -179,7 +183,7 @@ export default async function ArticlePage({
                     </span>
                   </h2>
                   <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-muted">
-                    {meta.kind}
+                    {kind}
                   </span>
                 </div>
                 <div className="mt-lg">
