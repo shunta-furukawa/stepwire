@@ -1,5 +1,6 @@
 import { blink, bob, wireFace, type Tone } from '@/lib/design/wire';
 import type { Mood } from '@/lib/content/dialogue';
+import { monoFace } from '@/lib/design/mono';
 
 /**
  * WIRE and MONO on the page, as SVG.
@@ -135,24 +136,27 @@ export function WireFace({
   );
 }
 
-/** MONO's mark: WIRE's silhouette in the type colour, with the initial. */
+/** MONO: the shared silhouette on the deepest ground, the low-poly M, a mouth. */
 export function MonoMark({ className = '' }: { className?: string }) {
-  const outline = wireFace('neutral').head[0]?.points ?? [];
+  const face = monoFace();
   return (
     <svg viewBox="-4 -14 108 112" className={className} role="img" aria-label="MONO">
-      <polygon points={path(outline)} fill={TONES.fg} />
-      <text
-        x={50}
-        y={52}
-        textAnchor="middle"
-        dominantBaseline="central"
-        fill={TONES.deep}
-        fontFamily="var(--font-display)"
-        fontWeight={900}
-        fontSize={46}
-      >
-        M
-      </text>
+      <polygon points={path(face.head)} fill={TONES.deep} stroke={TONES.fg} strokeWidth={2.5} strokeLinejoin="round" />
+      {face.facets.map((facet, i) => (
+        <polygon
+          key={i}
+          points={path(facet.points)}
+          fill={facet.lime ? TONES.accent : TONES.fg}
+          fillOpacity={facet.alpha}
+        />
+      ))}
+      <path
+        d={`M ${face.mouth.points[0]?.join(' ')} C ${face.mouth.points[1]?.join(' ')} ${face.mouth.points[2]?.join(' ')} ${face.mouth.points[3]?.join(' ')}`}
+        fill="none"
+        stroke={TONES.fg}
+        strokeWidth={3}
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

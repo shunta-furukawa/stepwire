@@ -60,3 +60,28 @@ describe("WIRE's face", () => {
     expect(Math.min(...samples)).toBeLessThan(0.1);
   });
 });
+
+describe("MONO's mark", () => {
+  it('is two side-three triangles sharing exactly one lime unit at the foot', async () => {
+    const { monoMark } = await import('../lib/design/mono');
+    const facets = monoMark(50, 60, 50);
+    expect(facets).toHaveLength(9 + 9 + 1);
+    const lime = facets.filter((facet) => facet.lime);
+    expect(lime).toHaveLength(1);
+    // The shared unit sits on the base, centred, one unit (width / 5) wide.
+    const [a, b, c] = lime[0]!.points;
+    expect(a).toEqual([45, 60]);
+    expect(b).toEqual([55, 60]);
+    expect(c?.[0]).toBe(50);
+    expect(c?.[1]).toBeCloseTo(60 - (10 * Math.sqrt(3)) / 2, 6);
+    // Every facet stays inside the M's box.
+    for (const facet of facets) {
+      for (const [x, y] of facet.points) {
+        expect(x).toBeGreaterThanOrEqual(25 - 1e-9);
+        expect(x).toBeLessThanOrEqual(75 + 1e-9);
+        expect(y).toBeLessThanOrEqual(60 + 1e-9);
+        expect(y).toBeGreaterThanOrEqual(60 - 3 * (10 * Math.sqrt(3)) / 2 - 1e-9);
+      }
+    }
+  });
+});

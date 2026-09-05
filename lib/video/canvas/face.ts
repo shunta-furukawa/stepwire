@@ -1,6 +1,7 @@
 import { blink, bob, wireFace, type Tone } from '../../design/wire';
+import { monoFace } from '../../design/mono';
 import type { Mood } from '../../content/dialogue';
-import { color, font } from '../../design/tokens';
+import { color } from '../../design/tokens';
 
 /**
  * WIRE and MONO on the canvas.
@@ -148,22 +149,42 @@ export function drawWire(ctx: Ctx, x: number, y: number, size: number, mood: Moo
 }
 
 /**
- * MONO's mark: the same silhouette as WIRE's head, in the type colour, with
- * the initial on it. The operator's face is the operator's own; the mark
- * only says which of the two is talking.
+ * MONO: the shared silhouette on the deepest ground, MONO DDR's low-poly M
+ * where the eyes would be, and a mouth. Still — it is the operator's mark,
+ * and the operator's face is the operator's own.
  */
 export function drawMono(ctx: Ctx, x: number, y: number, size: number) {
+  const face = monoFace();
   const scale = size / 100;
   ctx.save();
   ctx.translate(x, y);
   ctx.scale(scale, scale);
-  polygon(ctx, wireFace('neutral').head[0]?.points ?? []);
-  ctx.fillStyle = TONES.fg;
-  ctx.fill();
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  polygon(ctx, face.head);
   ctx.fillStyle = TONES.deep;
-  ctx.font = `900 46px ${font.display}`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('M', 50, 52);
+  ctx.fill();
+  ctx.strokeStyle = TONES.fg;
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  for (const facet of face.facets) {
+    polygon(ctx, facet.points);
+    ctx.globalAlpha = facet.alpha;
+    ctx.fillStyle = facet.lime ? TONES.accent : TONES.fg;
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  const [a, b, c, e] = face.mouth.points;
+  if (a && b && c && e) {
+    ctx.strokeStyle = TONES.fg;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(...a);
+    ctx.bezierCurveTo(b[0], b[1], c[0], c[1], e[0], e[1]);
+    ctx.stroke();
+  }
   ctx.restore();
 }

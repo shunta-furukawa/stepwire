@@ -56,10 +56,13 @@ export interface Face {
   brow?: [[number, number], [number, number]];
 }
 
+/** The silhouette both faces share. */
+export const HEAD_OUTLINE: [number, number][] = [[50, 8], [86, 28], [86, 72], [50, 92], [14, 72], [14, 28]];
+
 /** The head is the same for every mood: a rounded hexagon, cut into facets. */
 const HEAD: Polygon[] = [
   // The silhouette, then the facets that catch light, front to back.
-  { points: [[50, 8], [86, 28], [86, 72], [50, 92], [14, 72], [14, 28]], tone: 'raised' },
+  { points: HEAD_OUTLINE, tone: 'raised' },
   { points: [[50, 8], [86, 28], [50, 40], [14, 28]], tone: 'lineStrong' },
   { points: [[14, 28], [50, 40], [50, 92], [14, 72]], tone: 'line' },
   { points: [[50, 40], [86, 28], [86, 72], [50, 92]], tone: 'raised' },
