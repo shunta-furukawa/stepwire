@@ -79,3 +79,29 @@ describe('fitHeadline', () => {
     expect(size).toBeGreaterThan(60);
   });
 });
+
+describe('fitHeadline with an unbreakable word', () => {
+  it('shrinks until the widest line fits the box, not only the height', () => {
+    const measure = (text: string, size: number) => [...text].length * size * 0.6;
+    const { size, lines } = fitHeadline('STEPWIREとは', { width: 1000, height: 400 }, measure);
+    for (const line of lines) expect(measure(line, size)).toBeLessThanOrEqual(1000);
+  });
+});
+
+describe('the pair on the thumbnail', () => {
+  it('stands in only when a conversation has no pictures of its own', () => {
+    const conversation: ArticleVideoInput = {
+      ...article,
+      heroImage: undefined,
+      media: [],
+      blocks: {
+        news: [{ kind: 'paragraph', text: article.news }],
+        context: [{ kind: 'turn', speaker: 'WIRE', mood: 'grin', text: 'はじめまして。' }],
+        playerImpact: [{ kind: 'paragraph', text: article.playerImpact }],
+      },
+    };
+    expect(thumbnailPlan(conversation).pair).toBe(true);
+    expect(thumbnailPlan({ ...conversation, blocks: undefined }).pair).toBe(false);
+    expect(thumbnailPlan(article).pair).toBe(false);
+  });
+});

@@ -5,6 +5,7 @@ import { difficultyLabel, formatScore } from '../../content/figures';
 import { color, difficulty, font, tracking } from '../../design/tokens';
 import { formatDate } from '../../format';
 import { wrapText } from './text';
+import { drawMono, drawWire } from './face';
 
 /**
  * The thumbnail — one frame that has to win a tap.
@@ -28,6 +29,11 @@ export interface ThumbnailPlan {
   backdrop?: MediaRef;
   /** Results to shout about: highlighted rows of the article's plays figures. */
   chips: { label: string; score: string; rank?: string; difficulty: keyof typeof difficulty }[];
+  /**
+   * WIRE and MONO in the picture column, when the article has no pictures
+   * of its own and is told as a conversation: the two are what it shows.
+   */
+  pair: boolean;
 }
 
 export function thumbnailPlan(article: ArticleVideoInput): ThumbnailPlan {
@@ -61,12 +67,17 @@ export function thumbnailPlan(article: ArticleVideoInput): ThumbnailPlan {
   // Best score first: the thumbnail leads with the strongest number.
   const chips = [...best.values()].sort((a, b) => b.score - a.score).map((entry) => entry.chip);
 
+  const conversation = Object.values(article.blocks ?? {}).some((blocks) =>
+    blocks.some((block) => block.kind === 'turn'),
+  );
+
   return {
     headline: article.shortTitle ?? article.title,
     kicker: `${CATEGORY_META[article.category].label} · ${formatDate(article.publishedAt)}`,
     tiles,
     ...(backdrop ? { backdrop } : {}),
     chips: chips.slice(0, 3),
+    pair: !backdrop && tiles.length === 0 && conversation,
   };
 }
 
@@ -93,7 +104,10 @@ export function fitHeadline(
   let size = box.height;
   while (size > 24) {
     const lines = wrapText(text, box.width, (line) => measure(line, size));
-    if (lines.length * size * lineHeight <= box.height) return { size, lines };
+    // Fits in height, and no line runs past the box: a single Latin word has
+    // nowhere to wrap, and shrinking for height alone let one off the edge.
+    const widest = Math.max(0, ...lines.map((line) => measure(line, size)));
+    if (lines.length * size * lineHeight <= box.height && widest <= box.width) return { size, lines };
     size *= 0.94;
   }
   return { size, lines: wrapText(text, box.width, (line) => measure(line, size)) };
@@ -136,7 +150,7 @@ export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
 
   // The tile column takes the right 36% when there are pictures; the
   // headline takes what is left, which is still most of the frame.
-  const tileColumn = plan.tiles.length > 0 ? px(460) : 0;
+  const tileColumn = plan.tiles.length > 0 || plan.pair ? px(460) : 0;
   const textRight = width - tileColumn;
 
   // Backdrop: the hero, darkened where the words go.
@@ -166,6 +180,19 @@ export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
       }
     });
     // The seam: a lime rule between words and pictures.
+    ctx.fillStyle = color.accent;
+    ctx.fillRect(x - px(8), 0, px(8), height);
+  }
+
+  // The pair, where the pictures would be: WIRE over MONO, facing the words.
+  if (plan.pair) {
+    const x = textRight;
+    ctx.fillStyle = color.raised;
+    ctx.fillRect(x, 0, tileColumn, height);
+    const face = px(250);
+    const cx = x + (tileColumn - face) / 2;
+    drawWire(ctx, cx, px(70), face, 'grin', 1);
+    drawMono(ctx, cx, height - px(70) - face, face);
     ctx.fillStyle = color.accent;
     ctx.fillRect(x - px(8), 0, px(8), height);
   }
