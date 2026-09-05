@@ -210,6 +210,28 @@ describe('buildSceneSequence', () => {
     expect(last?.kind === 'plays' && last.items[0]?.song).toBe('Song 21');
   });
 
+  it('gives the session card longer when the log is long', () => {
+    const row = (i: number) => ({
+      song: `Song ${i}`,
+      difficulty: 'EXPERT' as const,
+      style: 'SINGLE' as const,
+      score: 990_000,
+    });
+    const session = { date: '2026-09-05', style: 'SINGLE' as const };
+    const short = buildSceneSequence(
+      { ...article, session, figures: [{ kind: 'plays', items: Array.from({ length: 8 }, (_, i) => row(i)) }] },
+      'STEPWIRE_NEWS',
+    ).scenes[0]!;
+    const long = buildSceneSequence(
+      { ...article, session, figures: [{ kind: 'plays', items: Array.from({ length: 20 }, (_, i) => row(i)) }] },
+      'STEPWIRE_NEWS',
+    ).scenes[0]!;
+    expect(short.type).toBe('stats');
+    expect(long.durationInFrames).toBeGreaterThan(short.durationInFrames);
+    // 7 s + 10 × 0.25 s at 30 fps.
+    expect(long.durationInFrames).toBe(Math.round(9.5 * 30));
+  });
+
   it('types every card, and holds it after the last character', () => {
     for (const scene of buildSceneSequence(article, 'STEPWIRE_NEWS').scenes) {
       if (!['headline', 'news', 'context', 'impact'].includes(scene.type)) continue;

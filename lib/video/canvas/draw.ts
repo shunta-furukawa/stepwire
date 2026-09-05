@@ -1295,8 +1295,12 @@ const drawStats: Drawer = (d, scene) => {
     ctx.font = fontOf(700, rankSize, font.mono);
     const rankFit = Math.min(rankSize, (rankSize * slot * 0.9) / Math.max(1, ctx.measureText('AAA').width));
     const rankLabels = rankFit >= px(22);
+    // The bars land between 28% and 72% of the card whatever their number,
+    // so the last one is down, and the chips after it are in, before the
+    // cut: a card that is still moving when it ends was never seen whole.
+    const barStagger = plays.length > 1 ? Math.min(0.035, 0.44 / (plays.length - 1)) : 0;
     plays.forEach((play, i) => {
-      const t = stepAt(p, 0.28 + i * 0.035, 0.38);
+      const t = stepAt(p, 0.28 + i * barStagger, 0.25);
       if (t <= 0) return;
       const under = play.score < floor;
       const frac = clamp01((play.score - floor) / (ceiling - floor));
@@ -1370,7 +1374,7 @@ const drawStats: Drawer = (d, scene) => {
     while (widthAt(chipSize) > chipRoom && chipSize > px(20)) chipSize *= 0.94;
     let chipX = chipX0;
     labels.forEach((label, i) => {
-      const t = stepAt(p, startAt + i * 0.06, 0.16);
+      const t = stepAt(p, startAt + i * 0.05, 0.14);
       if (t <= 0) return;
       ctx.globalAlpha = easeOutCubic(t);
       chipX += drawChip(d, label, chipX, y, fillOf(i), inkOf(i), chipSize) + px(14);
@@ -1389,7 +1393,7 @@ const drawStats: Drawer = (d, scene) => {
     drawChipRow(
       stats.byFlare.map((entry) => `FLARE ${entry.flare} ×${entry.count}`),
       chipsY + chipRow,
-      0.6,
+      0.56,
       (i) => (stats.byFlare[i]?.flare === 'EX' ? 'rainbow' : color.lineStrong),
       (i) => (stats.byFlare[i]?.flare === 'EX' ? color.onAccent : color.fg),
     );

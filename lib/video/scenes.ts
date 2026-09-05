@@ -269,6 +269,12 @@ function typed(text: string, kind: 'headline' | 'body', fps: number) {
   return { reveal, durationInFrames: reveal.revealFrames + reveal.holdFrames };
 }
 
+/** Rows in the session log — the first plays figure — for pacing the card. */
+function statsPlays(article: ArticleVideoInput): number {
+  const log = article.figures.find((figure) => figure.kind === 'plays');
+  return log && log.kind === 'plays' ? log.items.length : 0;
+}
+
 export function buildSceneSequence(
   article: ArticleVideoInput,
   composition: CompositionId,
@@ -289,7 +295,13 @@ export function buildSceneSequence(
     drafts.push({
       id: 'stats',
       type: 'stats',
-      durationInFrames: secondsToFrames(profile.statsSeconds, fps),
+      // Twenty bars need longer than ten: the card grows a little per play
+      // past the first ten, and the drawer paces its motion to end with a
+      // hold, whatever the count.
+      durationInFrames: secondsToFrames(
+        profile.statsSeconds + Math.min(6, Math.max(0, statsPlays(article) - 10) * 0.25),
+        fps,
+      ),
       stats: sessionStats(article.session, article.figures),
       kicker: `SESSION · ${article.session.date.replace(/-/g, '.')}`,
       text: headline,
