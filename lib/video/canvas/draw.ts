@@ -770,44 +770,133 @@ const drawFigure: Drawer = (d, scene) => {
     return;
   }
 
-  // The `at` column is sized to its widest member, not to a guessed constant:
-  // it is free text, and `タイブレーク` is wider than `第1曲` by half again.
-  // A fixed width put the longest label through the rail and into the row.
-  ctx.font = fontOf(400, px(fontSize.small * 3), font.mono);
-  const atSpacing = px(fontSize.small * 3) * tracking.wider;
-  const atWidth = Math.max(
-    ...figure.items.map((item) =>
-      [...item.at].reduce((total, char) => total + ctx.measureText(char).width + atSpacing, 0),
-    ),
-  );
-  const railX = x + atWidth + px(56);
+  // A timeline is a road, not a list: a rail across the card with a node
+  // per moment, the version names as the big type, and the rail lighting up
+  // to the highlighted node as the card plays. Landscape runs it across;
+  // portrait runs it down. A list of four lines on a black card read as
+  // empty; the same four moments spaced along a rail read as a history.
+  const items = figure.items;
+  const landscape = width > height;
+  const lit = Math.max(0, items.findIndex((item) => item.highlight));
+  const grow = easeOutCubic(stepAt(d.progress, 0.05, 0.6));
+  const atSize = px(fontSize[landscape ? 'h3' : 'h4'] * 3);
+  const labelSize = px(fontSize.base * 3);
+  const noteSize = px(fontSize.small * 3);
+  const node = px(18);
 
-  const hasNotes = figure.items.some((item) => item.note);
-  const rowHeight = px(fontSize.base * 3) + (hasNotes ? px(56) : 0) + px(56);
-  cursor = Math.max(top, top + (bottom - top - rowHeight * figure.items.length) / 2);
+  if (landscape) {
+    const railY = top + (bottom - top) * 0.5;
+    const inset = px(140);
+    const step = items.length > 1 ? (w - inset * 2) / (items.length - 1) : 0;
+    const column = Math.max(step, px(360)) - px(40);
+    const nodeX = (i: number) => x + inset + step * i;
 
-  figure.items.forEach((item, i) => {
-    const reveal = Math.min(1, Math.max(0, d.progress * 3 - i * 0.12));
+    // The rail, then the lit part growing along it to the highlighted node.
+    ctx.fillStyle = color.lineStrong;
+    ctx.fillRect(x, railY - px(3), w, px(6));
+    const litTo = nodeX(0) + (nodeX(lit) - nodeX(0)) * grow;
+    ctx.fillStyle = color.accent;
+    ctx.fillRect(nodeX(0), railY - px(3), Math.max(0, litTo - nodeX(0)), px(6));
+
+    items.forEach((item, i) => {
+      const reveal = easeOutCubic(stepAt(d.progress, 0.08 + i * 0.12, 0.25));
+      if (reveal <= 0) return;
+      const cx = nodeX(i);
+      const on = item.highlight || litTo >= cx - px(2);
+      ctx.globalAlpha = reveal;
+
+      // The node: a diamond, in the accent once the rail has reached it;
+      // the highlighted one wears a ring that breathes with the frame.
+      ctx.save();
+      ctx.translate(cx, railY);
+      ctx.rotate(Math.PI / 4);
+      ctx.fillStyle = on ? color.accent : color.lineStrong;
+      ctx.fillRect(-node / 2, -node / 2, node, node);
+      if (item.highlight) {
+        const ring = node * (1.9 + 0.25 * Math.sin(d.frame / 5));
+        ctx.strokeStyle = color.accentHot;
+        ctx.lineWidth = px(3);
+        ctx.strokeRect(-ring / 2, -ring / 2, ring, ring);
+      }
+      ctx.restore();
+
+      // The moment, above the rail, in the big type; the words below it.
+      ctx.textAlign = 'center';
+      ctx.font = fontOf(900, atSize, font.display);
+      ctx.fillStyle = item.highlight ? color.accent : color.fg;
+      ctx.fillText(item.at, cx, railY - px(48) - (1 - reveal) * px(20));
+
+      ctx.font = fontOf(item.highlight ? 700 : 500, labelSize, font.display);
+      ctx.fillStyle = color.fg;
+      const lines = wrapText(item.label, column, (line) => ctx.measureText(line).width);
+      let ly = railY + px(48) + labelSize;
+      for (const line of lines) {
+        ctx.fillText(line, cx, ly);
+        ly += labelSize * 1.3;
+      }
+      if (item.note) {
+        ctx.font = fontOf(400, noteSize, font.mono);
+        ctx.fillStyle = color.faint;
+        for (const line of wrapText(item.note, column, (line) => ctx.measureText(line).width)) {
+          ly += noteSize * 0.2;
+          ctx.fillText(line, cx, ly);
+          ly += noteSize * 1.35;
+        }
+      }
+      ctx.textAlign = 'left';
+      ctx.globalAlpha = 1;
+    });
+    return;
+  }
+
+  // Portrait: the rail runs down the left, the moments beside it.
+  const railX = x + px(30);
+  const slot = (bottom - top - px(40)) / items.length;
+  const nodeY = (i: number) => top + px(20) + slot * i + slot * 0.3;
+  ctx.fillStyle = color.lineStrong;
+  ctx.fillRect(railX - px(3), nodeY(0), px(6), nodeY(items.length - 1) - nodeY(0));
+  const litToY = nodeY(0) + (nodeY(lit) - nodeY(0)) * grow;
+  ctx.fillStyle = color.accent;
+  ctx.fillRect(railX - px(3), nodeY(0), px(6), Math.max(0, litToY - nodeY(0)));
+
+  items.forEach((item, i) => {
+    const reveal = easeOutCubic(stepAt(d.progress, 0.08 + i * 0.12, 0.25));
     if (reveal <= 0) return;
-    const y = cursor + i * rowHeight;
+    const cy = nodeY(i);
+    const on = item.highlight || litToY >= cy - px(2);
     ctx.globalAlpha = reveal;
+    ctx.save();
+    ctx.translate(railX, cy);
+    ctx.rotate(Math.PI / 4);
+    ctx.fillStyle = on ? color.accent : color.lineStrong;
+    ctx.fillRect(-node / 2, -node / 2, node, node);
+    if (item.highlight) {
+      const ring = node * (1.9 + 0.25 * Math.sin(d.frame / 5));
+      ctx.strokeStyle = color.accentHot;
+      ctx.lineWidth = px(3);
+      ctx.strokeRect(-ring / 2, -ring / 2, ring, ring);
+    }
+    ctx.restore();
 
-    ctx.fillStyle = item.highlight ? color.accent : color.lineStrong;
-    ctx.fillRect(railX - px(30), y, px(6), rowHeight - px(16));
-
-    ctx.font = fontOf(400, px(fontSize.small * 3), font.mono);
-    ctx.fillStyle = item.highlight ? color.accent : color.muted;
-    drawTracked(ctx, item.at, x, y + px(fontSize.base * 3), px(3));
-
-    const size = px(fontSize.base * 3);
-    ctx.font = fontOf(item.highlight ? 900 : 500, size, font.display);
+    const tx = railX + px(64);
+    const measure = x + w - tx;
+    ctx.font = fontOf(900, atSize, font.display);
+    ctx.fillStyle = item.highlight ? color.accent : color.fg;
+    ctx.fillText(item.at, tx + (1 - reveal) * px(20), cy + atSize * 0.36);
+    ctx.font = fontOf(item.highlight ? 700 : 500, labelSize, font.display);
     ctx.fillStyle = color.fg;
-    ctx.fillText(item.label, railX, y + size);
-
+    let ly = cy + atSize * 0.36 + px(24) + labelSize;
+    for (const line of wrapText(item.label, measure, (line) => ctx.measureText(line).width)) {
+      ctx.fillText(line, tx, ly);
+      ly += labelSize * 1.3;
+    }
     if (item.note) {
-      ctx.font = fontOf(400, px(fontSize.small * 3), font.mono);
+      ctx.font = fontOf(400, noteSize, font.mono);
       ctx.fillStyle = color.faint;
-      ctx.fillText(item.note, railX, y + size + px(44));
+      for (const line of wrapText(item.note, measure, (line) => ctx.measureText(line).width)) {
+        ctx.fillText(line, tx, ly);
+        ly += noteSize * 1.35;
+      }
     }
     ctx.globalAlpha = 1;
   });
