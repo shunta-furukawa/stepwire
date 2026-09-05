@@ -34,6 +34,8 @@ export interface FieldState {
  * were distracting on the source card" is a note nobody should have to write.
  */
 export const FIELD_ENERGY: Record<SceneType, number> = {
+  // The opening card is the loudest thing in the film: the session, at once.
+  stats: 1,
   headline: 1,
   image: 0.55,
   outro: 0.9,

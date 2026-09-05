@@ -113,6 +113,7 @@ figures:
         rank: AAA                 # as the game grades it
         note: PERFECT FULL COMBO  # or a time of day, or a caveat
         highlight: true
+        pb: true                  # a personal best — counted on the session card
 ```
 
 One row per play, up to twelve, exactly as a result screen or the play-data
@@ -121,6 +122,13 @@ page shows it. The difficulty badge is printed in the game's own colour
 allowed, because EXPERT is green to a player before it is a word. The level
 is optional: the e-amusement play list does not show it, a result photo does.
 `AAA` is set in the accent; every other rank in `muted`.
+
+`pb` marks a personal best. It is the operator's flag, never derived — the
+system has no record of earlier scores to compare against. The first `plays`
+figure of an article with a `session` block is its session log, and the
+opening card counts it: charts, average level, personal bests (one per
+chart, however many times it was played), and a bar per play in the
+difficulty's colour. See `docs/video-system.md`.
 
 ## Sourcing
 

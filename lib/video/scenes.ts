@@ -3,6 +3,7 @@ import type { SceneType } from './scene-types';
 import type { Figure } from '../content/figures';
 import type { MediaRef } from '../content/schema';
 import { planReveal, type RevealPlan } from './reveal';
+import { sessionStats, type SessionStats } from './session-stats';
 import { toSentences } from '../content/markdown';
 import { pageCaptions } from './captions';
 import { visualLength } from './text';
@@ -39,6 +40,8 @@ export interface Scene {
   meta?: string;
   /** `figure` scenes only. */
   figure?: Figure;
+  /** `stats` scenes only: the session, counted. */
+  stats?: SessionStats;
   /** `image` scenes, and the headline when the article has a hero. */
   image?: MediaRef;
   /** The small line above a headline: category and date. */
@@ -76,6 +79,8 @@ export interface SceneSequence {
  * this project's content model exists to prevent.
  */
 export const SCENE_TONE: Record<SceneType, 'fact' | 'analysis'> = {
+  // Counts of declared plays. Nothing in it is an opinion.
+  stats: 'fact',
   headline: 'fact',
   news: 'fact',
   // An image is shown, not argued. What it means is the analysis around it.
@@ -168,6 +173,8 @@ interface FormatProfile {
   outroSeconds: number;
   figureSeconds: number;
   imageSeconds: number;
+  /** The opening session card: long enough for its numbers to count up. */
+  statsSeconds: number;
 }
 
 const PROFILES: Record<CompositionId, FormatProfile> = {
@@ -183,6 +190,7 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
     outroSeconds: 2,
     figureSeconds: 3,
     imageSeconds: 2.6,
+    statsSeconds: 6,
   },
   // Landscape: watched, not scrolled past. Room for the full argument, but a
   // 16:9 frame has less vertical space per card than its width suggests, so the
@@ -200,6 +208,7 @@ const PROFILES: Record<CompositionId, FormatProfile> = {
     outroSeconds: 2.5,
     figureSeconds: 3.5,
     imageSeconds: 3,
+    statsSeconds: 7,
   },
 };
 
@@ -264,20 +273,37 @@ export function buildSceneSequence(
   const headline = article.video?.headline ?? article.shortTitle ?? article.title;
   const drafts: Draft[] = [];
 
-  // The headline opens, over the hero image when there is one. A feed gives a
-  // film about two seconds to earn the next two; a brand ident spends them on
-  // the brand. The kicker carries what the ident used to say.
-  drafts.push({
-    id: 'headline',
-    type: 'headline',
-    ...typed(headline, 'headline', fps),
-    text: headline,
-    meta: article.summary,
-    kicker: `${CATEGORY_META[article.category].label.toUpperCase()} · ${formatDate(article.publishedAt)}`,
-    ...(article.heroImage
-      ? { image: { ...article.heroImage, credit: article.heroImage.credit ?? '' } }
-      : {}),
-  });
+  const kicker = `${CATEGORY_META[article.category].label.toUpperCase()} · ${formatDate(article.publishedAt)}`;
+
+  if (article.session) {
+    // A session article opens on the session itself — the date, the window,
+    // the counts — rather than on its title. The thumbnail already said the
+    // title; the first seconds are for "this happened, and here is its
+    // shape". The headline card is dropped: the news card carries the story.
+    drafts.push({
+      id: 'stats',
+      type: 'stats',
+      durationInFrames: secondsToFrames(profile.statsSeconds, fps),
+      stats: sessionStats(article.session, article.figures),
+      kicker: `SESSION · ${article.session.date.replace(/-/g, '.')}`,
+      text: headline,
+    });
+  } else {
+    // The headline opens, over the hero image when there is one. A feed gives
+    // a film about two seconds to earn the next two; a brand ident spends them
+    // on the brand. The kicker carries what the ident used to say.
+    drafts.push({
+      id: 'headline',
+      type: 'headline',
+      ...typed(headline, 'headline', fps),
+      text: headline,
+      meta: article.summary,
+      kicker,
+      ...(article.heroImage
+        ? { image: { ...article.heroImage, credit: article.heroImage.credit ?? '' } }
+        : {}),
+    });
+  }
 
   // A narrated article replaces its three derived text sections with the
   // recording. The written sections are the article's job; the voice is the

@@ -137,6 +137,33 @@ describe('buildSceneSequence', () => {
     expect(headline.kicker).toContain('2026.08.30');
   });
 
+  it('opens on the session card instead of the headline when a session is declared', () => {
+    // The thumbnail already said what the film is about; the film opens on
+    // what was played. The session card is never dropped under budget.
+    const sequence = buildSceneSequence(
+      {
+        ...article,
+        session: { date: '2026-09-03', start: '19:08', end: '19:37', style: 'SINGLE' },
+        figures: [
+          {
+            kind: 'plays',
+            items: [
+              { song: 'A', difficulty: 'EXPERT', style: 'SINGLE', level: 13, score: 999200, rank: 'AAA', pb: true },
+              { song: 'B', difficulty: 'EXPERT', style: 'SINGLE', level: 15, score: 987020, rank: 'AA+' },
+            ],
+          },
+        ],
+      },
+      'STEPWIRE_NEWS',
+    );
+    const first = sequence.scenes[0]!;
+    expect(first.type).toBe('stats');
+    expect(first.kicker).toBe('SESSION · 2026.09.03');
+    expect(first.stats?.charts).toBe(2);
+    expect(first.stats?.personalBests).toBe(1);
+    expect(sequence.scenes.map((scene) => scene.type)).not.toContain('headline');
+  });
+
   it('types every card, and holds it after the last character', () => {
     for (const scene of buildSceneSequence(article, 'STEPWIRE_NEWS').scenes) {
       if (!['headline', 'news', 'context', 'impact'].includes(scene.type)) continue;

@@ -145,6 +145,7 @@ function drawWireBar(d: DrawContext, meta: string | undefined) {
   ctx.fillText('WIRE', x + step, y);
 
   if (!meta) return;
+  const wordmarkEnd = x + step + ctx.measureText('WIRE').width;
 
   // `textAlign: 'right'` cannot compose with per-character drawing — each
   // character would be right-aligned to the same x. The origin is measured
@@ -157,8 +158,13 @@ function drawWireBar(d: DrawContext, meta: string | undefined) {
     (total, char) => total + ctx.measureText(char).width + spacing,
     0,
   );
+  // A 9:16 frame has no room for `SESSION · 2026.09.03` beside the wordmark,
+  // so the meta drops back to its first segment rather than run into it.
+  const room = width - px(120) - (wordmarkEnd + px(48));
+  const shown = textWidth > room && text.includes(' · ') ? (text.split(' · ')[0] ?? text) : text;
+  const shownWidth = [...shown].reduce((total, char) => total + ctx.measureText(char).width + spacing, 0);
   ctx.fillStyle = color.muted;
-  drawTracked(ctx, text, width - px(120) - textWidth, y, spacing);
+  drawTracked(ctx, shown, width - px(120) - shownWidth, y, spacing);
 }
 
 /** The step timeline along the bottom. Same role as `ProgressRail`. */
@@ -751,8 +757,322 @@ const drawImage: Drawer = (d, scene) => {
  * fails to compile until the renderer can draw it. The alternative — a default
  * case — would silently export a video with a scene missing.
  */
+/* ---------------------------------------------------------------------------
+ * The session card: the opening infographic.
+ * ------------------------------------------------------------------------- */
+
+function clamp01(x: number) {
+  return Math.min(1, Math.max(0, x));
+}
+
+function easeOutCubic(t: number) {
+  return 1 - (1 - clamp01(t)) ** 3;
+}
+
+/** Overshoots a little and settles — a bar that lands, not one that stops. */
+function easeOutBack(t: number) {
+  const c = clamp01(t) - 1;
+  const s = 1.70158;
+  return 1 + (s + 1) * c ** 3 + s * c ** 2;
+}
+
+/** Where a step that begins at `start` and lasts `span` stands, 0–1. */
+function stepAt(progress: number, start: number, span: number) {
+  return clamp01((progress - start) / span);
+}
+
+/** `text` drawn with tracking, centred on `cx`. */
+function drawTrackedCentred(ctx: DrawContext['ctx'], text: string, cx: number, y: number, spacing: number) {
+  const chars = [...text];
+  const w = chars.reduce((t, ch) => t + ctx.measureText(ch).width, 0) + spacing * (chars.length - 1);
+  drawTracked(ctx, text, cx - w / 2, y, spacing);
+}
+
+/** A small filled chip; returns its width so a row can flow. */
+function drawChip(
+  d: DrawContext,
+  text: string,
+  x: number,
+  y: number,
+  fill: string,
+  ink: string,
+  size: number,
+) {
+  const { ctx } = d;
+  const px = scaled(d.width, d.height);
+  const padX = px(18);
+  const spacing = size * tracking.wide;
+  ctx.font = fontOf(700, size, font.mono);
+  const chars = [...text];
+  const w = chars.reduce((t, ch) => t + ctx.measureText(ch).width, 0) + spacing * (chars.length - 1);
+  const h = size + px(16);
+  ctx.fillStyle = fill;
+  ctx.fillRect(x, y, w + padX * 2, h);
+  ctx.fillStyle = ink;
+  ctx.textBaseline = 'middle';
+  drawTracked(ctx, text, x + padX, y + h / 2, spacing);
+  ctx.textBaseline = 'alphabetic';
+  return w + padX * 2;
+}
+
+/**
+ * The session as an infographic, in motion.
+ *
+ * This replaces the headline card when the article declares a session: the
+ * thumbnail already said what the video is about, so the film opens on what
+ * was played. Every number is one the operator wrote (`session-stats.ts`
+ * only counts), and every motion is a function of `d.progress` or `d.frame`:
+ * the numbers count up, the bars land with a little overshoot, and a scan
+ * line crosses the chart as they do. Nothing here is timed by a clock.
+ */
+const drawStats: Drawer = (d, scene) => {
+  const stats = scene.stats;
+  if (!stats) return;
+  const { ctx, width, height } = d;
+  const px = scaled(width, height);
+  const { top, bottom } = contentBand(d);
+  const landscape = width > height;
+  const left = px(120);
+  const right = width - px(120);
+  const p = d.progress;
+
+  // Regions. Landscape reads left to right — the session, then its plays;
+  // portrait stacks the same blocks top to bottom.
+  const headW = landscape ? px(780) : right - left;
+  const gutter = px(64);
+  const tiles = landscape
+    ? { x: left, y: top + px(330), w: headW, h: bottom - top - px(330) }
+    : { x: left, y: top + px(340), w: right - left, h: px(420) };
+  const chartTop = landscape ? top : tiles.y + tiles.h + px(60);
+  const chart = landscape
+    ? { x: left + headW + gutter, y: chartTop, w: right - (left + headW + gutter), h: bottom - top - px(120) }
+    : { x: left, y: chartTop, w: right - left, h: bottom - chartTop - px(130) };
+  const chipsY = bottom - px(landscape ? 66 : 80);
+
+  /* Head: the date, the day, the window. */
+  const dateSize = px(landscape ? 128 : 112);
+  const headIn = easeOutCubic(stepAt(p, 0, 0.12));
+  ctx.globalAlpha = headIn;
+  ctx.font = fontOf(900, dateSize, font.display);
+  ctx.fillStyle = color.fg;
+  const dateY = top + dateSize * 0.86 + (1 - headIn) * px(36);
+  drawTracked(ctx, stats.date, left, dateY, dateSize * tracking.display);
+
+  // Line two: the weekday as a chip, the window, the length counting up.
+  const lineIn = easeOutCubic(stepAt(p, 0.06, 0.14));
+  ctx.globalAlpha = lineIn;
+  const lineSize = px(fontSize.lead * 3);
+  const lineY = dateY + px(40) + lineSize;
+  let cursor = left;
+  cursor += drawChip(d, stats.weekday, cursor, lineY - lineSize * 0.5 - px(8) - lineSize * 0.45, color.accent, color.onAccent, lineSize * 0.7) + px(24);
+  ctx.font = fontOf(500, lineSize, font.mono);
+  ctx.fillStyle = color.fg;
+  if (stats.window) {
+    ctx.fillText(stats.window, cursor, lineY);
+    cursor += ctx.measureText(stats.window).width + px(28);
+  }
+  if (stats.minutes !== undefined) {
+    const shown = Math.round(stats.minutes * easeOutCubic(stepAt(p, 0.1, 0.4)));
+    ctx.fillStyle = color.accent;
+    ctx.font = fontOf(900, lineSize, font.mono);
+    const value = String(shown);
+    ctx.fillText(value, cursor, lineY);
+    cursor += ctx.measureText(value).width + px(10);
+    ctx.font = fontOf(500, lineSize * 0.6, font.mono);
+    ctx.fillStyle = color.muted;
+    ctx.fillText('MIN', cursor, lineY);
+  }
+
+  // Line three: the conditions, in the operator's words.
+  const metaIn = easeOutCubic(stepAt(p, 0.12, 0.14));
+  ctx.globalAlpha = metaIn;
+  const metaSize = px(fontSize.base * 3);
+  ctx.font = fontOf(400, metaSize, font.mono);
+  ctx.fillStyle = color.muted;
+  const meta = [stats.weather, stats.venue, stats.style].filter((part): part is string => Boolean(part));
+  ctx.fillText(meta.join(' · '), left, lineY + px(24) + metaSize);
+
+  /* Tiles: the session, counted. */
+  const cells: { label: string; value: (t: number) => string; unit?: string; badge?: { text: string; hot: boolean } }[] = [
+    { label: 'CHARTS', value: (t) => String(Math.round(stats.charts * t)), unit: '曲' },
+    {
+      label: 'AVG LEVEL',
+      value: (t) => (stats.averageLevel === undefined ? '—' : (stats.averageLevel * t).toFixed(1)),
+      unit: 'LV',
+    },
+    { label: 'PERSONAL BEST', value: (t) => String(Math.round(stats.personalBests * t)), unit: 'PB' },
+  ];
+  if (stats.flare) {
+    const { before, delta } = stats.flare;
+    cells.push({
+      label: 'FLARE SKILL',
+      value: (t) => String(Math.round(before + delta * t)),
+      badge: { text: delta > 0 ? `+${delta} UP` : delta < 0 ? `${delta}` : '±0', hot: delta > 0 },
+    });
+  } else if (stats.best) {
+    const best = stats.best;
+    cells.push({ label: 'BEST SCORE', value: (t) => formatScore(Math.round(best.score * t)) });
+  }
+  const cols = 2;
+  const rows = Math.ceil(cells.length / cols);
+  const cellW = (tiles.w - px(40)) / cols;
+  const cellH = tiles.h / rows;
+  const labelSize = px(fontSize.micro * 3);
+  const valueSize = Math.min(px(landscape ? 88 : 104), cellH - labelSize - px(40));
+  cells.forEach((cell, i) => {
+    const t = stepAt(p, 0.14 + i * 0.07, 0.42);
+    if (t <= 0) return;
+    const x = tiles.x + (i % cols) * (cellW + px(40));
+    const y = tiles.y + Math.floor(i / cols) * cellH;
+    ctx.globalAlpha = easeOutCubic(Math.min(1, t * 3));
+    ctx.fillStyle = color.lineStrong;
+    ctx.fillRect(x, y, cellW, px(2));
+    // The rule underlines itself in the accent as the number arrives.
+    ctx.fillStyle = color.accent;
+    ctx.fillRect(x, y, cellW * easeOutCubic(t), px(2));
+
+    ctx.font = fontOf(700, labelSize, font.mono);
+    ctx.fillStyle = color.muted;
+    drawTracked(ctx, cell.label, x, y + px(18) + labelSize, labelSize * tracking.wider);
+
+    const valueY = y + px(18) + labelSize + px(16) + valueSize * 0.86;
+    ctx.font = fontOf(900, valueSize, font.mono);
+    ctx.fillStyle = color.fg;
+    const value = cell.value(easeOutCubic(t));
+    ctx.fillText(value, x, valueY);
+    let after = x + ctx.measureText(value).width + px(12);
+    if (cell.unit) {
+      ctx.font = fontOf(500, valueSize * 0.34, font.mono);
+      ctx.fillStyle = color.muted;
+      ctx.fillText(cell.unit, after, valueY);
+      after += ctx.measureText(cell.unit).width + px(16);
+    }
+    if (cell.badge && t >= 1) {
+      // A rise pulses; the pulse is a function of the frame, as everything is.
+      const pulse = cell.badge.hot ? 0.8 + 0.2 * Math.sin(d.frame / 3) : 1;
+      ctx.globalAlpha = pulse;
+      const size = valueSize * 0.3;
+      drawChip(
+        d,
+        cell.badge.text,
+        after,
+        valueY - size - px(10),
+        cell.badge.hot ? color.accentHot : color.lineStrong,
+        cell.badge.hot ? color.onAccent : color.fg,
+        size,
+      );
+    }
+  });
+  ctx.globalAlpha = 1;
+
+  /* Chart: one bar per play, in the difficulty's colour. */
+  const plays = stats.plays;
+  if (plays.length > 0) {
+    const titleSize = px(fontSize.micro * 3);
+    const titleIn = easeOutCubic(stepAt(p, 0.24, 0.12));
+
+    // The axis floors just under the lowest score of the top three quarters:
+    // on a 0–1,000,000 axis every bar is the same height, and a floor under
+    // the lowest score lets one abandoned play flatten the rest. Plays under
+    // the floor are drawn as dimmed stubs — off the chart, and shown as such.
+    const sorted = plays.map((play) => play.score).sort((a, b) => a - b);
+    const typical = sorted[Math.floor(sorted.length / 4)] ?? 0;
+    const floor = Math.max(0, Math.floor((typical - 1) / 50_000) * 50_000);
+    const ceiling = 1_000_000;
+
+    ctx.globalAlpha = titleIn;
+    ctx.font = fontOf(700, titleSize, font.mono);
+    ctx.fillStyle = color.muted;
+    const titleY = chart.y + titleSize;
+    const titleW = drawTracked(ctx, 'SCORE', chart.x, titleY, titleSize * tracking.wider);
+    ctx.font = fontOf(400, titleSize, font.mono);
+    ctx.fillStyle = color.faint;
+    ctx.fillText(`${formatScore(floor)} → ${formatScore(ceiling)}`, chart.x + titleW + px(24), titleY);
+    ctx.globalAlpha = 1;
+
+    const rankSize = px(fontSize.small * 3);
+    const plotTop = chart.y + titleSize + px(96);
+    const plotBottom = chart.y + chart.h - rankSize - px(24);
+    const plotH = plotBottom - plotTop;
+
+    const slot = chart.w / plays.length;
+    const barW = slot * 0.62;
+    plays.forEach((play, i) => {
+      const t = stepAt(p, 0.28 + i * 0.035, 0.38);
+      if (t <= 0) return;
+      const under = play.score < floor;
+      const frac = clamp01((play.score - floor) / (ceiling - floor));
+      const h = under ? px(10) : Math.max(px(6), plotH * frac * easeOutBack(t));
+      const x = chart.x + slot * i + (slot - barW) / 2;
+      const y = plotBottom - h;
+      ctx.globalAlpha = under ? 0.45 : 1;
+      ctx.fillStyle = difficulty[play.difficulty];
+      ctx.fillRect(x, y, barW, h);
+      ctx.globalAlpha = 1;
+
+      if (play.pb) {
+        // The best marked in the hot accent, and blinking: it is the one
+        // thing on the card that is news.
+        ctx.globalAlpha = 0.7 + 0.3 * Math.sin(d.frame / 2.5 + i);
+        ctx.fillStyle = color.accentHot;
+        ctx.fillRect(x, y - px(12), barW, px(8));
+        ctx.font = fontOf(900, rankSize * 0.9, font.mono);
+        drawTrackedCentred(ctx, 'PB', x + barW / 2, y - px(24), rankSize * 0.9 * tracking.wide);
+        ctx.globalAlpha = 1;
+      }
+
+      if (play.rank) {
+        ctx.font = fontOf(700, rankSize, font.mono);
+        ctx.fillStyle = play.rank === 'AAA' ? color.accent : color.muted;
+        ctx.globalAlpha = easeOutCubic(t);
+        drawTrackedCentred(ctx, play.rank, x + barW / 2, plotBottom + rankSize + px(4), 0);
+        ctx.globalAlpha = 1;
+      }
+    });
+
+    // The baseline, and the scan that crosses the chart while the bars land.
+    ctx.fillStyle = color.lineStrong;
+    ctx.fillRect(chart.x, plotBottom, chart.w, px(2));
+    const scan = stepAt(p, 0.28, 0.45);
+    if (scan > 0 && scan < 1) {
+      ctx.globalAlpha = 0.5 * Math.sin(scan * Math.PI);
+      ctx.fillStyle = color.accent;
+      ctx.fillRect(chart.x + chart.w * scan, plotTop - px(20), px(3), plotBottom - plotTop + px(20));
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  /* Chips: the difficulty mix, in the game's colours. */
+  // Sized to fit the row: five difficulties on a 9:16 frame would otherwise
+  // run off the right edge, and a chip half off the card says nothing.
+  const chipLabels = stats.byDifficulty.map((entry) => `${entry.difficulty} ×${entry.count}`);
+  const chipRoom = landscape ? chart.w : right - left;
+  let chipSize = px(fontSize.small * 3);
+  const chipsWidth = (size: number) => {
+    ctx.font = fontOf(700, size, font.mono);
+    return chipLabels.reduce((total, label) => {
+      const chars = [...label];
+      const w = chars.reduce((t, ch) => t + ctx.measureText(ch).width, 0) + size * tracking.wide * (chars.length - 1);
+      return total + w + px(36) + px(14);
+    }, 0);
+  };
+  while (chipsWidth(chipSize) > chipRoom && chipSize > px(20)) chipSize *= 0.94;
+  let chipX = landscape ? chart.x : left;
+  stats.byDifficulty.forEach((entry, i) => {
+    const t = stepAt(p, 0.5 + i * 0.06, 0.16);
+    if (t <= 0) return;
+    ctx.globalAlpha = easeOutCubic(t);
+    chipX +=
+      drawChip(d, `${entry.difficulty} ×${entry.count}`, chipX, chipsY, difficulty[entry.difficulty], color.onAccent, chipSize) +
+      px(14);
+  });
+  ctx.globalAlpha = 1;
+  ctx.textBaseline = 'alphabetic';
+};
+
 const DRAWERS: Record<SceneType, Drawer> = {
   outro: drawIdent,
+  stats: drawStats,
   headline: drawCard,
   news: drawCard,
   context: drawCard,
@@ -795,7 +1115,14 @@ export function drawScene(d: DrawContext, scene: Scene) {
   if (d.field) ctx.drawImage(d.field, 0, 0, width, height);
 
   if (!ident && !ownsBackdrop) {
-    drawWireBar(d, scene.type === 'headline' ? scene.kicker : scene.type === 'source' ? undefined : scene.label);
+    drawWireBar(
+      d,
+      scene.type === 'headline' || scene.type === 'stats'
+        ? scene.kicker
+        : scene.type === 'source'
+          ? undefined
+          : scene.label,
+    );
   }
 
   DRAWERS[scene.type](d, scene);

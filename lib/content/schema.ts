@@ -138,6 +138,23 @@ export const narrationSchema = z.object({
 });
 export type Narration = z.infer<typeof narrationSchema>;
 
+export const sessionSchema = z.object({
+  /** `YYYY-MM-DD`, in the arcade's calendar. */
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'session.date must be YYYY-MM-DD'),
+  /** `HH:MM`, first and last play, from the play-data list. */
+  start: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  end: z.string().regex(/^\d{2}:\d{2}$/).optional(),
+  venue: z.string().min(1).max(40).optional(),
+  /** As the operator would say it: `晴れ · 27℃`. */
+  weather: z.string().min(1).max(24).optional(),
+  style: z.enum(['SINGLE', 'DOUBLE']).default('SINGLE'),
+  /** FLARE SKILL before and after, from the profile page. */
+  flareSkill: z
+    .object({ before: z.number().int().min(0), after: z.number().int().min(0) })
+    .optional(),
+});
+export type Session = z.infer<typeof sessionSchema>;
+
 /** Frontmatter as authored in `content/**\/*.mdx`. */
 export const articleFrontmatterSchema = z.object({
   id: z.string().min(1),
@@ -187,6 +204,13 @@ export const articleFrontmatterSchema = z.object({
    * narration still produces a complete, silent video from its text.
    */
   narration: narrationSchema.optional(),
+  /**
+   * The session this article records, for the opening card of the film. All
+   * of it is declared by the operator; the card only counts and averages the
+   * plays figure against it. Weather and flare skill are typed in, never
+   * fetched.
+   */
+  session: sessionSchema.optional(),
   status: z.enum(STATUSES),
   /**
    * Marks seeded sample content. Fixture articles are rendered with a visible

@@ -11,6 +11,7 @@
  * the ident is the sign-off.
  */
 export const SCENE_TYPES = [
+  'stats',
   'headline',
   'news',
   'image',

@@ -115,6 +115,8 @@ export const playsFigureSchema = z.object({
         /** Full-combo kind, a time of day, a caveat. */
         note: z.string().min(1).max(40).optional(),
         highlight: z.boolean().optional(),
+        /** A personal best on this chart, as the result screen said. */
+        pb: z.boolean().optional(),
       }),
     )
     .min(1)

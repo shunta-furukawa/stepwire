@@ -18,8 +18,36 @@ An article produces one of two films, depending on whether it has a recording.
 | Length | Trimmed to the format's ceiling | As long as the recording |
 | Audio | none | the recording |
 
-Both open with the ident and headline and close with the source card and the
-outro. Everything else changes.
+Both open with the headline and close with the source card and the outro.
+Everything else changes.
+
+### The session card
+
+An article with a `session` block opens on the session instead of the
+headline: the thumbnail has already said what the film is about, so the first
+seven seconds show what was played. The card is an infographic in motion — the
+date and the window, the length counting up, tiles for charts played, average
+level, personal bests and FLARE SKILL (with its rise as a pulsing chip), a bar
+per play in the difficulty's colour with the personal bests marked, and the
+difficulty mix as chips.
+
+```yaml
+session:
+  date: '2026-09-03'
+  start: '19:08'            # optional; with `end`, gives the window and the length
+  end: '19:37'
+  venue: 普段行かないゲーセン  # optional
+  weather: 晴れ              # optional, in the operator's words
+  style: SINGLE             # or DOUBLE
+  flareSkill:               # optional; the tile shows the rise
+    before: 1200
+    after: 1260
+```
+
+Every number is counted by `lib/video/session-stats.ts` from the block and
+from the first `plays` figure — the session log — and nothing is inferred: a
+personal best is a `pb: true` the operator wrote on the row. Every motion on
+the card is a function of the frame. The card is never trimmed under budget.
 
 ### The recording is the script
 
