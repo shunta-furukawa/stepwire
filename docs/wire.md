@@ -66,3 +66,30 @@ time — `blink(t)`, `bob(t)` — so a frame is the same on every run.
 
 MONO's mark is the same silhouette in the type colour with the initial on
 it. It is a mark, not a face: the operator's face is the operator's own.
+
+## Writing so it does not read as a machine
+
+AI-sounding Japanese is a matter of rhythm before vocabulary — the finding
+of the natural-japanese lint write-up (zenn.dev/coji, `natural-japanese-
+ai-smell-lint`), measured over seven models and four hundred texts. The
+checks below are what it flags; every draft is read against them before it
+goes out.
+
+- **Vary the length.** A run of sentences all around the same length is the
+  strongest signal. Put a four-character sentence next to an eighty-mora
+  one. 「一回も。」 then a long one.
+- **Vary the paragraphs.** Not every turn is two sentences. Some are one
+  word; some run on.
+- **End on a noun sometimes.** 体言止め — 「主戦場は地元のゲーセン。」 A text
+  with none at all reads as generated; humans use it in most texts.
+- **Go easy on 「〜ではなく」.** The negate-then-affirm frame is used five
+  times more by models than by people. Say the thing; skip the contrast.
+- **No tidy triads.** Three parallel items of equal weight, three clauses
+  of equal length, a summary that restates the list — cut one, or let one
+  run long.
+- **Titles are said, not filed.** 「STEPWIREとは」 is a heading in a manual.
+  「STEPWIRE、はじめます」 is a person talking. A title with a colon and an
+  explainer after it is the manual again.
+- **Let WIRE interrupt.** 「で、」「一回も。」「というか」. A question can be
+  two words. MONO answers the way people answer: sometimes with the reason
+  first, sometimes trailing off.
