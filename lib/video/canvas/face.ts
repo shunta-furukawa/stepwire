@@ -95,10 +95,10 @@ export function drawWire(ctx: Ctx, x: number, y: number, size: number, mood: Moo
     ctx.fillStyle = TONES.deep;
     ctx.beginPath();
     ctx.ellipse(
-      eye.cx + eye.look[0] * eye.rx * 0.5 + 1.5,
-      eye.cy + eye.look[1] * ry * 0.5 - 1.5,
-      eye.rx * 0.32,
-      ry * 0.32,
+      eye.cx + eye.look[0] * eye.rx * (1 - eye.pupil),
+      eye.cy + eye.look[1] * ry * (1 - eye.pupil),
+      eye.rx * eye.pupil,
+      ry * eye.pupil,
       0,
       0,
       Math.PI * 2,

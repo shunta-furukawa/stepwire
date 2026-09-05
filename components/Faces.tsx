@@ -88,10 +88,10 @@ export function WireFace({
             <g key={i}>
               <ellipse cx={eye.cx} cy={eye.cy} rx={eye.rx} ry={ry} fill={TONES.accent} />
               <ellipse
-                cx={eye.cx + eye.look[0] * eye.rx * 0.5 + 1.5}
-                cy={eye.cy + eye.look[1] * ry * 0.5 - 1.5}
-                rx={eye.rx * 0.32}
-                ry={ry * 0.32}
+                cx={eye.cx + eye.look[0] * eye.rx * (1 - eye.pupil)}
+                cy={eye.cy + eye.look[1] * ry * (1 - eye.pupil)}
+                rx={eye.rx * eye.pupil}
+                ry={ry * eye.pupil}
                 fill={TONES.deep}
               />
             </g>

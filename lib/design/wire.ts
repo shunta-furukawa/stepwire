@@ -28,9 +28,11 @@ export interface Polygon {
 export interface Eye {
   cx: number;
   cy: number;
-  /** Half-width and half-height of the open eye. */
+  /** Half-width and half-height of the open eye. Round: the two are equal. */
   rx: number;
   ry: number;
+  /** The pupil, as a fraction of the eye. Big — it is what makes WIRE cute. */
+  pupil: number;
   /** `open` is a rounded shape; `arc` is the ^ of a smile; `shut` a line. */
   shape: 'open' | 'arc' | 'shut';
   /** Where the pupil looks, as a fraction of the eye's radius. */
@@ -65,7 +67,7 @@ const HEAD: Polygon[] = [
 
 const ANTENNA = { from: [50, 8] as [number, number], to: [58, -6] as [number, number], tip: [60, -9] as [number, number] };
 
-const EYE_BASE = { rx: 8, ry: 9 } as const;
+const EYE_BASE = { rx: 9.5, ry: 9.5, pupil: 0.56 } as const;
 
 export function wireFace(mood: Mood): Face {
   const left = { cx: 36, cy: 54 };
@@ -91,7 +93,7 @@ export function wireFace(mood: Mood): Face {
       return {
         head: HEAD,
         antenna: ANTENNA,
-        eyes: [eye(left, { ry: 11, rx: 8.5 }), eye(right, { ry: 11, rx: 8.5 })],
+        eyes: [eye(left, { rx: 11, ry: 11, pupil: 0.42 }), eye(right, { rx: 11, ry: 11, pupil: 0.42 })],
         mouth: { kind: 'round', points: [[50, 75], [4, 5]] },
       };
     case 'think':
