@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ArticleVideoInput } from '../lib/content/article';
-import { fitHeadline, thumbnailPlan } from '../lib/video/canvas/thumbnail';
+import { fitHeadline, fitHeadlineTight, thumbnailPlan } from '../lib/video/canvas/thumbnail';
 
 const article: ArticleVideoInput = {
   slug: 's',
@@ -103,5 +103,30 @@ describe('the pair on the thumbnail', () => {
     expect(thumbnailPlan(conversation).pair).toBe(true);
     expect(thumbnailPlan({ ...conversation, blocks: undefined }).pair).toBe(false);
     expect(thumbnailPlan(article).pair).toBe(false);
+  });
+});
+
+describe('fitHeadlineTight', () => {
+  const measure = (text: string, size: number) => [...text].length * size * 0.6;
+
+  it('sizes every line to the width, and the block to the height', () => {
+    const lines = fitHeadlineTight('STEPWIREとは', { width: 1200, height: 900 }, measure);
+    // The Latin word stays whole; the two characters after it get their own,
+    // much larger, line — the poster block — and the whole is scaled to the
+    // height, so every line is at most the width and the block fills it.
+    expect(lines.map((line) => line.text)).toEqual(['STEPWIRE', 'とは']);
+    for (const line of lines) expect(measure(line.text, line.size)).toBeLessThanOrEqual(1200 + 1e-6);
+    expect(lines.reduce((t, line) => t + line.size, 0)).toBeCloseTo(900, 3);
+  });
+
+  it('scales the block down when the width-filled lines would be too tall', () => {
+    const lines = fitHeadlineTight('とは', { width: 1200, height: 300 }, measure);
+    expect(lines).toHaveLength(1);
+    expect(lines[0]?.size).toBeCloseTo(300, 3);
+  });
+
+  it('never starts a line with a closing mark', () => {
+    const lines = fitHeadlineTight('解禁当日に踏んできた。次はPFCを取りたい', { width: 800, height: 800 }, measure);
+    for (const line of lines) expect([...'。、」）']).not.toContain([...line.text][0]);
   });
 });

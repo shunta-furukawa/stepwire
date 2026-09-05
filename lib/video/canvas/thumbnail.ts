@@ -113,6 +113,105 @@ export function fitHeadline(
   return { size, lines: wrapText(text, box.width, (line) => measure(line, size)) };
 }
 
+/** Characters a line may not begin with — the simplest kinsoku rule. */
+const NO_LINE_START = new Set([...'。、．，」』）】〕〉》!?！？ー～…‥:：;；']);
+/** Where a line would rather break: after these, or at a script boundary. */
+const BREAK_AFTER = new Set([...' 。、！？…」』）】']);
+
+const script = (ch: string) => (/[A-Za-z0-9,.'&+-]/.test(ch) ? 'latin' : 'other');
+
+/**
+ * Splits `text` into `n` lines of roughly equal measured width.
+ *
+ * A break is allowed at a space, after punctuation, where the script
+ * changes, or between two Japanese characters — never inside a Latin word,
+ * and never before a character that may not start a line. Each cut goes to
+ * the allowed break nearest its share of the width; if the text has fewer
+ * allowed breaks than cuts, fewer lines come back, and the caller skips
+ * that count.
+ */
+function balance(text: string, n: number, measure: (text: string) => number): string[] {
+  const chars = [...text.trim()];
+  if (n <= 1 || chars.length < n) return [chars.join('')];
+  const allowed: number[] = [];
+  for (let i = 1; i < chars.length; i += 1) {
+    const prev = chars[i - 1] ?? '';
+    const next = chars[i] ?? '';
+    if (NO_LINE_START.has(next)) continue;
+    const ok =
+      prev === ' ' ||
+      next === ' ' ||
+      BREAK_AFTER.has(prev) ||
+      script(prev) !== script(next) ||
+      (script(prev) === 'other' && script(next) === 'other');
+    if (ok) allowed.push(i);
+  }
+  const total = measure(chars.join(''));
+  const lines: string[] = [];
+  let start = 0;
+  for (let line = 0; line < n - 1; line += 1) {
+    const target = (total * (line + 1)) / n;
+    const candidates = allowed.filter((i) => i > start);
+    if (candidates.length === 0) break;
+    const cut = candidates.reduce((best, i) =>
+      Math.abs(measure(chars.slice(0, i).join('')) - target) < Math.abs(measure(chars.slice(0, best).join('')) - target)
+        ? i
+        : best,
+    );
+    const piece = chars.slice(start, cut).join('').trim();
+    if (piece.length === 0) break;
+    lines.push(piece);
+    start = cut;
+  }
+  const rest = chars.slice(start).join('').trim();
+  if (rest.length > 0) lines.push(rest);
+  return lines;
+}
+
+/**
+ * The headline as a poster: every line sized on its own to fill the box's
+ * width, the whole block scaled to its height.
+ *
+ * `fitHeadline` keeps one size for every line and leaves the short line
+ * short; this lets 「とは」 stand as wide as 「STEPWIRE」 above it, which is
+ * the gap-free block a thumbnail wants. Tries one to four lines and keeps
+ * the split that fills the most of the box, docked when its smallest line
+ * would be a sliver next to its largest.
+ */
+export function fitHeadlineTight(
+  text: string,
+  box: { width: number; height: number },
+  measure: (text: string, size: number) => number,
+  lineHeight = 1.0,
+): { text: string; size: number }[] {
+  const unit = (line: string) => Math.max(1e-6, measure(line, 100) / 100);
+  let best: { text: string; size: number }[] = [];
+  let bestScore = -1;
+  for (let n = 1; n <= 4; n += 1) {
+    const lines = balance(text, n, unit);
+    if (lines.length !== n) continue;
+    // A lone character is not a line: 「と」 over 「は」 fills the box and
+    // reads as nothing.
+    if (n > 1 && lines.some((line) => [...line].length < 2)) continue;
+    let sized = lines.map((line) => ({ text: line, size: box.width / unit(line) }));
+    const total = sized.reduce((t, line) => t + line.size * lineHeight, 0);
+    if (total > box.height) {
+      const k = box.height / total;
+      sized = sized.map((line) => ({ ...line, size: line.size * k }));
+    }
+    const sizes = sized.map((line) => line.size);
+    const filled = sizes.reduce((t, size) => t + size * lineHeight, 0);
+    // Docked in proportion to how much of a sliver the smallest line is.
+    const ratio = Math.min(...sizes) / Math.max(...sizes);
+    const score = filled * Math.min(1, ratio / 0.3);
+    if (score > bestScore) {
+      bestScore = score;
+      best = sized;
+    }
+  }
+  return best;
+}
+
 function cover(
   ctx: ThumbnailContext['ctx'],
   image: CanvasImageSource,
@@ -272,26 +371,27 @@ export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
   const boxTop = pad + chipSize + px(18) + px(28);
   const boxBottom = chipTop - (rows.length > 0 ? px(24) : 0);
   const box = { width: textRight - pad * 2, height: boxBottom - boxTop - px(24) };
-  const { size, lines } = fitHeadline(plan.headline, box, (text, at) => {
-    ctx.font = fontOf(900, at, font.display);
+  // Each line fills the column's width at its own size, in the impact face;
+  // a headline that leaves a gap is a headline that could have been larger.
+  const lines = fitHeadlineTight(plan.headline, box, (text, at) => {
+    ctx.font = fontOf(400, at, font.impact);
     return ctx.measureText(text).width;
   });
-  ctx.font = fontOf(900, size, font.display);
-  const lineH = size * 1.04;
   // Bottom-anchored: the words sit on the chips, and any slack goes to the
   // top where the chip strip is, not into a hole above the results.
-  const blockH = lines.length * lineH;
-  let y = boxBottom - px(24) - blockH + size * 0.86;
-  y = Math.max(y, boxTop + size * 0.86);
+  const blockH = lines.reduce((t, line) => t + line.size, 0);
+  let y = Math.max(boxBottom - px(24) - blockH, boxTop);
   for (const line of lines) {
+    ctx.font = fontOf(400, line.size, font.impact);
+    const baseline = y + line.size * 0.84;
     ctx.fillStyle = color.deep;
-    ctx.fillText(line, pad + px(4), y + px(4));
+    ctx.fillText(line.text, pad + px(4), baseline + px(4));
     ctx.fillStyle = color.fg;
-    ctx.fillText(line, pad, y);
-    y += lineH;
+    ctx.fillText(line.text, pad, baseline);
+    y += line.size;
   }
   ctx.fillStyle = color.accent;
-  ctx.fillRect(pad, y - lineH + size * 0.3, Math.min(box.width, px(320)), px(10));
+  ctx.fillRect(pad, Math.min(y + px(6), height - pad - px(10)), Math.min(box.width, px(320)), px(10));
 
   // Wordmark, small, bottom-right of the text column when there are no chips;
   // otherwise tucked at the top-right of the text column.

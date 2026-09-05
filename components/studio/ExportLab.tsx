@@ -20,6 +20,7 @@ import { postCopy } from '@/lib/video/post-copy';
 import { ThumbnailPanel } from '@/components/studio/ThumbnailPanel';
 import { PreviewPanel } from '@/components/studio/PreviewPanel';
 import { loadImages } from '@/lib/video/canvas/images';
+import { ensureFonts } from '@/lib/video/canvas/fonts';
 
 /**
  * The export spike.
@@ -188,6 +189,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
       // Every image, decoded before the first frame. A frame renderer that
       // awaits the network drops frames; this one is handed a cache.
       setStatus('画像を読み込み中…');
+      await ensureFonts();
       const images = await loadImages(
         sequence.scenes.flatMap((scene) => (scene.image ? [scene.image.src] : [])),
       );

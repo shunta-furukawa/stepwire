@@ -124,6 +124,16 @@ export const font = {
    */
   body:
     "'Iowan Old Style', Charter, Georgia, 'Hiragino Mincho ProN', 'Hiragino Mincho Pro', 'Yu Mincho', YuMincho, 'Noto Serif JP', ui-serif, serif",
+  /**
+   * Impact. Dela Gothic One (SIL OFL, self-hosted in `public/fonts/`), the
+   * one face that is not a system stack: a black Japanese display gothic
+   * for the thumbnail headline and the film's headline card, where the
+   * words have to win a tap. The stack falls back to `display` when the
+   * file has not loaded, so a card is never blank; `ensureFonts()` loads it
+   * before a canvas draws.
+   */
+  impact:
+    "'Dela Gothic One', 'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', Meiryo, 'Noto Sans JP', sans-serif",
   /** Metadata, timestamps, source lines, data readouts — the "wire" voice. */
   mono:
     "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', 'Hiragino Sans', 'Yu Gothic', monospace",

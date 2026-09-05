@@ -281,6 +281,24 @@ on-device path was measured faster than the cloud one it replaced.
 
 `/studio` reads the registry, so nothing else needs changing.
 
+## Type
+
+The film and the thumbnail set copy in the system stacks from
+`lib/design/tokens.ts`, with one exception: `font.impact`, Dela Gothic One,
+a black Japanese display gothic self-hosted in `public/fonts/` under the
+SIL OFL. It is used where the words have to win a tap — the thumbnail
+headline and the film's headline card — and nowhere on the website, so
+the 2.4 MB file is fetched only by the studio. A canvas paints with
+whatever is loaded, so every drawer's caller awaits `ensureFonts()`
+(`lib/video/canvas/fonts.ts`) first; without it the first thumbnail of a
+session comes out in the fallback gothic.
+
+The thumbnail headline is set as a poster: `fitHeadlineTight` sizes every
+line on its own to fill the column's width and scales the block to the
+height, trying one to four lines and keeping the split that fills the most
+of the box. A line never breaks inside a Latin word, never starts with a
+closing mark, and never holds a single character.
+
 ## Design system
 
 Video styles come from `lib/design/tokens.ts` — the same module the website's

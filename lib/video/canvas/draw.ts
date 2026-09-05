@@ -242,17 +242,25 @@ function drawLabelChip(d: DrawContext, label: string, tone: 'fact' | 'analysis',
  * placed: the DOM version gets vertical centring from flexbox, and a canvas
  * gets it by computing the height first.
  */
-function layoutBody(d: DrawContext, text: string, size: number, weight = 500, measure?: number) {
+function layoutBody(
+  d: DrawContext,
+  text: string,
+  size: number,
+  weight = 500,
+  measure?: number,
+  family: string = font.display,
+) {
   const { ctx, width, height } = d;
   const px = scaled(width, height);
   const x = px(120);
   // A 16:9 frame is wider than its measure should be; the DOM caps it at 82%.
   const maxWidth = measure ?? Math.min(width - x * 2, width * (width > height ? 0.82 : 1));
 
-  ctx.font = fontOf(weight, size, font.display);
+  ctx.font = fontOf(weight, size, family);
   const lines = wrapText(text, maxWidth, (line) => ctx.measureText(line).width);
-  const lineHeight = size * 1.35;
-  return { text, lines, lineHeight, x, size, weight, blockHeight: lines.length * lineHeight };
+  // The impact face carries its own air; the text faces need the lead.
+  const lineHeight = size * (family === font.impact ? 1.18 : 1.35);
+  return { text, lines, lineHeight, x, size, weight, family, blockHeight: lines.length * lineHeight };
 }
 
 type BodyLayout = ReturnType<typeof layoutBody>;
@@ -273,7 +281,7 @@ function paintBody(
   scene?: Scene,
 ) {
   const { ctx } = d;
-  ctx.font = fontOf(layout.weight, layout.size, font.display);
+  ctx.font = fontOf(layout.weight, layout.size, layout.family);
   ctx.fillStyle = fill;
 
   const limit = scene?.reveal ? visibleUnits(scene.reveal, d.frame) : Number.POSITIVE_INFINITY;
@@ -432,11 +440,15 @@ const drawCard: Drawer = (d, scene) => {
   // a card. The floor matches `fitBodySize`, which the DOM estimates with.
   const wanted = px(fontSize[isHeadline ? 'h2' : 'h4'] * 3);
   const room = bottom - top - markHeight - markGap - metaGap - (meta?.blockHeight ?? 0);
+  // The headline is set in the impact face, which has one weight; asking
+  // for 900 would only have the browser embolden it.
+  const weight = isHeadline ? 400 : 500;
+  const family = isHeadline ? font.impact : font.display;
   let bodySize = wanted;
-  let body = scene.text ? layoutBody(d, scene.text, bodySize, isHeadline ? 900 : 500, panel?.measure) : null;
+  let body = scene.text ? layoutBody(d, scene.text, bodySize, weight, panel?.measure, family) : null;
   while (body && body.blockHeight > room && bodySize > wanted * 0.6) {
     bodySize = Math.max(wanted * 0.6, bodySize * 0.92);
-    body = layoutBody(d, scene.text!, bodySize, isHeadline ? 900 : 500, panel?.measure);
+    body = layoutBody(d, scene.text!, bodySize, weight, panel?.measure, family);
   }
   const blockHeight =
     markHeight + markGap + (body?.blockHeight ?? 0) + metaGap + (meta?.blockHeight ?? 0);

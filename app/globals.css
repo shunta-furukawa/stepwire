@@ -26,6 +26,8 @@
     'Hiragino Mincho Pro', 'Yu Mincho', YuMincho, 'Noto Serif JP', ui-serif, serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono',
     'Hiragino Sans', 'Yu Gothic', monospace;
+  --font-impact: 'Dela Gothic One', 'Helvetica Neue', Helvetica, Arial, 'Hiragino Sans',
+    'Hiragino Kaku Gothic ProN', 'Yu Gothic', Meiryo, 'Noto Sans JP', sans-serif;
 
   --text-micro: 11px;
   --text-small: 13px;
@@ -209,4 +211,17 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/*
+ * Dela Gothic One, self-hosted (public/fonts, SIL OFL). Declared here so
+ * `document.fonts.load` can find it; nothing on the website sets the family,
+ * so the 2.4 MB file is fetched only when the studio draws with it.
+ */
+@font-face {
+  font-family: 'Dela Gothic One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/DelaGothicOne-Regular.ttf') format('truetype');
 }

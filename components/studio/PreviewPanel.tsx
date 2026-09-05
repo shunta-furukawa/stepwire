@@ -8,6 +8,7 @@ import { drawScene } from '@/lib/video/canvas/draw';
 import { fieldState } from '@/lib/video/field-plan';
 import type { Field } from '@/lib/video/field';
 import { loadImages } from '@/lib/video/canvas/images';
+import { ensureFonts } from '@/lib/video/canvas/fonts';
 import { formatDuration } from '@/lib/video/timing';
 
 /**
@@ -43,6 +44,7 @@ export function PreviewPanel({
       const [images, { createField }] = await Promise.all([
         loadImages(sources),
         import('@/lib/video/field').catch(() => ({ createField: null })),
+        ensureFonts(),
       ]);
       if (!alive) return;
       imagesRef.current = images;
