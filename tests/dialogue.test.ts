@@ -72,7 +72,7 @@ describe("MONO's mark", () => {
       facets.some((facet) => {
         const near = (a: number, b: number) => Math.abs(a - b) < 1e-6;
         const base = facet.points.filter(([, y]) => near(y, 60)).map(([x]) => x);
-        return base.length === 2 && base.some((x) => near(x, left)) && base.some((x) => near(x, left + 5));
+        return base.length === 2 && base.some((x) => near(x, left)) && base.some((x) => near(x, left + 10));
       });
     expect(hasUnitAt(35)).toBe(false); // under the left peak
     expect(hasUnitAt(55)).toBe(false); // under the right peak
