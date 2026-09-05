@@ -9,7 +9,7 @@ import {
   type StatFigure,
   type TimelineFigure,
 } from '@/lib/content/figures';
-import { color, difficulty } from '@/lib/design/tokens';
+import { color, difficulty, flareEx } from '@/lib/design/tokens';
 
 /**
  * Figures on the page.
@@ -195,7 +195,12 @@ function PlayRows({ figure }: { figure: PlaysFigure }) {
                 ) : null}
                 {item.rank && item.flare ? <span className="text-faint"> · </span> : null}
                 {item.flare ? (
-                  <span className={item.flare === 'EX' ? 'text-accent-hot' : 'text-faint'}>
+                  <span
+                    className={item.flare === 'EX' ? 'bg-clip-text text-transparent' : 'text-faint'}
+                    // The FLARE EX rainbow is a quotation of the game, like the
+                    // difficulty colours: inline from the tokens, not a class.
+                    style={item.flare === 'EX' ? { backgroundImage: `linear-gradient(90deg, ${flareEx.join(', ')})` } : undefined}
+                  >
                     FLARE {item.flare}
                   </span>
                 ) : null}

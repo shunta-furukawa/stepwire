@@ -110,9 +110,11 @@ verified by eye in `/studio`, whose preview is the export renderer at a frame.
 - **The palette is greyscale plus one hue.** Black ground, off-white type, and
   the MONO DDR lime (`accent`, with `accentHot` for live and breaking). Alert
   and data are separated by *form* — a filled chip that pulses versus accent
-  text — never by adding a second hue. The one exception is `difficulty` in
-  the tokens: DDR's five difficulty colours, quoted on the difficulty badge of
-  a `plays` figure and nowhere else. Token names describe the role
+  text — never by adding a second hue. The exceptions are quotations of the
+  game, in the tokens: `difficulty`, DDR's five difficulty colours, on the
+  difficulty badge of a `plays` figure and nowhere else; and `flareEx`, the
+  rainbow of the FLARE EX gauge, on the FLARE EX label and nowhere else —
+  the nine lower flare ranks stay grey. Token names describe the role
   (`surface`, `raised`, `fg`, `muted`, `line`), never the pigment: a name like
   `ink` stops being true the moment the ground flips.
 - **No HTML scraping.** Official feeds, official APIs and public feeds only. A

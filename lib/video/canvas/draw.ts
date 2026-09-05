@@ -3,7 +3,7 @@ import type { MediaRef } from '../../content/schema';
 import { visibleUnits } from '../reveal';
 import { barFractions, difficultyLabel, formatBarValue, formatScore } from '../../content/figures';
 import { visualLength } from '../text';
-import { color, difficulty, font, fontSize, tracking } from '../../design/tokens';
+import { color, difficulty, flareEx, font, fontSize, tracking } from '../../design/tokens';
 import { typedLines, wrapText } from './text';
 import { backdropDim, backdropZoom, sceneGround } from '../ground';
 
@@ -598,7 +598,7 @@ const drawFigure: Drawer = (d, scene) => {
         ctx.font = fontOf(700, px(fontSize.small * 3) * 0.85, font.mono);
         const flareLabel = `FLARE ${item.flare}`;
         const flareWidth = ctx.measureText(flareLabel).width;
-        ctx.fillStyle = item.flare === 'EX' ? color.accentHot : color.faint;
+        ctx.fillStyle = item.flare === 'EX' ? rainbow(ctx, right - flareWidth, flareWidth) : color.faint;
         ctx.fillText(flareLabel, right - flareWidth, mid);
         right -= flareWidth + px(24);
       }
@@ -796,13 +796,20 @@ function drawTrackedCentred(ctx: DrawContext['ctx'], text: string, cx: number, y
   drawTracked(ctx, text, cx - w / 2, y, spacing);
 }
 
+/** The FLARE EX rainbow across `[x, x + w]`, as a canvas fill. */
+function rainbow(ctx: DrawContext['ctx'], x: number, w: number) {
+  const gradient = ctx.createLinearGradient(x, 0, x + w, 0);
+  flareEx.forEach((stop, i) => gradient.addColorStop(i / (flareEx.length - 1), stop));
+  return gradient;
+}
+
 /** A small filled chip; returns its width so a row can flow. */
 function drawChip(
   d: DrawContext,
   text: string,
   x: number,
   y: number,
-  fill: string,
+  fill: string | 'rainbow',
   ink: string,
   size: number,
 ) {
@@ -814,7 +821,7 @@ function drawChip(
   const chars = [...text];
   const w = chars.reduce((t, ch) => t + ctx.measureText(ch).width, 0) + spacing * (chars.length - 1);
   const h = size + px(16);
-  ctx.fillStyle = fill;
+  ctx.fillStyle = fill === 'rainbow' ? rainbow(ctx, x, w + padX * 2) : fill;
   ctx.fillRect(x, y, w + padX * 2, h);
   ctx.fillStyle = ink;
   ctx.textBaseline = 'middle';
@@ -1100,7 +1107,7 @@ const drawStats: Drawer = (d, scene) => {
     labels: string[],
     y: number,
     startAt: number,
-    fillOf: (i: number) => string,
+    fillOf: (i: number) => string | 'rainbow',
     inkOf: (i: number) => string,
   ) => {
     // Sized to fit the row: five difficulties on a 9:16 frame would
@@ -1132,13 +1139,13 @@ const drawStats: Drawer = (d, scene) => {
     () => color.onAccent,
   );
   if (stats.byFlare.length > 0) {
-    // EX is the one filled chip: the gauge that drains on a PERFECT is the
-    // claim on this row. The rest are outlined, on the palette's grey.
+    // EX quotes the game's rainbow (`flareEx` in the tokens); the nine
+    // lower ranks sit on the palette's grey.
     drawChipRow(
       stats.byFlare.map((entry) => `FLARE ${entry.flare} ×${entry.count}`),
       chipsY + chipRow,
       0.6,
-      (i) => (stats.byFlare[i]?.flare === 'EX' ? color.accentHot : color.lineStrong),
+      (i) => (stats.byFlare[i]?.flare === 'EX' ? 'rainbow' : color.lineStrong),
       (i) => (stats.byFlare[i]?.flare === 'EX' ? color.onAccent : color.fg),
     );
   }

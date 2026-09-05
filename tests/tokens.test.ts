@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { color, difficulty, fontSize, motion, space, video } from '../lib/design/tokens';
+import { color, difficulty, flareEx, fontSize, motion, space, video } from '../lib/design/tokens';
 
 /**
  * The guard that keeps one brand across two renderers.
@@ -155,6 +155,16 @@ describe('colour contrast (WCAG 2.1)', () => {
     // Five distinct hues, none of them the accent: a quotation, not a theme.
     expect(new Set(Object.values(difficulty)).size).toBe(5);
     expect(Object.values(difficulty)).not.toContain(color.accent);
+  });
+
+  it('meets AA for the label text on every stop of the FLARE EX rainbow', () => {
+    // The rainbow is a gradient, so a letter can land on any stop; each has
+    // to carry `onAccent` on its own.
+    for (const hex of flareEx) {
+      expect(contrast(color.onAccent, hex), hex).toBeGreaterThanOrEqual(AA);
+    }
+    expect(new Set(flareEx).size).toBe(flareEx.length);
+    expect(flareEx).not.toContain(color.accent);
   });
 
   it('meets AA for every text tone on the deepest block', () => {

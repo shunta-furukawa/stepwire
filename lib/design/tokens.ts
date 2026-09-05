@@ -89,6 +89,20 @@ export const difficulty = {
 } as const;
 export type Difficulty = keyof typeof difficulty;
 
+/**
+ * The FLARE EX gauge, the game's other quotation.
+ *
+ * The game paints its ten flare ranks in ten colours and EX in a rainbow; a
+ * player who has cleared on EX reads the rainbow before the letters. The
+ * nine lower ranks stay on the palette's grey — one filled band is a claim,
+ * nine coloured ones are a theme — and only EX quotes the game, as a
+ * gradient across these stops, on the FLARE EX label and nowhere else.
+ *
+ * Every stop is light enough that `onAccent` text meets AA on it, so the
+ * chip reads at whichever stop a letter lands; the test checks each.
+ */
+export const flareEx = ['#FF7A7A', '#FFB65C', '#F7E463', '#7EE38A', '#6BD8F5', '#9FB0FF', '#D39BFF', '#FF93DC'] as const;
+
 export const font = {
   /**
    * Display + UI.

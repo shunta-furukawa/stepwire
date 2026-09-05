@@ -126,9 +126,11 @@ is optional: the e-amusement play list does not show it, a result photo does.
 
 `flare` is the FLARE RANK the play cleared with, as the result screen or the
 score app shows it. The page prints it after the rank and the video prints
-it on the row; EX is set in the hot accent, every other rank in `faint` —
-the game colours its ten ranks, and this palette does not follow it there.
-The session card counts them as a second row of chips.
+it on the row; EX is set in the game's rainbow (`flareEx` in the tokens),
+every other rank in `faint` — the game colours all ten, and the palette
+quotes only the one that is a claim. The session card counts them as a
+second row of chips. Optional, and usually absent: a play's flare rank is
+hard to recover after the fact, and a row without one is simply a row.
 
 `pb` marks a personal best. It is the operator's flag, never derived — the
 system has no record of earlier scores to compare against. The first `plays`
