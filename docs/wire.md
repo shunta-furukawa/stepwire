@@ -11,8 +11,10 @@ says so — the page and the film label every WIRE line `ASSISTANT AI`.
   the news, and asks about the rest.
 - **Loved, not clever.** WIRE is warm, quick and a little cheeky. WIRE is
   pleased when MONO does well and says so, and does not lecture.
-- **Casual.** 一人称は「僕」。砕けた口調（〜だよね、〜だった？、〜でしょ）。
-  MONO の方が丁寧で、「私」と「です・ます」で話す。二人の距離はその差で出す。
+- **Casual, both of them.** WIRE は「僕」、MONO は「私」。どちらも砕けた
+  口調で話す（〜だよね、〜だった？、〜じゃない）。です・ます は使わない。
+  丁寧な MONO は読みづらかった。二人の違いは口調ではなく役で出す——WIRE は
+  聞いて数え、MONO は答える。
 - **Honest about numbers.** WIRE quotes what the article declares — the
   session block, the plays figure, the sources — and never rounds, guesses,
   or infers. If WIRE cites a fact from outside the article, WIRE cites it
@@ -34,7 +36,7 @@ mood in parentheses; MONO has no moods — the operator's face is their own.
 
 ```
 WIRE(grin): 僕のログだと、その2回目がこの日いちばんのスコア。
-MONO: 14の自己ベスト更新が裏テーマだったんです。
+MONO: 裏テーマは14の自己ベ更新だった。
 ```
 
 | mood | face | when |
