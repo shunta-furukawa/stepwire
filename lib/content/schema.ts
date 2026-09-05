@@ -204,7 +204,7 @@ export const articleFrontmatterSchema = z.object({
   heroImage: imageRefSchema.optional(),
   thumbnail: imageRefSchema.optional(),
   /** Images the video shows, in order. See `mediaSchema`. */
-  media: z.array(mediaSchema).max(6).default([]),
+  media: z.array(mediaSchema).max(12).default([]),
   /** Music under the video. See `bgmSchema`. */
   bgm: bgmSchema.optional(),
   video: videoOverrideSchema.optional(),
