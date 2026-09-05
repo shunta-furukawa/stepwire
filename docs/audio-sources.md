@@ -57,19 +57,31 @@ STEPWIRE の動画に使う BGM と効果音を、どこから、どの条件で
 
 ## 投入済み
 
-`public/audio/bgm/` にあるのは Kevin MacLeod の三曲。どれも CC BY 4.0 で、
+`public/audio/bgm/` にあるのは Kevin MacLeod の九曲。どれも CC BY 4.0 で、
 公開リポジトリに置くこと自体が許されるのはこのライセンスだけだから
 （魔王魂・効果音ラボ・DOVA は曲単体の再配布を禁じている）。
 フロントマターにはこの一行をそのまま書く。アウトロにはこの一行が印字される。
 
-| ファイル | 役割 | `credit` に書く一行 | `gain` |
-| --- | --- | --- | --- |
-| `macleod-getting-it-done.mp3` | 通常ニュース（UPDATE / CHART の既定） | `"Getting it Done" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.4 |
-| `macleod-neon-laser-horizon.mp3` | 大会・速報 | `"Neon Laser Horizon" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.42 |
-| `macleod-deliberate-thought.mp3` | カルチャー・特集 | `"Deliberate Thought" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.8 |
+| ファイル | 手触り | 向く記事 | `credit` に書く一行 | `gain` |
+| --- | --- | --- | --- | --- |
+| `macleod-getting-it-done.mp3` | 軽快なエレクトロ | 通常のセッション記事の既定 | `"Getting it Done" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.4 |
+| `macleod-werq.mp3` | 速い、押してくる、125 BPM | 自己ベが出た日、大会 | `"Werq" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.34 |
+| `macleod-neon-laser-horizon.mp3` | シンセ、緊張感 | 速報、解禁の当日 | `"Neon Laser Horizon" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.42 |
+| `macleod-electrodoodle.mp3` | 跳ねる、おもちゃっぽい | WIRE が grin ばかりの日 | `"Electrodoodle" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.3 |
+| `macleod-digital-lemonade.mp3` | 明るい、軽い、清涼 | 自己紹介、告知、短い動画 | `"Digital Lemonade" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.56 |
+| `macleod-chill-wave.mp3` | ゆるいシンセウェーブ | ふつうの日の振り返り | `"Chill Wave" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.35 |
+| `macleod-vibing-over-venus.mp3` | ローファイ、遅い、6 分半 | 不調だった日、長い会話 | `"Vibing Over Venus" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 1.0 |
+| `macleod-airport-lounge.mp3` | ラウンジ、ボサノバ寄り | カルチャー、雑談回 | `"Airport Lounge" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.6 |
+| `macleod-deliberate-thought.mp3` | ピアノ、静か | 特集、追悼、真面目な話 | `"Deliberate Thought" Kevin MacLeod (incompetech.com) · CC BY 4.0` | 0.8 |
 
-`gain` は三曲の音量差（RMS で -13 / -14 / -21 dB）を揃えて、打鍵音の下に
--22 dB 前後で敷くための値（打鍵音のピークは -0.5 dB）。曲を足すときは同じ基準で決める。
+`gain` は曲ごとの音量差（RMS）を揃えて、打鍵音の下に -22 dB 前後で敷くための値
+（打鍵音のピークは -0.5 dB）。`gain = 10^((-21.5 - RMS_dB) / 20)` で出し、
+1.0 で頭打ち。Vibing Over Venus は素材が静か（-22.7 dB）なので 1.0 でも
+少し引っ込む。曲を足すときは同じ基準で決める。
+
+選び方は、記事の温度で決める。数字が出た日は速い曲、出なかった日は遅い曲。
+書き手（Claude）が下書きに一曲入れて出すので、変えたければ `bgm.src` を
+差し替えるだけでよい。`credit` の行も上の表からそのまま。
 
 YouTube などの概要欄には incompetech が指定する定型文を貼る。
 
