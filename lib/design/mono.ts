@@ -5,9 +5,11 @@ import { HEAD_OUTLINE, type Mouth } from './wire';
  *
  * The mark is MONO DDR's low-poly M — two equilateral triangles of side
  * three units, set two units apart so their bases overlap by one, each cut
- * into nine unit facets. The overlap is exactly one unit triangle at the
- * foot of the M's centre, and that one is lime: the same construction as
- * the logo, computed rather than traced, so it is right at every size.
+ * into unit facets. The overlap is exactly one unit triangle at the foot of
+ * the M's centre, and that one is lime. The unit under each peak is left
+ * out: it is the counter of the letter, and without that hollow the mark is
+ * two mountains, not an M. The same construction as the logo, computed
+ * rather than traced, so it is right at every size.
  *
  * The head is WIRE's silhouette, on the deepest ground with the type-colour
  * edge, so the pair reads as a pair. MONO has no moods — the operator's face
@@ -28,12 +30,13 @@ export interface MonoFace {
 }
 
 /** Shading per facet, row-major from the apex: up, down, up, down, up … */
-const LEFT_SHADE = [1, 0.92, 0.76, 0.88, 0.68, 0.84, 0.6, 0.8, 0.9];
-const RIGHT_SHADE = [0.96, 0.86, 0.7, 0.9, 0.64, 0.82, 0.74, 0.58, 0.88];
+const LEFT_SHADE = [1, 0.92, 0.76, 0.88, 0.68, 0.84, 0.6, 0.9];
+const RIGHT_SHADE = [0.96, 0.86, 0.7, 0.9, 0.64, 0.82, 0.58, 0.88];
 
 /**
- * The nine facets of an equilateral triangle of side `3u` with its apex at
- * (ax, ay), row-major from the apex.
+ * The facets of an equilateral triangle of side `3u` with its apex at
+ * (ax, ay), row-major from the apex — eight of nine: the unit under the
+ * peak is the letter's counter and stays open.
  */
 function facetsOf(ax: number, ay: number, u: number, shade: number[]): Facet[] {
   const h = (u * Math.sqrt(3)) / 2;
@@ -43,10 +46,13 @@ function facetsOf(ax: number, ay: number, u: number, shade: number[]): Facet[] {
     const bottom = ay + (r + 1) * h;
     for (let k = 0; k <= r; k += 1) {
       const left = ax - ((r + 1) * u) / 2 + k * u;
-      out.push({
-        points: [[left, bottom], [left + u, bottom], [left + u / 2, top]],
-        alpha: shade[out.length] ?? 0.8,
-      });
+      const counter = r === 2 && k === 1;
+      if (!counter) {
+        out.push({
+          points: [[left, bottom], [left + u, bottom], [left + u / 2, top]],
+          alpha: shade[out.length] ?? 0.8,
+        });
+      }
       if (k < r) {
         const dl = ax - (r * u) / 2 + k * u;
         out.push({

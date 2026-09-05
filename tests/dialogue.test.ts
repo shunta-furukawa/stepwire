@@ -65,13 +65,26 @@ describe("MONO's mark", () => {
   it('is two side-three triangles sharing exactly one lime unit at the foot', async () => {
     const { monoMark } = await import('../lib/design/mono');
     const facets = monoMark(50, 60, 50);
-    expect(facets).toHaveLength(9 + 9 + 1);
+    // Eight per triangle: the unit under each peak is the letter's counter.
+    expect(facets).toHaveLength(8 + 8 + 1);
+    // An up-facet on the base is the one whose two base points are at `left` and `left + u`.
+    const hasUnitAt = (left: number) =>
+      facets.some((facet) => {
+        const near = (a: number, b: number) => Math.abs(a - b) < 1e-6;
+        const base = facet.points.filter(([, y]) => near(y, 60)).map(([x]) => x);
+        return base.length === 2 && base.some((x) => near(x, left)) && base.some((x) => near(x, left + 5));
+      });
+    expect(hasUnitAt(35)).toBe(false); // under the left peak
+    expect(hasUnitAt(55)).toBe(false); // under the right peak
+    expect(hasUnitAt(25)).toBe(true); // the left foot
     const lime = facets.filter((facet) => facet.lime);
     expect(lime).toHaveLength(1);
     // The shared unit sits on the base, centred, one unit (width / 5) wide.
     const [a, b, c] = lime[0]!.points;
-    expect(a).toEqual([45, 60]);
-    expect(b).toEqual([55, 60]);
+    expect(a?.[0]).toBeCloseTo(45, 6);
+    expect(a?.[1]).toBeCloseTo(60, 6);
+    expect(b?.[0]).toBeCloseTo(55, 6);
+    expect(b?.[1]).toBeCloseTo(60, 6);
     expect(c?.[0]).toBe(50);
     expect(c?.[1]).toBeCloseTo(60 - (10 * Math.sqrt(3)) / 2, 6);
     // Every facet stays inside the M's box.
