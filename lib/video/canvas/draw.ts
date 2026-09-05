@@ -527,7 +527,7 @@ const drawTurn: Drawer = (d, scene) => {
 
   // The pop, from the tail: a bubble that scales up from where the voice is
   // reads as spoken; one that fades in reads as a caption.
-  const pop = easeOutBack(Math.min(1, d.frame / 9));
+  const pop = easeOutBack(Math.min(1, d.frame / 9), 0.6);
   ctx.save();
   ctx.globalAlpha = Math.min(1, d.frame / 5);
   ctx.translate(speakerCx, apexY);
@@ -906,10 +906,14 @@ function easeOutCubic(t: number) {
   return 1 - (1 - clamp01(t)) ** 3;
 }
 
-/** Overshoots a little and settles — a bar that lands, not one that stops. */
-function easeOutBack(t: number) {
+/**
+ * Overshoots a little and settles — a bar that lands, not one that stops.
+ * `s` is how far past the mark it goes: the default is the classic back
+ * ease; a bubble the width of the stage takes a gentler one, or its
+ * overshoot leaves the frame.
+ */
+function easeOutBack(t: number, s = 1.70158) {
   const c = clamp01(t) - 1;
-  const s = 1.70158;
   return 1 + (s + 1) * c ** 3 + s * c ** 2;
 }
 
