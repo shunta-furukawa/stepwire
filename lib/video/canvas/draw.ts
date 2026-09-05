@@ -457,72 +457,130 @@ const drawCard: Drawer = (d, scene) => {
   if (meta) paintBody(d, meta, cursor + metaGap, color.muted);
 };
 
+/** The width `drawChip` will take for `text` at `size`, for centring one. */
+function chipWidth(d: DrawContext, text: string, size: number) {
+  const px = scaled(d.width, d.height);
+  d.ctx.font = fontOf(700, size, font.mono);
+  const chars = [...text];
+  return chars.reduce((t, ch) => t + d.ctx.measureText(ch).width, 0) + size * tracking.wide * (chars.length - 1) + px(36);
+}
+
 /**
- * One turn of the conversation: the speaker over the words.
+ * One turn of the conversation, staged.
  *
- * The same card as `drawCard` — a picture panel if the turn has one, the
- * copy measured and shrunk to fit — with a face and a name where the section
- * mark would be. WIRE blinks and floats as a function of the frame; MONO's
- * mark holds still, because it is a mark and not a face.
+ * Both faces are on every card — WIRE at the left, MONO at the right, facing
+ * each other across the bottom of the stage — and the words arrive in a
+ * speech bubble with its tail on whoever is talking. The listener dims. The
+ * bubble is a rectangle with a straight tail, like everything else on the
+ * card: the brand has no radius, and a rounded bubble would be the one
+ * thing on the film drawn in a different hand.
+ *
+ * The bubble pops in over the first frames from its tail, as a function of
+ * the frame; the copy then types inside it on the shared reveal plan. A
+ * picture takes its panel as on a body card, and the stage is what is left.
  */
 const drawTurn: Drawer = (d, scene) => {
   const { ctx, width, height } = d;
   const px = scaled(width, height);
+  const landscape = width > height;
   const band = contentBand(d);
   const panel = scene.image ? drawPanel(d, scene.image) : null;
   const top = panel?.top ?? band.top;
-  const bottom = panel?.bottom ?? band.bottom;
+  const bottom = band.bottom;
   const speaker = scene.speaker ?? 'WIRE';
-
-  const labelHeight = scene.label ? measureLabelChip(d) + px(40) : 0;
-  const avatar = px(132);
-  const headGap = px(36);
-
-  const wanted = px(fontSize.h4 * 3);
-  const room = bottom - top - labelHeight - avatar - headGap;
-  let bodySize = wanted;
-  let body = scene.text ? layoutBody(d, scene.text, bodySize, 500, panel?.measure) : null;
-  while (body && body.blockHeight > room && bodySize > wanted * 0.6) {
-    bodySize = Math.max(wanted * 0.6, bodySize * 0.92);
-    body = layoutBody(d, scene.text ?? '', bodySize, 500, panel?.measure);
-  }
-  const blockHeight = labelHeight + avatar + headGap + (body?.blockHeight ?? 0);
-  let cursor = Math.max(top, top + (bottom - top - blockHeight) / 2);
-
-  if (scene.label) {
-    drawLabelChip(d, scene.label, 'analysis', cursor);
-    cursor += labelHeight;
-  }
-
-  const x = px(120);
   const t = d.frame / (d.fps ?? 30);
-  if (speaker === 'WIRE') drawWire(ctx, x, cursor, avatar, scene.mood ?? 'neutral', t);
-  else drawMono(ctx, x, cursor, avatar);
 
-  // The name, as a chip beside the face: filled in the accent for WIRE, in
-  // the type colour for MONO, so the two are told apart at a glance and by
-  // form as well as by hue.
+  const stage = { x: px(120), w: panel?.measure ?? width - px(240) };
+
+  // The face row, along the bottom of the stage.
+  const faceSize = px(landscape ? 160 : 184);
   const nameSize = px(fontSize.small * 3);
-  const nameX = x + avatar + px(28);
-  drawChip(
-    d,
-    speaker,
-    nameX,
-    cursor + avatar / 2 - (nameSize + px(16)) / 2,
-    speaker === 'WIRE' ? color.accent : color.fg,
-    color.onAccent,
-    nameSize,
-  );
-  if (speaker === 'WIRE') {
-    ctx.font = fontOf(400, px(fontSize.micro * 3), font.mono);
-    ctx.fillStyle = color.faint;
-    ctx.textBaseline = 'middle';
-    drawTracked(ctx, 'ASSISTANT AI', nameX + px(150), cursor + avatar / 2, px(fontSize.micro * 3) * tracking.wider);
-    ctx.textBaseline = 'alphabetic';
-  }
-  cursor += avatar + headGap;
+  const noteSize = px(fontSize.micro * 3);
+  const faceRow = faceSize + px(14) + nameSize + px(16) + px(10) + noteSize;
+  const faceTop = bottom - faceRow;
+  const wireX = stage.x;
+  const monoX = stage.x + stage.w - faceSize;
 
-  if (body) paintBody(d, body, cursor, color.fg, scene);
+  let cursor = top;
+  if (scene.label) cursor += drawLabelChip(d, scene.label, 'analysis', cursor) + px(28);
+
+  // The bubble: as tall as the words, sat on its tail above the faces.
+  const pad = px(44);
+  const tail = px(30);
+  const bubbleX = stage.x;
+  const bubbleW = stage.w;
+  const bubbleBottom = faceTop - tail - px(10);
+  const roomForText = bubbleBottom - cursor - pad * 2;
+  const wanted = px(fontSize.h4 * 3);
+  let bodySize = wanted;
+  let body = scene.text ? layoutBody(d, scene.text, bodySize, 500, bubbleW - pad * 2) : null;
+  while (body && body.blockHeight > roomForText && bodySize > wanted * 0.55) {
+    bodySize = Math.max(wanted * 0.55, bodySize * 0.92);
+    body = layoutBody(d, scene.text ?? '', bodySize, 500, bubbleW - pad * 2);
+  }
+  const bubbleH = (body?.blockHeight ?? px(80)) + pad * 2;
+  const bubbleTop = Math.max(cursor, bubbleBottom - bubbleH);
+
+  const speakerCx = (speaker === 'WIRE' ? wireX : monoX) + faceSize / 2;
+  const apexY = faceTop - px(4);
+  const ink = speaker === 'WIRE' ? color.accent : color.fg;
+
+  // The pop, from the tail: a bubble that scales up from where the voice is
+  // reads as spoken; one that fades in reads as a caption.
+  const pop = easeOutBack(Math.min(1, d.frame / 9));
+  ctx.save();
+  ctx.globalAlpha = Math.min(1, d.frame / 5);
+  ctx.translate(speakerCx, apexY);
+  ctx.scale(pop, pop);
+  ctx.translate(-speakerCx, -apexY);
+
+  ctx.fillStyle = color.surface;
+  ctx.fillRect(bubbleX, bubbleTop, bubbleW, bubbleBottom - bubbleTop);
+  ctx.beginPath();
+  ctx.moveTo(speakerCx - px(26), bubbleBottom);
+  ctx.lineTo(speakerCx, apexY);
+  ctx.lineTo(speakerCx + px(26), bubbleBottom);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = ink;
+  ctx.lineWidth = Math.max(1, px(3));
+  ctx.lineJoin = 'miter';
+  ctx.beginPath();
+  ctx.moveTo(speakerCx - px(26), bubbleBottom);
+  ctx.lineTo(bubbleX, bubbleBottom);
+  ctx.lineTo(bubbleX, bubbleTop);
+  ctx.lineTo(bubbleX + bubbleW, bubbleTop);
+  ctx.lineTo(bubbleX + bubbleW, bubbleBottom);
+  ctx.lineTo(speakerCx + px(26), bubbleBottom);
+  ctx.lineTo(speakerCx, apexY);
+  ctx.closePath();
+  ctx.stroke();
+
+  if (body) paintBody(d, { ...body, x: bubbleX + pad }, bubbleTop + pad, color.fg, scene);
+  ctx.restore();
+
+  // The faces. The one talking is lit; the one listening is dimmed.
+  const listener = 0.42;
+  ctx.globalAlpha = speaker === 'WIRE' ? 1 : listener;
+  drawWire(ctx, wireX, faceTop, faceSize, scene.mood ?? 'neutral', t);
+  ctx.globalAlpha = speaker === 'MONO' ? 1 : listener;
+  drawMono(ctx, monoX, faceTop, faceSize);
+  ctx.globalAlpha = 1;
+
+  const nameY = faceTop + faceSize + px(14);
+  for (const who of ['WIRE', 'MONO'] as const) {
+    const cx = (who === 'WIRE' ? wireX : monoX) + faceSize / 2;
+    ctx.globalAlpha = who === speaker ? 1 : listener;
+    const w = chipWidth(d, who, nameSize);
+    drawChip(d, who, cx - w / 2, nameY, who === 'WIRE' ? color.accent : color.fg, color.onAccent, nameSize);
+    if (who === 'WIRE') {
+      ctx.font = fontOf(400, noteSize, font.mono);
+      ctx.fillStyle = color.faint;
+      ctx.textBaseline = 'alphabetic';
+      drawTrackedCentred(ctx, 'ASSISTANT AI', cx, nameY + nameSize + px(16) + px(10) + noteSize * 0.8, noteSize * tracking.wider);
+    }
+  }
+  ctx.globalAlpha = 1;
 };
 
 /** The source card. The brand rule above it is the one place it is loud. */
