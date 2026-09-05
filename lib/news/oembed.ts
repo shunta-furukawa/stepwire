@@ -3,7 +3,7 @@ import { z } from 'zod';
 /**
  * Reading a post on X through its official oEmbed endpoint.
  *
- * This is the one way STEPWIRE looks at a post: `publish.twitter.com/oembed`
+ * This is the one way STEPWIRE looks at a post: `publish.x.com/oembed`
  * is an API X offers for exactly this, it needs no key, and it returns the
  * author and the text. It is not scraping — see `docs/sources.md` — and it is
  * not the undocumented syndication endpoint, which returns more (the date, the
@@ -113,7 +113,7 @@ export function parseOembed(payload: unknown): XPost {
 
 export async function fetchXPost(url: string): Promise<XPost> {
   if (!X_POST_URL.test(url)) throw new Error(`not a post URL: ${url}`);
-  const endpoint = new URL('https://publish.twitter.com/oembed');
+  const endpoint = new URL('https://publish.x.com/oembed');
   endpoint.searchParams.set('url', url);
   endpoint.searchParams.set('omit_script', 'true');
   endpoint.searchParams.set('dnt', 'true');

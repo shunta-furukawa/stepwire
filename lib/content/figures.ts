@@ -129,8 +129,11 @@ export const playsFigureSchema = z.object({
       }),
     )
     .min(1)
-    .max(12),
+    .max(40),
 });
+
+/** Rows a `plays` figure shows per card in the film; the page shows all. */
+export const PLAYS_PER_CARD = 10;
 
 export const figureSchema = z.discriminatedUnion('kind', [
   statFigureSchema,

@@ -4,6 +4,7 @@ import type { Figure } from '../content/figures';
 import type { MediaRef } from '../content/schema';
 import { planReveal, type RevealPlan } from './reveal';
 import { sessionStats, type SessionStats } from './session-stats';
+import { PLAYS_PER_CARD } from '../content/figures';
 import type { Mood, Speaker } from '../content/dialogue';
 import { toSentences } from '../content/markdown';
 import { pageCaptions } from './captions';
@@ -412,17 +413,30 @@ export function buildSceneSequence(
   }
 
   // One scene per figure. A figure with more rows needs longer on screen, so
-  // the duration is derived from the row count rather than fixed.
+  // the duration is derived from the row count rather than fixed. A session
+  // log longer than a card can hold is dealt out over several cards, ten
+  // rows each, so a seventy-minute session is read and not squinted at.
   article.figures.forEach((figure, index) => {
-    drafts.push({
-      id: article.figures.length > 1 ? `figure-${index + 1}` : 'figure',
-      type: 'figure',
-      durationInFrames: secondsToFrames(
-        Math.min(profile.figureSeconds + figure.items.length * 0.55, 9),
-        fps,
-      ),
-      ...(figure.title ? { label: figure.title } : { label: LABELS.figure }),
-      figure,
+    const pages =
+      figure.kind === 'plays' && figure.items.length > PLAYS_PER_CARD
+        ? Array.from({ length: Math.ceil(figure.items.length / PLAYS_PER_CARD) }, (_, page) => ({
+            ...figure,
+            items: figure.items.slice(page * PLAYS_PER_CARD, (page + 1) * PLAYS_PER_CARD),
+          }))
+        : [figure];
+    const base = article.figures.length > 1 ? `figure-${index + 1}` : 'figure';
+    pages.forEach((pageFigure, page) => {
+      const paged = pages.length > 1;
+      drafts.push({
+        id: paged ? `${base}-p${page + 1}` : base,
+        type: 'figure',
+        durationInFrames: secondsToFrames(
+          Math.min(profile.figureSeconds + pageFigure.items.length * 0.55, 9),
+          fps,
+        ),
+        label: `${figure.title ?? LABELS.figure}${paged ? ` ${page + 1}/${pages.length}` : ''}`,
+        figure: pageFigure,
+      });
     });
   });
 

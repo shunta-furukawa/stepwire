@@ -191,6 +191,25 @@ describe('buildSceneSequence', () => {
     expect(turns.every((scene) => scene.reveal)).toBe(true);
   });
 
+  it('deals a long session log over several figure cards, ten rows each', () => {
+    const rows = Array.from({ length: 23 }, (_, i) => ({
+      song: `Song ${i + 1}`,
+      difficulty: 'EXPERT' as const,
+      style: 'SINGLE' as const,
+      score: 900_000 + i * 1000,
+    }));
+    const sequence = buildSceneSequence(
+      { ...article, figures: [{ kind: 'plays', title: 'ログ', items: rows }] },
+      'STEPWIRE_NEWS',
+    );
+    const figures = sequence.scenes.filter((scene) => scene.type === 'figure');
+    expect(figures.map((scene) => scene.id)).toEqual(['figure-p1', 'figure-p2', 'figure-p3']);
+    expect(figures.map((scene) => scene.figure?.items.length)).toEqual([10, 10, 3]);
+    expect(figures[0]?.label).toBe('ログ 1/3');
+    const last = figures[2]?.figure;
+    expect(last?.kind === 'plays' && last.items[0]?.song).toBe('Song 21');
+  });
+
   it('types every card, and holds it after the last character', () => {
     for (const scene of buildSceneSequence(article, 'STEPWIRE_NEWS').scenes) {
       if (!['headline', 'news', 'context', 'impact'].includes(scene.type)) continue;
