@@ -91,6 +91,13 @@ export const DIFFICULTIES = ['BEGINNER', 'BASIC', 'DIFFICULT', 'EXPERT', 'CHALLE
 export type DifficultyName = (typeof DIFFICULTIES)[number];
 
 /**
+ * FLARE GAUGE ranks, best first. EX is the gauge that drains even on a
+ * PERFECT; I is the gentlest. The game's own order, so a mix sorts by it.
+ */
+export const FLARE_RANKS = ['EX', 'IX', 'VIII', 'VII', 'VI', 'V', 'IV', 'III', 'II', 'I'] as const;
+export type FlareRank = (typeof FLARE_RANKS)[number];
+
+/**
  * A list of plays: a session log, or the results the story is about.
  *
  * Each row is what a result screen or the play-data page shows — the chart,
@@ -117,6 +124,8 @@ export const playsFigureSchema = z.object({
         highlight: z.boolean().optional(),
         /** A personal best on this chart, as the result screen said. */
         pb: z.boolean().optional(),
+        /** The FLARE RANK the play cleared with, as the result screen said. */
+        flare: z.enum(FLARE_RANKS).optional(),
       }),
     )
     .min(1)

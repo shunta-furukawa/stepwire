@@ -148,9 +148,18 @@ export const sessionSchema = z.object({
   /** As the operator would say it: `晴れ · 27℃`. */
   weather: z.string().min(1).max(24).optional(),
   style: z.enum(['SINGLE', 'DOUBLE']).default('SINGLE'),
-  /** FLARE SKILL before and after, from the profile page. */
+  /**
+   * FLARE SKILL after the session, from the profile page, with the value
+   * before it when the last write-up recorded one — the first session has no
+   * before, and a card that could not be made without it would never appear.
+   * `rank` is the FLARE RANK name the profile shows (`SUN`, `EARTH`).
+   */
   flareSkill: z
-    .object({ before: z.number().int().min(0), after: z.number().int().min(0) })
+    .object({
+      after: z.number().int().min(0),
+      before: z.number().int().min(0).optional(),
+      rank: z.string().min(1).max(12).optional(),
+    })
     .optional(),
 });
 export type Session = z.infer<typeof sessionSchema>;

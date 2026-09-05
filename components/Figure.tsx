@@ -188,13 +188,17 @@ function PlayRows({ figure }: { figure: PlaysFigure }) {
           </div>
           <div className="text-right">
             <p className="font-mono text-base tabular-nums leading-snug">{formatScore(item.score)}</p>
-            {item.rank ? (
-              <p
-                className={`font-mono text-micro font-bold leading-snug ${
-                  item.rank === 'AAA' ? 'text-accent' : 'text-muted'
-                }`}
-              >
-                {item.rank}
+            {item.rank || item.flare ? (
+              <p className="font-mono text-micro font-bold leading-snug">
+                {item.rank ? (
+                  <span className={item.rank === 'AAA' ? 'text-accent' : 'text-muted'}>{item.rank}</span>
+                ) : null}
+                {item.rank && item.flare ? <span className="text-faint"> · </span> : null}
+                {item.flare ? (
+                  <span className={item.flare === 'EX' ? 'text-accent-hot' : 'text-faint'}>
+                    FLARE {item.flare}
+                  </span>
+                ) : null}
               </p>
             ) : null}
           </div>

@@ -592,8 +592,16 @@ const drawFigure: Drawer = (d, scene) => {
       ctx.fillStyle = color.onAccent;
       drawTracked(ctx, label, x + badgePad, mid, spacing);
 
-      // Rank, then score, from the right edge in.
+      // Flare, rank, then score, from the right edge in.
       let right = x + w;
+      if (item.flare) {
+        ctx.font = fontOf(700, px(fontSize.small * 3) * 0.85, font.mono);
+        const flareLabel = `FLARE ${item.flare}`;
+        const flareWidth = ctx.measureText(flareLabel).width;
+        ctx.fillStyle = item.flare === 'EX' ? color.accentHot : color.faint;
+        ctx.fillText(flareLabel, right - flareWidth, mid);
+        right -= flareWidth + px(24);
+      }
       if (item.rank) {
         ctx.font = fontOf(700, px(fontSize.small * 3), font.mono);
         const rankWidth = ctx.measureText(item.rank).width;
@@ -844,10 +852,15 @@ const drawStats: Drawer = (d, scene) => {
     ? { x: left, y: top + px(330), w: headW, h: bottom - top - px(330) }
     : { x: left, y: top + px(340), w: right - left, h: px(420) };
   const chartTop = landscape ? top : tiles.y + tiles.h + px(60);
+  // Two chip rows when the plays carry FLARE RANKs; the chart gives up the
+  // height rather than the chips running into the rail.
+  const chipRows = stats.byFlare.length > 0 ? 2 : 1;
+  const chipRow = px(landscape ? 74 : 84);
+  const chipsBlock = chipRow * chipRows;
   const chart = landscape
-    ? { x: left + headW + gutter, y: chartTop, w: right - (left + headW + gutter), h: bottom - top - px(120) }
-    : { x: left, y: chartTop, w: right - left, h: bottom - chartTop - px(130) };
-  const chipsY = bottom - px(landscape ? 66 : 80);
+    ? { x: left + headW + gutter, y: chartTop, w: right - (left + headW + gutter), h: bottom - top - px(54) - chipsBlock }
+    : { x: left, y: chartTop, w: right - left, h: bottom - chartTop - px(50) - chipsBlock };
+  const chipsY = bottom - chipsBlock + px(8);
 
   /* Head: the date, the day, the window. */
   const dateSize = px(landscape ? 128 : 112);
@@ -886,10 +899,18 @@ const drawStats: Drawer = (d, scene) => {
   // Line three: the conditions, in the operator's words.
   const metaIn = easeOutCubic(stepAt(p, 0.12, 0.14));
   ctx.globalAlpha = metaIn;
-  const metaSize = px(fontSize.base * 3);
-  ctx.font = fontOf(400, metaSize, font.mono);
-  ctx.fillStyle = color.muted;
+  // The conditions are free text and the column is not: the line shrinks a
+  // little to fit, then drops its last part (the style, then the venue)
+  // rather than run under the chart.
   const meta = [stats.weather, stats.venue, stats.style].filter((part): part is string => Boolean(part));
+  let metaSize = px(fontSize.base * 3);
+  ctx.fillStyle = color.muted;
+  while (meta.length > 0) {
+    ctx.font = fontOf(400, metaSize, font.mono);
+    if (ctx.measureText(meta.join(' · ')).width <= headW) break;
+    if (metaSize > px(fontSize.base * 3) * 0.8) metaSize *= 0.95;
+    else meta.pop();
+  }
   ctx.fillText(meta.join(' · '), left, lineY + px(24) + metaSize);
 
   /* Tiles: the session, counted. */
@@ -903,11 +924,18 @@ const drawStats: Drawer = (d, scene) => {
     { label: 'PERSONAL BEST', value: (t) => String(Math.round(stats.personalBests * t)), unit: 'PB' },
   ];
   if (stats.flare) {
-    const { before, delta } = stats.flare;
+    // With a before, the number rolls from it to the after and the rise is
+    // the badge; without one it rolls up from nothing, and the rank name
+    // (SUN, EARTH) stands where the unit would.
+    const { after, before, delta, rank } = stats.flare;
+    const from = before ?? 0;
     cells.push({
       label: 'FLARE SKILL',
-      value: (t) => String(Math.round(before + delta * t)),
-      badge: { text: delta > 0 ? `+${delta} UP` : delta < 0 ? `${delta}` : '±0', hot: delta > 0 },
+      value: (t) => formatScore(Math.round(from + (after - from) * t)),
+      ...(rank ? { unit: rank } : {}),
+      ...(delta !== undefined
+        ? { badge: { text: delta > 0 ? `+${delta}` : delta < 0 ? `${delta}` : '±0', hot: delta > 0 } }
+        : {}),
     });
   } else if (stats.best) {
     const best = stats.best;
@@ -935,31 +963,54 @@ const drawStats: Drawer = (d, scene) => {
     ctx.fillStyle = color.muted;
     drawTracked(ctx, cell.label, x, y + px(18) + labelSize, labelSize * tracking.wider);
 
-    const valueY = y + px(18) + labelSize + px(16) + valueSize * 0.86;
-    ctx.font = fontOf(900, valueSize, font.mono);
-    ctx.fillStyle = color.fg;
+    // The value, its unit and its rise share one row, sized to the tile: a
+    // six-figure FLARE SKILL with a rank and a rise does not fit at the size
+    // a two-digit count does, and the size is settled before the count-up
+    // so the number does not jump when the rise arrives.
     const value = cell.value(easeOutCubic(t));
+    const settled = cell.value(1);
+    const badgeSize = labelSize * 0.9;
+    const badgeText = cell.badge?.text ?? '';
+    const badgeChars = [...badgeText];
+    ctx.font = fontOf(700, badgeSize, font.mono);
+    const badgeW = cell.badge
+      ? badgeChars.reduce((total, ch) => total + ctx.measureText(ch).width, 0) +
+        badgeSize * tracking.wide * (badgeChars.length - 1) +
+        px(36)
+      : 0;
+    ctx.font = fontOf(900, valueSize, font.mono);
+    const settledW = ctx.measureText(settled).width;
+    ctx.font = fontOf(500, valueSize * 0.34, font.mono);
+    const unitW = cell.unit ? ctx.measureText(cell.unit).width : 0;
+    // The gaps and the chip do not scale with the value; only the text does.
+    const fixed = (cell.unit ? px(12) : 0) + (cell.badge ? badgeW + px(20) : 0);
+    const scaling = settledW + unitW;
+    const size =
+      scaling + fixed > cellW
+        ? Math.max(valueSize * 0.55, valueSize * ((cellW - fixed) / scaling))
+        : valueSize;
+    const valueY = y + px(18) + labelSize + px(16) + size * 0.86;
+
+    ctx.font = fontOf(900, size, font.mono);
+    ctx.fillStyle = color.fg;
     ctx.fillText(value, x, valueY);
-    let after = x + ctx.measureText(value).width + px(12);
+    const valueW = ctx.measureText(value).width;
     if (cell.unit) {
-      ctx.font = fontOf(500, valueSize * 0.34, font.mono);
+      ctx.font = fontOf(500, size * 0.34, font.mono);
       ctx.fillStyle = color.muted;
-      ctx.fillText(cell.unit, after, valueY);
-      after += ctx.measureText(cell.unit).width + px(16);
+      ctx.fillText(cell.unit, x + valueW + px(12), valueY);
     }
     if (cell.badge && t >= 1) {
       // A rise pulses; the pulse is a function of the frame, as everything is.
-      const pulse = cell.badge.hot ? 0.8 + 0.2 * Math.sin(d.frame / 3) : 1;
-      ctx.globalAlpha = pulse;
-      const size = valueSize * 0.3;
+      ctx.globalAlpha = cell.badge.hot ? 0.8 + 0.2 * Math.sin(d.frame / 3) : 1;
       drawChip(
         d,
         cell.badge.text,
-        after,
-        valueY - size - px(10),
+        x + cellW - badgeW,
+        valueY - badgeSize - px(12),
         cell.badge.hot ? color.accentHot : color.lineStrong,
         cell.badge.hot ? color.onAccent : color.fg,
-        size,
+        badgeSize,
       );
     }
   });
@@ -1042,30 +1093,55 @@ const drawStats: Drawer = (d, scene) => {
     }
   }
 
-  /* Chips: the difficulty mix, in the game's colours. */
-  // Sized to fit the row: five difficulties on a 9:16 frame would otherwise
-  // run off the right edge, and a chip half off the card says nothing.
-  const chipLabels = stats.byDifficulty.map((entry) => `${entry.difficulty} ×${entry.count}`);
+  /* Chips: the difficulty mix in the game's colours; the FLARE mix below it. */
   const chipRoom = landscape ? chart.w : right - left;
-  let chipSize = px(fontSize.small * 3);
-  const chipsWidth = (size: number) => {
-    ctx.font = fontOf(700, size, font.mono);
-    return chipLabels.reduce((total, label) => {
-      const chars = [...label];
-      const w = chars.reduce((t, ch) => t + ctx.measureText(ch).width, 0) + size * tracking.wide * (chars.length - 1);
-      return total + w + px(36) + px(14);
-    }, 0);
+  const chipX0 = landscape ? chart.x : left;
+  const drawChipRow = (
+    labels: string[],
+    y: number,
+    startAt: number,
+    fillOf: (i: number) => string,
+    inkOf: (i: number) => string,
+  ) => {
+    // Sized to fit the row: five difficulties on a 9:16 frame would
+    // otherwise run off the right edge, and a chip half off the card says
+    // nothing.
+    let chipSize = px(fontSize.small * 3);
+    const widthAt = (size: number) => {
+      ctx.font = fontOf(700, size, font.mono);
+      return labels.reduce((total, label) => {
+        const chars = [...label];
+        const w = chars.reduce((t, ch) => t + ctx.measureText(ch).width, 0) + size * tracking.wide * (chars.length - 1);
+        return total + w + px(36) + px(14);
+      }, 0);
+    };
+    while (widthAt(chipSize) > chipRoom && chipSize > px(20)) chipSize *= 0.94;
+    let chipX = chipX0;
+    labels.forEach((label, i) => {
+      const t = stepAt(p, startAt + i * 0.06, 0.16);
+      if (t <= 0) return;
+      ctx.globalAlpha = easeOutCubic(t);
+      chipX += drawChip(d, label, chipX, y, fillOf(i), inkOf(i), chipSize) + px(14);
+    });
   };
-  while (chipsWidth(chipSize) > chipRoom && chipSize > px(20)) chipSize *= 0.94;
-  let chipX = landscape ? chart.x : left;
-  stats.byDifficulty.forEach((entry, i) => {
-    const t = stepAt(p, 0.5 + i * 0.06, 0.16);
-    if (t <= 0) return;
-    ctx.globalAlpha = easeOutCubic(t);
-    chipX +=
-      drawChip(d, `${entry.difficulty} ×${entry.count}`, chipX, chipsY, difficulty[entry.difficulty], color.onAccent, chipSize) +
-      px(14);
-  });
+  drawChipRow(
+    stats.byDifficulty.map((entry) => `${entry.difficulty} ×${entry.count}`),
+    chipsY,
+    0.5,
+    (i) => difficulty[stats.byDifficulty[i]?.difficulty ?? 'BEGINNER'],
+    () => color.onAccent,
+  );
+  if (stats.byFlare.length > 0) {
+    // EX is the one filled chip: the gauge that drains on a PERFECT is the
+    // claim on this row. The rest are outlined, on the palette's grey.
+    drawChipRow(
+      stats.byFlare.map((entry) => `FLARE ${entry.flare} ×${entry.count}`),
+      chipsY + chipRow,
+      0.6,
+      (i) => (stats.byFlare[i]?.flare === 'EX' ? color.accentHot : color.lineStrong),
+      (i) => (stats.byFlare[i]?.flare === 'EX' ? color.onAccent : color.fg),
+    );
+  }
   ctx.globalAlpha = 1;
   ctx.textBaseline = 'alphabetic';
 };

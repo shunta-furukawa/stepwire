@@ -1,6 +1,6 @@
 import type { Figure } from '../content/figures';
 import type { Session } from '../content/schema';
-import { DIFFICULTIES, type DifficultyName as Difficulty } from '../content/figures';
+import { DIFFICULTIES, FLARE_RANKS, type DifficultyName as Difficulty, type FlareRank } from '../content/figures';
 
 /**
  * A session, as numbers the opening card can animate.
@@ -30,14 +30,24 @@ export interface SessionStats {
   averageLevel?: number;
   /** Rows the operator flagged as a personal best, one per chart. */
   personalBests: number;
-  flare?: { before: number; after: number; delta: number };
+  /** FLARE SKILL after the session; the rise only when a before was declared. */
+  flare?: { after: number; before?: number; delta?: number; rank?: string };
   best?: { song: string; score: number };
   /** Rows per difficulty, in the game's order, zeros dropped. */
   byDifficulty: { difficulty: Difficulty; count: number }[];
   /** Rows per rank, best rank first, as declared. */
   byRank: { rank: string; count: number }[];
+  /** Rows per FLARE RANK, EX first, rows without one left out. */
+  byFlare: { flare: FlareRank; count: number }[];
   /** Every play in order: what the bar chart draws. */
-  plays: { song: string; score: number; difficulty: Difficulty; rank?: string; pb: boolean }[];
+  plays: {
+    song: string;
+    score: number;
+    difficulty: Difficulty;
+    rank?: string;
+    flare?: FlareRank;
+    pb: boolean;
+  }[];
 }
 
 const WEEKDAYS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
@@ -46,6 +56,14 @@ const RANK_ORDER = ['AAA', 'AA+', 'AA', 'AA-', 'A+', 'A', 'A-', 'B+', 'B', 'B-',
 function minutesOf(hhmm: string): number {
   const [h, m] = hhmm.split(':').map(Number);
   return (h ?? 0) * 60 + (m ?? 0);
+}
+
+function flareOf(skill: NonNullable<Session['flareSkill']>): NonNullable<SessionStats['flare']> {
+  return {
+    after: skill.after,
+    ...(skill.before !== undefined ? { before: skill.before, delta: skill.after - skill.before } : {}),
+    ...(skill.rank ? { rank: skill.rank } : {}),
+  };
 }
 
 export function sessionStats(session: Session, figures: Figure[]): SessionStats {
@@ -83,6 +101,11 @@ export function sessionStats(session: Session, figures: Figure[]): SessionStats 
       return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
     });
 
+  const byFlare = FLARE_RANKS.map((flare) => ({
+    flare,
+    count: rows.filter((row) => row.flare === flare).length,
+  })).filter((entry) => entry.count > 0);
+
   const minutes =
     session.start && session.end ? Math.max(0, minutesOf(session.end) - minutesOf(session.start)) : undefined;
 
@@ -97,23 +120,17 @@ export function sessionStats(session: Session, figures: Figure[]): SessionStats 
     charts: rows.length,
     ...(averageLevel !== undefined ? { averageLevel } : {}),
     personalBests: pbCharts.size,
-    ...(session.flareSkill
-      ? {
-          flare: {
-            before: session.flareSkill.before,
-            after: session.flareSkill.after,
-            delta: session.flareSkill.after - session.flareSkill.before,
-          },
-        }
-      : {}),
+    ...(session.flareSkill ? { flare: flareOf(session.flareSkill) } : {}),
     ...(best ? { best } : {}),
     byDifficulty,
     byRank,
+    byFlare,
     plays: rows.map((row) => ({
       song: row.song,
       score: row.score,
       difficulty: row.difficulty,
       ...(row.rank ? { rank: row.rank } : {}),
+      ...(row.flare ? { flare: row.flare } : {}),
       pb: Boolean(row.pb),
     })),
   };

@@ -114,6 +114,7 @@ figures:
         note: PERFECT FULL COMBO  # or a time of day, or a caveat
         highlight: true
         pb: true                  # a personal best — counted on the session card
+        flare: EX                 # the FLARE RANK it cleared with: I … IX, EX
 ```
 
 One row per play, up to twelve, exactly as a result screen or the play-data
@@ -122,6 +123,12 @@ page shows it. The difficulty badge is printed in the game's own colour
 allowed, because EXPERT is green to a player before it is a word. The level
 is optional: the e-amusement play list does not show it, a result photo does.
 `AAA` is set in the accent; every other rank in `muted`.
+
+`flare` is the FLARE RANK the play cleared with, as the result screen or the
+score app shows it. The page prints it after the rank and the video prints
+it on the row; EX is set in the hot accent, every other rank in `faint` —
+the game colours its ten ranks, and this palette does not follow it there.
+The session card counts them as a second row of chips.
 
 `pb` marks a personal best. It is the operator's flag, never derived — the
 system has no record of earlier scores to compare against. The first `plays`

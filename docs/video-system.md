@@ -39,10 +39,18 @@ session:
   venue: 普段行かないゲーセン  # optional
   weather: 晴れ              # optional, in the operator's words
   style: SINGLE             # or DOUBLE
-  flareSkill:               # optional; the tile shows the rise
-    before: 1200
-    after: 1260
+  flareSkill:               # optional; from the profile page after the session
+    after: 88894
+    before: 88100           # optional — the last write-up's value; gives the rise
+    rank: SUN               # optional — the FLARE RANK name the profile shows
 ```
+
+FLARE SKILL is a total, not a per-play number: the game sums the best thirty
+charts of each of three categories, so a session moves it only when a play
+enters that set. The tile rolls the number up to `after` — from `before`
+when there is one, with the rise as a pulsing chip — and prints the rank
+name where a unit would go. Plays that declare a `flare` rank add a second
+row of chips under the difficulty mix, with EX filled in the hot accent.
 
 Every number is counted by `lib/video/session-stats.ts` from the block and
 from the first `plays` figure — the session log — and nothing is inferred: a

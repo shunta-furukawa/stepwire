@@ -52,9 +52,33 @@ describe('sessionStats', () => {
     expect(stats.plays.map((play) => play.pb)).toEqual([false, true, false, false, true, true]);
   });
 
-  it('reports the flare skill as a delta', () => {
+  it('reports the flare skill as a delta when a before was declared', () => {
     const stats = sessionStats({ ...session, flareSkill: { before: 1200, after: 1260 } }, [log]);
     expect(stats.flare).toEqual({ before: 1200, after: 1260, delta: 60 });
+  });
+
+  it('stands on a flare skill with no before — the first session has none', () => {
+    const stats = sessionStats({ ...session, flareSkill: { after: 88894, rank: 'SUN' } }, [log]);
+    expect(stats.flare).toEqual({ after: 88894, rank: 'SUN' });
+  });
+
+  it('counts the flare ranks EX first and leaves out rows without one', () => {
+    const withFlare: Figure = {
+      kind: 'plays',
+      items: [
+        { song: 'A', difficulty: 'EXPERT', style: 'SINGLE', score: 999200, flare: 'IX' },
+        { song: 'B', difficulty: 'EXPERT', style: 'SINGLE', score: 990000, flare: 'EX' },
+        { song: 'C', difficulty: 'EXPERT', style: 'SINGLE', score: 980000 },
+        { song: 'D', difficulty: 'EXPERT', style: 'SINGLE', score: 970000, flare: 'EX' },
+      ],
+    };
+    const stats = sessionStats(session, [withFlare]);
+    expect(stats.byFlare).toEqual([
+      { flare: 'EX', count: 2 },
+      { flare: 'IX', count: 1 },
+    ]);
+    expect(stats.plays.map((play) => play.flare)).toEqual(['IX', 'EX', undefined, 'EX']);
+    expect(sessionStats(session, [log]).byFlare).toEqual([]);
   });
 
   it('takes the weekday from the civil date, not the viewer’s zone', () => {
