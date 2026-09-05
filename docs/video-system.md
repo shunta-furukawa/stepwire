@@ -102,6 +102,12 @@ legal decision the software does not make.** A game's own tracks in a public
 video will be matched by Content ID, and Japan has no general fair-use defence.
 The mechanism is here; the file is the operator's.
 
+Three hands are on the keys. A narration or body card types in the
+narrator's knock; a `turn` card types in its speaker's — WIRE a shade
+higher and cleaner, MONO lower and warmer — so a listener can tell who is
+talking with their eyes shut. `tickVoiceOf` in `lib/video/canvas/mix.ts`
+decides from the scene; `lib/video/canvas/sfx.ts` holds the three shapes.
+
 ### Images
 
 ```yaml

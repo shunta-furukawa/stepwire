@@ -23,6 +23,15 @@ export interface Tick {
   sampleRate: number;
 }
 
+/**
+ * Who is typing. The film has three hands on the keys: the narrator's
+ * cards, WIRE's turns and MONO's turns, and a listener should tell them
+ * apart with their eyes shut. Same knock, three registers — WIRE a shade
+ * higher and cleaner (the machine), MONO lower and warmer (the person), the
+ * narration between them where it always was.
+ */
+export type TickVoice = 'narration' | 'wire' | 'mono';
+
 interface KnockShape {
   /** Where the pitch starts. */
   fromHz: number;
@@ -33,11 +42,13 @@ interface KnockShape {
   noise: number;
   /** The low-pass corner for that noise: lower is duller. */
   noiseHz: number;
+  /** Second harmonic against the fundamental: more is brighter, not louder. */
+  harmonic?: number;
 }
 
 /** A sine that glides down, with a low-passed noise attack, decaying. */
 function knock(sampleRate: number, shape: KnockShape): Float32Array {
-  const { fromHz, toHz, ms, noise, noiseHz } = shape;
+  const { fromHz, toHz, ms, noise, noiseHz, harmonic = 0.25 } = shape;
   const length = Math.round((ms / 1000) * sampleRate);
   const out = new Float32Array(length);
 
@@ -74,23 +85,42 @@ function knock(sampleRate: number, shape: KnockShape): Float32Array {
     filtered += alpha * (burst - filtered);
 
     // A touch of second harmonic gives the note a body without brightness.
-    const tone = Math.sin(phase) + 0.25 * Math.sin(2 * phase);
+    const tone = Math.sin(phase) + harmonic * Math.sin(2 * phase);
     out[i] = Math.tanh((tone * 0.8 + filtered * 1.6) * decay * attack * 1.4);
   }
   return out;
 }
 
-export function synthTick(sampleRate: number): Tick {
-  return {
-    samples: knock(sampleRate, { fromHz: 700, toHz: 500, ms: 34, noise: 0.35, noiseHz: 900 }),
-    sampleRate,
-  };
+const KEY: Record<TickVoice, KnockShape> = {
+  narration: { fromHz: 700, toHz: 500, ms: 34, noise: 0.35, noiseHz: 900 },
+  wire: { fromHz: 1040, toHz: 860, ms: 26, noise: 0.14, noiseHz: 1500, harmonic: 0.45 },
+  mono: { fromHz: 440, toHz: 330, ms: 44, noise: 0.42, noiseHz: 650, harmonic: 0.15 },
+};
+
+const CARRIAGE: Record<TickVoice, { mid: KnockShape; low: KnockShape }> = {
+  narration: {
+    mid: { fromHz: 560, toHz: 400, ms: 42, noise: 0.45, noiseHz: 1100 },
+    low: { fromHz: 180, toHz: 140, ms: 80, noise: 0.15, noiseHz: 500 },
+  },
+  wire: {
+    mid: { fromHz: 880, toHz: 700, ms: 34, noise: 0.2, noiseHz: 1600, harmonic: 0.45 },
+    low: { fromHz: 220, toHz: 180, ms: 70, noise: 0.1, noiseHz: 600 },
+  },
+  mono: {
+    mid: { fromHz: 360, toHz: 270, ms: 52, noise: 0.5, noiseHz: 800, harmonic: 0.15 },
+    low: { fromHz: 150, toHz: 110, ms: 95, noise: 0.18, noiseHz: 420 },
+  },
+};
+
+export function synthTick(sampleRate: number, voice: TickVoice = 'narration'): Tick {
+  return { samples: knock(sampleRate, KEY[voice]), sampleRate };
 }
 
 /** The heavier tick that lands every few characters. */
-export function synthAccentTick(sampleRate: number): Tick {
-  const mid = knock(sampleRate, { fromHz: 560, toHz: 400, ms: 42, noise: 0.45, noiseHz: 1100 });
-  const low = knock(sampleRate, { fromHz: 180, toHz: 140, ms: 80, noise: 0.15, noiseHz: 500 });
+export function synthAccentTick(sampleRate: number, voice: TickVoice = 'narration'): Tick {
+  const shape = CARRIAGE[voice];
+  const mid = knock(sampleRate, shape.mid);
+  const low = knock(sampleRate, shape.low);
   const out = new Float32Array(Math.max(mid.length, low.length));
   for (let i = 0; i < out.length; i += 1) {
     out[i] = (mid[i] ?? 0) * 0.75 + (low[i] ?? 0) * 0.85;

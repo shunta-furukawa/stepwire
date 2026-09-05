@@ -1,6 +1,6 @@
-import type { SceneSequence } from '../scenes';
+import type { Scene, SceneSequence } from '../scenes';
 import { sceneStartFrames } from '../scenes';
-import { synthAccentTick, synthTick } from './sfx';
+import { synthAccentTick, synthTick, type TickVoice } from './sfx';
 
 /**
  * The soundtrack: music under the ticks.
@@ -27,18 +27,30 @@ export interface MixOptions {
   tickGain?: number;
 }
 
-/** Every tick in the film, as a sample offset. */
-export function tickOffsets(sequence: SceneSequence, sampleRate: number): number[] {
+/** Whose keys a scene's characters land on. */
+export function tickVoiceOf(scene: Pick<Scene, 'type' | 'speaker'>): TickVoice {
+  if (scene.type !== 'turn') return 'narration';
+  return scene.speaker === 'MONO' ? 'mono' : 'wire';
+}
+
+/** Every tick in the film: where it lands, and in whose voice. */
+export function tickEvents(sequence: SceneSequence, sampleRate: number): { offset: number; voice: TickVoice }[] {
   const starts = sceneStartFrames(sequence);
-  const offsets: number[] = [];
+  const events: { offset: number; voice: TickVoice }[] = [];
   sequence.scenes.forEach((scene, index) => {
     if (!scene.reveal) return;
     const start = starts[index]!;
+    const voice = tickVoiceOf(scene);
     for (const frame of scene.reveal.ticks) {
-      offsets.push(Math.round(((start + frame) / sequence.fps) * sampleRate));
+      events.push({ offset: Math.round(((start + frame) / sequence.fps) * sampleRate), voice });
     }
   });
-  return offsets;
+  return events;
+}
+
+/** Every tick in the film, as a sample offset. */
+export function tickOffsets(sequence: SceneSequence, sampleRate: number): number[] {
+  return tickEvents(sequence, sampleRate).map((event) => event.offset);
 }
 
 /** Every eighth tick is the heavy one. */
@@ -68,15 +80,20 @@ export function mixSoundtrack(options: MixOptions): Soundtrack {
     }
   }
 
-  const tick = synthTick(sampleRate);
-  const accent = synthAccentTick(sampleRate);
-  const offsets = tickOffsets(sequence, sampleRate);
-  offsets.forEach((offset, n) => {
-    const voice = n % ACCENT_EVERY === 0 ? accent : tick;
-    for (let i = 0; i < voice.samples.length && offset + i < length; i += 1) {
-      out[offset + i]! += voice.samples[i]! * tickGain;
+  // Three hands on the keys, each with its own knock and carriage.
+  const voices: Record<TickVoice, { tick: ReturnType<typeof synthTick>; accent: ReturnType<typeof synthTick> }> = {
+    narration: { tick: synthTick(sampleRate, 'narration'), accent: synthAccentTick(sampleRate, 'narration') },
+    wire: { tick: synthTick(sampleRate, 'wire'), accent: synthAccentTick(sampleRate, 'wire') },
+    mono: { tick: synthTick(sampleRate, 'mono'), accent: synthAccentTick(sampleRate, 'mono') },
+  };
+  const events = tickEvents(sequence, sampleRate);
+  events.forEach(({ offset, voice }, n) => {
+    const sound = n % ACCENT_EVERY === 0 ? voices[voice].accent : voices[voice].tick;
+    for (let i = 0; i < sound.samples.length && offset + i < length; i += 1) {
+      out[offset + i]! += sound.samples[i]! * tickGain;
     }
   });
+  const offsets = events;
 
   // A soft limiter: a tick on a music peak must not clip, and hard clipping
   // is the one artefact everybody hears.

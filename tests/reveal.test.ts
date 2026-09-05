@@ -71,3 +71,33 @@ describe('tickOffsets', () => {
     expect(offsets[0]).toBe(0);
   });
 });
+
+describe('tick voices', () => {
+  it('routes each scene to its speaker: narration, WIRE or MONO', async () => {
+    const { tickVoiceOf } = await import('../lib/video/canvas/mix');
+    expect(tickVoiceOf({ type: 'news' })).toBe('narration');
+    expect(tickVoiceOf({ type: 'narration' })).toBe('narration');
+    expect(tickVoiceOf({ type: 'turn', speaker: 'WIRE' })).toBe('wire');
+    expect(tickVoiceOf({ type: 'turn', speaker: 'MONO' })).toBe('mono');
+  });
+
+  it('gives the three voices three registers, and the same sound every time', async () => {
+    const { synthTick } = await import('../lib/video/canvas/sfx');
+    const rate = 48_000;
+    // Zero-crossing rate stands in for pitch: WIRE above the narrator, MONO below.
+    const zcr = (samples: Float32Array) => {
+      let crossings = 0;
+      for (let i = 1; i < samples.length; i += 1) if (samples[i]! >= 0 !== samples[i - 1]! >= 0) crossings += 1;
+      return crossings / (samples.length / rate);
+    };
+    const wire = synthTick(rate, 'wire').samples;
+    const narration = synthTick(rate, 'narration').samples;
+    const mono = synthTick(rate, 'mono').samples;
+    expect(zcr(wire)).toBeGreaterThan(zcr(narration));
+    expect(zcr(narration)).toBeGreaterThan(zcr(mono));
+    expect(synthTick(rate, 'mono').samples).toEqual(mono);
+    for (const samples of [wire, narration, mono]) {
+      expect(Math.max(...Array.from(samples).map(Math.abs))).toBeLessThanOrEqual(1);
+    }
+  });
+});
