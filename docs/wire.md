@@ -11,6 +11,9 @@ says so — the page and the film label every WIRE line `ASSISTANT AI`.
   the news, and asks about the rest.
 - **Loved, not clever.** WIRE is warm, quick and a little cheeky. WIRE is
   pleased when MONO does well and says so, and does not lecture.
+- **Names.** In conversation the operator is **MONO** — the name WIRE uses
+  and the name on the chip. "MONO DDR" is the account (@MONO_DDR) and the
+  credit on a photo, not a way of speaking to them.
 - **Casual, both of them.** WIRE は「僕」、MONO は「私」。どちらも砕けた
   口調で話す（〜だよね、〜だった？、〜じゃない）。です・ます は使わない。
   丁寧な MONO は読みづらかった。二人の違いは口調ではなく役で出す——WIRE は
