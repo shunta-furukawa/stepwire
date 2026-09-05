@@ -1289,6 +1289,12 @@ const drawStats: Drawer = (d, scene) => {
 
     const slot = chart.w / plays.length;
     const barW = slot * 0.62;
+    // Twenty bars leave no room for twenty rank labels: the label shrinks to
+    // the slot, and below a readable size it gives way to a mark under the
+    // AAA bars alone — the rank that is the point of a session.
+    ctx.font = fontOf(700, rankSize, font.mono);
+    const rankFit = Math.min(rankSize, (rankSize * slot * 0.9) / Math.max(1, ctx.measureText('AAA').width));
+    const rankLabels = rankFit >= px(22);
     plays.forEach((play, i) => {
       const t = stepAt(p, 0.28 + i * 0.035, 0.38);
       if (t <= 0) return;
@@ -1313,11 +1319,16 @@ const drawStats: Drawer = (d, scene) => {
         ctx.globalAlpha = 1;
       }
 
-      if (play.rank) {
-        ctx.font = fontOf(700, rankSize, font.mono);
+      if (play.rank && rankLabels) {
+        ctx.font = fontOf(700, rankFit, font.mono);
         ctx.fillStyle = play.rank === 'AAA' ? color.accent : color.muted;
         ctx.globalAlpha = easeOutCubic(t);
-        drawTrackedCentred(ctx, play.rank, x + barW / 2, plotBottom + rankSize + px(4), 0);
+        drawTrackedCentred(ctx, play.rank, x + barW / 2, plotBottom + rankFit + px(4), 0);
+        ctx.globalAlpha = 1;
+      } else if (play.rank === 'AAA') {
+        ctx.fillStyle = color.accent;
+        ctx.globalAlpha = easeOutCubic(t);
+        ctx.fillRect(x, plotBottom + px(8), barW, px(6));
         ctx.globalAlpha = 1;
       }
     });
