@@ -6,7 +6,7 @@ import { planReveal, type RevealPlan } from './reveal';
 import { sessionStats, type SessionStats } from './session-stats';
 import { PLAYS_PER_CARD } from '../content/figures';
 import type { Mood, Speaker } from '../content/dialogue';
-import type { CharacterPoses } from './character-poses';
+import { resolveCharacterPoses, type CharacterPoses } from './character-poses';
 import { toSentences } from '../content/markdown';
 import { pageCaptions } from './captions';
 import { visualLength } from './text';
@@ -49,6 +49,7 @@ export interface Scene {
   speaker?: Speaker;
   mood?: Mood;
   characterPoses?: CharacterPoses;
+  resolvedCharacterPoses?: CharacterPoses;
   /** Article-derived heading for the illustrated conversation stage. */
   stageTitle?: string;
   /** `image` scenes, and the headline when the article has a hero. */
@@ -519,7 +520,7 @@ export function buildSceneSequence(
 
   const trimmed = trimToBudget(overridden, target.max * fps);
 
-  const scenes: Scene[] = trimmed.map((scene, index) => ({
+  const scenes: Scene[] = resolveCharacterPoses(trimmed).map((scene, index) => ({
     ...scene,
     ...(scene.type === 'turn' ? { stageTitle: article.video?.headline ?? article.shortTitle ?? article.title } : {}),
     index,

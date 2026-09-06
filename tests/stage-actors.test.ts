@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { characterPose, POSE_IMAGES } from '../lib/video/character-poses';
+import { characterPose, POSE_IMAGES, resolveCharacterPoses } from '../lib/video/character-poses';
 import { sceneImageSources } from '../lib/video/canvas/images';
 import { videoOverrideSchema } from '../lib/content/schema';
 
@@ -24,4 +24,18 @@ it('preloads selected variants plus the registered default fallback', () => {
   expect(sources).toContain(POSE_IMAGES.default);
   expect(sources).not.toContain(POSE_IMAGES.celebrate);
   expect(sceneImageSources([{ type: 'headline' }])).not.toContain(POSE_IMAGES.explain);
+});
+
+it('changes only the speaker, retaining listener poses across photos and other scenes', () => {
+  const scenes = resolveCharacterPoses([
+    { type: 'turn', speaker: 'WIRE' as const, mood: 'grin' as const },
+    { type: 'image' },
+    { type: 'turn', speaker: 'MONO' as const, characterPoses: { WIRE: 'think' as const } },
+    { type: 'turn', speaker: 'WIRE' as const, mood: 'think' as const },
+  ]);
+  expect(scenes[0]?.resolvedCharacterPoses).toEqual({ WIRE: 'celebrate', MONO: 'default' });
+  expect(scenes[2]?.resolvedCharacterPoses).toEqual({ WIRE: 'celebrate', MONO: 'explain' });
+  expect(scenes[3]?.resolvedCharacterPoses).toEqual({ WIRE: 'think', MONO: 'explain' });
+  // No renderer history is needed when seeking directly to the last turn.
+  expect(characterPose(scenes[3]!, 'MONO')).toBe('explain');
 });
