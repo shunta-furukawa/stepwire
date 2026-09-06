@@ -19,7 +19,7 @@ import { mixSoundtrack } from '@/lib/video/canvas/mix';
 import { postCopy, type PostFormat } from '@/lib/video/post-copy';
 import { ThumbnailPanel } from '@/components/studio/ThumbnailPanel';
 import { PreviewPanel } from '@/components/studio/PreviewPanel';
-import { loadImages } from '@/lib/video/canvas/images';
+import { loadImages, sceneImageSources } from '@/lib/video/canvas/images';
 import { ensureFonts } from '@/lib/video/canvas/fonts';
 
 /**
@@ -191,7 +191,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
       setStatus('画像を読み込み中…');
       await ensureFonts();
       const images = await loadImages(
-        sequence.scenes.flatMap((scene) => (scene.image ? [scene.image.src] : [])),
+        sceneImageSources(sequence.scenes),
       );
 
       // The particle field, on its own WebGL canvas, composited into each

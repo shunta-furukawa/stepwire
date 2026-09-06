@@ -7,7 +7,7 @@ import { sceneStartFrames } from '@/lib/video/scenes';
 import { drawScene } from '@/lib/video/canvas/draw';
 import { fieldState } from '@/lib/video/field-plan';
 import type { Field } from '@/lib/video/field';
-import { loadImages } from '@/lib/video/canvas/images';
+import { loadImages, sceneImageSources } from '@/lib/video/canvas/images';
 import { ensureFonts } from '@/lib/video/canvas/fonts';
 import { formatDuration } from '@/lib/video/timing';
 
@@ -39,7 +39,7 @@ export function PreviewPanel({
   // Pictures and the field are loaded once per sequence, not per frame.
   useEffect(() => {
     let alive = true;
-    const sources = sequence.scenes.flatMap((scene) => (scene.image ? [scene.image.src] : []));
+    const sources = sceneImageSources(sequence.scenes);
     void (async () => {
       const [images, { createField }] = await Promise.all([
         loadImages(sources),
