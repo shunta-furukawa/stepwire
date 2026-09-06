@@ -47,6 +47,8 @@ export interface Scene {
   /** `turn` scenes only: who is talking, and WIRE's face while doing it. */
   speaker?: Speaker;
   mood?: Mood;
+  /** Article-derived heading for the illustrated conversation stage. */
+  stageTitle?: string;
   /** `image` scenes, and the headline when the article has a hero. */
   image?: MediaRef;
   /** The small line above a headline: category and date. */
@@ -516,6 +518,7 @@ export function buildSceneSequence(
 
   const scenes: Scene[] = trimmed.map((scene, index) => ({
     ...scene,
+    ...(scene.type === 'turn' ? { stageTitle: article.video?.headline ?? article.shortTitle ?? article.title } : {}),
     index,
     total: trimmed.length,
   }));

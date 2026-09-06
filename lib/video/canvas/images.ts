@@ -6,6 +6,15 @@
  * picture that fails to load is left out rather than failing the export: the
  * renderer draws a labelled gap for it, which the operator sees.
  */
+export const CONVERSATION_PLATE = 'images/studio/mono-wire-stage.webp';
+
+export function sceneImageSources(scenes: readonly { type: string; image?: { src: string } }[]): string[] {
+  return [
+    ...scenes.flatMap((scene) => scene.image ? [scene.image.src] : []),
+    ...(scenes.some((scene) => scene.type === 'turn') ? [CONVERSATION_PLATE] : []),
+  ];
+}
+
 export async function loadImages(sources: Iterable<string>): Promise<Map<string, CanvasImageSource>> {
   const images = new Map<string, CanvasImageSource>();
   await Promise.all(

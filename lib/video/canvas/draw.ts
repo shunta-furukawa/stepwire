@@ -7,6 +7,7 @@ import { color, difficulty, flareEx, font, fontSize, tracking } from '../../desi
 import { typedLines, wrapText } from './text';
 import { backdropDim, backdropZoom, sceneGround } from '../ground';
 import { drawMono, drawWire } from './face';
+import { drawIllustratedTurn } from './illustrated-turn';
 
 /**
  * The renderer for STEPWIRE scenes.
@@ -1469,6 +1470,8 @@ function contentBand(d: DrawContext) {
  */
 export function drawScene(d: DrawContext, scene: Scene) {
   const { ctx, width, height } = d;
+  // One path for preview and encoding; retain the vector stage if art is unavailable.
+  if (scene.type === 'turn' && drawIllustratedTurn(d, scene)) return;
   const ident = scene.type === 'outro';
   // The stack under every card, in the order `lib/video/ground.ts` fixes:
   // ground, picture, field, copy. Scenes over a picture draw the masthead
