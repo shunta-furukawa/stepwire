@@ -2,12 +2,13 @@ import type { DrawContext } from './draw';
 import type { Scene } from '../scenes';
 import { visibleUnits } from '../reveal';
 import { color } from '../../design/tokens';
+import type { Speaker } from '../../content/dialogue';
 
 /** Frame-derived motion: seeking and exporting never depend on wall time. */
-export function stagePerformance(d: Pick<DrawContext, 'frame' | 'fps'>, scene: Scene) {
+export function stagePerformance(d: Pick<DrawContext, 'frame' | 'fps'>, scene: Scene, who: Speaker = 'WIRE') {
   const t = Math.max(0, d.frame) / (d.fps ?? 30);
   const reveal = scene.reveal;
-  const talking = scene.speaker === 'WIRE' && !!reveal &&
+  const talking = scene.speaker === who && !!reveal &&
     visibleUnits(reveal, d.frame) > visibleUnits(reveal, Math.max(0, d.frame - (d.fps ?? 30) * 0.12));
   const phase = (t + scene.index * 0.71) % 4.3;
   return { t, talking, blink: phase > 3.95 && phase < 4.10,

@@ -23,6 +23,9 @@ mouth with the existing article moods: neutral, grin, surprise, think, wink.
 WIRE blinks and looks around, and its mouth moves while its text is revealing
 (typewriter timing, not audio lip sync). When MONO speaks WIRE listens in neutral.
 MONO keeps its established M mask and no mood tags are added to its dialogue.
+Its small mouth opens during its own text reveal and returns to the painted
+closed mouth while listening or holding completed text. Mouth position is
+registered for all four poses. This is typewriter-driven motion, not audio sync.
 
 The existing WebGL particle field is composited over the scenery again. Sparse
 rotating facets and orbiting sparks add motion even without WebGL. Both character
@@ -52,11 +55,16 @@ three additional RGBA plates live in `public/images/studio/`:
 | `think` | Hand at chin, other arm folded | Arms crossed | `mono-wire-pose-think.webp` |
 | `celebrate` | Both fists raised | One fist raised | `mono-wire-pose-celebrate.webp` |
 
-The speaking character defaults to `explain` and the listener to `default`.
+The speaking character defaults to `explain`. Only the speaker's pose can change;
+the listener holds its last pose (initially `default`). Pose history is resolved
+after scene trimming and stored on each scene, so seeking directly to a later
+turn reproduces the same result as sequential playback. Non-dialogue scenes do
+not reset that history. Character positions also remain fixed when photos change.
 WIRE's existing `think` mood selects `think`, and `grin` selects `celebrate`.
 MONO's emotional poses are author-controlled, not guessed from its words.
 Poses stay fixed within a turn while WIRE's eyes and mouth continue animating.
-Either character can be overridden independently in article frontmatter:
+The speaker's pose can be overridden in article frontmatter. A setting for the
+listener in that turn is ignored, so it cannot make both bodies change together:
 
 ```yaml
 video:
@@ -64,10 +72,10 @@ video:
     context-2:
       characterPoses:
         MONO: celebrate
-        WIRE: think
 ```
 
-Use the scene's actual id. No dialogue text or facial mood is changed by this
+Use the scene's actual id (`context-2` must be a MONO turn in this example).
+No dialogue text or facial mood is changed by this
 override. Unknown pose names are rejected during content validation. Preloading
 includes only selected variants, plus the default for missing-asset fallback.
 Each pose has its own sprite split and registration; a failed load uses the

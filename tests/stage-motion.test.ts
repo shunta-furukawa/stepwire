@@ -15,6 +15,14 @@ it('moves the mouth while copy types, then rests during the reading hold', () =>
   expect(stagePerformance({ frame: 5, fps: 30 }, { ...turn, speaker: 'MONO' }).mouth).toBe(0);
 });
 
+it('animates only MONO’s mouth during MONO text reveal', () => {
+  const mono = { ...turn, speaker: 'MONO' as const };
+  expect(stagePerformance({ frame: 5, fps: 30 }, mono, 'MONO').mouth).toBeGreaterThan(0);
+  expect(stagePerformance({ frame: 5, fps: 30 }, mono, 'WIRE').mouth).toBe(0);
+  expect(stagePerformance({ frame: 90, fps: 30 }, mono, 'MONO').mouth).toBe(0);
+  expect(stagePerformance({ frame: 5, fps: 30 }, turn, 'MONO').mouth).toBe(0);
+});
+
 it('reconstructs expressions on seek and uses seconds for blinking at any fps', () => {
   const frame = { frame: 120, fps: 30 };
   const initial = stagePerformance(frame, turn);

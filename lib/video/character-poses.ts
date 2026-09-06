@@ -15,10 +15,13 @@ export interface PoseScene {
   speaker?: Speaker;
   mood?: Mood;
   characterPoses?: CharacterPoses;
+  resolvedCharacterPoses?: CharacterPoses;
 }
 
 /** A pose is held for the whole turn, never cycled by time or randomness. */
 export function characterPose(scene: PoseScene, who: Speaker): CharacterPose {
+  const resolved = scene.resolvedCharacterPoses?.[who];
+  if (resolved) return resolved;
   const explicit = scene.characterPoses?.[who];
   if (explicit) return explicit;
   if (scene.speaker !== who) return 'default';
@@ -27,4 +30,17 @@ export function characterPose(scene: PoseScene, who: Speaker): CharacterPose {
     if (scene.mood === 'grin') return 'celebrate';
   }
   return 'explain';
+}
+
+/** Resolve once, after trimming: listeners keep their last on-screen pose.
+ * Every frame then stands alone, including out-of-order preview seeks.
+ */
+export function resolveCharacterPoses<T extends PoseScene & { type: string }>(scenes: readonly T[]): (T & { resolvedCharacterPoses?: CharacterPoses })[] {
+  let held: CharacterPoses = { WIRE: 'default', MONO: 'default' };
+  return scenes.map((scene) => {
+    if (scene.type !== 'turn') return scene;
+    const who = scene.speaker ?? 'WIRE';
+    held = { ...held, [who]: characterPose({ ...scene, speaker: who, resolvedCharacterPoses: undefined }, who) };
+    return { ...scene, resolvedCharacterPoses: { ...held } };
+  });
 }
