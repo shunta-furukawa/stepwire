@@ -17,10 +17,25 @@ progress and quoted article images are rendered as live canvas content.
 - Missing plate: the existing vector conversation renderer remains the fallback.
 - Other scene types and thumbnails keep their existing renderers.
 
-This first illustrated version is a static character plate: individual eye,
-mouth and mood animation is not applied to the painted characters. The active
-speaker is identified by the name underline and dialogue border. The original
-vector fallback retains its mood/blink behavior. No AI service runs during export.
+The animated plate `public/images/studio/mono-wire-stage-animated.webp` removes
+only WIRE's painted eyes and mouth. `stage-motion.ts` draws registered eyes and
+mouth with the existing article moods: neutral, grin, surprise, think, wink.
+WIRE blinks and looks around, and its mouth moves while its text is revealing
+(typewriter timing, not audio lip sync). When MONO speaks WIRE listens in neutral.
+MONO keeps its established M mask and no mood tags are added to its dialogue.
+
+The existing WebGL particle field is composited over the scenery again. Sparse
+rotating facets and orbiting sparks add motion even without WebGL. Both character
+silhouettes are masked out, with headings, media and dialogue drawn afterwards.
+All animation derives from frame/fps; seeking and export are repeatable.
+The original illustrated plate remains a fallback if the blank plate fails to
+load, and the vector renderer remains the fallback if both plates fail.
+No AI service runs during export.
+
+Asset provenance: built-in image generation, using the original plate as edit
+target. Prompt: remove only the left robot's lime eyes and mouth; seamlessly
+restore charcoal face facets; preserve head outline, antenna, arms, MONO mask,
+lighting, background, camera and framing; no new text or objects.
 
 ## Verification
 

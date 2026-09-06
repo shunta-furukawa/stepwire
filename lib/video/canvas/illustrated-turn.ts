@@ -3,11 +3,13 @@ import type { Scene } from '../scenes';
 import { color, font } from '../../design/tokens';
 import { visibleUnits } from '../reveal';
 import { typedLines, wrapText } from './text';
-import { CONVERSATION_PLATE } from './images';
+import { ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE } from './images';
+import { drawStageMotion, drawWireExpression } from './stage-motion';
 
 /** The art contains no copy or result data. Every label remains article-driven. */
 export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
-  const art = d.images.get(CONVERSATION_PLATE);
+  const animatedArt = d.images.get(ANIMATED_CONVERSATION_PLATE);
+  const art = animatedArt ?? d.images.get(CONVERSATION_PLATE);
   if (!art) return false;
   const { ctx, width: w, height: h } = d;
   const landscape = w > h;
@@ -25,6 +27,8 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
   const artY = landscape ? 0 : h * 0.22;
   const artH = landscape ? h : w * 9 / 16;
   ctx.drawImage(art, 0, artY, w, artH);
+  drawStageMotion(d, scene, artY, artH);
+  if (animatedArt) drawWireExpression(d, scene, artY, artH);
   const shade = ctx.createLinearGradient(0, 0, 0, landscape ? h * 0.28 : artY);
   shade.addColorStop(0, 'rgba(0,0,0,.7)');
   shade.addColorStop(1, 'rgba(0,0,0,0)');

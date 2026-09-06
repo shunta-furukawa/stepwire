@@ -7,11 +7,12 @@
  * renderer draws a labelled gap for it, which the operator sees.
  */
 export const CONVERSATION_PLATE = 'images/studio/mono-wire-stage.webp';
+export const ANIMATED_CONVERSATION_PLATE = 'images/studio/mono-wire-stage-animated.webp';
 
 export function sceneImageSources(scenes: readonly { type: string; image?: { src: string } }[]): string[] {
   return [
     ...scenes.flatMap((scene) => scene.image ? [scene.image.src] : []),
-    ...(scenes.some((scene) => scene.type === 'turn') ? [CONVERSATION_PLATE] : []),
+    ...(scenes.some((scene) => scene.type === 'turn') ? [ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE] : []),
   ];
 }
 
