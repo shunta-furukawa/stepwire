@@ -504,7 +504,7 @@ export function buildSceneSequence(
     durationInFrames: secondsToFrames(teaser ? profile.outroSeconds + 1 : profile.outroSeconds, fps),
     // The teaser's last card points at the full version; the sources live
     // there, and so does the rest of the conversation.
-    meta: teaser ? `全部の話は本編で · ${new URL(site.url).host}` : site.tagline,
+    meta: teaser ? '全部の話は、本編で。' : site.tagline,
     ...(credits.length > 0 ? { credits } : {}),
   });
 

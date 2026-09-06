@@ -346,11 +346,36 @@ const drawIdent: Drawer = (d, scene) => {
   }
 
   if (credits.length > 0) {
-    ctx.font = fontOf(400, creditSize, font.mono);
+    // A credit line has to fit the frame — a licence cut off at the edge is
+    // not a credit. The size shrinks a little first; a line still too wide
+    // for a 9:16 frame breaks at its separators.
+    const room = width - px(240);
+    const widthOf = (line: string, size: number) => {
+      ctx.font = fontOf(400, size, font.mono);
+      return [...line].reduce((total, char) => total + ctx.measureText(char).width + px(2), 0);
+    };
+    let size = creditSize;
+    while (size > creditSize * 0.8 && credits.some((line) => widthOf(line, size) > room)) size *= 0.95;
+    const lines = credits.flatMap((line) => {
+      if (widthOf(line, size) <= room) return [line];
+      const out: string[] = [];
+      let current = '';
+      for (const part of line.split(' · ')) {
+        const next = current ? `${current} · ${part}` : part;
+        if (current && widthOf(next, size) > room) {
+          out.push(current);
+          current = part;
+        } else current = next;
+      }
+      if (current) out.push(current);
+      return out;
+    });
+    const lead = size * 1.6;
+    ctx.font = fontOf(400, size, font.mono);
     ctx.fillStyle = color.faint;
     ctx.globalAlpha = Math.min(1, d.progress * 3);
-    credits.forEach((line, i) => {
-      const y = height - px(150) - px(48) - (credits.length - 1 - i) * creditLead;
+    lines.forEach((line, i) => {
+      const y = height - px(150) - px(48) - (lines.length - 1 - i) * lead;
       drawTracked(ctx, line, px(120), y, px(2));
     });
     ctx.globalAlpha = 1;
@@ -705,10 +730,16 @@ const drawFigure: Drawer = (d, scene) => {
   }
 
   if (figure.kind === 'plays') {
-    // Rows share the band; twelve of them shrink rather than overflow.
+    // Rows share the band; twelve of them shrink rather than overflow. A
+    // 9:16 frame has no width for a song, a score, a rank and a flare on
+    // one line, so there each row is two: the song, then its numbers.
+    const stacked = height > width;
     const dense = figure.items.length > 6;
     const size = px(fontSize[dense ? 'small' : 'base'] * 3);
-    const rowHeight = Math.min(size + px(dense ? 26 : 44), (bottom - top - px(40)) / figure.items.length);
+    const rowHeight = Math.min(
+      stacked ? size * 2 + px(dense ? 34 : 56) : size + px(dense ? 26 : 44),
+      (bottom - top - px(40)) / figure.items.length,
+    );
     cursor = Math.max(top, top + (bottom - top - rowHeight * figure.items.length) / 2);
     const badgeSize = size * 0.62;
     const badgePad = px(14);
@@ -718,7 +749,10 @@ const drawFigure: Drawer = (d, scene) => {
       const reveal = Math.min(1, Math.max(0, d.progress * 3 - i * 0.1));
       if (reveal <= 0) return;
       const y = cursor + i * rowHeight;
-      const mid = y + rowHeight / 2;
+      // Stacked: the song sits on the upper line, the numbers on the lower.
+      const mid = stacked ? y + rowHeight * 0.3 : y + rowHeight / 2;
+      const numbersMid = stacked ? y + rowHeight * 0.72 : mid;
+      const numbersLeft = stacked ? x : x + px(0);
       ctx.globalAlpha = reveal;
       ctx.textBaseline = 'middle';
 
@@ -740,28 +774,30 @@ const drawFigure: Drawer = (d, scene) => {
         const flareLabel = `FLARE ${item.flare}`;
         const flareWidth = ctx.measureText(flareLabel).width;
         ctx.fillStyle = item.flare === 'EX' ? rainbow(ctx, right - flareWidth, flareWidth) : color.faint;
-        ctx.fillText(flareLabel, right - flareWidth, mid);
+        ctx.fillText(flareLabel, right - flareWidth, numbersMid);
         right -= flareWidth + px(24);
       }
       if (item.rank) {
         ctx.font = fontOf(700, px(fontSize.small * 3), font.mono);
         const rankWidth = ctx.measureText(item.rank).width;
         ctx.fillStyle = item.rank === 'AAA' ? color.accent : color.muted;
-        ctx.fillText(item.rank, right - rankWidth, mid);
+        ctx.fillText(item.rank, right - rankWidth, numbersMid);
         right -= rankWidth + px(24);
       }
       ctx.font = fontOf(item.highlight ? 700 : 500, size, font.mono);
       ctx.fillStyle = color.fg;
       const score = formatScore(item.score);
       const scoreWidth = ctx.measureText(score).width;
-      ctx.fillText(score, right - scoreWidth, mid);
-      right -= scoreWidth + px(28);
+      ctx.fillText(score, stacked ? numbersLeft + labelWidth + badgePad * 2 + px(28) : right - scoreWidth, numbersMid);
+      if (!stacked) right -= scoreWidth + px(28);
 
-      // The song and its note, clipped to the room between badge and score.
+      // The song and its note, clipped to the room between badge and score
+      // (or, stacked, to the row's full width).
       const songX = x + labelWidth + badgePad * 2 + px(28);
+      const songRight = stacked ? x + w : right;
       ctx.save();
       ctx.beginPath();
-      ctx.rect(songX, y, Math.max(0, right - songX), rowHeight);
+      ctx.rect(songX, y, Math.max(0, songRight - songX), rowHeight);
       ctx.clip();
       ctx.font = fontOf(item.highlight ? 900 : 500, size, font.display);
       ctx.fillStyle = color.fg;
@@ -770,7 +806,10 @@ const drawFigure: Drawer = (d, scene) => {
         const songWidth = ctx.measureText(item.song).width;
         ctx.font = fontOf(400, noteSize, font.mono);
         ctx.fillStyle = color.muted;
-        ctx.fillText(item.note, songX + songWidth + px(20), mid);
+        // A note that would be cut mid-word is left off: half a note says
+        // less than none, and the figure on the page carries it whole.
+        const noteX = songX + songWidth + px(20);
+        if (noteX + ctx.measureText(item.note).width <= songRight) ctx.fillText(item.note, noteX, mid);
       }
       ctx.restore();
 

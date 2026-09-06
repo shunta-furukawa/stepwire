@@ -276,6 +276,7 @@ describe('buildSceneSequence', () => {
     expect(short.scenes.filter((scene) => scene.type === 'figure').map((scene) => scene.label)).toEqual(['pickup']);
     expect(short.scenes[1]?.meta).toBe('The one line.');
     expect(short.scenes.at(-1)?.meta).toContain('本編');
+    expect(short.scenes.at(-1)?.meta).not.toMatch(/localhost|http/i);
 
     // The landscape keeps everything.
     const full = buildSceneSequence(session, 'STEPWIRE_NEWS').scenes.map((scene) => scene.type);
