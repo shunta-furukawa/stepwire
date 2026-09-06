@@ -9,8 +9,8 @@
  *
  * A turn is a paragraph that opens with the speaker's name and a colon:
  *
- *   WIRE: 3曲ともEXPERTで踏んでますね。
- *   MONO: はい。1回目はGREATが1つで悔しくて。
+ *   WIRE: 3曲ともEXPERTで踏んだんだね。
+ *   MONO: そう。1回目はGREATが1つで悔しくて。
  *   WIRE(grin): それで2回目、999,200。
  *
  * The parenthesised mood is WIRE's expression on the card and is optional;
