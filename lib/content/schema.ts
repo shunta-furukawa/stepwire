@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { CATEGORIES } from './categories';
 import { figureSchema } from './figures';
+import { CHARACTER_POSES } from '../video/character-poses';
 
 /**
  * The STEPWIRE Article model.
@@ -113,6 +114,11 @@ export const videoOverrideSchema = z.object({
       z.string(),
       z.object({
         text: z.string().optional(),
+        /** Illustration poses; independent of WIRE's facial mood. */
+        characterPoses: z.object({
+          WIRE: z.enum(CHARACTER_POSES).optional(),
+          MONO: z.enum(CHARACTER_POSES).optional(),
+        }).strict().optional(),
         /** Explicit duration in seconds; otherwise derived from text length. */
         durationInSeconds: z.number().positive().max(30).optional(),
         skip: z.boolean().optional(),

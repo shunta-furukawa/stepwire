@@ -36,12 +36,48 @@ No AI service runs during export.
 
 `mono-wire-scenery.webp` is the empty set; `mono-wire-characters.webp` is a
 1672 × 941 RGBA sprite plate. Its left and right halves are registered and drawn
-independently by `stage-actors.ts`. WIRE's Canvas face uses the same body transform,
-so eyes and mouth stay attached. Both actors breathe, lean and sway around the
-waist. WIRE has a quicker speaking beat; MONO has slower motion; listeners give
-occasional small nods. This is 2D upper-body animation, not separately articulated
-arms or skeletal animation. Poses settle at scene boundaries and are derived
-only from frame/fps. MONO retains its M mask.
+independently by `stage-actors.ts`. WIRE's Canvas face stays registered to its head.
+Body sway, rotation and breathing transforms have been removed: arms now change
+by swapping authored illustrations on each turn. MONO retains its M mask.
+
+## Arm and hand pose variants
+
+Each character has four illustrations. The default uses the original sprite;
+three additional RGBA plates live in `public/images/studio/`:
+
+| Pose | WIRE | MONO | Asset |
+| --- | --- | --- | --- |
+| `default` | One palm open | Cheek resting on hand | `mono-wire-characters.webp` |
+| `explain` | Both palms open | One hand extended | `mono-wire-pose-explain.webp` |
+| `think` | Hand at chin, other arm folded | Arms crossed | `mono-wire-pose-think.webp` |
+| `celebrate` | Both fists raised | One fist raised | `mono-wire-pose-celebrate.webp` |
+
+The speaking character defaults to `explain` and the listener to `default`.
+WIRE's existing `think` mood selects `think`, and `grin` selects `celebrate`.
+MONO's emotional poses are author-controlled, not guessed from its words.
+Poses stay fixed within a turn while WIRE's eyes and mouth continue animating.
+Either character can be overridden independently in article frontmatter:
+
+```yaml
+video:
+  scenes:
+    context-2:
+      characterPoses:
+        MONO: celebrate
+        WIRE: think
+```
+
+Use the scene's actual id. No dialogue text or facial mood is changed by this
+override. Unknown pose names are rejected during content validation. Preloading
+includes only selected variants, plus the default for missing-asset fallback.
+Each pose has its own sprite split and registration; a failed load uses the
+default's registration too. Preview and export use the same selection logic.
+
+Built-in image generation prompts for each new plate used the animated stage as
+reference: extract both characters with true transparency and preserve identity,
+blank WIRE face, antenna, MONO M mask and faceted charcoal/lime palette; replace
+arms/hands with the matching pose in the table above. RGB outputs with baked-in
+checkerboards were rejected. All three shipped images have verified alpha.
 
 Layer order: empty scenery → particles → large photograph → transparent actors
 → centered photo credit → dialogue. Landscape media bounds grow from 28% to 50%
