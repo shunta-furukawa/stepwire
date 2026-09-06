@@ -8,11 +8,14 @@
  */
 export const CONVERSATION_PLATE = 'images/studio/mono-wire-stage.webp';
 export const ANIMATED_CONVERSATION_PLATE = 'images/studio/mono-wire-stage-animated.webp';
+export const CONVERSATION_SCENERY = 'images/studio/mono-wire-scenery.webp';
+export const CONVERSATION_CHARACTERS = 'images/studio/mono-wire-characters.webp';
 
 export function sceneImageSources(scenes: readonly { type: string; image?: { src: string } }[]): string[] {
   return [
     ...scenes.flatMap((scene) => scene.image ? [scene.image.src] : []),
-    ...(scenes.some((scene) => scene.type === 'turn') ? [ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE] : []),
+    ...(scenes.some((scene) => scene.type === 'turn')
+      ? [CONVERSATION_SCENERY, CONVERSATION_CHARACTERS, ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE] : []),
   ];
 }
 

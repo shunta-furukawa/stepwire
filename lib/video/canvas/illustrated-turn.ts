@@ -3,13 +3,18 @@ import type { Scene } from '../scenes';
 import { color, font } from '../../design/tokens';
 import { visibleUnits } from '../reveal';
 import { typedLines, wrapText } from './text';
-import { ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE } from './images';
+import { ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE, CONVERSATION_SCENERY, CONVERSATION_CHARACTERS } from './images';
 import { drawStageMotion, drawWireExpression } from './stage-motion';
+import { drawConversationActors } from './stage-actors';
 
 /** The art contains no copy or result data. Every label remains article-driven. */
 export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
   const animatedArt = d.images.get(ANIMATED_CONVERSATION_PLATE);
-  const art = animatedArt ?? d.images.get(CONVERSATION_PLATE);
+  const scenery = d.images.get(CONVERSATION_SCENERY);
+  const actors = d.images.get(CONVERSATION_CHARACTERS);
+  // Never show an empty set if only one of the new layers loaded.
+  const layered = !!scenery && !!actors;
+  const art = layered ? scenery : animatedArt ?? d.images.get(CONVERSATION_PLATE);
   if (!art) return false;
   const { ctx, width: w, height: h } = d;
   const landscape = w > h;
@@ -27,8 +32,8 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
   const artY = landscape ? 0 : h * 0.22;
   const artH = landscape ? h : w * 9 / 16;
   ctx.drawImage(art, 0, artY, w, artH);
-  drawStageMotion(d, scene, artY, artH);
-  if (animatedArt) drawWireExpression(d, scene, artY, artH);
+  drawStageMotion(d, scene, artY, artH, !layered);
+  if (!layered && animatedArt) drawWireExpression(d, scene, artY, artH);
   const shade = ctx.createLinearGradient(0, 0, 0, landscape ? h * 0.28 : artY);
   shade.addColorStop(0, 'rgba(0,0,0,.7)');
   shade.addColorStop(1, 'rgba(0,0,0,0)');
@@ -52,13 +57,23 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
     font.impact, color.fg);
 
   // The existing quoted result stays intact; never synthesize score-screen pixels.
+  let creditY: number | undefined;
   if (scene.image) {
     const media = d.images.get(scene.image.src);
     const box = landscape
-      ? { x: w * 0.36, y: h * 0.28, w: w * 0.28, h: h * 0.40 }
-      : { x: margin, y: artY + artH + 26 * u, w: w - margin * 2, h: h * 0.16 };
+      ? layered
+        ? { x: w * 0.25, y: h * 0.225, w: w * 0.50, h: h * 0.50 }
+        : { x: w * 0.36, y: h * 0.28, w: w * 0.28, h: h * 0.40 }
+      : { x: margin, y: artY + artH * 0.79, w: w - margin * 2, h: h * 0.21 };
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,.8)';
+    ctx.shadowBlur = 24 * u;
     ctx.fillStyle = 'rgba(0,0,0,.88)';
     ctx.fillRect(box.x - 10 * u, box.y - 10 * u, box.w + 20 * u, box.h + 55 * u);
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = color.accent;
+    ctx.lineWidth = 2 * u;
+    ctx.strokeRect(box.x - 10 * u, box.y - 10 * u, box.w + 20 * u, box.h + 55 * u);
     if (media) {
       const iw = 'width' in media ? Number(media.width) : box.w;
       const ih = 'height' in media ? Number(media.height) : box.h;
@@ -67,13 +82,23 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
     } else {
       fitText('画像を読み込めませんでした', box.x, box.y, box.w, box.h, 28 * u, font.display, color.muted);
     }
-    fitText(scene.image.credit, box.x, box.y + box.h + 10 * u, box.w, 32 * u, 23 * u, font.mono, color.fg);
+    creditY = box.y + box.h + 10 * u;
+    ctx.restore();
   } else if (landscape) {
     ctx.fillStyle = color.accent;
     ctx.fillRect(w * 0.43, h * 0.46, w * 0.14, 5 * u);
     ctx.font = `700 ${26 * u}px ${font.mono}`;
     ctx.textAlign = 'center';
     ctx.fillText('MONO × WIRE', w / 2, h * 0.49);
+    ctx.textAlign = 'left';
+  }
+
+  // Foreground actors overlap the media frame; text panels stay above all art.
+  if (layered && actors) drawConversationActors(d, scene, actors, artY, artH);
+  if (scene.image && creditY !== undefined) {
+    ctx.textAlign = 'center';
+    fitText(scene.image.credit, w / 2, creditY, landscape ? w * 0.24 : w - margin * 2,
+      28 * u, 21 * u, font.mono, color.fg);
     ctx.textAlign = 'left';
   }
 
