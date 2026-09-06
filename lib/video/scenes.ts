@@ -282,6 +282,10 @@ export function buildSceneSequence(
 ): SceneSequence {
   const profile = PROFILES[composition];
   const target = COMPOSITIONS[composition].targetSeconds;
+  // The vertical of a session is a teaser for the landscape: the card, the
+  // poster, the pickups, and a pointer to the full version. A phone thumb
+  // gives it twenty seconds; the whole conversation is the other film's job.
+  const teaser = composition === 'STEPWIRE_SHORT' && article.session !== undefined;
   const headline = article.video?.headline ?? article.shortTitle ?? article.title;
   const drafts: Draft[] = [];
 
@@ -306,6 +310,21 @@ export function buildSceneSequence(
       kicker: `SESSION · ${article.session.date.replace(/-/g, '.')}`,
       text: headline,
     });
+    if (teaser) {
+      // The poster, after the numbers: the title in the impact face over
+      // the hero, with the dek as the one line under it.
+      drafts.push({
+        id: 'headline',
+        type: 'headline',
+        ...typed(headline, 'headline', fps),
+        text: headline,
+        meta: article.dek ?? article.summary,
+        kicker,
+        ...(article.heroImage
+          ? { image: { ...article.heroImage, credit: article.heroImage.credit ?? '' } }
+          : {}),
+      });
+    }
   } else {
     // The headline opens, over the hero image when there is one. A feed gives
     // a film about two seconds to earn the next two; a brand ident spends them
@@ -330,11 +349,13 @@ export function buildSceneSequence(
 
   const sections = narrated
     ? []
-    : [
-        { type: 'news' as const, key: 'news' as const, source: article.news, max: profile.maxChunks.news },
-        { type: 'context' as const, key: 'context' as const, source: article.context, max: profile.maxChunks.context },
-        { type: 'impact' as const, key: 'playerImpact' as const, source: article.playerImpact, max: profile.maxChunks.impact },
-      ];
+    : teaser
+      ? [{ type: 'impact' as const, key: 'playerImpact' as const, source: article.playerImpact, max: 4 }]
+      : [
+          { type: 'news' as const, key: 'news' as const, source: article.news, max: profile.maxChunks.news },
+          { type: 'context' as const, key: 'context' as const, source: article.context, max: profile.maxChunks.context },
+          { type: 'impact' as const, key: 'playerImpact' as const, source: article.playerImpact, max: profile.maxChunks.impact },
+        ];
 
   // A picture placed in the prose is shown WITH the paragraph after it, on
   // that paragraph's cards, rather than in the gallery after the fact: the
@@ -428,7 +449,10 @@ export function buildSceneSequence(
   // the duration is derived from the row count rather than fixed. A session
   // log longer than a card can hold is dealt out over several cards, ten
   // rows each, so a seventy-minute session is read and not squinted at.
-  article.figures.forEach((figure, index) => {
+  const figures = teaser
+    ? article.figures.filter((figure) => figure.kind === 'plays' && figure.items.length <= 5)
+    : article.figures;
+  figures.forEach((figure, index) => {
     const pages =
       figure.kind === 'plays' && figure.items.length > PLAYS_PER_CARD
         ? Array.from({ length: Math.ceil(figure.items.length / PLAYS_PER_CARD) }, (_, page) => ({
@@ -436,7 +460,7 @@ export function buildSceneSequence(
             items: figure.items.slice(page * PLAYS_PER_CARD, (page + 1) * PLAYS_PER_CARD),
           }))
         : [figure];
-    const base = article.figures.length > 1 ? `figure-${index + 1}` : 'figure';
+    const base = figures.length > 1 ? `figure-${index + 1}` : 'figure';
     pages.forEach((pageFigure, page) => {
       const paged = pages.length > 1;
       drafts.push({
@@ -452,16 +476,18 @@ export function buildSceneSequence(
     });
   });
 
-  drafts.push({
-    id: 'source',
-    type: 'source',
-    durationInFrames: secondsToFrames(profile.sourceSeconds, fps),
-    label: 'SOURCE',
-    text: article.primarySource
-      ? `${article.primarySource.publisher} — ${article.primarySource.title}`
-      : 'STEPWIRE reporting',
-    meta: formatDate(article.publishedAt),
-  });
+  if (!teaser) {
+    drafts.push({
+      id: 'source',
+      type: 'source',
+      durationInFrames: secondsToFrames(profile.sourceSeconds, fps),
+      label: 'SOURCE',
+      text: article.primarySource
+        ? `${article.primarySource.publisher} — ${article.primarySource.title}`
+        : 'STEPWIRE reporting',
+      meta: formatDate(article.publishedAt),
+    });
+  }
 
   const credits = [
     ...new Set(
@@ -475,8 +501,10 @@ export function buildSceneSequence(
   drafts.push({
     id: 'outro',
     type: 'outro',
-    durationInFrames: secondsToFrames(profile.outroSeconds, fps),
-    meta: site.tagline,
+    durationInFrames: secondsToFrames(teaser ? profile.outroSeconds + 1 : profile.outroSeconds, fps),
+    // The teaser's last card points at the full version; the sources live
+    // there, and so does the rest of the conversation.
+    meta: teaser ? `全部の話は本編で · ${new URL(site.url).host}` : site.tagline,
     ...(credits.length > 0 ? { credits } : {}),
   });
 

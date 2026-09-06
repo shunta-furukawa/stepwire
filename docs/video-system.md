@@ -21,6 +21,13 @@ An article produces one of two films, depending on whether it has a recording.
 Both open with the headline and close with the source card and the outro.
 Everything else changes.
 
+The vertical of a **session** article is different again: a teaser for the
+landscape. It opens on the session card, then the poster (the title in the
+impact face over the hero, the dek under it), keeps only the PICKUP turns
+with their photos and the short plays figure, drops NEWS, SESSION, the log
+and the source card, and signs off with 「全部の話は本編で」 and the site.
+Twenty to forty seconds; the whole conversation is the other film's job.
+
 ### The session card
 
 An article with a `session` block opens on the session instead of the

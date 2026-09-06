@@ -232,6 +232,58 @@ describe('buildSceneSequence', () => {
     expect(long.durationInFrames).toBe(Math.round(9.5 * 30));
   });
 
+  it('makes the vertical of a session a teaser: card, poster, pickups, pointer', () => {
+    const session: ArticleVideoInput = {
+      ...article,
+      dek: 'The one line.',
+      session: { date: '2026-09-05', style: 'SINGLE' },
+      heroImage: { src: 'images/hero.jpg', alt: 'hero', credit: 'MONO DDR' },
+      figures: [
+        {
+          kind: 'plays',
+          title: 'log',
+          items: Array.from({ length: 12 }, (_, i) => ({
+            song: `Song ${i}`,
+            difficulty: 'EXPERT' as const,
+            style: 'SINGLE' as const,
+            score: 990_000,
+          })),
+        },
+        {
+          kind: 'plays',
+          title: 'pickup',
+          items: [{ song: 'A', difficulty: 'EXPERT', style: 'SINGLE', score: 999_200, highlight: true }],
+        },
+      ],
+      blocks: {
+        news: [{ kind: 'paragraph', text: article.news }],
+        context: [{ kind: 'turn', speaker: 'WIRE', mood: 'neutral', text: 'The session.' }],
+        playerImpact: [
+          { kind: 'turn', speaker: 'WIRE', mood: 'think', text: 'The pickup?' },
+          { kind: 'turn', speaker: 'MONO', mood: 'neutral', text: 'The answer.' },
+        ],
+      },
+    };
+    const short = buildSceneSequence(session, 'STEPWIRE_SHORT');
+    const types = short.scenes.map((scene) => scene.type);
+    expect(types.slice(0, 2)).toEqual(['stats', 'headline']);
+    expect(types).not.toContain('news');
+    expect(types).not.toContain('source');
+    expect(short.scenes.filter((scene) => scene.type === 'turn').map((scene) => scene.text)).toEqual([
+      'The pickup?',
+      'The answer.',
+    ]);
+    expect(short.scenes.filter((scene) => scene.type === 'figure').map((scene) => scene.label)).toEqual(['pickup']);
+    expect(short.scenes[1]?.meta).toBe('The one line.');
+    expect(short.scenes.at(-1)?.meta).toContain('本編');
+
+    // The landscape keeps everything.
+    const full = buildSceneSequence(session, 'STEPWIRE_NEWS').scenes.map((scene) => scene.type);
+    expect(full).toContain('news');
+    expect(full).toContain('source');
+    expect(full.filter((type) => type === 'figure').length).toBeGreaterThan(1);
+  });
+
   it('types every card, and holds it after the last character', () => {
     for (const scene of buildSceneSequence(article, 'STEPWIRE_NEWS').scenes) {
       if (!['headline', 'news', 'context', 'impact'].includes(scene.type)) continue;
