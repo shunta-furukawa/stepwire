@@ -72,18 +72,20 @@ export function drawWireExpression(d: DrawContext, scene: Scene, artY: number, a
 }
 
 /** Restore the existing GPU field and add sparse orbiting facets behind copy. */
-export function drawStageMotion(d: DrawContext, scene: Scene, artY: number, artH: number) {
+export function drawStageMotion(d: DrawContext, scene: Scene, artY: number, artH: number, protectCharacters = true) {
   const { ctx, width: w, height: h } = d;
   const { t } = stagePerformance(d, scene);
   const u = Math.min(w, h) / 1080;
   ctx.save();
   // Protect both character silhouettes. Effects remain on the scenery, even
   // in portrait, and later title/photo/dialogue layers stay fully readable.
-  ctx.beginPath();
-  ctx.rect(0, 0, w, h);
-  ctx.rect(w * 0.06, artY + artH * 0.19, w * 0.36, artH * 0.64);
-  ctx.rect(w * 0.55, artY + artH * 0.20, w * 0.42, artH * 0.63);
-  ctx.clip('evenodd');
+  if (protectCharacters) {
+    ctx.beginPath();
+    ctx.rect(0, 0, w, h);
+    ctx.rect(w * 0.06, artY + artH * 0.19, w * 0.36, artH * 0.64);
+    ctx.rect(w * 0.55, artY + artH * 0.20, w * 0.42, artH * 0.63);
+    ctx.clip('evenodd');
+  }
   if (d.field) {
     ctx.globalAlpha = 0.75;
     ctx.drawImage(d.field, 0, 0, w, h);

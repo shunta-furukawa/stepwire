@@ -32,6 +32,31 @@ The original illustrated plate remains a fallback if the blank plate fails to
 load, and the vector renderer remains the fallback if both plates fail.
 No AI service runs during export.
 
+## Independent body layers and featured photographs
+
+`mono-wire-scenery.webp` is the empty set; `mono-wire-characters.webp` is a
+1672 × 941 RGBA sprite plate. Its left and right halves are registered and drawn
+independently by `stage-actors.ts`. WIRE's Canvas face uses the same body transform,
+so eyes and mouth stay attached. Both actors breathe, lean and sway around the
+waist. WIRE has a quicker speaking beat; MONO has slower motion; listeners give
+occasional small nods. This is 2D upper-body animation, not separately articulated
+arms or skeletal animation. Poses settle at scene boundaries and are derived
+only from frame/fps. MONO retains its M mask.
+
+Layer order: empty scenery → particles → large photograph → transparent actors
+→ centered photo credit → dialogue. Landscape media bounds grow from 28% to 50%
+of frame width and from 40% to 50% of height, with containment (no cropping), a
+lime frame and a shadow. Characters move slightly outward around a photograph;
+their silhouettes overlap its frame in the foreground. Portrait also enlarges
+the media and places its top edge behind the character layer. If either new
+layer is missing, both actors fall back together to the previous composite plate.
+
+Additional built-in image generation prompts, using the animated plate as input:
+- Extract both characters onto genuine transparency; preserve blank WIRE face,
+  MONO M mask, antenna, hands and faceted palette; remove scenery and table.
+- Remove both characters and reconstruct the dark industrial scenery; retain
+  camera, table, railings, plants, palette and lighting; no new text or figures.
+
 Asset provenance: built-in image generation, using the original plate as edit
 target. Prompt: remove only the left robot's lime eyes and mouth; seamlessly
 restore charcoal face facets; preserve head outline, antenna, arms, MONO mask,
