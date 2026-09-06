@@ -1,5 +1,5 @@
 import type { Block, InlineNode } from '@/lib/content/markdown';
-import { MonoMark, WireFace } from '@/components/Faces';
+import { ConversationAvatar } from '@/components/ConversationAvatar';
 
 /**
  * Renders the article-body AST as React.
@@ -82,12 +82,8 @@ export function Markdown({ blocks }: { blocks: Block[] }) {
             // A line of the conversation: the speaker beside the words. The
             // name is text, not only a face, so the split survives styles off.
             return (
-              <div key={index} className="grid grid-cols-[52px_minmax(0,1fr)] gap-x-md">
-                {block.speaker === 'WIRE' ? (
-                  <WireFace mood={block.mood} className="h-[52px] w-[52px]" />
-                ) : (
-                  <MonoMark className="h-[52px] w-[52px]" />
-                )}
+              <div key={index} className="grid grid-cols-[64px_minmax(0,1fr)] gap-x-md sm:grid-cols-[80px_minmax(0,1fr)]">
+                <ConversationAvatar speaker={block.speaker} mood={block.mood} />
                 <div className="min-w-0 pt-[2px]">
                   <p className="font-mono text-micro font-bold uppercase tracking-wider">
                     <span className={block.speaker === 'WIRE' ? 'text-accent' : 'text-fg'}>{block.speaker}</span>
