@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ArticleVideoInput } from '../lib/content/article';
-import { hashtag, postCopy, postTitle } from '../lib/video/post-copy';
+import { FULL_VIDEO_PLACEHOLDER, hashtag, postCopy, postTitle, teaserTitle } from '../lib/video/post-copy';
 
 const article: ArticleVideoInput = {
   slug: 'a-session',
@@ -62,5 +62,25 @@ describe('post copy', () => {
     expect(postCopy(article, 'u').description.startsWith(article.dek!)).toBe(true);
     const { dek: _dek, ...noDek } = article;
     expect(postCopy(noDek, 'u').description.startsWith(article.summary)).toBe(true);
+  });
+});
+
+describe('the teaser copy', () => {
+  it('is the short title with #Shorts, a pointer at the full film, and the credits', () => {
+    const copy = postCopy(article, 'https://stepwire.vercel.app/article/a-session', 'teaser');
+    expect(copy.title).toBe(`${article.shortTitle} #Shorts`);
+    expect(copy.title.length).toBeLessThanOrEqual(100);
+    expect(copy.description).toContain(FULL_VIDEO_PLACEHOLDER);
+    expect(copy.description).toContain('記事: https://stepwire.vercel.app/article/a-session');
+    // Sources stay on the article; the licence still travels with the film.
+    expect(copy.description).not.toContain('▶ 出典');
+    expect(copy.description).toContain('Licensed under Creative Commons');
+    expect(copy.hashtags.startsWith('#Shorts')).toBe(true);
+    expect(copy.hashtags.split(' ').length).toBeLessThanOrEqual(5);
+  });
+
+  it('keeps a long short title inside the limit with the tag', () => {
+    expect(teaserTitle({ title: 'x'.repeat(120) }).length).toBeLessThanOrEqual(100);
+    expect(teaserTitle({ title: 'x'.repeat(120) }).endsWith(' #Shorts')).toBe(true);
   });
 });

@@ -18,6 +18,17 @@ export interface PostCopy {
   hashtags: string;
 }
 
+/**
+ * Which film the words go with. The landscape carries the whole article;
+ * the vertical is its teaser, so its title is the short one with the
+ * platform's tag, its description points at the full version and keeps
+ * only what a licence requires, and the sources stay on the article.
+ */
+export type PostFormat = 'full' | 'teaser';
+
+/** Where the teaser's description asks for the full film's link. */
+export const FULL_VIDEO_PLACEHOLDER = '本編: （本編のYouTubeリンクをここに）';
+
 /** YouTube truncates a title past this; a title that gets cut is a worse title. */
 const TITLE_LIMIT = 100;
 
@@ -40,19 +51,30 @@ export function postTitle(article: Pick<ArticleVideoInput, 'title' | 'shortTitle
   return article.shortTitle ?? `${full.slice(0, TITLE_LIMIT - 1)}…`;
 }
 
-export function postHashtags(article: Pick<ArticleVideoInput, 'tags' | 'category'>): string {
-  const base = ['DDR', 'DanceDanceRevolution', 'STEPWIRE'];
+export function postHashtags(article: Pick<ArticleVideoInput, 'tags' | 'category'>, format: PostFormat = 'full'): string {
+  const base = format === 'teaser' ? ['Shorts', 'DDR', 'STEPWIRE'] : ['DDR', 'DanceDanceRevolution', 'STEPWIRE'];
   const own = (article.tags ?? []).map(hashtag).filter(Boolean);
-  return [...new Set([...base.map((t) => `#${t}`), ...own])].join(' ');
+  const tags = [...new Set([...base.map((t) => `#${t}`), ...own])];
+  // A teaser's tags are a line, not a paragraph.
+  return (format === 'teaser' ? tags.slice(0, 5) : tags).join(' ');
 }
 
-export function postDescription(article: ArticleVideoInput, articleUrl: string): string {
+/** The teaser's title: the short one, with the platform's tag on the end. */
+export function teaserTitle(article: Pick<ArticleVideoInput, 'title' | 'shortTitle'>): string {
+  const base = article.shortTitle ?? article.title;
+  const tag = ' #Shorts';
+  const room = TITLE_LIMIT - tag.length;
+  return `${base.length <= room ? base : `${base.slice(0, room - 1)}…`}${tag}`;
+}
+
+export function postDescription(article: ArticleVideoInput, articleUrl: string, format: PostFormat = 'full'): string {
   const parts: string[] = [];
 
   parts.push(article.dek ?? article.summary);
-  parts.push(`記事: ${articleUrl}`);
+  if (format === 'teaser') parts.push([FULL_VIDEO_PLACEHOLDER, `記事: ${articleUrl}`].join('\n'));
+  else parts.push(`記事: ${articleUrl}`);
 
-  const sources = article.sources ?? (article.primarySource ? [article.primarySource] : []);
+  const sources = format === 'teaser' ? [] : (article.sources ?? (article.primarySource ? [article.primarySource] : []));
   if (sources.length > 0) {
     parts.push(
       ['▶ 出典', ...sources.map((s) => `${s.publisher} — ${s.title}\n${s.url}`)].join('\n'),
@@ -78,14 +100,14 @@ export function postDescription(article: ArticleVideoInput, articleUrl: string):
     parts.push(['▶ 音楽', credit, ...(licence ? LICENCE_LINES[licence]! : [])].join('\n'));
   }
 
-  parts.push(postHashtags(article));
+  parts.push(postHashtags(article, format));
   return parts.join('\n\n');
 }
 
-export function postCopy(article: ArticleVideoInput, articleUrl: string): PostCopy {
+export function postCopy(article: ArticleVideoInput, articleUrl: string, format: PostFormat = 'full'): PostCopy {
   return {
-    title: postTitle(article),
-    description: postDescription(article, articleUrl),
-    hashtags: postHashtags(article),
+    title: format === 'teaser' ? teaserTitle(article) : postTitle(article),
+    description: postDescription(article, articleUrl, format),
+    hashtags: postHashtags(article, format),
   };
 }

@@ -16,7 +16,7 @@ import {
   type AudioCandidate,
 } from '@/lib/video/canvas/audio';
 import { mixSoundtrack } from '@/lib/video/canvas/mix';
-import { postCopy } from '@/lib/video/post-copy';
+import { postCopy, type PostFormat } from '@/lib/video/post-copy';
 import { ThumbnailPanel } from '@/components/studio/ThumbnailPanel';
 import { PreviewPanel } from '@/components/studio/PreviewPanel';
 import { loadImages } from '@/lib/video/canvas/images';
@@ -600,7 +600,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
       ) : null}
 
       {article ? <ThumbnailPanel article={article} /> : null}
-      {article ? <PostCopyPanel article={article} siteUrl={siteUrl} /> : null}
+      {article ? <PostCopyPanel article={article} siteUrl={siteUrl} format={composition === 'STEPWIRE_SHORT' ? 'teaser' : 'full'} /> : null}
 
       {/* Off-screen but in the DOM: an OffscreenCanvas would be faster, and is
           the next thing to try if these numbers are close. */}
@@ -615,10 +615,18 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
  * the same sources and credits the film does — and the phone never has to
  * retype a licence line.
  */
-function PostCopyPanel({ article, siteUrl }: { article: ArticleVideoInput; siteUrl: string }) {
+function PostCopyPanel({
+  article,
+  siteUrl,
+  format,
+}: {
+  article: ArticleVideoInput;
+  siteUrl: string;
+  format: PostFormat;
+}) {
   const copy = useMemo(
-    () => postCopy(article, `${siteUrl.replace(/\/$/, '')}/article/${article.slug}`),
-    [article, siteUrl],
+    () => postCopy(article, `${siteUrl.replace(/\/$/, '')}/article/${article.slug}`, format),
+    [article, siteUrl, format],
   );
   const [copied, setCopied] = useState<string | null>(null);
 
@@ -644,7 +652,9 @@ function PostCopyPanel({ article, siteUrl }: { article: ArticleVideoInput; siteU
     <section className="mt-xl space-y-md border-2 border-line-strong bg-raised p-md" aria-labelledby="post-copy-heading">
       <h2 id="post-copy-heading" className="font-mono text-micro font-bold uppercase tracking-wider">
         投稿用テキスト
-        <span className="ml-sm font-normal text-muted">記事から生成 · 出典とクレジット入り</span>
+        <span className="ml-sm font-normal text-muted">
+          {format === 'teaser' ? '9:16 ティザー用 · 本編リンクの欄あり' : '16:9 本編用 · 出典とクレジット入り'}
+        </span>
       </h2>
       {blocks.map((block) => (
         <div key={block.key}>
