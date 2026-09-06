@@ -6,6 +6,7 @@ import { planReveal, type RevealPlan } from './reveal';
 import { sessionStats, type SessionStats } from './session-stats';
 import { PLAYS_PER_CARD } from '../content/figures';
 import type { Mood, Speaker } from '../content/dialogue';
+import type { CharacterPoses } from './character-poses';
 import { toSentences } from '../content/markdown';
 import { pageCaptions } from './captions';
 import { visualLength } from './text';
@@ -47,6 +48,7 @@ export interface Scene {
   /** `turn` scenes only: who is talking, and WIRE's face while doing it. */
   speaker?: Speaker;
   mood?: Mood;
+  characterPoses?: CharacterPoses;
   /** Article-derived heading for the illustrated conversation stage. */
   stageTitle?: string;
   /** `image` scenes, and the headline when the article has a hero. */
@@ -231,6 +233,7 @@ function applyOverride(
 
   return {
     ...scene,
+    ...(scene.type === 'turn' && override.characterPoses ? { characterPoses: override.characterPoses } : {}),
     ...(override.text ? { text: override.text } : {}),
     ...(override.text && scene.reveal ? typed(override.text, scene.type === 'headline' ? 'headline' : 'body', fps) : {}),
     ...(override.durationInSeconds

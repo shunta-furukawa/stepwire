@@ -6,14 +6,18 @@
  * picture that fails to load is left out rather than failing the export: the
  * renderer draws a labelled gap for it, which the operator sees.
  */
+import { characterPose, POSE_IMAGES, type PoseScene } from '../character-poses';
+
 export const CONVERSATION_PLATE = 'images/studio/mono-wire-stage.webp';
 export const ANIMATED_CONVERSATION_PLATE = 'images/studio/mono-wire-stage-animated.webp';
 export const CONVERSATION_SCENERY = 'images/studio/mono-wire-scenery.webp';
 export const CONVERSATION_CHARACTERS = 'images/studio/mono-wire-characters.webp';
 
-export function sceneImageSources(scenes: readonly { type: string; image?: { src: string } }[]): string[] {
+export function sceneImageSources(scenes: readonly (PoseScene & { type: string; image?: { src: string } })[]): string[] {
   return [
     ...scenes.flatMap((scene) => scene.image ? [scene.image.src] : []),
+    ...scenes.filter((scene) => scene.type === 'turn').flatMap((scene) =>
+      (['WIRE', 'MONO'] as const).map((who) => POSE_IMAGES[characterPose(scene, who)])),
     ...(scenes.some((scene) => scene.type === 'turn')
       ? [CONVERSATION_SCENERY, CONVERSATION_CHARACTERS, ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE] : []),
   ];

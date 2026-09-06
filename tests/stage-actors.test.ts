@@ -1,38 +1,27 @@
 import { expect, it } from 'vitest';
-import { actorPose } from '../lib/video/canvas/stage-actors';
-import { planReveal } from '../lib/video/reveal';
-import type { Scene } from '../lib/video/scenes';
+import { characterPose, POSE_IMAGES } from '../lib/video/character-poses';
+import { sceneImageSources } from '../lib/video/canvas/images';
+import { videoOverrideSchema } from '../lib/content/schema';
 
-const turn: Scene = {
-  id: 'turn', type: 'turn', speaker: 'WIRE', mood: 'grin', index: 0, total: 2,
-  durationInFrames: 240, reveal: planReveal('a'.repeat(160), 'body', 30),
-};
-
-it('returns to its registered pose at both sides of a cut', () => {
-  for (const who of ['WIRE', 'MONO'] as const) {
-    for (const frame of [0, 239]) {
-      const pose = actorPose({ frame, fps: 30 }, turn, who);
-      expect(Math.abs(pose.x) + Math.abs(pose.y) + Math.abs(pose.rotation)).toBe(0);
-      expect(pose.scaleY).toBe(1);
-    }
-  }
+it('switches arm illustrations by speaker and authored WIRE mood', () => {
+  expect(characterPose({ speaker: 'WIRE', mood: 'grin' }, 'WIRE')).toBe('celebrate');
+  expect(characterPose({ speaker: 'WIRE', mood: 'think' }, 'WIRE')).toBe('think');
+  expect(characterPose({ speaker: 'WIRE' }, 'MONO')).toBe('default');
+  expect(characterPose({ speaker: 'MONO' }, 'MONO')).toBe('explain');
 });
 
-it('gives MONO and WIRE distinct speaking and listening motion', () => {
-  const d = { frame: 40, fps: 30 };
-  expect(actorPose(d, turn, 'MONO')).not.toEqual(actorPose(d, { ...turn, speaker: 'MONO' }, 'MONO'));
-  expect(actorPose(d, turn, 'WIRE')).not.toEqual(actorPose(d, turn, 'MONO'));
-  expect(actorPose(d, turn, 'WIRE')).toEqual(actorPose(d, turn, 'WIRE'));
+it('lets either character use all poses without changing dialogue or facial mood', () => {
+  const result = videoOverrideSchema.parse({ scenes: { 'context-2': { characterPoses: { MONO: 'celebrate', WIRE: 'think' } } } });
+  const scene = { speaker: 'MONO' as const, ...result.scenes!['context-2'] };
+  expect(characterPose(scene, 'MONO')).toBe('celebrate');
+  expect(characterPose(scene, 'WIRE')).toBe('think');
+  expect(videoOverrideSchema.safeParse({ scenes: { a: { characterPoses: { MONO: 'invalid' } } } }).success).toBe(false);
 });
 
-it('keeps motion small enough for face registration and media margins', () => {
-  for (let frame = 0; frame < 240; frame++) {
-    for (const who of ['WIRE', 'MONO'] as const) {
-      const pose = actorPose({ frame, fps: 30 }, turn, who);
-      expect(Math.abs(pose.rotation)).toBeLessThan(0.03);
-      expect(Math.abs(pose.x)).toBeLessThan(8);
-      expect(Math.abs(pose.y)).toBeLessThan(12);
-      expect(Math.abs(pose.scaleY - 1)).toBeLessThan(0.012);
-    }
-  }
+it('preloads selected variants plus the registered default fallback', () => {
+  const sources = sceneImageSources([{ type: 'turn', speaker: 'WIRE', mood: 'think' }]);
+  expect(sources).toContain(POSE_IMAGES.think);
+  expect(sources).toContain(POSE_IMAGES.default);
+  expect(sources).not.toContain(POSE_IMAGES.celebrate);
+  expect(sceneImageSources([{ type: 'headline' }])).not.toContain(POSE_IMAGES.explain);
 });
