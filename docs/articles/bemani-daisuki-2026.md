@@ -1,7 +1,7 @@
 # BEMANI DAISUKI 2026 — article / Studio review
 
 - Article: `content/articles/2026-09-06-bemani-daisuki-2026.mdx`
-- Status: draft; available in Studio after deployment, excluded from public article feeds.
+- Status: published, explicitly approved by the operator. Included in public article lists and feeds after deployment.
 - Full conversation: STEPWIRE_NEWS (landscape), 16 turns, approximately 98 seconds including title and credits. The opening explicitly states MONO probably cannot participate because of time constraints.
 - STEPWIRE_SHORT uses the existing 45-second budget and section limits, so it is an abridged version. Review the landscape format for the complete proposed script.
 - MONO lines reflect the operator’s stated position: probably unable to participate due to time, wished to participate, and cheering on participants. They are edited dialogue, not a verbatim transcript.
