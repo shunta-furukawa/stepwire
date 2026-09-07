@@ -138,6 +138,8 @@ function balance(text: string, n: number, measure: (text: string) => number): st
     const prev = chars[i - 1] ?? '';
     const next = chars[i] ?? '';
     if (NO_LINE_START.has(next)) continue;
+    // Keep katakana names together in poster line breaks.
+    if (/[ァ-ヶー]/.test(prev) && /[ァ-ヶー]/.test(next)) continue;
     const ok =
       prev === ' ' ||
       next === ' ' ||
@@ -200,10 +202,13 @@ export function fitHeadlineTight(
       sized = sized.map((line) => ({ ...line, size: line.size * k }));
     }
     const sizes = sized.map((line) => line.size);
-    const filled = sizes.reduce((t, size) => t + size * lineHeight, 0);
     // Docked in proportion to how much of a sliver the smallest line is.
     const ratio = Math.min(...sizes) / Math.max(...sizes);
-    const score = filled * Math.min(1, ratio / 0.3);
+    // Height alone rewards tall, narrow stacks after uniform shrinking.
+    // Compare occupied area so the chosen split also uses the column width.
+    const area = sized.reduce((sum, line) =>
+      sum + measure(line.text, line.size) * line.size * lineHeight, 0);
+    const score = area * Math.min(1, ratio / 0.3);
     if (score > bestScore) {
       bestScore = score;
       best = sized;
@@ -384,10 +389,16 @@ export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
   for (const line of lines) {
     ctx.font = fontOf(400, line.size, font.impact);
     const baseline = y + line.size * 0.84;
+    const measuredWidth = ctx.measureText(line.text).width;
+    ctx.save();
+    ctx.translate(pad, baseline);
+    // Expand poster lettering to the column edge without changing its words.
+    ctx.scale(box.width / Math.max(1, measuredWidth), 1);
     ctx.fillStyle = color.deep;
-    ctx.fillText(line.text, pad + px(4), baseline + px(4));
+    ctx.fillText(line.text, px(4), px(4));
     ctx.fillStyle = color.fg;
-    ctx.fillText(line.text, pad, baseline);
+    ctx.fillText(line.text, 0, 0);
+    ctx.restore();
     y += line.size;
   }
   ctx.fillStyle = color.accent;
