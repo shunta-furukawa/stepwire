@@ -129,6 +129,8 @@ export const videoOverrideSchema = z.object({
   headline: z.string().max(90).optional(),
   /** A short opening line used by the intro scene. */
   hook: z.string().max(120).optional(),
+  /** Landscape ceiling for a longer feature; Shorts retain their own limit. */
+  maxDurationInSeconds: z.number().int().min(30).max(300).optional(),
   /** Optional rights-cleared song excerpts, aligned to generated scene ids. */
   musicClips: z.array(musicClipSchema).max(8).optional(),
   /** Per-scene overrides, keyed by scene id. */

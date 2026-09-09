@@ -287,6 +287,10 @@ export function buildSceneSequence(
   fps = FPS,
 ): SceneSequence {
   const profile = PROFILES[composition];
+  const featureLimit = composition === 'STEPWIRE_NEWS' ? article.video?.maxDurationInSeconds : undefined;
+  // An explicitly timed feature is limited by its total running time. The
+  // ordinary per-section cap would silently discard later song chapters.
+  const sectionLimit = (ordinary: number) => featureLimit === undefined ? ordinary : Infinity;
   const target = COMPOSITIONS[composition].targetSeconds;
   // The vertical of a session is a teaser for the landscape: the card, the
   // poster, the pickups, and a pointer to the full version. A phone thumb
@@ -358,9 +362,9 @@ export function buildSceneSequence(
     : teaser
       ? [{ type: 'impact' as const, key: 'playerImpact' as const, source: article.playerImpact, max: 4 }]
       : [
-          { type: 'news' as const, key: 'news' as const, source: article.news, max: profile.maxChunks.news },
-          { type: 'context' as const, key: 'context' as const, source: article.context, max: profile.maxChunks.context },
-          { type: 'impact' as const, key: 'playerImpact' as const, source: article.playerImpact, max: profile.maxChunks.impact },
+          { type: 'news' as const, key: 'news' as const, source: article.news, max: sectionLimit(profile.maxChunks.news) },
+          { type: 'context' as const, key: 'context' as const, source: article.context, max: sectionLimit(profile.maxChunks.context) },
+          { type: 'impact' as const, key: 'playerImpact' as const, source: article.playerImpact, max: sectionLimit(profile.maxChunks.impact) },
         ];
 
   // A picture placed in the prose is shown WITH the paragraph after it, on
@@ -521,7 +525,7 @@ export function buildSceneSequence(
     .map((scene) => applyOverride(scene, article.video, fps))
     .filter((scene): scene is Draft => scene !== null);
 
-  const trimmed = trimToBudget(overridden, target.max * fps);
+  const trimmed = trimToBudget(overridden, (featureLimit ?? target.max) * fps);
 
   const scenes: Scene[] = resolveCharacterPoses(trimmed).map((scene, index) => ({
     ...scene,

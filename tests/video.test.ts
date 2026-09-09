@@ -121,6 +121,22 @@ describe('composition registry', () => {
 });
 
 describe('buildSceneSequence', () => {
+  it('keeps later feature chapters when explicitly timed, without lengthening Shorts or ordinary articles', () => {
+    const feature: ArticleVideoInput = {
+      ...article,
+      blocks: {
+        news: [{ kind: 'paragraph', text: article.news }],
+        context: Array.from({ length: 18 }, (_, i) => ({ kind: 'paragraph', text: `Chapter ${i + 1}.` })),
+        playerImpact: [{ kind: 'paragraph', text: article.playerImpact }],
+      },
+    };
+    const timed = { ...feature, video: { maxDurationInSeconds: 180 } };
+    expect(buildSceneSequence(timed, 'STEPWIRE_NEWS').scenes.some((s) => s.text === 'Chapter 18.')).toBe(true);
+    expect(buildSceneSequence(feature, 'STEPWIRE_NEWS').scenes.some((s) => s.text === 'Chapter 18.')).toBe(false);
+    expect(buildSceneSequence(timed, 'STEPWIRE_SHORT')).toEqual(buildSceneSequence(feature, 'STEPWIRE_SHORT'));
+    expect(buildSceneSequence(timed, 'STEPWIRE_SHORT').durationInFrames).toBeLessThanOrEqual(45 * 30);
+  });
+
   it('opens on the headline and closes with source and outro', () => {
     // No ident up front: a feed gives a film two seconds to earn the next two,
     // and a brand ident spends them on the brand. The ident is the sign-off.

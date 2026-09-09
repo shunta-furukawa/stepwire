@@ -245,6 +245,7 @@ an article with none still produces a complete video.
 video:
   headline: A shorter headline that fits a 9:16 frame
   hook: One line under the ident
+  maxDurationInSeconds: 180  # optional landscape ceiling (30–300); does not pad the film
   scenes:
     context-2:
       skip: true
@@ -258,6 +259,12 @@ Use them sparingly. If a line reads badly on screen it usually reads badly on
 the page too, and fixing the article fixes both. An override is for a real
 difference between the surfaces — a headline that will not fit, a hook that
 only makes sense over an ident.
+
+An explicit `maxDurationInSeconds` lets a landscape feature keep all its
+chapters until the total duration ceiling is reached, instead of applying the
+default per-section card cap. It does not add time to short copy. The vertical
+format keeps its own 45-second ceiling and section caps; other articles keep
+their existing limits. Check the studio's scene list for anything trimmed.
 
 Data is **not** an override. `figures` sits at the top level of the frontmatter
 and is drawn by both the page and the video; see `docs/figures.md`.
