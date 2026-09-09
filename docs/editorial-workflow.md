@@ -220,6 +220,30 @@ the thumbnail, and hands over the title, description and hashtags to post
 with. Nothing renders on a server and nothing costs money. Details in
 [`video-system.md`](./video-system.md).
 
+### Attach the published film and choose the sharing image
+
+After posting the STEPWIRE film to YouTube, add its video ID to the article.
+This puts a responsive player above NEWS on both the public page and its studio
+preview. The original MVs cited in the body remain separate. The published
+player does not enter the generated MP4's script or change its duration.
+
+```yaml
+youtubeVideoId: maunje9POB0
+thumbnail:
+  src: images/articles/teto-triple-pack/stepwire-video-thumbnail.jpg
+  alt: '重音テトSVの3曲がDDRへ — STEPWIRE'
+  credit: 'MONO DDR / STEPWIRE'
+  width: 1280
+  height: 720
+```
+
+Put the chosen thumbnail under `public/images/`. Its absolute URL is shared by
+`og:image` and `twitter:image`, with `summary_large_image` for X. An article
+without a chosen thumbnail keeps its generated 1200×630 card. Use the public
+`/article/<slug>` URL when sharing; `/studio` is excluded from crawling.
+After a deployment, check the page's metadata and that its image URL returns
+an image without signing in. X controls when its cached card is refreshed.
+
 ---
 
 ## The loop, condensed

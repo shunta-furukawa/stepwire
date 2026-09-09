@@ -234,6 +234,8 @@ export const articleFrontmatterSchema = z.object({
     .optional(),
   heroImage: imageRefSchema.optional(),
   thumbnail: imageRefSchema.optional(),
+  /** The published STEPWIRE adaptation; shown on the page, never added to the export script. */
+  youtubeVideoId: z.string().regex(/^[A-Za-z0-9_-]{11}$/, 'use the 11-character YouTube video ID').optional(),
   /** Images the video shows, in order. See `mediaSchema`. */
   media: z.array(mediaSchema).max(12).default([]),
   /** Music under the video. See `bgmSchema`. */
