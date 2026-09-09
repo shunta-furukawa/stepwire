@@ -97,6 +97,27 @@ export const bgmSchema = z.object({
 export type Bgm = z.infer<typeof bgmSchema>;
 
 /**
+ * A rights-cleared excerpt placed over one video scene.
+ *
+ * Keeping these files separate from BGM makes the editorial intent explicit:
+ * the bed loops; an excerpt starts at a named scene, plays once, and ducks the
+ * bed. `permissionBasis` forces the operator to record why this copy may be
+ * included instead of treating a credit or a Content ID claim as permission.
+ */
+export const musicClipSchema = z.object({
+  src: z
+    .string()
+    .regex(/^\/?audio\/clips\/[\w.-]+\.(m4a|mp3|wav|ogg)$/, 'music clips must be files under public/audio/clips/'),
+  sceneId: z.string().min(1),
+  credit: z.string().min(1),
+  permissionBasis: z.string().min(1),
+  sourceStartSeconds: z.number().min(0).default(0),
+  durationInSeconds: z.number().positive().max(15),
+  gain: z.number().min(0).max(1).default(0.8),
+});
+export type MusicClip = z.infer<typeof musicClipSchema>;
+
+/**
  * Optional per-article video overrides.
  *
  * The rule is: overrides are the exception. If a field is absent the video
@@ -108,6 +129,8 @@ export const videoOverrideSchema = z.object({
   headline: z.string().max(90).optional(),
   /** A short opening line used by the intro scene. */
   hook: z.string().max(120).optional(),
+  /** Optional rights-cleared song excerpts, aligned to generated scene ids. */
+  musicClips: z.array(musicClipSchema).max(8).optional(),
   /** Per-scene overrides, keyed by scene id. */
   scenes: z
     .record(

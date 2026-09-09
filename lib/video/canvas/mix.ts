@@ -23,6 +23,14 @@ export interface MixOptions {
   sampleRate: number;
   /** Decoded music, looped under the film and faded out at the end. */
   bgm?: { buffer: AudioBuffer; gain: number };
+  /** One-shot music excerpts; their scene-aligned starts are resolved by Studio. */
+  musicClips?: {
+    buffer: AudioBuffer;
+    startInSeconds: number;
+    sourceStartSeconds: number;
+    durationInSeconds: number;
+    gain: number;
+  }[];
   /** Level of the ticks, 0–1. */
   tickGain?: number;
 }
@@ -59,7 +67,7 @@ const ACCENT_EVERY = 8;
 const FADE_SECONDS = 1.6;
 
 export function mixSoundtrack(options: MixOptions): Soundtrack {
-  const { sequence, sampleRate, bgm, tickGain = 0.55 } = options;
+  const { sequence, sampleRate, bgm, musicClips = [], tickGain = 0.55 } = options;
   const length = Math.ceil((sequence.durationInFrames / sequence.fps) * sampleRate);
   const out = new Float32Array(length);
 
@@ -76,7 +84,36 @@ export function mixSoundtrack(options: MixOptions): Soundtrack {
       for (const channel of channels) sample += channel[at] ?? 0;
       sample /= channels.length;
       const fade = i > fadeStart ? 1 - (i - fadeStart) / (length - fadeStart) : 1;
-      out[i] = sample * bgm.gain * fade;
+      const second = i / sampleRate;
+      const underExcerpt = musicClips.some(
+        (clip) => second >= clip.startInSeconds && second < clip.startInSeconds + clip.durationInSeconds,
+      );
+      const duck = underExcerpt ? 0.16 : 1;
+      out[i] = sample * bgm.gain * fade * duck;
+    }
+  }
+
+  // Excerpts play once at their named scenes. A short edge fade avoids clicks
+  // when a source begins away from a zero crossing.
+  for (const clip of musicClips) {
+    const source = clip.buffer;
+    const ratio = source.sampleRate / sampleRate;
+    const channels = Array.from({ length: source.numberOfChannels }, (_, c) => source.getChannelData(c));
+    const outputStart = Math.round(clip.startInSeconds * sampleRate);
+    const sourceStart = Math.round(clip.sourceStartSeconds * source.sampleRate);
+    const requested = Math.round(clip.durationInSeconds * sampleRate);
+    const available = Math.max(0, Math.floor((source.length - sourceStart) / ratio));
+    const count = Math.min(requested, available, length - outputStart);
+    const edge = Math.max(1, Math.round(0.12 * sampleRate));
+
+    for (let i = 0; i < count; i += 1) {
+      const at = sourceStart + Math.floor(i * ratio);
+      let sample = 0;
+      for (const channel of channels) sample += channel[at] ?? 0;
+      sample /= channels.length;
+      const fadeIn = Math.min(1, i / edge);
+      const fadeOut = Math.min(1, (count - i - 1) / edge);
+      out[outputStart + i]! += sample * clip.gain * Math.min(fadeIn, fadeOut);
     }
   }
 

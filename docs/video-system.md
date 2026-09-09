@@ -109,6 +109,26 @@ legal decision the software does not make.** A game's own tracks in a public
 video will be matched by Content ID, and Japan has no general fair-use defence.
 The mechanism is here; the file is the operator's.
 
+An article may also place a rights-cleared excerpt over one named scene. The
+bed automatically ducks while it plays:
+
+```yaml
+video:
+  musicClips:
+    - src: audio/clips/example.mp3       # under public/audio/clips/
+      sceneId: context-3
+      sourceStartSeconds: 24
+      durationInSeconds: 8               # maximum 15 seconds
+      gain: 0.8
+      credit: 'Artist — Song title'
+      permissionBasis: 'Written permission from the creator'
+```
+
+`permissionBasis` is required. A YouTube URL is intentionally not accepted as
+`src`: the official player may be embedded on the article page, but an embed
+does not expose a reusable audio track or grant permission to copy one into the
+exported MP4.
+
 Three hands are on the keys. A narration or body card types in the
 narrator's knock; a `turn` card types in its speaker's — WIRE a shade
 higher and cleaner, MONO lower and warmer — so a listener can tell who is

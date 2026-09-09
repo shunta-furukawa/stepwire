@@ -100,6 +100,13 @@ export function postDescription(article: ArticleVideoInput, articleUrl: string, 
     parts.push(['▶ 音楽', credit, ...(licence ? LICENCE_LINES[licence]! : [])].join('\n'));
   }
 
+  const clipCredits = [
+    ...new Set((article.video?.musicClips ?? []).map((clip) => clip.credit)),
+  ];
+  if (clipCredits.length > 0) {
+    parts.push(['▶ 楽曲クリップ', ...clipCredits].join('\n'));
+  }
+
   parts.push(postHashtags(article, format));
   return parts.join('\n\n');
 }

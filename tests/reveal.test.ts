@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { planReveal, revealedText, visibleUnits } from '../lib/video/reveal';
 import { buildSceneSequence } from '../lib/video/scenes';
-import { tickOffsets } from '../lib/video/canvas/mix';
+import { mixSoundtrack, tickOffsets } from '../lib/video/canvas/mix';
 import type { ArticleVideoInput } from '../lib/content/article';
+import type { SceneSequence } from '../lib/video/scenes';
 
 describe('planReveal', () => {
   it('lands one character per cadence and counts code points, not UTF-16 units', () => {
@@ -69,6 +70,60 @@ describe('tickOffsets', () => {
     expect(offsets.at(-1)!).toBeLessThan((sequence.durationInFrames / sequence.fps) * 48_000);
     // The first tick is the headline's first character, on frame 0.
     expect(offsets[0]).toBe(0);
+  });
+});
+
+describe('music clip mix', () => {
+  const buffer = {
+    sampleRate: 10,
+    numberOfChannels: 1,
+    length: 20,
+    getChannelData: () => new Float32Array(20).fill(1),
+  } as unknown as AudioBuffer;
+  const sequence = {
+    scenes: [],
+    durationInFrames: 30,
+    fps: 10,
+    composition: 'STEPWIRE_NEWS',
+  } as SceneSequence;
+
+  it('places a one-shot clip at its resolved start and fades its edges', () => {
+    const mixed = mixSoundtrack({
+      sequence,
+      sampleRate: 10,
+      musicClips: [
+        {
+          buffer,
+          startInSeconds: 0.2,
+          sourceStartSeconds: 0,
+          durationInSeconds: 0.6,
+          gain: 0.5,
+        },
+      ],
+    });
+    expect(mixed.samples[1]).toBe(0);
+    expect(mixed.samples[2]).toBe(0);
+    expect(mixed.samples[3]).toBeCloseTo(0.5);
+    expect(mixed.samples[7]).toBe(0);
+  });
+
+  it('ducks the bed while an excerpt is active', () => {
+    const mixed = mixSoundtrack({
+      sequence,
+      sampleRate: 10,
+      bgm: { buffer, gain: 0.5 },
+      musicClips: [
+        {
+          buffer,
+          startInSeconds: 0.2,
+          sourceStartSeconds: 0,
+          durationInSeconds: 0.4,
+          gain: 0,
+        },
+      ],
+    });
+    expect(mixed.samples[1]).toBeCloseTo(0.5);
+    expect(mixed.samples[3]).toBeCloseTo(0.08);
   });
 });
 

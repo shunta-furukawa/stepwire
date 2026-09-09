@@ -94,4 +94,37 @@ describe('videoOverrideSchema', () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it('accepts a rights-cleared local music clip', () => {
+    const parsed = videoOverrideSchema.parse({
+      musicClips: [
+        {
+          src: 'audio/clips/example.mp3',
+          sceneId: 'context-2',
+          credit: 'Example — Example Song',
+          permissionBasis: 'Written permission from the creator',
+          durationInSeconds: 8,
+        },
+      ],
+    });
+    expect(parsed.musicClips?.[0]).toMatchObject({
+      sourceStartSeconds: 0,
+      gain: 0.8,
+    });
+  });
+
+  it('rejects a music clip with no permission basis or a remote source', () => {
+    expect(
+      videoOverrideSchema.safeParse({
+        musicClips: [
+          {
+            src: 'https://youtube.com/watch?v=abcdefghijk',
+            sceneId: 'context-2',
+            credit: 'Example',
+            durationInSeconds: 8,
+          },
+        ],
+      }).success,
+    ).toBe(false);
+  });
 });

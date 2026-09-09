@@ -13,8 +13,9 @@
  *     input is trusted and the supported subset can stay narrow.
  *
  * Supported: paragraphs, `###`/`####` headings, `-`/`1.` lists, `>` quotes,
- * `---` rules; inline `**bold**`, `*italic*`, `` `code` ``, `[text](url)` and
- * `[^n]` citations.
+ * `---` rules, official YouTube players as `@[youtube](VIDEO_ID "title")`;
+ * inline `**bold**`, `*italic*`, `` `code` ``, `[text](url)` and `[^n]`
+ * citations.
  */
 
 import { parseTurnPrefix, type Mood, type Speaker } from './dialogue';
@@ -38,6 +39,11 @@ export type Block =
   | { type: 'list'; ordered: boolean; items: InlineNode[][] }
   | { type: 'blockquote'; children: InlineNode[] }
   | { type: 'rule' }
+  /**
+   * An official YouTube player. The page embeds the creator's upload without
+   * copying it; the exported STEPWIRE film deliberately drops this block.
+   */
+  | { type: 'youtube'; videoId: string; title: string }
   /**
    * A picture in the flow of the prose: `![alt](images/…)` alone on a line.
    * It must name a `media` entry of the article — that is where the credit
@@ -156,6 +162,14 @@ export function parseMarkdown(source: string): Block[] {
       continue;
     }
 
+    const youtube = /^@\[youtube\]\(([A-Za-z0-9_-]{11})\s+"([^"]+)"\)$/.exec(trimmed);
+    if (youtube) {
+      flushParagraph(paragraph);
+      blocks.push({ type: 'youtube', videoId: youtube[1]!, title: youtube[2]!.trim() });
+      index += 1;
+      continue;
+    }
+
     const image = /^!\[([^\]]*)\]\(([^)\s]+)\)$/.exec(trimmed);
     if (image) {
       flushParagraph(paragraph);
@@ -215,8 +229,8 @@ function inlineChildren(node: InlineNode): InlineNode[] {
 }
 
 function blockInlines(block: Block): InlineNode[] {
-  // A picture has no words; its caption is metadata, not prose.
-  if (block.type === 'image') return [];
+  // Pictures and players have no article prose for the video projection.
+  if (block.type === 'image' || block.type === 'youtube') return [];
   switch (block.type) {
     case 'paragraph':
     case 'turn':

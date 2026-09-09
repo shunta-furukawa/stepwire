@@ -503,6 +503,9 @@ export function buildSceneSequence(
     ),
   ].map((credit) => `IMAGE: ${credit}`);
   if (article.bgm) credits.push(`MUSIC: ${article.bgm.credit}`);
+  for (const clip of article.video?.musicClips ?? []) {
+    credits.push(`MUSIC EXCERPT: ${clip.credit}`);
+  }
 
   drafts.push({
     id: 'outro',

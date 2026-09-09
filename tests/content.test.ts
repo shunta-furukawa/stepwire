@@ -7,7 +7,7 @@ import {
   toVideoInput,
 } from '../lib/content/article';
 import { splitFrontmatter } from '../lib/content/frontmatter';
-import { loadAllArticles } from '../lib/content/loader';
+import { getArticles, getStudioArticles, getSyndicatableArticles, loadAllArticles } from '../lib/content/loader';
 import { validateArticle, validateArticles } from '../lib/content/validate';
 
 const VALID = `---
@@ -207,6 +207,22 @@ describe('loadAllArticles', () => {
   it('passes validation for every committed article', async () => {
     const issues = validateArticles(await loadAllArticles());
     expect(issues.filter((issue) => issue.level === 'error')).toEqual([]);
+  });
+});
+
+describe('review visibility', () => {
+  it('keeps review articles in Studio but out of published listings and syndication', async () => {
+    const all = await loadAllArticles();
+    const reviews = all.filter((article) => article.status === 'review');
+    expect(reviews.length).toBeGreaterThan(0);
+    const studio = await getStudioArticles();
+    const published = await getArticles();
+    const syndicated = await getSyndicatableArticles();
+    for (const review of reviews.filter((article) => !article.fixture)) {
+      expect(studio.some((article) => article.slug === review.slug)).toBe(true);
+      expect(published.some((article) => article.slug === review.slug)).toBe(false);
+      expect(syndicated.some((article) => article.slug === review.slug)).toBe(false);
+    }
   });
 });
 
