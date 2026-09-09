@@ -13,3 +13,12 @@ into each illustrated scene and the closing credits.
 
 The creator and original upload were matched through YouTube's official
 oEmbed response. No MV audio or moving footage is included in these assets.
+
+## Published STEPWIRE poster
+
+`stepwire-video-thumbnail.jpg` is the unmodified 1280 × 720 thumbnail of
+[MONO DDR CHANNEL's published STEPWIRE film](https://www.youtube.com/watch?v=maunje9POB0),
+retrieved from `https://img.youtube.com/vi/maunje9POB0/maxresdefault.jpg`.
+The upload's title and channel were matched through official YouTube oEmbed.
+It is the article's chosen social-sharing image, separate from the three
+MV stills carried into the export.

@@ -16,6 +16,13 @@ const validFrontmatter = {
 };
 
 describe('articleFrontmatterSchema', () => {
+  it('accepts a published YouTube ID and rejects URLs or malformed IDs', () => {
+    expect(articleFrontmatterSchema.parse({ ...validFrontmatter, youtubeVideoId: 'maunje9POB0' }).youtubeVideoId).toBe('maunje9POB0');
+    for (const youtubeVideoId of ['https://youtu.be/maunje9POB0', 'too-short', 'maunje9POB0?']) {
+      expect(articleFrontmatterSchema.safeParse({ ...validFrontmatter, youtubeVideoId }).success).toBe(false);
+    }
+  });
+
   it('accepts minimal valid frontmatter and applies defaults', () => {
     const parsed = articleFrontmatterSchema.parse(validFrontmatter);
     expect(parsed.tags).toEqual([]);

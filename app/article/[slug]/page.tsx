@@ -13,6 +13,8 @@ import { StoryList } from '@/components/StoryCard';
 import { SectionHeading } from '@/components/SectionHeading';
 import { FigureList } from '@/components/Figure';
 import { absoluteUrl, site } from '@/lib/site';
+import { articleSocialImage } from '@/lib/content/social';
+import { ArticleVideo } from '@/components/ArticleVideo';
 
 /**
  * Article URLs are permanent. Once a slug is published it does not change —
@@ -36,6 +38,7 @@ export async function generateMetadata({
 
   const url = `/article/${article.slug}`;
   const description = article.dek ?? article.summary;
+  const image = articleSocialImage(article);
 
   return {
     title: article.title,
@@ -46,6 +49,8 @@ export async function generateMetadata({
     ...(article.fixture ? { robots: { index: false, follow: false } } : {}),
     openGraph: {
       type: 'article',
+      siteName: site.name,
+      locale: 'ja_JP',
       title: article.title,
       description,
       url,
@@ -53,11 +58,13 @@ export async function generateMetadata({
       ...(article.updatedAt ? { modifiedTime: article.updatedAt } : {}),
       tags: article.tags,
       section: CATEGORY_META[article.category].label,
+      ...(image ? { images: [image] } : {}),
     },
     twitter: {
       card: 'summary_large_image',
       title: article.shortTitle ?? article.title,
       description,
+      ...(image ? { images: [image] } : {}),
     },
   };
 }
@@ -160,6 +167,7 @@ export default async function ArticlePage({
 
       <div className="grid gap-2xl pt-xl lg:grid-cols-[1fr_260px]">
         <div className="min-w-0 space-y-2xl">
+          <ArticleVideo videoId={article.youtubeVideoId} title={article.title} />
           {SECTION_KEYS.map((key) => {
             const section = article.sections[key];
             const meta = SECTION_LABELS[key];
@@ -202,6 +210,9 @@ export default async function ArticlePage({
           <nav aria-label="記事の構成" className="border-2 border-line-strong p-md">
             <p className="font-mono text-micro font-bold uppercase tracking-wider">この記事の構成</p>
             <ol className="mt-md space-y-sm font-mono text-micro uppercase tracking-wide">
+              {article.youtubeVideoId ? (
+                <li><a href="#stepwire-video" className="text-accent hover:underline">▶ STEPWIRE動画</a></li>
+              ) : null}
               {SECTION_KEYS.map((key) => (
                 <li key={key}>
                   <a href={`#${key}`} className="hover:text-accent">

@@ -7,6 +7,7 @@ import { Markdown } from '@/components/Markdown';
 import { SourceList } from '@/components/SourceList';
 import { FigureList } from '@/components/Figure';
 import { CategoryChip } from '@/components/CategoryChip';
+import { ArticleVideo } from '@/components/ArticleVideo';
 
 // Studio already carries review content. Keep the web-reading preview in that
 // same noindex surface; never widen the published article loader to show drafts.
@@ -54,6 +55,7 @@ export default async function ArticlePreviewPage({
       </header>
 
       <div className="min-w-0 space-y-2xl pt-xl">
+        <ArticleVideo videoId={article.youtubeVideoId} title={article.title} />
         {SECTION_KEYS.map((key) => (
           <section key={key} aria-labelledby={`section-${key}`}>
             <h2 id={`section-${key}`} className="border-b-2 border-line-strong pb-sm font-display text-h4 font-black">
