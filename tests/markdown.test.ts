@@ -97,6 +97,20 @@ describe('parseMarkdown', () => {
     expect(blocks.map((block) => block.type)).toEqual(['heading', 'blockquote', 'rule']);
   });
 
+  it('parses an official YouTube player and omits it from video text', () => {
+    const blocks = parseMarkdown(
+      '@[youtube](LLjfal8jCYI "オーバーライド - 重音テトSV / 吉田夜世")',
+    );
+    expect(blocks).toEqual([
+      {
+        type: 'youtube',
+        videoId: 'LLjfal8jCYI',
+        title: 'オーバーライド - 重音テトSV / 吉田夜世',
+      },
+    ]);
+    expect(toPlainText(blocks)).toBe('');
+  });
+
   it('handles CRLF input', () => {
     expect(parseMarkdown('a\r\n\r\nb')).toHaveLength(2);
   });

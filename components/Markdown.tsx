@@ -141,6 +141,33 @@ export function Markdown({ blocks }: { blocks: Block[] }) {
             );
           case 'rule':
             return <hr key={index} className="border-line" />;
+          case 'youtube':
+            return (
+              <figure key={index} className="border-2 border-line-strong bg-raised p-sm">
+                <div className="aspect-video overflow-hidden bg-black">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${block.videoId}`}
+                    title={block.title}
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    className="h-full w-full border-0"
+                  />
+                </div>
+                <figcaption className="mt-sm flex items-center justify-between gap-md font-mono text-micro leading-snug text-muted">
+                  <span>{block.title}</span>
+                  <a
+                    href={`https://www.youtube.com/watch?v=${block.videoId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="shrink-0 text-accent underline underline-offset-4"
+                  >
+                    YouTubeで開く ↗
+                  </a>
+                </figcaption>
+              </figure>
+            );
           case 'image':
             return (
               <figure key={index} className="border-2 border-line-strong bg-raised p-sm">

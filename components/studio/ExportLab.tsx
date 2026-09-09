@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import type { ArticleVideoInput } from '@/lib/content/article';
-import { buildSceneSequence } from '@/lib/video/scenes';
+import { buildSceneSequence, sceneStartFrames } from '@/lib/video/scenes';
 import { COMPOSITIONS, type CompositionId } from '@/lib/video/compositions';
 import { drawScene } from '@/lib/video/canvas/draw';
 import { fieldState } from '@/lib/video/field-plan';
@@ -220,6 +221,14 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
       let audioBlob: Blob | null = null;
       let bgm: { buffer: AudioBuffer; gain: number } | undefined;
       let bgmNote = 'なし';
+      const musicClips: {
+        buffer: AudioBuffer;
+        startInSeconds: number;
+        sourceStartSeconds: number;
+        durationInSeconds: number;
+        gain: number;
+      }[] = [];
+      const musicClipNotes: string[] = [];
 
       if (article.bgm) {
         setStatus('BGMを読み込み中…');
@@ -229,6 +238,37 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
           bgmNote = `${article.bgm.src} · ${decoded.durationInSeconds.toFixed(1)}秒ループ · gain ${article.bgm.gain}`;
         } catch (bgmError) {
           bgmNote = `読み込めません: ${bgmError instanceof Error ? bgmError.message : String(bgmError)}`;
+        }
+      }
+
+      if (article.video?.musicClips?.length) {
+        setStatus('楽曲クリップを読み込み中…');
+        const starts = sceneStartFrames(sequence);
+        for (const clip of article.video.musicClips) {
+          const sceneIndex = sequence.scenes.findIndex((scene) => scene.id === clip.sceneId);
+          if (sceneIndex < 0) {
+            musicClipNotes.push(`${clip.src}: scene ${clip.sceneId} は出力対象外`);
+            continue;
+          }
+          try {
+            const decoded = await decodeAudio(clip.src.startsWith('/') ? clip.src : `/${clip.src}`);
+            const scene = sequence.scenes[sceneIndex]!;
+            musicClips.push({
+              buffer: decoded.buffer,
+              startInSeconds: starts[sceneIndex]! / sequence.fps,
+              sourceStartSeconds: clip.sourceStartSeconds,
+              durationInSeconds: Math.min(
+                clip.durationInSeconds,
+                scene.durationInFrames / sequence.fps,
+              ),
+              gain: clip.gain,
+            });
+            musicClipNotes.push(`${clip.src}: ${clip.sceneId} · ${clip.durationInSeconds}秒`);
+          } catch (clipError) {
+            musicClipNotes.push(
+              `${clip.src}: 読み込めません (${clipError instanceof Error ? clipError.message : String(clipError)})`,
+            );
+          }
         }
       }
 
@@ -326,7 +366,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
       if (audioCandidate) {
         setStatus('効果音とBGMを合成中…');
         try {
-          const soundtrack = mixSoundtrack({ sequence, sampleRate: SAMPLE_RATE, bgm });
+          const soundtrack = mixSoundtrack({ sequence, sampleRate: SAMPLE_RATE, bgm, musicClips });
           const audio = await encodePcm({ samples: soundtrack.samples, candidate: audioCandidate });
 
           // Safari's AAC encoder emits no decoder description, and the muxer
@@ -355,6 +395,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
           audioNote =
             `${audioCandidate.muxer === 'aac' ? 'AAC' : 'OPUS（Safari/QuickTimeでは無音）'}` +
             ` · 効果音 ${soundtrack.ticks}回 · BGM ${bgm ? 'あり' : 'なし'}` +
+            ` · 楽曲クリップ ${musicClips.length}本` +
             `${synthesised ? ' · esds補完' : ''}`;
         } catch (audioError) {
           // The video is still worth having. What is not acceptable is
@@ -391,7 +432,9 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
         url: URL.createObjectURL(blob),
         codec: candidate.label,
         audio: audioNote,
-        verified: `${audioCandidate?.muxer.toUpperCase() ?? '—'} / ${verdict.detail} / BGM: ${bgmNote}`,
+        verified:
+          `${audioCandidate?.muxer.toUpperCase() ?? '—'} / ${verdict.detail} / BGM: ${bgmNote}` +
+          `${musicClipNotes.length ? ` / CLIPS: ${musicClipNotes.join(' · ')}` : ''}`,
         verifiedOk: verdict.audible,
         audioUrl: audioBlob ? URL.createObjectURL(audioBlob) : '',
       });
@@ -455,6 +498,13 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
           ))}
         </select>
 
+        <Link
+          href={`/studio/articles/${article.slug}`}
+          className="block border-2 border-line-strong px-md py-sm text-center font-mono text-micro hover:bg-accent hover:text-on-accent"
+        >
+          記事本文・公式MVを確認 →
+        </Link>
+
         <div className="grid grid-cols-2 gap-md">
           <div>
             <label className="block font-mono text-micro uppercase tracking-wide text-muted" htmlFor="lab-comp">
@@ -503,6 +553,10 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
           <dt className="text-muted">BGM</dt>
           <dd className={article.bgm ? 'text-accent' : 'text-muted'}>
             {article.bgm ? article.bgm.src : 'なし（効果音のみ）'}
+          </dd>
+          <dt className="text-muted">楽曲クリップ</dt>
+          <dd className={article.video?.musicClips?.length ? 'text-accent' : 'text-muted'}>
+            {article.video?.musicClips?.length ? `${article.video?.musicClips?.length ?? 0}本` : 'なし'}
           </dd>
           <dt className="text-muted">台本</dt>
           <dd className="text-muted">
