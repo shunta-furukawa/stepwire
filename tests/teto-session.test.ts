@@ -36,7 +36,7 @@ describe('Teto first-session article', () => {
       expect(existsSync(`public/images/articles/2026-09-10-teto-first-session/${name}`)).toBe(true);
     }
     // No third-party gameplay or the previous STEPWIRE film becomes this session's own film.
-    expect(article.youtubeVideoId).toBeUndefined();
+    expect(article.youtubeVideoId).toBe('DgD_8C345JU');
     expect(article.video?.musicClips).toBeUndefined();
   });
 
@@ -58,10 +58,10 @@ describe('Teto first-session article', () => {
     expect(sequence.scenes.some((scene) => scene.type === 'image')).toBe(false);
   });
 
-  it('uses a short teaser without inventing a full-film YouTube destination', () => {
+  it('links the short teaser to the uploaded session film', () => {
     const sequence = buildSceneSequence(input, 'STEPWIRE_SHORT');
     expect(sequence.durationInFrames / sequence.fps).toBeLessThanOrEqual(45);
     expect(sequence.scenes.some((scene) => scene.text?.includes('テトリミノの形'))).toBe(true);
-    expect(sequence.scenes.at(-1)?.promotion?.destination).toBe('article');
+    expect(sequence.scenes.at(-1)?.promotion?.destination).toBe('youtube');
   });
 });
