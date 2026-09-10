@@ -21,10 +21,11 @@ Article: `content/articles/2026-09-10-teto-first-session.mdx`, `status: review`.
 - No screenshot from the supplied Override reference (`ApOlFSba9TQ`) is available. Its footage is not described or substituted with generated imagery; Override uses MONO's own result photo.
 - Third-party reuse permission has not been confirmed. Attribution is not recorded as permission. Keep the article under review until the operator has decided on publication and the reference-image usage.
 
-## Open questions
+## Operator clarification
 
-1. What happened on the final Override EXPERT play, 337,660 / E at 12:38? The result remains in the log, without assigning fatigue, failure, time pressure or abandonment as its cause.
-2. The spoken phrase before “16分3連” sounded like “フテンシブ”. The draft deliberately says only “フリーズアローが絡む16分3連”, not an unconfirmed dotted-note or triplet explanation. The supplied still does not establish timing by itself.
+The operator confirmed that the final Override EXPERT play, 337,660 / E at 12:38, was another attempt to improve the score despite being exhausted from the preceding Override. They ran out of energy. The log, session summary and closing conversation now reflect that explanation. No time-pressure or intentional-abandonment reason is added.
+
+The spoken phrase before “16分3連” sounded like “フテンシブ”. The draft deliberately says only “フリーズアローが絡む16分3連”, not an unconfirmed dotted-note or triplet explanation. The supplied still does not establish timing by itself.
 
 Venue, weather, FLARE SKILL totals and DIFFICULT levels are unprovided and omitted. No other player is identified in the session dialogue. Sources and media attribution identify the reference uploader only.
 
@@ -34,8 +35,9 @@ Existing speaking-character poses, mouth animation and stage effects remain unch
 
 ## Validation
 
-- Derived landscape: **163 seconds / 31 scenes**. Every reference image and result accompanies a dialogue turn for at least 4 seconds; screenshot durations range from 4 to 7 seconds. Only the speaking character has an explicit pose override.
+- Derived landscape: **174 seconds / 33 scenes** after incorporating the final-play explanation. Every reference image and result accompanies a dialogue turn for at least 4 seconds; screenshot durations range from 4 to 7 seconds. Only the speaking character has an explicit pose override.
 - Derived Short: **26.87 seconds / 7 scenes**, with the Tetris exchange, a Liar Dancer question and a STEPWIRE CTA. No old or third-party YouTube upload is set as the new article's own film.
 - Local offline tests: **297 passed**, including four new session-content tests. Content gate: **7 articles, 0 errors / 0 warnings**. Lint, TypeScript and production build pass. Build includes `/studio/articles/teto-first-session` and excludes this review article from public article routes.
 - Full `pnpm verify` was attempted but its process was interrupted by the environment's network-approval cancellation. Network-adapter tests are left to the existing GitHub CI gate; no access restriction was bypassed.
 - Local scene/data checks and source-image inspection are complete. A visual review of this new article in the deployed Studio and an on-device MP4 export have not been performed.
+- The initial draft also passed the full GitHub CI gate. For this clarification, content validation and the 11 session/Short tests pass locally; the derived landscape remains within the three-minute ceiling and retains every image cue.
