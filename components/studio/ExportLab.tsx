@@ -517,7 +517,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
               className="mt-sm w-full border-2 border-line-strong bg-raised px-md py-sm font-mono text-small text-fg"
             >
               <option value="STEPWIRE_NEWS">16:9（主）</option>
-              <option value="STEPWIRE_SHORT">9:16</option>
+              <option value="STEPWIRE_SHORT">9:16（本編への予告編）</option>
             </select>
           </div>
           <div>
@@ -540,6 +540,18 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
           {sequence.scenes.length} シーン · {sequence.durationInFrames} フレーム ·{' '}
           {seconds.toFixed(1)}秒 @ {sequence.fps}fps
         </p>
+
+        {composition === 'STEPWIRE_SHORT' && article.video?.shortMode !== 'summary' ? (
+          <section aria-label="Shortから本編への導線" className="space-y-sm border-2 border-accent bg-raised p-md text-small leading-snug">
+            <p className="font-bold text-accent">Shortは本編への予告編として自動構成</p>
+            <p>フック → 掛け合い・写真つきの見どころ → 本編の案内。全文は見せず、話者・画像・表情は本編から引き継ぎます。</p>
+            {article.youtubeVideoId ? (
+              <p>誘導先：<a href={`https://www.youtube.com/watch?v=${article.youtubeVideoId}`} target="_blank" rel="noreferrer" className="text-accent underline">{article.shortTitle ?? article.title}（本編を確認）</a></p>
+            ) : <p className="text-muted">本編のYouTube URLは未登録です。今は記事への案内を表示します。本編公開後に登録すると、本編リンクを使えます。</p>}
+            <p className="text-muted">公開時にYouTube StudioのShortの「関連動画」で本編を選んでください。MP4にはクリックできるリンクは付かず、この設定も自動では行われません。</p>
+            <a href="https://support.google.com/youtube/answer/14075157?hl=ja" target="_blank" rel="noreferrer" className="text-accent underline">関連動画の設定方法（上級者向け機能の利用資格が必要）</a>
+          </section>
+        ) : null}
 
         {/* What this article brings to the film, stated before the button:
             "I exported and it was plain" is the same sentence whether a bug
@@ -707,7 +719,7 @@ function PostCopyPanel({
       <h2 id="post-copy-heading" className="font-mono text-micro font-bold uppercase tracking-wider">
         投稿用テキスト
         <span className="ml-sm font-normal text-muted">
-          {format === 'teaser' ? '9:16 ティザー用 · 本編リンクの欄あり' : '16:9 本編用 · 出典とクレジット入り'}
+          {format === 'teaser' ? '9:16 予告編用 · 関連動画に本編を設定' : '16:9 本編用 · 出典とクレジット入り'}
         </span>
       </h2>
       {blocks.map((block) => (

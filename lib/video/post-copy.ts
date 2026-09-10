@@ -71,7 +71,11 @@ export function postDescription(article: ArticleVideoInput, articleUrl: string, 
   const parts: string[] = [];
 
   parts.push(article.dek ?? article.summary);
-  if (format === 'teaser') parts.push([FULL_VIDEO_PLACEHOLDER, `記事: ${articleUrl}`].join('\n'));
+  if (format === 'teaser') parts.push([
+    article.youtubeVideoId ? '続きは、このShortの関連動画から本編へ。' : '続きはSTEPWIREの本編・記事で。',
+    article.youtubeVideoId ? `本編: https://www.youtube.com/watch?v=${article.youtubeVideoId}` : FULL_VIDEO_PLACEHOLDER,
+    `記事: ${articleUrl}`,
+  ].join('\n'));
   else parts.push(`記事: ${articleUrl}`);
 
   const sources = format === 'teaser' ? [] : (article.sources ?? (article.primarySource ? [article.primarySource] : []));

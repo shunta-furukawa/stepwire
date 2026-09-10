@@ -129,6 +129,10 @@ export const videoOverrideSchema = z.object({
   headline: z.string().max(90).optional(),
   /** A short opening line used by the intro scene. */
   hook: z.string().max(120).optional(),
+  /** Shorts are trailers by default; summary preserves the original cut. */
+  shortMode: z.enum(['teaser', 'summary']).optional(),
+  /** Optional editorial hook for the trailer only; never rewrites the article. */
+  shortHook: z.string().trim().min(1).max(60).optional(),
   /** Landscape ceiling for a longer feature; Shorts retain their own limit. */
   maxDurationInSeconds: z.number().int().min(30).max(300).optional(),
   /** Optional rights-cleared song excerpts, aligned to generated scene ids. */

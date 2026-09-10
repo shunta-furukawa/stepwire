@@ -314,8 +314,68 @@ function paintBody(
  */
 type Drawer = (d: DrawContext, scene: Scene) => void;
 
+/** A recognisable 16:9 poster inside the Short, with a platform-safe CTA. */
+const drawTrailerEnd: Drawer = (d, scene) => {
+  const { ctx, width, height } = d;
+  const px = scaled(width, height);
+  const x = px(120);
+  const room = width - x * 2;
+  drawWireBar(d, 'FULL VIDEO');
+  const heading = layoutBody(d, scene.text ?? '', px(86), 900, room, font.impact);
+  paintBody(d, heading, px(260), color.fg, scene);
+
+  const posterY = px(570);
+  const posterH = room * 9 / 16;
+  ctx.fillStyle = color.deep;
+  ctx.fillRect(x, posterY, room, posterH);
+  const poster = scene.image ? d.images.get(scene.image.src) : undefined;
+  if (poster) {
+    const { width: iw, height: ih } = poster as { width: number; height: number };
+    const scale = Math.min(room / iw, posterH / ih);
+    ctx.drawImage(poster, x + (room - iw * scale) / 2, posterY + (posterH - ih * scale) / 2, iw * scale, ih * scale);
+  } else {
+    ctx.font = fontOf(900, px(72), font.display);
+    ctx.fillStyle = color.fg;
+    ctx.fillText('STEPWIRE', x + px(64), posterY + posterH / 2);
+  }
+  ctx.strokeStyle = color.accent;
+  ctx.lineWidth = px(5);
+  ctx.strokeRect(x, posterY, room, posterH);
+
+  let size = px(56);
+  let title = layoutBody(d, scene.promotion?.title ?? '', size, 700, room);
+  while (title.blockHeight > px(155) && size > px(26)) {
+    size *= 0.94;
+    title = layoutBody(d, scene.promotion?.title ?? '', size, 700, room);
+  }
+  paintBody(d, title, posterY + posterH + px(28));
+  ctx.fillStyle = color.accent;
+  ctx.fillRect(x, px(1280), room, px(90));
+  ctx.font = fontOf(700, px(44), font.display);
+  ctx.fillStyle = color.onAccent;
+  ctx.fillText(scene.meta ?? '続きは本編で', x + px(30), px(1340), room - px(60));
+
+  // Credits wrap by measured width, including long Japanese attributions.
+  // Keep all of them above the progress rail instead of cropping long lines.
+  const creditTop = px(1440);
+  const creditRoom = height - px(210) - creditTop;
+  let creditSize = px(25);
+  const linesAt = () => {
+    ctx.font = fontOf(400, creditSize, font.mono);
+    return (scene.credits ?? []).flatMap((credit) => wrapText(credit, room, (line) => ctx.measureText(line).width));
+  };
+  let lines = linesAt();
+  while (lines.length * creditSize * 1.35 > creditRoom && creditSize > px(10)) {
+    creditSize *= 0.94;
+    lines = linesAt();
+  }
+  ctx.fillStyle = color.muted;
+  lines.forEach((line, i) => ctx.fillText(line, x, creditTop + creditSize * (1 + i * 1.35), room));
+};
+
 /** The wordmark, centred, with the brand rule assembling under it. */
 const drawIdent: Drawer = (d, scene) => {
+  if (scene.promotion && d.height > d.width) return drawTrailerEnd(d, scene);
   const { ctx, width, height } = d;
   const px = scaled(width, height);
   const size = px(fontSize.h1 * 3);
