@@ -7,11 +7,13 @@ const filePath = 'content/articles/2026-09-09-teto-triple-pack.mdx';
 const article = parseArticle(readFileSync(filePath, 'utf8'), { filePath });
 
 describe('three-song MV feature', () => {
-  it('keeps the published film and its poster out of the export script', () => {
+  it('keeps the published film and its poster out of the landscape export script', () => {
     expect(article.youtubeVideoId).toBe('maunje9POB0');
     expect(article.thumbnail).toBeDefined();
     expect(existsSync(`public/${article.thumbnail!.src}`)).toBe(true);
-    expect(toVideoInput(article)).toEqual(toVideoInput({ ...article, youtubeVideoId: undefined, thumbnail: undefined }));
+    expect(buildSceneSequence(toVideoInput(article), 'STEPWIRE_NEWS')).toEqual(
+      buildSceneSequence(toVideoInput({ ...article, youtubeVideoId: undefined, thumbnail: undefined }), 'STEPWIRE_NEWS'),
+    );
   });
 
   it('keeps all three illustrated chapters and the ending in about three minutes', () => {

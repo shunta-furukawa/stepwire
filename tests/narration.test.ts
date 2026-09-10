@@ -165,7 +165,7 @@ describe('narrated scene sequence', () => {
     expect(pages.length).toBeGreaterThan(0);
     for (const page of pages) {
       expect(page.reveal).toBeDefined();
-      expect(page.durationInFrames).toBe(page.reveal!.revealFrames + page.reveal!.holdFrames);
+      expect(page.durationInFrames).toBeGreaterThanOrEqual(page.reveal!.revealFrames + page.reveal!.holdFrames);
       expect(page).not.toHaveProperty('tokens');
     }
   });

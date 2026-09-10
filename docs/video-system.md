@@ -21,12 +21,31 @@ An article produces one of two films, depending on whether it has a recording.
 Both open with the headline and close with the source card and the outro.
 Everything else changes.
 
-The vertical of a **session** article is different again: a teaser for the
-landscape. It opens on the session card, then the poster (the title in the
-impact face over the hero, the dek under it), keeps only the PICKUP turns
-with their photos and the short plays figure, drops NEWS, SESSION, the log
-and the source card, and signs off with 「全部の話は本編で」 and the site.
-Twenty to forty seconds; the whole conversation is the other film's job.
+The vertical is a **trailer for the landscape**, for both news and session
+articles. `lib/video/short-teaser.ts` selects from the actual landscape scenes:
+a hook, one complete adjacent WIRE/MONO exchange when available, one opening
+excerpt per pictured chapter (up to three pictures), then an existing unanswered
+WIRE question when it fits. With no dialogue it uses a factual card and a short
+analysis/transcript excerpt. It never writes new MONO lines or clips a sentence
+midway. The source and seven-second full-film end card have reserved space inside
+the 45-second ceiling. Very brief articles can produce a shorter trailer.
+
+The end card displays `thumbnail` (falling back to `heroImage`) and the article's
+short title. A registered `youtubeVideoId` switches the CTA to 「関連動画から本編へ」
+and fills the full-film URL into post copy. Without it, the CTA points to STEPWIRE,
+not to a nonexistent YouTube link. Images, credits, expressions and explicit poses
+travel with excerpts; listener poses are resolved again after selection.
+
+The operator must set the Short's **Related video** to the full film in YouTube
+Studio. This project does not change that setting, and an MP4 cannot contain a
+clickable YouTube link. Shorts description/comment URLs are not clickable.
+Related videos require advanced feature access:
+https://support.google.com/youtube/answer/14075157
+https://support.google.com/youtube/answer/13748639
+
+Optional narrow overrides: `video.shortHook` (up to 60 characters) changes only
+the trailer's opening line; `video.shortMode: summary` retains the original
+summary/session-pickup cut. Neither setting changes the landscape film.
 
 ### The session card
 
@@ -245,6 +264,8 @@ an article with none still produces a complete video.
 video:
   headline: A shorter headline that fits a 9:16 frame
   hook: One line under the ident
+  shortHook: BPMが同じでも、踏み心地は違う？ # optional, trailer only
+  shortMode: teaser       # default; summary restores the previous vertical cut
   maxDurationInSeconds: 180  # optional landscape ceiling (30–300); does not pad the film
   scenes:
     context-2:
@@ -263,8 +284,8 @@ only makes sense over an ident.
 An explicit `maxDurationInSeconds` lets a landscape feature keep all its
 chapters until the total duration ceiling is reached, instead of applying the
 default per-section card cap. It does not add time to short copy. The vertical
-format keeps its own 45-second ceiling and section caps; other articles keep
-their existing limits. Check the studio's scene list for anything trimmed.
+format keeps its own 45-second trailer ceiling; other articles keep their
+existing landscape limits. Check the studio's scene list for anything trimmed.
 
 Data is **not** an override. `figures` sits at the top level of the frontmatter
 and is drawn by both the page and the video; see `docs/figures.md`.

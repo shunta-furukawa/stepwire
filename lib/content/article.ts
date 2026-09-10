@@ -91,6 +91,9 @@ export interface ArticleVideoInput {
   heroImage?: ImageRef;
   /** Images the video shows, in order, each with its credit. */
   media: MediaRef[];
+  /** Published full-film destination and poster, used only by the Short's CTA. */
+  youtubeVideoId?: string;
+  thumbnail?: ImageRef;
   /** Music under the film. The file and its rights are the operator's. */
   bgm?: Bgm;
   /** The session the article records; opens the film when present. */
@@ -265,6 +268,8 @@ export function toVideoInput(
     ...(article.labels ? { labels: article.labels } : {}),
     ...(article.heroImage ? { heroImage: article.heroImage } : {}),
     media: article.media,
+    ...(article.youtubeVideoId ? { youtubeVideoId: article.youtubeVideoId } : {}),
+    ...(article.thumbnail ? { thumbnail: article.thumbnail } : {}),
     ...(article.bgm ? { bgm: article.bgm } : {}),
     ...(article.session ? { session: article.session } : {}),
     news: article.sections.news.text,

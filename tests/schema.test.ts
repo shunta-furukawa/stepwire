@@ -95,6 +95,13 @@ describe('videoOverrideSchema', () => {
     expect(parsed.scenes).toBeUndefined();
   });
 
+  it('validates trailer-only controls', () => {
+    expect(videoOverrideSchema.parse({ shortMode: 'teaser', shortHook: '次に気になるのは？' }).shortMode).toBe('teaser');
+    expect(videoOverrideSchema.safeParse({ shortMode: 'unknown' }).success).toBe(false);
+    expect(videoOverrideSchema.safeParse({ shortHook: ' ' }).success).toBe(false);
+    expect(videoOverrideSchema.safeParse({ shortHook: 'あ'.repeat(61) }).success).toBe(false);
+  });
+
   it('caps a scene override duration so an override cannot run away', () => {
     const result = videoOverrideSchema.safeParse({
       scenes: { intro: { durationInSeconds: 120 } },

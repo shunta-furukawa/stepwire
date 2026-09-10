@@ -15,6 +15,7 @@ import { formatDate } from '../format';
 import { COMPOSITIONS, type CompositionId } from './compositions';
 import { FPS, secondsToFrames, type DurationBounds } from './timing';
 import { site } from '../site';
+import { buildShortTeaser } from './short-teaser';
 
 /**
  * Article → scene sequence.
@@ -62,6 +63,8 @@ export interface Scene {
    * where a viewer can find it — the last card is that place.
    */
   credits?: string[];
+  /** A trailer's end card advertises the actual full film, not a fake player. */
+  promotion?: { title: string; destination: 'youtube' | 'article' };
   /**
    * When each character of `text` lands, and when a tick sounds. Present on
    * every scene that types its copy; the renderer and the sound generator
@@ -286,6 +289,9 @@ export function buildSceneSequence(
   composition: CompositionId,
   fps = FPS,
 ): SceneSequence {
+  if (composition === 'STEPWIRE_SHORT' && article.video?.shortMode !== 'summary') {
+    return buildShortTeaser(article, buildSceneSequence(article, 'STEPWIRE_NEWS', fps), fps);
+  }
   const profile = PROFILES[composition];
   const featureLimit = composition === 'STEPWIRE_NEWS' ? article.video?.maxDurationInSeconds : undefined;
   // An explicitly timed feature is limited by its total running time. The

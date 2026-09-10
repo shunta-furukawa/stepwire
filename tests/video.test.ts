@@ -49,6 +49,9 @@ const article: ArticleVideoInput = {
   },
   figures: [],
   media: [],
+  // These regression cases exercise the original summary cut. Trailer
+  // selection is tested separately in short-teaser.test.ts.
+  video: { shortMode: 'summary' },
 };
 
 describe('timing', () => {
@@ -130,7 +133,7 @@ describe('buildSceneSequence', () => {
         playerImpact: [{ kind: 'paragraph', text: article.playerImpact }],
       },
     };
-    const timed = { ...feature, video: { maxDurationInSeconds: 180 } };
+    const timed = { ...feature, video: { ...feature.video, maxDurationInSeconds: 180 } };
     expect(buildSceneSequence(timed, 'STEPWIRE_NEWS').scenes.some((s) => s.text === 'Chapter 18.')).toBe(true);
     expect(buildSceneSequence(feature, 'STEPWIRE_NEWS').scenes.some((s) => s.text === 'Chapter 18.')).toBe(false);
     expect(buildSceneSequence(timed, 'STEPWIRE_SHORT')).toEqual(buildSceneSequence(feature, 'STEPWIRE_SHORT'));
@@ -482,7 +485,7 @@ describe('buildSceneSequence', () => {
     const sequence = buildSceneSequence(
       {
         ...article,
-        video: { scenes: { source: { durationInSeconds: 3 } } },
+        video: { shortMode: 'summary', scenes: { source: { durationInSeconds: 3 } } },
       },
       'STEPWIRE_SHORT',
     );
@@ -492,7 +495,7 @@ describe('buildSceneSequence', () => {
 
   it('drops a scene marked skip', () => {
     const sequence = buildSceneSequence(
-      { ...article, video: { scenes: { outro: { skip: true } } } },
+      { ...article, video: { shortMode: 'summary', scenes: { outro: { skip: true } } } },
       'STEPWIRE_SHORT',
     );
     expect(sequence.scenes.some((scene) => scene.type === 'outro')).toBe(false);

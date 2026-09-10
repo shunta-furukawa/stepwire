@@ -66,6 +66,12 @@ describe('post copy', () => {
 });
 
 describe('the teaser copy', () => {
+  it('uses the registered full-film URL instead of a placeholder', () => {
+    const copy = postCopy({ ...article, youtubeVideoId: 'maunje9POB0' }, 'https://stepwire.vercel.app/article/a-session', 'teaser');
+    expect(copy.description).toContain('本編: https://www.youtube.com/watch?v=maunje9POB0');
+    expect(copy.description).toContain('関連動画');
+    expect(copy.description).not.toContain(FULL_VIDEO_PLACEHOLDER);
+  });
   it('is the short title with #Shorts, a pointer at the full film, and the credits', () => {
     const copy = postCopy(article, 'https://stepwire.vercel.app/article/a-session', 'teaser');
     expect(copy.title).toBe(`${article.shortTitle} #Shorts`);
