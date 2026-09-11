@@ -13,12 +13,14 @@
  *     input is trusted and the supported subset can stay narrow.
  *
  * Supported: paragraphs, `###`/`####` headings, `-`/`1.` lists, `>` quotes,
- * `---` rules, official YouTube players as `@[youtube](VIDEO_ID "title")`;
+ * `---` rules, official YouTube players as `@[youtube](VIDEO_ID "title")`,
+ * chart players as `@[step-analyzer](SHARE_URL "title")`;
  * inline `**bold**`, `*italic*`, `` `code` ``, `[text](url)` and `[^n]`
  * citations.
  */
 
 import { parseTurnPrefix, type Mood, type Speaker } from './dialogue';
+import { stepAnalyzerUrlSchema } from './step-analyzer';
 
 export type InlineNode =
   | { type: 'text'; value: string }
@@ -44,6 +46,7 @@ export type Block =
    * copying it; the exported STEPWIRE film deliberately drops this block.
    */
   | { type: 'youtube'; videoId: string; title: string }
+  | { type: 'step-analyzer'; url: string; title: string }
   /**
    * A picture in the flow of the prose: `![alt](images/…)` alone on a line.
    * It must name a `media` entry of the article — that is where the credit
@@ -162,6 +165,17 @@ export function parseMarkdown(source: string): Block[] {
       continue;
     }
 
+    if (trimmed.startsWith('@[step-analyzer]')) {
+      const match = /^@\[step-analyzer\]\((\S+)\s+"([^"\r\n]+)"\)$/.exec(trimmed);
+      if (!match?.[1] || !match[2]?.trim()) {
+        throw new Error('踏み順の埋め込みは @[step-analyzer](共有URL "説明") で指定してください');
+      }
+      flushParagraph(paragraph);
+      blocks.push({ type: 'step-analyzer', url: stepAnalyzerUrlSchema.parse(match[1]), title: match[2].trim() });
+      index += 1;
+      continue;
+    }
+
     const youtube = /^@\[youtube\]\(([A-Za-z0-9_-]{11})\s+"([^"]+)"\)$/.exec(trimmed);
     if (youtube) {
       flushParagraph(paragraph);
@@ -230,7 +244,7 @@ function inlineChildren(node: InlineNode): InlineNode[] {
 
 function blockInlines(block: Block): InlineNode[] {
   // Pictures and players have no article prose for the video projection.
-  if (block.type === 'image' || block.type === 'youtube') return [];
+  if (block.type === 'image' || block.type === 'youtube' || block.type === 'step-analyzer') return [];
   switch (block.type) {
     case 'paragraph':
     case 'turn':
