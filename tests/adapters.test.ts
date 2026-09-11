@@ -397,7 +397,8 @@ describe('collectNews', () => {
 
   it('skips disabled sources instead of fetching them', async () => {
     const result = await collectNews({
-      sources: await registry(),
+      sources: (await registry()).filter((source) => source.type === 'fixture' || !source.enabled),
+      fetch: () => { throw new Error('disabled sources must not be fetched'); },
       seen: emptySeenIndex(),
       now: () => new Date('2026-08-30T00:00:00.000Z'),
       maxAgeDays: 365,
@@ -447,7 +448,8 @@ describe('collectNews', () => {
 
   it('honours the global limit', async () => {
     const result = await collectNews({
-      sources: await registry(),
+      sources: (await registry()).filter((source) => source.type === 'fixture'),
+      fetch: () => { throw new Error('fixture tests must not access live feeds'); },
       seen: emptySeenIndex(),
       now: () => new Date('2026-08-30T00:00:00.000Z'),
       maxAgeDays: 365,

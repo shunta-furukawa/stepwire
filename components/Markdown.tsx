@@ -1,5 +1,6 @@
 import type { Block, InlineNode } from '@/lib/content/markdown';
 import { ConversationAvatar } from '@/components/ConversationAvatar';
+import { StepAnalyzerEmbed } from '@/components/StepAnalyzerEmbed';
 
 /**
  * Renders the article-body AST as React.
@@ -141,6 +142,8 @@ export function Markdown({ blocks }: { blocks: Block[] }) {
             );
           case 'rule':
             return <hr key={index} className="border-line" />;
+          case 'step-analyzer':
+            return <StepAnalyzerEmbed key={index} url={block.url} title={block.title} />;
           case 'youtube':
             return (
               <figure key={index} className="border-2 border-line-strong bg-raised p-sm">
