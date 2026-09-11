@@ -67,7 +67,7 @@ function StatRows({ figure }: { figure: StatFigure }) {
           <dt className="font-mono text-micro uppercase tracking-wide text-muted">
             {item.label}
           </dt>
-          <dd className="mt-xs font-display text-h3 font-black leading-headline tracking-tight text-accent">
+          <dd className="mt-xs font-display text-h3 font-black leading-headline tracking-tight text-accent" style={item.difficulty ? { color: difficulty[item.difficulty] } : undefined}>
             {item.value}
           </dd>
           {item.note ? (

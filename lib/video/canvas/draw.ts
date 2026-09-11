@@ -754,7 +754,7 @@ const drawFigure: Drawer = (d, scene) => {
       ctx.fillStyle = color.muted;
       drawTracked(ctx, item.label, cx, cy + px(60), px(3));
       ctx.font = fontOf(900, valueSize, font.display);
-      ctx.fillStyle = color.accent;
+      ctx.fillStyle = item.difficulty ? difficulty[item.difficulty] : color.accent;
       ctx.fillText(item.value, cx, cy + px(60) + valueSize);
       ctx.globalAlpha = 1;
     });

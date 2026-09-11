@@ -56,6 +56,7 @@ export default async function ArticlePreviewPage({
 
       <div className="min-w-0 space-y-2xl pt-xl">
         <ArticleVideo videoId={article.youtubeVideoId} title={article.title} />
+        <FigureList figures={article.figures.filter((figure) => figure.kind === 'stat' && figure.placement === 'intro')} />
         {SECTION_KEYS.map((key) => (
           <section key={key} aria-labelledby={`section-${key}`}>
             <h2 id={`section-${key}`} className="border-b-2 border-line-strong pb-sm font-display text-h4 font-black">
@@ -67,7 +68,7 @@ export default async function ArticlePreviewPage({
             <div className="mt-lg"><Markdown blocks={article.sections[key].blocks} /></div>
           </section>
         ))}
-        <FigureList figures={article.figures} />
+        <FigureList figures={article.figures.filter((figure) => figure.kind !== 'stat' || figure.placement !== 'intro')} />
         <SourceList sources={article.sources} />
       </div>
     </article>

@@ -168,6 +168,7 @@ export default async function ArticlePage({
       <div className="grid gap-2xl pt-xl lg:grid-cols-[1fr_260px]">
         <div className="min-w-0 space-y-2xl">
           <ArticleVideo videoId={article.youtubeVideoId} title={article.title} />
+        <FigureList figures={article.figures.filter((figure) => figure.kind === 'stat' && figure.placement === 'intro')} />
           {SECTION_KEYS.map((key) => {
             const section = article.sections[key];
             const meta = SECTION_LABELS[key];
@@ -201,7 +202,7 @@ export default async function ArticlePage({
             );
           })}
 
-          <FigureList figures={article.figures} />
+          <FigureList figures={article.figures.filter((figure) => figure.kind !== 'stat' || figure.placement !== 'intro')} />
 
           <SourceList sources={article.sources} />
         </div>

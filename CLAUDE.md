@@ -118,7 +118,7 @@ verified by eye in `/studio`, whose preview is the export renderer at a frame.
   and data are separated by *form* — a filled chip that pulses versus accent
   text — never by adding a second hue. The exceptions are quotations of the
   game, in the tokens: `difficulty`, DDR's five difficulty colours, on the
-  difficulty badge of a `plays` figure and nowhere else; and `flareEx`, the
+  difficulty badge of a `plays` figure or an explicitly marked difficulty statistic; and `flareEx`, the
   rainbow of the FLARE EX gauge, on the FLARE EX label and nowhere else —
   the nine lower flare ranks stay grey. Token names describe the role
   (`surface`, `raised`, `fg`, `muted`, `line`), never the pigment: a name like
