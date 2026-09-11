@@ -6,6 +6,7 @@ import { typedLines, wrapText } from './text';
 import { ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE, CONVERSATION_SCENERY, CONVERSATION_CHARACTERS } from './images';
 import { drawStageMotion, drawWireExpression } from './stage-motion';
 import { drawConversationActors } from './stage-actors';
+import { drawChart } from './chart';
 
 /** The art contains no copy or result data. Every label remains article-driven. */
 export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
@@ -58,7 +59,7 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
 
   // The existing quoted result stays intact; never synthesize score-screen pixels.
   let creditY: number | undefined;
-  if (scene.image) {
+  if (scene.image && !scene.chartPlayback) {
     const media = d.images.get(scene.image.src);
     const box = landscape
       ? layered
@@ -84,7 +85,7 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
     }
     creditY = box.y + box.h + 10 * u;
     ctx.restore();
-  } else if (landscape) {
+  } else if (landscape && !scene.chartPlayback) {
     ctx.fillStyle = color.accent;
     ctx.fillRect(w * 0.43, h * 0.46, w * 0.14, 5 * u);
     ctx.font = `700 ${26 * u}px ${font.mono}`;
@@ -95,6 +96,12 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
 
   // Foreground actors overlap the media frame; text panels stay above all art.
   if (layered && actors) drawConversationActors(d, scene, actors, artY, artH);
+  if (scene.chartPlayback) {
+    const box = landscape
+      ? { x: w * 0.25, y: h * 0.235, w: w * 0.50, h: h * 0.46 }
+      : { x: margin, y: artY + artH * 0.79, w: w - margin * 2, h: h * 0.23 };
+    drawChart(d, scene.chartPlayback, box);
+  }
   if (scene.image && creditY !== undefined) {
     ctx.textAlign = 'center';
     fitText(scene.image.credit, w / 2, creditY, landscape ? w * 0.24 : w - margin * 2,

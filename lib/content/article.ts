@@ -14,6 +14,8 @@ import {
 } from './markdown';
 import type { Mood, Speaker } from './dialogue';
 import type { Figure } from './figures';
+import { prepareChartClip } from './chart-clip';
+import type { ChartClip } from '../video/chart-model';
 import type { Bgm, ImageRef, MediaRef, Session } from './schema';
 import {
   narrationPublicPath,
@@ -58,6 +60,8 @@ export interface NarrationInput {
 
 /** One unit of a section as the video sees it: words, or a picture. */
 export type VideoBlock =
+  | { kind: 'chart'; clip: ChartClip }
+  | { kind: 'chart-end' }
   | { kind: 'paragraph'; text: string }
   | { kind: 'turn'; speaker: Speaker; mood: Mood; text: string }
   | { kind: 'image'; media: MediaRef };
@@ -231,6 +235,11 @@ export function articleCitations(article: Article): number[] {
 function toVideoBlocks(article: Article, key: SectionKey): VideoBlock[] {
   const out: VideoBlock[] = [];
   for (const block of article.sections[key].blocks) {
+    if (block.type === 'step-analyzer') {
+      out.push({ kind: 'chart', clip: prepareChartClip(block.url, block.title) });
+      continue;
+    }
+    if (block.type === 'heading') out.push({ kind: 'chart-end' });
     if (block.type === 'image') {
       const media = article.media.find((item) => item.src === block.src);
       if (media) out.push({ kind: 'image', media });

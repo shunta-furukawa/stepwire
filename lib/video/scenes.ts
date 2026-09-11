@@ -1,4 +1,6 @@
 import type { ArticleVideoInput, NarrationInput, VideoBlock } from '../content/article';
+import type { ChartClip, ChartPlayback } from './chart-model';
+import { chartPlaybackSeconds } from './chart-playback';
 import type { SceneType } from './scene-types';
 import type { Figure } from '../content/figures';
 import type { MediaRef } from '../content/schema';
@@ -55,6 +57,7 @@ export interface Scene {
   stageTitle?: string;
   /** `image` scenes, and the headline when the article has a hero. */
   image?: MediaRef;
+  chartPlayback?: ChartPlayback;
   /** The small line above a headline: category and date. */
   kicker?: string;
   /**
@@ -391,30 +394,61 @@ export function buildSceneSequence(
     ];
     const cards: Draft[] = [];
     let pending: MediaRef | undefined;
+    let activeChart: ChartClip | undefined;
+    let chartShown = false;
+    const flushUnshownChart = () => {
+      if (!activeChart || chartShown) return;
+      const chartPlayback: ChartPlayback = { clip: activeChart, mode: 'overview' };
+      const timing = typed(activeChart.title, 'body', fps);
+      cards.push({ id: section.type, type: section.type, text: activeChart.title, ...timing,
+        durationInFrames: Math.max(timing.durationInFrames, Math.ceil(chartPlaybackSeconds(chartPlayback) * fps)), chartPlayback });
+      chartShown = true;
+    };
 
     for (const block of blocks) {
+      if (block.kind === 'chart') {
+        flushUnshownChart();
+        activeChart = block.clip;
+        chartShown = false;
+        pending = undefined;
+        continue;
+      }
+      if (block.kind === 'chart-end') {
+        flushUnshownChart();
+        activeChart = undefined;
+        continue;
+      }
       if (block.kind === 'image') {
+        flushUnshownChart();
+        activeChart = undefined;
         pending = block.media;
         continue;
       }
       if (cards.length >= section.max) break;
       // Chunked per paragraph, not per section: a paragraph break is a break
       // the author chose, and a picture is bound to a paragraph.
-      const budget = pending ? Math.round(profile.budget * profile.pictureBudget) : profile.budget;
+      const budget = pending || activeChart ? Math.round(profile.budget * profile.pictureBudget) : profile.budget;
       for (const text of chunk(block.text, budget, section.max - cards.length)) {
+        const chartPlayback: ChartPlayback | undefined = activeChart
+          ? { clip: activeChart, mode: chartShown ? 'focus' : 'overview' } : undefined;
+        const timing = typed(text, 'body', fps);
+        if (chartPlayback) timing.durationInFrames = Math.max(timing.durationInFrames, Math.ceil(chartPlaybackSeconds(chartPlayback) * fps));
         cards.push({
           id: section.type,
           // A turn is its own kind of card — a face and a name over the
           // words — but it counts against the section it sits in.
           type: block.kind === 'turn' ? 'turn' : section.type,
-          ...typed(text, 'body', fps),
+          ...timing,
           text,
           ...(block.kind === 'turn' ? { speaker: block.speaker, mood: block.mood } : {}),
           ...(pending ? { image: pending } : {}),
+          ...(chartPlayback ? { chartPlayback } : {}),
         });
+        if (activeChart) chartShown = true;
       }
       pending = undefined;
     }
+    flushUnshownChart();
     // A picture with nothing after it belongs to what came before it.
     if (pending && cards.length > 0) cards[cards.length - 1]!.image = pending;
 
