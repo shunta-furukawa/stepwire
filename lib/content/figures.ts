@@ -19,6 +19,8 @@ import { z } from 'zod';
  * article omits.
  */
 
+export const DIFFICULTIES = ['BEGINNER', 'BASIC', 'DIFFICULT', 'EXPERT', 'CHALLENGE'] as const;
+
 const baseFigure = {
   /** Short title, set in the mono "wire" voice. */
   title: z.string().min(1).max(60).optional(),
@@ -32,12 +34,14 @@ const baseFigure = {
  */
 export const statFigureSchema = z.object({
   kind: z.literal('stat'),
+  placement: z.enum(['intro', 'end']).optional(),
   ...baseFigure,
   items: z
     .array(
       z.object({
         label: z.string().min(1).max(24),
         value: z.string().min(1).max(12),
+        difficulty: z.enum(DIFFICULTIES).optional(),
         note: z.string().min(1).max(40).optional(),
       }),
     )
@@ -87,7 +91,7 @@ export const timelineFigureSchema = z.object({
 });
 
 /** DDR's five difficulties, in the game's order. */
-export const DIFFICULTIES = ['BEGINNER', 'BASIC', 'DIFFICULT', 'EXPERT', 'CHALLENGE'] as const;
+
 export type DifficultyName = (typeof DIFFICULTIES)[number];
 
 /**

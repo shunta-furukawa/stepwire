@@ -561,7 +561,12 @@ export function buildSceneSequence(
     ...(credits.length > 0 ? { credits } : {}),
   });
 
-  const overridden = drafts
+  const introFigures = drafts.filter((scene) => scene.figure?.kind === 'stat' && scene.figure.placement === 'intro');
+  const ordered = drafts.filter((scene) => !introFigures.includes(scene));
+  const headlineIndex = ordered.findIndex((scene) => scene.type === 'headline');
+  ordered.splice(headlineIndex + 1, 0, ...introFigures);
+
+  const overridden = ordered
     .map((scene) => applyOverride(scene, article.video, fps))
     .filter((scene): scene is Draft => scene !== null);
 
