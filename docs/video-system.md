@@ -231,12 +231,12 @@ card plays the clip at its shared speed, subsequent cards replay highlighted
 measures at half speed. Chart context ends at a heading, image or section end.
 The chart's own title supplies a standalone card when no prose follows it.
 The same `chartFrame` function drives preview seeks and exported frames;
-`drawChart` draws lanes and a 2D L/R footwork panel, retaining the illustrated
+`drawChart` draws the upstream arrow artwork and composites the upstream Three.js foot scene, retaining the illustrated
 WIRE/MONO stage and article dialogue. The fallback stage and ordinary prose
 cards also support charts. No new MONO lines or song audio are generated.
 
 See `docs/step-analyzer.md` for syntax, clip selection, duration limits and the
-unpublished SAMPLE studio article. Tests assert data and timing; they do not
+unpublished SAMPLE in the /studio article selector. The chart stage is created once per preview/export and disposed afterwards. Its frame-addressable pose API makes seeks and offline encoding deterministic; WebGL failure blocks chart export instead of substituting 2D art. Tests assert data and timing; they do not
 render video.
 
 `lib/video/scenes.ts` turns an `ArticleVideoInput` into a scene sequence:

@@ -6,12 +6,36 @@ import { parseArticle, toVideoInput } from '../lib/content/article';
 import { buildSceneSequence } from '../lib/video/scenes';
 import { chartFrame, chartPlaybackSeconds } from '../lib/video/chart-playback';
 import { STEP_ANALYZER_ORIGIN } from '../lib/content/step-analyzer';
+import { chartFootFrame } from '../lib/video/chart-foot-frame';
 
 const notes = '1000010000100001-1000001001000001';
 const url = `${STEP_ANALYZER_ORIGIN}/?n=${notes}&b=120&f=192R&hl=192-240`;
 const sample = () => parseArticle(readFileSync('content/fixtures/sample-chart-conversation.mdx', 'utf8'), { filePath: 'content/fixtures/sample-chart-conversation.mdx', forceFixture: true });
 
 describe('chart video data and frame clock', () => {
+  it('lands the 3D pose before a note at normal and half speed without seek history', () => {
+    const clip = prepareChartClip(`${STEP_ANALYZER_ORIGIN}/?n=${notes}&b=120&hl=0`, 'Pose');
+    for (const mode of ['overview', 'focus'] as const) {
+      const playback = { clip, mode };
+      const rate = mode === 'focus' ? 0.5 : 1;
+      const at = Math.round((0.5 / rate - 0.02) * 100);
+      const pose = chartFootFrame(playback, at, 100);
+      expect(pose.progress).toBe(1);
+      expect(pose.to.leftPos).toBe(clip.footsteps[1]?.leftPos);
+      expect(pose.to.rightPos).toBe(clip.footsteps[1]?.rightPos);
+      chartFootFrame(playback, at + 800, 100);
+      expect(chartFootFrame(playback, at, 100)).toEqual(pose);
+    }
+  });
+
+  it('carries hold and bracket poses to the 3D renderer', () => {
+    const clip = prepareChartClip(`${STEP_ANALYZER_ORIGIN}/?n=2000010000103001-1100000000000000&b=120&f=192LL`, 'Hold');
+    const held = chartFootFrame({ clip, mode: 'overview' }, 10, 100);
+    expect(held.to.heldFeet.length).toBeGreaterThan(0);
+    const bracket = chartFootFrame({ clip, mode: 'overview' }, 202, 100);
+    expect(bracket.to.oneFoot).toEqual({ foot: 'L', panels: [0, 1] });
+  });
+
   it('decodes compressed and raw URLs to the same chart and pinned foot assignment', () => {
     const raw = prepareChartClip(url, 'Practice');
     const compressed = prepareChartClip(`${STEP_ANALYZER_ORIGIN}/?d=${deflateRawSync(notes).toString('base64url')}&b=120&f=192R&hl=192-240`, 'Practice');

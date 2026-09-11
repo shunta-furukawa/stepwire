@@ -6,6 +6,7 @@ import type { SceneSequence } from '@/lib/video/scenes';
 import { sceneStartFrames } from '@/lib/video/scenes';
 import { drawScene } from '@/lib/video/canvas/draw';
 import { fieldState } from '@/lib/video/field-plan';
+import type { ChartStage } from '@/lib/video/chart-stage';
 import type { Field } from '@/lib/video/field';
 import { loadImages, sceneImageSources } from '@/lib/video/canvas/images';
 import { ensureFonts } from '@/lib/video/canvas/fonts';
@@ -29,6 +30,8 @@ export function PreviewPanel({
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fieldRef = useRef<{ field: Field; canvas: HTMLCanvasElement } | null>(null);
+  const chartRef = useRef<ChartStage | null>(null);
+  const [chartError, setChartError] = useState('');
   const imagesRef = useRef<Map<string, CanvasImageSource>>(new Map());
   const [frame, setFrame] = useState(0);
   const [ready, setReady] = useState(0);
@@ -61,6 +64,16 @@ export function PreviewPanel({
           // No WebGL here: the preview is plainer, like the export would be.
         }
       }
+      try {
+        if (sequence.scenes.some((scene) => scene.chartPlayback) && !chartRef.current) {
+          const { createChartStage } = await import('@/lib/video/chart-stage');
+          if (!alive) return;
+          chartRef.current = createChartStage();
+        }
+        setChartError('');
+      } catch (error) {
+        setChartError(error instanceof Error ? error.message : String(error));
+      }
       setReady((n) => n + 1);
     })();
     return () => {
@@ -68,7 +81,10 @@ export function PreviewPanel({
     };
   }, [sequence, definition.width, definition.height]);
 
-  useEffect(() => () => fieldRef.current?.field.dispose(), []);
+  useEffect(() => () => {
+    fieldRef.current?.field.dispose(); fieldRef.current = null;
+    chartRef.current?.dispose(); chartRef.current = null;
+  }, []);
 
   const draw = useCallback(
     (at: number) => {
@@ -103,6 +119,7 @@ export function PreviewPanel({
           fps: sequence.fps,
           progress: sceneFrame / Math.max(1, scene.durationInFrames - 1),
           images: imagesRef.current,
+          chartStage: chartRef.current ?? undefined,
           ...(gl ? { field: gl.canvas } : {}),
         },
         scene,
@@ -129,6 +146,7 @@ export function PreviewPanel({
           書き出しと同じ描画 · {definition.width}×{definition.height}
         </span>
       </h2>
+      {chartError && <p role="alert" className="text-sm">{chartError}</p>}
       <div className="border-2 border-line bg-deep">
         <canvas
           ref={canvasRef}

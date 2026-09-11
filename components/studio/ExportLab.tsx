@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { ArticleVideoInput } from '@/lib/content/article';
 import { buildSceneSequence, sceneStartFrames } from '@/lib/video/scenes';
 import { COMPOSITIONS, type CompositionId } from '@/lib/video/compositions';
+import type { ChartStage } from '@/lib/video/chart-stage';
 import { drawScene } from '@/lib/video/canvas/draw';
 import { fieldState } from '@/lib/video/field-plan';
 import type { Field } from '@/lib/video/field';
@@ -165,6 +166,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
     // message that does not say so.
     const w = width - (width % 2);
     const h = height - (height % 2);
+    let chartStage: ChartStage | undefined;
 
     try {
       if (typeof globalThis.VideoEncoder === 'undefined') {
@@ -194,6 +196,12 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
       const images = await loadImages(
         sceneImageSources(sequence.scenes),
       );
+
+      if (sequence.scenes.some((scene) => scene.chartPlayback)) {
+        setStatus('3Dステップを準備中…');
+        const { createChartStage } = await import('@/lib/video/chart-stage');
+        chartStage = createChartStage();
+      }
 
       // The particle field, on its own WebGL canvas, composited into each
       // frame by the renderer. Without WebGL the film is plainer, not absent.
@@ -329,6 +337,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
               progress: f / Math.max(1, scene.durationInFrames - 1),
               images,
               field: fieldCanvas,
+              chartStage,
             },
             scene,
           );
@@ -442,6 +451,8 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
       setStatus('');
+    } finally {
+      chartStage?.dispose();
     }
   }, [article, definition, scale, sequence]);
 
