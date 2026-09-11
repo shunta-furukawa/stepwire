@@ -3,10 +3,21 @@ import { describe, expect, it } from 'vitest';
 import { parseArticle, toVideoInput } from '../lib/content/article';
 import { prepareChartClip } from '../lib/content/chart-clip';
 import { buildSceneSequence } from '../lib/video/scenes';
+import { thumbnailPlan } from '../lib/video/canvas/thumbnail';
 
 const article = () => parseArticle(readFileSync('content/articles/2026-09-11-miserable-life-footwork.mdx', 'utf8'), { filePath: 'content/articles/2026-09-11-miserable-life-footwork.mdx' });
 
 describe('miserable life chart explainer', () => {
+  it('uses the song, jacket and challenge level for its thumbnail and avoids millisecond explanations', () => {
+    const a = article();
+    expect(thumbnailPlan(toVideoInput(a)).chart).toMatchObject({
+      title: 'miserable life and worthless thoughts', artist: 'めめめ',
+      difficulty: 'CHALLENGE', level: '18',
+      jacket: { src: 'images/articles/miserable-life-footwork/jacket.png' },
+    });
+    const body = readFileSync('content/articles/2026-09-11-miserable-life-footwork.mdx', 'utf8').split('\n## NEWS')[1];
+    expect(body).not.toMatch(/ミリ秒|何秒|240÷/);
+  });
   it('preserves every note time in the BPM157 comparison', () => {
     const blocks = article().sections.playerImpact.blocks.filter((block) => block.type === 'step-analyzer');
     const clips = blocks.map((block) => prepareChartClip(block.url, block.title));

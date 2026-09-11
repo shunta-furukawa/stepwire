@@ -1,7 +1,8 @@
 import type { ArticleVideoInput } from '../../content/article';
 import type { MediaRef } from '../../content/schema';
 import { CATEGORY_META } from '../../content/categories';
-import { difficultyLabel, formatScore } from '../../content/figures';
+import { DIFFICULTIES, difficultyLabel, formatScore } from '../../content/figures';
+import { FOOT_BLOBS, isFootCircle, parseDiffParam } from '../../vendor/step-analyzer/difficulty';
 import { color, difficulty, font, tracking } from '../../design/tokens';
 import { formatDate } from '../../format';
 import { wrapText } from './text';
@@ -21,6 +22,7 @@ import { drawMono, drawWire } from './face';
  */
 
 export interface ThumbnailPlan {
+  chart?: { title: string; artist: string; jacket: MediaRef; difficulty: keyof typeof difficulty; level: string };
   headline: string;
   kicker: string;
   /** Pictures for the tile column, hero excluded, at most three. */
@@ -71,7 +73,21 @@ export function thumbnailPlan(article: ArticleVideoInput): ThumbnailPlan {
     blocks.some((block) => block.kind === 'turn'),
   );
 
+  const jacket = article.media.find((item) => item.kind === 'jacket' && item.src === backdrop?.src);
+  const embedded = Object.values(article.blocks ?? {}).flat().find((block) => block.kind === 'chart');
+  let chart: ThumbnailPlan['chart'];
+  if (article.category === 'CHARTS' && jacket && embedded?.kind === 'chart') {
+    const params = new URL(embedded.clip.url).searchParams;
+    const parsed = parseDiffParam(params.get('df') ?? undefined);
+    const chartDifficulty = parsed.cls === null ? undefined : DIFFICULTIES[parsed.cls];
+    const title = params.get('t')?.trim();
+    if (title && chartDifficulty && Number(parsed.lvl) >= 1 && Number(parsed.lvl) <= 19) {
+      chart = { title, artist: params.get('st') ?? '', jacket, difficulty: chartDifficulty, level: parsed.lvl };
+    }
+  }
+
   return {
+    ...(chart ? { chart } : {}),
     headline: article.shortTitle ?? article.title,
     kicker: `${CATEGORY_META[article.category].label} · ${formatDate(article.publishedAt)}`,
     tiles,
@@ -242,6 +258,7 @@ function cover(
 }
 
 export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
+  if (plan.chart && d.width > d.height) return drawChartThumbnail(d, plan.chart);
   const { ctx, width, height } = d;
   const s = width / 1280;
   const px = (v: number) => v * s;
@@ -420,4 +437,54 @@ export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
   ctx.fillStyle = color.muted;
   const opW = [...'MONO DDR'].length * px(16) * (0.62 + tracking.wider);
   ctx.fillText('MONO DDR', textRight - pad - opW, wmY + px(24));
+}
+
+/** Chart guides show the actual jacket intact, with the analyzer's own foot silhouette. */
+function drawChartThumbnail(d: ThumbnailContext, chart: NonNullable<ThumbnailPlan['chart']>) {
+  const { ctx } = d;
+  const ink = difficulty[chart.difficulty];
+  ctx.save();
+  ctx.scale(d.width / 1280, d.height / 720);
+  ctx.fillStyle = color.deep; ctx.fillRect(0, 0, 1280, 720);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.font = `900 38px ${font.display}`; ctx.fillStyle = color.fg;
+  ctx.fillText('STEP', 56, 40);
+  const step = ctx.measureText('STEP').width;
+  ctx.fillStyle = color.accent; ctx.fillText('WIRE', 56 + step, 40);
+  ctx.font = `700 24px ${font.mono}`; ctx.textAlign = 'right';
+  ctx.fillStyle = ink; ctx.fillText('CHART GUIDE', 1224, 49); ctx.textAlign = 'left';
+  const x = 68; const y = 137; const size = 494;
+  ctx.fillStyle = color.raised; ctx.fillRect(x, y, size, size);
+  const jacket = d.images.get(chart.jacket.src);
+  if (jacket) {
+    const w = 'width' in jacket ? Number(jacket.width) : size;
+    const h = 'height' in jacket ? Number(jacket.height) : size;
+    const scale = Math.min(size / w, size / h);
+    ctx.drawImage(jacket, x + (size - w * scale) / 2, y + (size - h * scale) / 2, w * scale, h * scale);
+  } else {
+    ctx.font = `700 24px ${font.display}`; ctx.fillStyle = color.fg;
+    ctx.fillText('ジャケットを読み込めませんでした', x + 20, y + size / 2, size - 40);
+  }
+  ctx.strokeStyle = ink; ctx.lineWidth = 14; ctx.strokeRect(x - 7, y - 7, size + 14, size + 14);
+  const title = fitHeadline(chart.title, { width: 572, height: 290 }, (text, size) => {
+    ctx.font = `900 ${size}px ${font.display}`; return ctx.measureText(text).width;
+  });
+  ctx.font = `900 ${title.size}px ${font.display}`; ctx.fillStyle = color.fg;
+  title.lines.forEach((line, i) => ctx.fillText(line, 640, 143 + i * title.size * 1.04));
+  ctx.font = `600 30px ${font.display}`; ctx.fillStyle = color.muted;
+  ctx.fillText(chart.artist, 640, 456, 572);
+  ctx.font = `800 25px ${font.mono}`; ctx.fillStyle = ink;
+  ctx.fillText(chart.difficulty, 640, 533);
+  // The same seven sole/heel/toe blobs as Step Analyzer, not a substitute icon.
+  ctx.save(); ctx.translate(640, 578); ctx.scale(3.6, 3.6); ctx.fillStyle = ink;
+  for (const blob of FOOT_BLOBS) {
+    ctx.beginPath();
+    if (isFootCircle(blob)) ctx.arc(blob.cx, blob.cy, blob.r, 0, Math.PI * 2);
+    else ctx.ellipse(blob.cx, blob.cy, blob.rx, blob.ry, blob.rot, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+  ctx.font = `900 112px ${font.display}`; ctx.fillStyle = color.fg;
+  ctx.fillText(chart.level, 745, 558);
+  ctx.restore();
 }
