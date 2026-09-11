@@ -1,3 +1,4 @@
+import { drawChart } from './chart';
 import { SCENE_TONE, type Scene, type SceneType } from '../scenes';
 import type { MediaRef } from '../../content/schema';
 import { visibleUnits } from '../reveal';
@@ -448,7 +449,7 @@ const drawIdent: Drawer = (d, scene) => {
  * (portrait) the copy — not behind it. A result photo is the point of the
  * card, so it is shown whole and lit, and the words keep their own ground.
  */
-function drawPanel(d: DrawContext, image: MediaRef) {
+function drawPanel(d: DrawContext, image?: MediaRef, chartPlayback?: Scene['chartPlayback']) {
   const { ctx, width, height } = d;
   const px = scaled(width, height);
   const { top, bottom } = contentBand(d);
@@ -466,8 +467,10 @@ function drawPanel(d: DrawContext, image: MediaRef) {
   ctx.beginPath();
   ctx.rect(x, y, panel.w, panel.h);
   ctx.clip();
-  const source = d.images.get(image.src);
-  if (source) {
+  const source = image ? d.images.get(image.src) : undefined;
+  if (chartPlayback) {
+    drawChart(d, chartPlayback, { x, y, w: panel.w, h: panel.h });
+  } else if (source) {
     const iw = 'width' in source ? Number(source.width) : panel.w;
     const ih = 'height' in source ? Number(source.height) : panel.h;
     const scale = Math.max(panel.w / iw, panel.h / ih) * backdropZoom(d.progress);
@@ -477,7 +480,7 @@ function drawPanel(d: DrawContext, image: MediaRef) {
     ctx.fillRect(x, y, panel.w, panel.h);
     ctx.font = fontOf(400, creditSize, font.mono);
     ctx.fillStyle = color.accentHot;
-    drawTracked(ctx, `IMAGE MISSING: ${image.src}`, x + px(20), y + panel.h / 2, px(2));
+    drawTracked(ctx, `IMAGE MISSING: ${image?.src ?? ''}`, x + px(20), y + panel.h / 2, px(2));
   }
   ctx.restore();
 
@@ -487,7 +490,7 @@ function drawPanel(d: DrawContext, image: MediaRef) {
 
   ctx.font = fontOf(400, creditSize, font.mono);
   ctx.fillStyle = color.faint;
-  drawTracked(ctx, image.credit, x, y + panel.h + creditSize * 1.4, creditSize * tracking.wide);
+  drawTracked(ctx, chartPlayback ? 'STEP ANALYZER' : image?.credit ?? '', x, y + panel.h + creditSize * 1.4, creditSize * tracking.wide);
 
   return landscape
     ? { measure: x - px(120) - px(56), top, bottom }
@@ -500,7 +503,7 @@ const drawCard: Drawer = (d, scene) => {
   const px = scaled(width, height);
   const tone = SCENE_TONE[scene.type];
   const band = contentBand(d);
-  const panel = scene.type !== 'headline' && scene.image ? drawPanel(d, scene.image) : null;
+  const panel = scene.type !== 'headline' && (scene.image || scene.chartPlayback) ? drawPanel(d, scene.image, scene.chartPlayback) : null;
   const top = panel?.top ?? band.top;
   const bottom = panel?.bottom ?? band.bottom;
 
@@ -582,7 +585,7 @@ const drawTurn: Drawer = (d, scene) => {
   const px = scaled(width, height);
   const landscape = width > height;
   const band = contentBand(d);
-  const panel = scene.image ? drawPanel(d, scene.image) : null;
+  const panel = scene.image || scene.chartPlayback ? drawPanel(d, scene.image, scene.chartPlayback) : null;
   const top = panel?.top ?? band.top;
   const bottom = band.bottom;
   const speaker = scene.speaker ?? 'WIRE';

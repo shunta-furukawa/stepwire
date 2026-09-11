@@ -219,6 +219,26 @@ and are dropped under budget like the paragraphs they replace.
 
 ## How a video is built
 
+### Step Analyzer charts in conversation
+
+`@[step-analyzer](SHARE_URL "caption")` projects to a typed chart block. The
+content boundary decodes the URL and prepares footwork/timing using a pinned
+snapshot of the Step Analyzer core (`lib/vendor/step-analyzer`). No iframe is
+recorded and no remote resources are fetched for the chart during export.
+
+The following conversation shows the chart on the central stage: the first
+card plays the clip at its shared speed, subsequent cards replay highlighted
+measures at half speed. Chart context ends at a heading, image or section end.
+The chart's own title supplies a standalone card when no prose follows it.
+The same `chartFrame` function drives preview seeks and exported frames;
+`drawChart` draws lanes and a 2D L/R footwork panel, retaining the illustrated
+WIRE/MONO stage and article dialogue. The fallback stage and ordinary prose
+cards also support charts. No new MONO lines or song audio are generated.
+
+See `docs/step-analyzer.md` for syntax, clip selection, duration limits and the
+unpublished SAMPLE studio article. Tests assert data and timing; they do not
+render video.
+
 `lib/video/scenes.ts` turns an `ArticleVideoInput` into a scene sequence:
 
 1. **Headline** — first, over the hero image, with category and date as the
