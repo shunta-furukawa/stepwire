@@ -151,7 +151,10 @@ verified by eye in `/studio`, whose preview is the export renderer at a frame.
   software cannot settle.
 - **Keep dependencies minimal.** Prefer a small typed module over a library. Do
   not add a database, a CMS, a job queue, or a state-management framework.
-  `three` is the one exception, and only `lib/video/field.ts` may import it.
+  `three` is the one exception: `lib/video/field.ts` and the pinned upstream
+  `lib/vendor/step-analyzer/footScene.js` may import it. The latter preserves
+  Step Analyzer’s original 3D footwork for preview and export; no replacement
+  2D artwork.
 - **The field is a function of the frame.** `lib/video/field-plan.ts` decides
   what the particle field does on a frame; `field.ts` paints it. Nothing in the
   field reads a clock or `Math.random`, and the ground under every scene comes

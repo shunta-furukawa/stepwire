@@ -1,3 +1,4 @@
+import type { ChartStage } from '../chart-stage';
 import { drawChart } from './chart';
 import { SCENE_TONE, type Scene, type SceneType } from '../scenes';
 import type { MediaRef } from '../../content/schema';
@@ -56,6 +57,7 @@ export interface DrawContext {
    * a plainer frame, not a broken one.
    */
   field?: CanvasImageSource;
+  chartStage?: ChartStage;
 }
 
 function scaled(width: number, height: number) {

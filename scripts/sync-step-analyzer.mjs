@@ -1,15 +1,14 @@
 import ts from 'typescript';
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync, readFileSync, mkdirSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
 import path from 'node:path';
 
 // Explicitly pinned: upgrading the analysis engine is a reviewed source change.
-const revision = '3114c83eb62df5f8448b20397ca95e8e32298d84';
+const revision = 'f71d3ed952e99caaba6279e546e20b8e2029b6a5';
 const checkout = process.argv[2];
 if (!checkout) throw new Error('Usage: node scripts/sync-step-analyzer.mjs /path/to/step-analyzer');
-const names = ['chart', 'timing', 'transform', 'edit'];
-const source = mkdtempSync(path.join(tmpdir(), 'step-analyzer-core-'));
+const names = ['chart', 'timing', 'transform', 'edit', 'arrowShape', 'arrowCanvas', 'footScene'];
+const source = mkdtempSync(path.resolve('.step-analyzer-core-'));
 const destination = path.resolve('lib/vendor/step-analyzer');
 try {
   mkdirSync(destination, { recursive: true });
