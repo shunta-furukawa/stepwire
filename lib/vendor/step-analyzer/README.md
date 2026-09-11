@@ -3,7 +3,7 @@
 Generated from the same owner's repository, `shunta-furukawa/step-analyzer`,
 commit `f71d3ed952e99caaba6279e546e20b8e2029b6a5`:
 `lib/chart.ts`, `lib/timing.ts`, `lib/transform.ts`, `lib/edit.ts`,
-`lib/arrowShape.ts`, `lib/arrowCanvas.ts`, `lib/footScene.ts`, `lib/clap.ts`.
+`lib/arrowShape.ts`, `lib/arrowCanvas.ts`, `lib/footScene.ts`, `lib/clap.ts`, `lib/difficulty.ts`.
 
 This immutable snapshot keeps arrow artwork, 3D geometry, foot assignment, holds, shocks, transforms and
 timing consistent with the analyzer without requiring a network request while

@@ -7,7 +7,7 @@ import path from 'node:path';
 const revision = 'f71d3ed952e99caaba6279e546e20b8e2029b6a5';
 const checkout = process.argv[2];
 if (!checkout) throw new Error('Usage: node scripts/sync-step-analyzer.mjs /path/to/step-analyzer');
-const names = ['chart', 'timing', 'transform', 'edit', 'arrowShape', 'arrowCanvas', 'footScene', 'clap'];
+const names = ['chart', 'timing', 'transform', 'edit', 'arrowShape', 'arrowCanvas', 'footScene', 'clap', 'difficulty'];
 const source = mkdtempSync(path.resolve('.step-analyzer-core-'));
 const destination = path.resolve('lib/vendor/step-analyzer');
 try {
