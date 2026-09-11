@@ -1,6 +1,8 @@
 import type { Scene, SceneSequence } from '../scenes';
 import { sceneStartFrames } from '../scenes';
 import { synthAccentTick, synthTick, type TickVoice } from './sfx';
+import { chartAudioRegions, chartBgmGain } from './chart-audio';
+import { renderClapTrackSamples } from '../../vendor/step-analyzer/clap';
 
 /**
  * The soundtrack: music under the ticks.
@@ -70,6 +72,7 @@ export function mixSoundtrack(options: MixOptions): Soundtrack {
   const { sequence, sampleRate, bgm, musicClips = [], tickGain = 0.55 } = options;
   const length = Math.ceil((sequence.durationInFrames / sequence.fps) * sampleRate);
   const out = new Float32Array(length);
+  const chartRegions = chartAudioRegions(sequence);
 
   if (bgm) {
     // Mono mix of whatever the file is, resampled by nearest sample if the
@@ -88,7 +91,7 @@ export function mixSoundtrack(options: MixOptions): Soundtrack {
       const underExcerpt = musicClips.some(
         (clip) => second >= clip.startInSeconds && second < clip.startInSeconds + clip.durationInSeconds,
       );
-      const duck = underExcerpt ? 0.16 : 1;
+      const duck = Math.min(underExcerpt ? 0.16 : 1, chartBgmGain(second, chartRegions));
       out[i] = sample * bgm.gain * fade * duck;
     }
   }
@@ -126,11 +129,21 @@ export function mixSoundtrack(options: MixOptions): Soundtrack {
   const events = tickEvents(sequence, sampleRate);
   events.forEach(({ offset, voice }, n) => {
     const sound = n % ACCENT_EVERY === 0 ? voices[voice].accent : voices[voice].tick;
+    const underChart = chartRegions.some((region) => offset / sampleRate >= region.start && offset / sampleRate < region.start + region.duration);
     for (let i = 0; i < sound.samples.length && offset + i < length; i += 1) {
-      out[offset + i]! += sound.samples[i]! * tickGain;
+      out[offset + i]! += sound.samples[i]! * tickGain * (underChart ? 0.15 : 1);
     }
   });
   const offsets = events;
+
+  for (const region of chartRegions) {
+    const normal = region.events.filter((event) => !event.ghost);
+    const { samples } = renderClapTrackSamples(normal.map((event) => event.time), normal.map((event) => event.accent),
+      region.duration, region.events.filter((event) => event.ghost).map((event) => event.time), [], sampleRate);
+    const start = Math.round(region.start * sampleRate);
+    const count = Math.min(samples.length, Math.ceil(region.duration * sampleRate), length - start);
+    for (let i = 0; i < count; i++) out[start + i]! += samples[i] ?? 0;
+  }
 
   // A soft limiter: a tick on a music peak must not clip, and hard clipping
   // is the one artefact everybody hears.

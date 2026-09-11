@@ -23,7 +23,8 @@ export function chartFrame(playback: ChartPlayback, frame: number, fps: number) 
   const ranges = chartRanges(playback);
   const total = Math.max(0.001, ranges.reduce((sum, r) => sum + r.end - r.start, 0));
   const cycle = total / rate + 0.8;
-  const elapsed = Math.max(0, frame / fps) % cycle;
+  const remainder = Math.max(0, frame / fps) % cycle;
+  const elapsed = cycle - remainder < 1e-8 ? 0 : remainder;
   let remaining = Math.min(elapsed * rate, total - 0.000001);
   let sourceTime = 0;
   for (const range of ranges) {
