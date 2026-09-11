@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ArticleVideoInput } from '@/lib/content/article';
-import { drawThumbnail, thumbnailPlan } from '@/lib/video/canvas/thumbnail';
+import { drawThumbnail, thumbnailPlan, thumbnailImageSources } from '@/lib/video/canvas/thumbnail';
 import { ensureFonts } from '@/lib/video/canvas/fonts';
 
 /**
@@ -37,9 +37,7 @@ export function ThumbnailPanel({ article }: { article: ArticleVideoInput }) {
     try {
       await ensureFonts();
       const images = new Map<string, CanvasImageSource>();
-      const sources = [plan.backdrop?.src, ...plan.tiles.map((t) => t.src)].filter(
-        (src): src is string => Boolean(src),
-      );
+      const sources = thumbnailImageSources(plan);
       await Promise.all(
         sources.map(async (src) => {
           try {

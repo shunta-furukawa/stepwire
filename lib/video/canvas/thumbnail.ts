@@ -7,6 +7,10 @@ import { color, difficulty, font, tracking } from '../../design/tokens';
 import { formatDate } from '../../format';
 import { wrapText } from './text';
 import { drawMono, drawWire } from './face';
+import { CONVERSATION_CHARACTERS, CONVERSATION_SCENERY } from './images';
+import { drawConversationActors } from './stage-actors';
+import { drawStageMotion } from './stage-motion';
+import type { Scene } from '../scenes';
 
 /**
  * The thumbnail — one frame that has to win a tap.
@@ -95,6 +99,14 @@ export function thumbnailPlan(article: ArticleVideoInput): ThumbnailPlan {
     chips: chips.slice(0, 3),
     pair: !backdrop && tiles.length === 0 && conversation,
   };
+}
+
+export function thumbnailImageSources(plan: ThumbnailPlan): string[] {
+  return [...new Set([
+    ...(plan.chart ? [plan.chart.jacket.src, CONVERSATION_SCENERY, CONVERSATION_CHARACTERS] : []),
+    ...(plan.backdrop ? [plan.backdrop.src] : []),
+    ...plan.tiles.map((tile) => tile.src),
+  ])];
 }
 
 export interface ThumbnailContext {
@@ -258,7 +270,7 @@ function cover(
 }
 
 export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
-  if (plan.chart && d.width > d.height) return drawChartThumbnail(d, plan.chart);
+  if (plan.chart && d.width > d.height) return drawChartThumbnail(d, plan.chart, plan.headline);
   const { ctx, width, height } = d;
   const s = width / 1280;
   const px = (v: number) => v * s;
@@ -440,12 +452,22 @@ export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
 }
 
 /** Chart guides show the actual jacket intact, with the analyzer's own foot silhouette. */
-function drawChartThumbnail(d: ThumbnailContext, chart: NonNullable<ThumbnailPlan['chart']>) {
+function drawChartThumbnail(d: ThumbnailContext, chart: NonNullable<ThumbnailPlan['chart']>, headline: string) {
   const { ctx } = d;
   const ink = difficulty[chart.difficulty];
   ctx.save();
   ctx.scale(d.width / 1280, d.height / 720);
   ctx.fillStyle = color.deep; ctx.fillRect(0, 0, 1280, 720);
+  const scenery = d.images.get(CONVERSATION_SCENERY);
+  if (scenery) {
+    cover(ctx, scenery, 0, 0, 1280, 720);
+    ctx.fillStyle = 'rgba(0,0,0,0.72)'; ctx.fillRect(0, 0, 1280, 720);
+  }
+  const scene: Scene = { id: 'thumbnail', type: 'turn', durationInFrames: 1,
+    index: 0, total: 1, speaker: 'WIRE', mood: 'grin',
+    characterPoses: { WIRE: 'default', MONO: 'default' } };
+  const stage = { ...d, width: 1280, height: 720, progress: 1, frame: 80, fps: 30 };
+  drawStageMotion(stage, scene, -160, 1100, false);
   ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   ctx.font = `900 38px ${font.display}`; ctx.fillStyle = color.fg;
   ctx.fillText('STEP', 56, 40);
@@ -453,7 +475,7 @@ function drawChartThumbnail(d: ThumbnailContext, chart: NonNullable<ThumbnailPla
   ctx.fillStyle = color.accent; ctx.fillText('WIRE', 56 + step, 40);
   ctx.font = `700 24px ${font.mono}`; ctx.textAlign = 'right';
   ctx.fillStyle = ink; ctx.fillText('CHART GUIDE', 1224, 49); ctx.textAlign = 'left';
-  const x = 68; const y = 137; const size = 494;
+  const x = 56; const y = 122; const size = 390;
   ctx.fillStyle = color.raised; ctx.fillRect(x, y, size, size);
   const jacket = d.images.get(chart.jacket.src);
   if (jacket) {
@@ -466,17 +488,28 @@ function drawChartThumbnail(d: ThumbnailContext, chart: NonNullable<ThumbnailPla
     ctx.fillText('ジャケットを読み込めませんでした', x + 20, y + size / 2, size - 40);
   }
   ctx.strokeStyle = ink; ctx.lineWidth = 14; ctx.strokeRect(x - 7, y - 7, size + 14, size + 14);
-  const title = fitHeadline(chart.title, { width: 572, height: 290 }, (text, size) => {
-    ctx.font = `900 ${size}px ${font.display}`; return ctx.measureText(text).width;
+  const title = fitHeadline(chart.title, { width: 724, height: 196 }, (text, size) => {
+    ctx.font = `400 ${size}px ${font.impact}`; return ctx.measureText(text).width;
   });
-  ctx.font = `900 ${title.size}px ${font.display}`; ctx.fillStyle = color.fg;
-  title.lines.forEach((line, i) => ctx.fillText(line, 640, 143 + i * title.size * 1.04));
-  ctx.font = `600 30px ${font.display}`; ctx.fillStyle = color.muted;
-  ctx.fillText(chart.artist, 640, 456, 572);
-  ctx.font = `800 25px ${font.mono}`; ctx.fillStyle = ink;
-  ctx.fillText(chart.difficulty, 640, 533);
+  ctx.font = `400 ${title.size}px ${font.impact}`; ctx.fillStyle = color.fg;
+  title.lines.forEach((line, i) => ctx.fillText(line, 500, 111 + i * title.size * 1.04));
+  ctx.font = `600 26px ${font.display}`; ctx.fillStyle = color.muted;
+  ctx.fillText(chart.artist, 506, 313, 700);
+
+  // Reuse the film's registered art and expression, in front of the field.
+  const actors = d.images.get(CONVERSATION_CHARACTERS);
+  ctx.save(); ctx.translate(510, 286);
+  if (actors) drawConversationActors({ ...stage, width: 730, height: 410 }, scene, actors, 0, 410);
+  else { drawWire(ctx, 55, 95, 210, 'grin', 1); drawMono(ctx, 460, 95, 210); }
+  ctx.restore();
+  ctx.font = `700 20px ${font.mono}`; ctx.fillStyle = color.fg;
+  ctx.fillText('WIRE / ASSISTANT AI', 550, 588);
+  ctx.fillText('MONO', 1110, 588);
+
+  ctx.font = `800 22px ${font.mono}`; ctx.fillStyle = ink;
+  ctx.fillText(chart.difficulty, 56, 545);
   // The same seven sole/heel/toe blobs as Step Analyzer, not a substitute icon.
-  ctx.save(); ctx.translate(640, 578); ctx.scale(3.6, 3.6); ctx.fillStyle = ink;
+  ctx.save(); ctx.translate(251, 543); ctx.scale(2.8, 2.8); ctx.fillStyle = ink;
   for (const blob of FOOT_BLOBS) {
     ctx.beginPath();
     if (isFootCircle(blob)) ctx.arc(blob.cx, blob.cy, blob.r, 0, Math.PI * 2);
@@ -484,7 +517,16 @@ function drawChartThumbnail(d: ThumbnailContext, chart: NonNullable<ThumbnailPla
     ctx.fill();
   }
   ctx.restore();
-  ctx.font = `900 112px ${font.display}`; ctx.fillStyle = color.fg;
-  ctx.fillText(chart.level, 745, 558);
+  ctx.font = `400 78px ${font.impact}`; ctx.fillStyle = color.fg;
+  ctx.fillText(chart.level, 323, 530);
+
+  // Keep the authored article hook, so the cover makes the same promise.
+  ctx.fillStyle = color.deep; ctx.fillRect(32, 625, 1216, 71);
+  ctx.fillStyle = color.accent; ctx.fillRect(32, 625, 7, 71);
+  const hook = fitHeadline(headline, { width: 1160, height: 55 }, (text, size) => {
+    ctx.font = `400 ${size}px ${font.impact}`; return ctx.measureText(text).width;
+  });
+  ctx.font = `400 ${hook.size}px ${font.impact}`; ctx.fillStyle = color.accent;
+  hook.lines.forEach((line, i) => ctx.fillText(line, 58, 634 + i * hook.size * 1.04));
   ctx.restore();
 }
