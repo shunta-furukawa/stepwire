@@ -24,14 +24,16 @@ export function drawChart(d: DrawContext, playback: ChartPlayback, box: { x: num
   ctx.font = `600 ${labelSize * 0.8}px ${font.mono}`;
   ctx.fillStyle = color.accent;
   ctx.fillText(`${playback.mode === 'focus' ? '注目リプレイ' : '踏み順'} · ${state.rate}× · ${Math.floor(state.beat / 4) + 1}小節`, 14 * u, 45 * u);
-  const laneX = 25 * u;
-  const laneW = box.w * 0.43;
-  const cell = laneW / 4;
+  const size = Math.min(box.w * 0.43 / 4 / 1.08, 68 * u);
+  // Original arrow rims occupy about 1.06 times their nominal size.
+  // Space by the artwork width, so all four lanes nearly touch.
+  const cell = size * 1.08;
+  const laneW = cell * 4;
+  const laneX = 25 * u + (box.w * 0.43 - laneW) / 2;
   const top = 92 * u;
   const bottom = box.h - 38 * u;
   const receptor = top + 30 * u;
   const perBeat = Math.max(22 * u, (bottom - receptor) / 5 * clip.hispeed);
-  const size = Math.min(cell * 0.8, 68 * u);
   ctx.save(); ctx.beginPath(); ctx.rect(laneX - 8 * u, top, laneW + 16 * u, bottom - top); ctx.clip();
   for (let p = 0; p < 4; p++) {
     const x = laneX + (p + 0.5) * cell;

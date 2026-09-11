@@ -94,14 +94,14 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
     ctx.textAlign = 'left';
   }
 
-  // Foreground actors overlap the media frame; text panels stay above all art.
-  if (layered && actors) drawConversationActors(d, scene, actors, artY, artH);
   if (scene.chartPlayback) {
     const box = landscape
-      ? { x: w * 0.25, y: h * 0.235, w: w * 0.50, h: h * 0.46 }
+      ? { x: w * 0.30, y: h * 0.235, w: w * 0.40, h: h * 0.46 }
       : { x: margin, y: artY + artH * 0.79, w: w - margin * 2, h: h * 0.23 };
     drawChart(d, scene.chartPlayback, box);
   }
+  // Both speakers stay in front of the chart and photos; dialogue stays on top.
+  if (layered && actors) drawConversationActors(d, scene, actors, artY, artH);
   if (scene.image && creditY !== undefined) {
     ctx.textAlign = 'center';
     fitText(scene.image.credit, w / 2, creditY, landscape ? w * 0.24 : w - margin * 2,
