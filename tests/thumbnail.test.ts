@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ArticleVideoInput } from '../lib/content/article';
-import { fitHeadline, fitHeadlineTight, thumbnailPlan } from '../lib/video/canvas/thumbnail';
+import { fitHeadline, fitHeadlineTight, thumbnailPlan, thumbnailImageSources } from '../lib/video/canvas/thumbnail';
 
 const article: ArticleVideoInput = {
   slug: 's',
@@ -128,5 +128,18 @@ describe('fitHeadlineTight', () => {
   it('never starts a line with a closing mark', () => {
     const lines = fitHeadlineTight('解禁当日に踏んできた。次はPFCを取りたい', { width: 800, height: 800 }, measure);
     for (const line of lines) expect([...'。、」）']).not.toContain([...line.text][0]);
+  });
+});
+
+
+describe('chart thumbnail assets', () => {
+  it('loads both presenters and scenery alongside the jacket, without duplicating it', () => {
+    const plan = thumbnailPlan(article);
+    const jacket = article.media[0]!;
+    plan.chart = { title: 'Song', artist: 'Artist', jacket, difficulty: 'CHALLENGE', level: '18' };
+    const sources = thumbnailImageSources(plan);
+    expect(sources).toContain('images/studio/mono-wire-characters.webp');
+    expect(sources).toContain('images/studio/mono-wire-scenery.webp');
+    expect(sources.filter((src) => src === jacket.src)).toHaveLength(1);
   });
 });
