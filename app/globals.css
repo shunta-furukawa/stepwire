@@ -216,12 +216,12 @@
 /*
  * Dela Gothic One, self-hosted (public/fonts, SIL OFL). Declared here so
  * `document.fonts.load` can find it; nothing on the website sets the family,
- * so the 2.4 MB file is fetched only when the studio draws with it.
+ * so the 1.1 MB file is fetched only when the studio draws with it.
  */
 @font-face {
   font-family: 'Dela Gothic One';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/DelaGothicOne-Regular.ttf') format('truetype');
+  src: url('/fonts/DelaGothicOne-Regular.woff2') format('woff2');
 }

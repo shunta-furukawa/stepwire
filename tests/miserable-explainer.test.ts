@@ -13,7 +13,7 @@ describe('miserable life chart explainer', () => {
     expect(thumbnailPlan(toVideoInput(a)).chart).toMatchObject({
       title: 'miserable life and worthless thoughts', artist: 'めめめ',
       difficulty: 'CHALLENGE', level: '18',
-      jacket: { src: 'images/articles/miserable-life-footwork/jacket.png' },
+      jacket: { src: 'images/articles/miserable-life-footwork/jacket.webp' },
     });
     const body = readFileSync('content/articles/2026-09-11-miserable-life-footwork.mdx', 'utf8').split('\n## NEWS')[1];
     expect(body).not.toMatch(/ミリ秒|何秒|240÷/);

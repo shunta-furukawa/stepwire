@@ -172,7 +172,7 @@ media:                              # shown after the reported fact
 A picture can also be placed in the prose, on a line of its own:
 
 ```md
-![](images/articles/2026-09-03-esw-7th-mca/result-decryption.jpg)
+![](images/articles/2026-09-03-esw-7th-mca/result-decryption.webp)
 
 新曲3曲で一番きつかったのは「Decryption」だった。…
 ```
@@ -369,7 +369,7 @@ The film and the thumbnail set copy in the system stacks from
 a black Japanese display gothic self-hosted in `public/fonts/` under the
 SIL OFL. It is used where the words have to win a tap — the thumbnail
 headline and the film's headline card — and nowhere on the website, so
-the 2.4 MB file is fetched only by the studio. A canvas paints with
+the 1.1 MB WOFF2 is fetched only by the studio. A canvas paints with
 whatever is loaded, so every drawer's caller awaits `ensureFonts()`
 (`lib/video/canvas/fonts.ts`) first; without it the first thumbnail of a
 session comes out in the fallback gothic.

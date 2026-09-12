@@ -6,6 +6,7 @@
  */
 import { loadAllArticles } from '../lib/content/loader';
 import { validateArticles } from '../lib/content/validate';
+import { validateAssets } from '../lib/content/assets';
 
 async function main() {
   let articles;
@@ -16,7 +17,7 @@ async function main() {
     process.exit(1);
   }
 
-  const issues = validateArticles(articles);
+  const issues = [...validateArticles(articles), ...validateAssets(articles)];
   const errors = issues.filter((issue) => issue.level === 'error');
   const warnings = issues.filter((issue) => issue.level === 'warning');
 

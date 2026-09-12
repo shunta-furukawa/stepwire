@@ -32,7 +32,7 @@ describe('Teto first-session article', () => {
     }
     expect(article.sources.map((source) => source.url)).toContain('https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s');
     expect(article.sources.map((source) => source.url)).toContain('https://www.youtube.com/watch?v=69bwtjRNm00&t=144s');
-    for (const name of ['session-history.png', 'ghoststep.png']) {
+    for (const name of ['session-history.webp', 'ghoststep.webp']) {
       expect(existsSync(`public/images/articles/2026-09-10-teto-first-session/${name}`)).toBe(true);
     }
     // No third-party gameplay or the previous STEPWIRE film becomes this session's own film.

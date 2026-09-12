@@ -23,4 +23,4 @@ Read the DDR section and exchange instructions of the official PRESENT page on S
 - Representative Canvas frames reviewed for dialogue and image layout. Real-device MP4 export is not verified.
 
 - Result photos were downloaded from the operator’s non-DUO post and visually checked. eyesight: 999,600 PFC / FLARE EX, +660 from the immediately preceding 998,940; GhostStep’s +880 is versus the earlier recorded best. Decryption: 998,810 GFC / FLARE EX, GREAT 1, +920. These two baselines are kept distinct.
-- Original GhostStep evidence is retained unchanged at `public/images/articles/2026-09-07-duo-and-hololive/ghoststep.png`; the video uses the clearer individual result photos.
+- The raw GhostStep screenshot was not referenced by the article and has been removed from the repository; the video uses the clearer individual result photos.
