@@ -174,7 +174,16 @@ Nothing renders on a server. See [`docs/video-system.md`](docs/video-system.md).
    Cloud rendering needs all three Vercel variables; with any missing, the API
    falls back to the local driver rather than half-working.
 
-4. Deploy. Every merge to `main` publishes.
+4. Deploy. Every push to the default branch publishes.
+
+   Preview deployments are switched off: `vercel.json` carries an
+   `ignoreCommand` that skips the build unless `VERCEL_ENV` is `production`,
+   so a pull-request branch does not produce a deployment of its own. Every
+   deployment carries `public/` (about 40 MB of music and pictures) and is
+   kept until deleted, so the project's deployment storage grows with each
+   one. Set **Settings → Deployment Retention** to a few days for preview,
+   canceled and errored deployments and a month or so for production; the
+   older ones are removed and the storage figure falls with them.
 
 ### GitHub Secrets
 
