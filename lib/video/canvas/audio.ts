@@ -71,6 +71,7 @@ export async function decodeAudio(src: string): Promise<DecodedAudio> {
 }
 
 export interface EncodeAudioOptions {
+  channels?: Float32Array[];
   /** Mono PCM, -1..1, at `candidate.sampleRate`. */
   samples: Float32Array;
   candidate: AudioCandidate;
@@ -159,7 +160,7 @@ async function encodeWith(
       for (let channel = 0; channel < numberOfChannels; channel += 1) {
         // Planar lays each channel end to end; interleaved alternates them.
         const at = format === 'f32-planar' ? channel * frames + i : i * numberOfChannels + channel;
-        scratch[at] = sample;
+        scratch[at] = options.channels?.[channel]?.[written + i] ?? sample;
       }
     }
 

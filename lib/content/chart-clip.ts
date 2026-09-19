@@ -4,6 +4,7 @@ import { parseCompact, assignFeet } from '../vendor/step-analyzer/chart';
 import { parseOverrides, parseHighlights, parseComments } from '../vendor/step-analyzer/edit';
 import { parseBpmParam, parseStopsParam, buildTimeline, timeAtBeat } from '../vendor/step-analyzer/timing';
 import { parseTransform, applyTransform } from '../vendor/step-analyzer/transform';
+import { parseDiffParam } from '../vendor/step-analyzer/difficulty';
 import type { ChartClip } from '../video/chart-model';
 
 /** Parse on the content boundary; export never fetches or records an iframe. */
@@ -19,7 +20,8 @@ export function prepareChartClip(input: string, title: string): ChartClip {
   const choices = [0.25, 0.5, 0.75, 1];
   const requested = Number(p.get('sp')) || 1;
   const speed = choices.reduce((a, b) => Math.abs(a - requested) <= Math.abs(b - requested) ? a : b);
-  return {
+  const result: ChartClip = {
+    difficultyLabel: label(p.get('df')),
     url, title, chart, timeline,
     footsteps: assignFeet(chart.events, parseOverrides(p.get('f') ?? undefined), chart.holds),
     eventTimes: chart.events.map((event) => timeAtBeat(timeline, event.row.beat)),
@@ -27,4 +29,25 @@ export function prepareChartClip(input: string, title: string): ChartClip {
     comments: Object.fromEntries(parseComments(p.get('hc') ?? undefined)),
     speed, hispeed: Math.min(6, Math.max(0.25, Math.round((Number(p.get('hs')) || 1) * 20) / 20)),
   };
+  if (p.get('n2') || p.get('d2')) {
+    const other = new URL(url);
+    for (const key of ['n', 'd', 'f', 'df']) {
+      other.searchParams.delete(key);
+      const value = p.get(`${key}2`);
+      if (value) other.searchParams.set(key, value);
+      other.searchParams.delete(`${key}2`);
+    }
+    result.comparison = prepareChartClip(other.toString(), title);
+    const totalBeats = Math.max(chart.totalBeats, result.comparison.chart.totalBeats);
+    chart.totalBeats = totalBeats;
+    result.comparison.chart.totalBeats = totalBeats;
+    result.timeline = buildTimeline(parseBpmParam(p.get('b') ?? undefined), parseStopsParam(p.get('s') ?? undefined), totalBeats);
+    result.comparison.timeline = result.timeline;
+  }
+  return result;
+}
+
+function label(value: string | null): string {
+  const parsed = parseDiffParam(value ?? undefined);
+  return `${['習', '楽', '踊', '激', '鬼'][parsed.cls ?? -1] ?? ''}${parsed.lvl}`;
 }

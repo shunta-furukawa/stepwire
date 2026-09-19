@@ -8,6 +8,18 @@ import { color, font } from '../../design/tokens';
 
 /** Original analyzer arrow artwork and 3D scene, composited at the video frame time. */
 export function drawChart(d: DrawContext, playback: ChartPlayback, box: { x: number; y: number; w: number; h: number }) {
+  const other = playback.clip.comparison;
+  if (other) {
+    const gap = 8;
+    const w = (box.w - gap) / 2;
+    drawSingleChart(d, { ...playback, clip: { ...playback.clip, title: `A ${playback.clip.difficultyLabel ?? ''} · ${playback.clip.title}` } }, { ...box, w });
+    drawSingleChart(d, { ...playback, clip: { ...other, title: `B ${other.difficultyLabel ?? ''} · ${other.title}` } }, { ...box, x: box.x + w + gap, w });
+    return;
+  }
+  drawSingleChart(d, playback, box);
+}
+
+function drawSingleChart(d: DrawContext, playback: ChartPlayback, box: { x: number; y: number; w: number; h: number }) {
   const { ctx } = d;
   const { clip } = playback;
   const state = chartFrame(playback, d.frame, d.fps ?? 30);
