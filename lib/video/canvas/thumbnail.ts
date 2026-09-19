@@ -84,7 +84,9 @@ export function thumbnailPlan(article: ArticleVideoInput): ThumbnailPlan {
     const params = new URL(embedded.clip.url).searchParams;
     const parsed = parseDiffParam(params.get('df') ?? undefined);
     const chartDifficulty = parsed.cls === null ? undefined : DIFFICULTIES[parsed.cls];
-    const title = params.get('t')?.trim();
+    const titles = Object.values(article.blocks ?? {}).flat().flatMap((block) => block.kind === 'chart' && block.clip.comparison
+      ? [new URL(block.clip.url).searchParams.get('t')?.trim()].filter((value): value is string => !!value) : []);
+    const title = [...new Set(titles)].join(' / ') || params.get('t')?.trim();
     if (title && chartDifficulty && Number(parsed.lvl) >= 1 && Number(parsed.lvl) <= 19) {
       chart = { title, artist: params.get('st') ?? '', jacket, difficulty: chartDifficulty, level: parsed.lvl };
     }

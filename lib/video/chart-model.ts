@@ -2,6 +2,8 @@ import type { ParsedChart, FootStep } from '../vendor/step-analyzer/chart';
 import type { TimingSeg } from '../vendor/step-analyzer/timing';
 
 export interface ChartClip {
+  comparison?: ChartClip;
+  difficultyLabel?: string;
   url: string;
   title: string;
   chart: ParsedChart;

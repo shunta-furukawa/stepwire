@@ -96,12 +96,23 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
 
   if (scene.chartPlayback) {
     const box = landscape
-      ? { x: w * 0.30, y: h * 0.235, w: w * 0.40, h: h * 0.46 }
+      ? scene.chartPlayback.clip.comparison
+        ? { x: w * 0.24, y: h * 0.235, w: w * 0.52, h: h * 0.46 }
+        : { x: w * 0.30, y: h * 0.235, w: w * 0.40, h: h * 0.46 }
       : { x: margin, y: artY + artH * 0.79, w: w - margin * 2, h: h * 0.23 };
     drawChart(d, scene.chartPlayback, box);
   }
   // Both speakers stay in front of the chart and photos; dialogue stays on top.
-  if (layered && actors) drawConversationActors(d, scene, actors, artY, artH);
+  if (layered && actors) {
+    if (landscape && scene.chartPlayback?.clip.comparison) {
+      // Leave a clear center for both charts; the hosts still sit in front.
+      const small = { ...d, width: w * 0.55, height: h * 0.55 };
+      drawConversationActors(small, scene, actors, h * 0.28, artH * 0.55, ['WIRE']);
+      ctx.save(); ctx.translate(w * 0.45, 0);
+      drawConversationActors(small, scene, actors, h * 0.28, artH * 0.55, ['MONO']);
+      ctx.restore();
+    } else drawConversationActors(d, scene, actors, artY, artH);
+  }
   if (scene.image && creditY !== undefined) {
     ctx.textAlign = 'center';
     fitText(scene.image.credit, w / 2, creditY, landscape ? w * 0.24 : w - margin * 2,

@@ -1,4 +1,5 @@
 import type { DrawContext } from './draw';
+import type { Speaker } from '../../content/dialogue';
 import type { Scene } from '../scenes';
 import { characterPose, POSE_IMAGES, type CharacterPose } from '../character-poses';
 import { drawWireExpression, stagePerformance } from './stage-motion';
@@ -16,12 +17,12 @@ const REGISTRATION: Record<CharacterPose, {
 };
 
 /** Swap arm/hand illustrations on turns; keep face animation and photo layering. */
-export function drawConversationActors(d: DrawContext, scene: Scene, fallback: CanvasImageSource, artY: number, artH: number) {
+export function drawConversationActors(d: DrawContext, scene: Scene, fallback: CanvasImageSource, artY: number, artH: number, speakers: readonly Speaker[] = ['WIRE', 'MONO']) {
   const { ctx } = d;
   ctx.save();
   ctx.translate(0, artY);
   ctx.scale(d.width / 1672, artH / 941);
-  for (const who of ['WIRE', 'MONO'] as const) {
+  for (const who of speakers) {
     const wire = who === 'WIRE';
     const wanted = characterPose(scene, who);
     const loaded = d.images.get(POSE_IMAGES[wanted]);

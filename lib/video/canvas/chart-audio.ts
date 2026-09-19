@@ -32,7 +32,9 @@ export function chartAudioRegions(sequence: SceneSequence) {
     if (!scene.chartPlayback) return [];
     const duration = scene.durationInFrames / sequence.fps;
     const events = chartClapEvents(scene.chartPlayback, duration);
-    return events.length ? [{ start: (starts[i] ?? 0) / sequence.fps, duration, events }] : [];
+    const comparison = scene.chartPlayback.clip.comparison;
+    const eventsB = comparison ? chartClapEvents({ ...scene.chartPlayback, clip: comparison }, duration) : undefined;
+    return events.length || eventsB?.length ? [{ start: (starts[i] ?? 0) / sequence.fps, duration, events, eventsB }] : [];
   });
 }
 

@@ -77,7 +77,7 @@ export function buildShortTeaser(article: ArticleVideoInput, full: SceneSequence
 
   if (!pair) {
     // Without dialogue, one factual card supplies enough context for a glimpse.
-    const first = full.scenes.find((s) => ['news', 'narration'].includes(s.type) && readable(s));
+    const first = full.scenes.find((s) => (['news', 'narration'].includes(s.type) || (s.type === 'turn' && s.speaker === 'WIRE')) && readable(s));
     if (first) add([first]);
   }
 

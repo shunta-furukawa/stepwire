@@ -224,7 +224,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
       // track up front, so the sample rate is fixed here and the mix is built
       // to it.
       const SAMPLE_RATE = 48_000;
-      const audioCandidate: AudioCandidate | null = await pickAudioCodec(SAMPLE_RATE, 1);
+      const audioCandidate: AudioCandidate | null = await pickAudioCodec(SAMPLE_RATE, sequence.scenes.some((scene) => scene.chartPlayback?.clip.comparison) ? 2 : 1);
       let audioNote = audioCandidate ? '' : 'この端末は音声をエンコードできません';
       let audioBlob: Blob | null = null;
       let bgm: { buffer: AudioBuffer; gain: number } | undefined;
@@ -376,7 +376,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
         setStatus('効果音とBGMを合成中…');
         try {
           const soundtrack = mixSoundtrack({ sequence, sampleRate: SAMPLE_RATE, bgm, musicClips });
-          const audio = await encodePcm({ samples: soundtrack.samples, candidate: audioCandidate });
+          const audio = await encodePcm({ samples: soundtrack.samples, channels: soundtrack.channels, candidate: audioCandidate });
 
           // Safari's AAC encoder emits no decoder description, and the muxer
           // turns that into a zero-length one rather than complaining.
@@ -394,7 +394,7 @@ export function ExportLab({ articles, siteUrl }: { articles: ArticleVideoInput[]
           const audioTarget = new ArrayBufferTarget();
           const audioMuxer = new Muxer({
             target: audioTarget,
-            audio: { codec: audioCandidate.muxer, sampleRate: SAMPLE_RATE, numberOfChannels: 1 },
+            audio: { codec: audioCandidate.muxer, sampleRate: SAMPLE_RATE, numberOfChannels: audioCandidate.numberOfChannels },
             fastStart: 'in-memory',
           });
           for (const { chunk, meta } of withConfig) audioMuxer.addAudioChunk(chunk, meta);

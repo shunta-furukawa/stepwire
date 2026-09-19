@@ -15,6 +15,7 @@ import { renderClapTrackSamples } from '../../vendor/step-analyzer/clap';
 
 export interface Soundtrack {
   samples: Float32Array;
+  channels?: Float32Array[];
   sampleRate: number;
   /** How many ticks were placed, for the lab to report. */
   ticks: number;
@@ -136,21 +137,30 @@ export function mixSoundtrack(options: MixOptions): Soundtrack {
   });
   const offsets = events;
 
+  const stereo = chartRegions.some((region) => region.eventsB !== undefined);
+  const channels = stereo ? [out.slice(), out.slice()] : [out];
   for (const region of chartRegions) {
-    const normal = region.events.filter((event) => !event.ghost);
-    const { samples } = renderClapTrackSamples(normal.map((event) => event.time), normal.map((event) => event.accent),
-      region.duration, region.events.filter((event) => event.ghost).map((event) => event.time), [], sampleRate);
-    const start = Math.round(region.start * sampleRate);
-    const count = Math.min(samples.length, Math.ceil(region.duration * sampleRate), length - start);
-    for (let i = 0; i < count; i++) out[start + i]! += samples[i] ?? 0;
+    const sides = region.eventsB ? [region.events, region.eventsB] : [region.events];
+    sides.forEach((notes, side) => {
+      const normal = notes.filter((event) => !event.ghost);
+      const { samples } = renderClapTrackSamples(normal.map((event) => event.time), normal.map((event) => event.accent),
+        region.duration, notes.filter((event) => event.ghost).map((event) => event.time), [], sampleRate);
+      const start = Math.round(region.start * sampleRate);
+      const count = Math.min(samples.length, Math.ceil(region.duration * sampleRate), length - start);
+      channels.forEach((channel, index) => {
+        if (region.eventsB && side !== index) return;
+        for (let i = 0; i < count; i++) channel[start + i] = (channel[start + i] ?? 0) + (samples[i] ?? 0);
+      });
+    });
   }
 
   // A soft limiter: a tick on a music peak must not clip, and hard clipping
   // is the one artefact everybody hears.
-  for (let i = 0; i < length; i += 1) {
-    const x = out[i]!;
-    out[i] = Math.abs(x) > 0.8 ? Math.sign(x) * (0.8 + Math.tanh((Math.abs(x) - 0.8) * 3) * 0.19) : x;
+  for (const channel of channels) for (let i = 0; i < length; i += 1) {
+    const x = channel[i] ?? 0;
+    channel[i] = Math.abs(x) > 0.8 ? Math.sign(x) * (0.8 + Math.tanh((Math.abs(x) - 0.8) * 3) * 0.19) : x;
   }
 
-  return { samples: out, sampleRate, ticks: offsets.length };
+  if (stereo) for (let i = 0; i < length; i++) out[i] = ((channels[0]?.[i] ?? 0) + (channels[1]?.[i] ?? 0)) / 2;
+  return { samples: out, ...(stereo ? { channels } : {}), sampleRate, ticks: offsets.length };
 }
