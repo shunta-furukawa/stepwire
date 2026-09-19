@@ -107,8 +107,15 @@ function drawSingleChart(d: DrawContext, playback: ChartPlayback, box: { x: numb
   ctx.restore();
   const stageBox = { x: box.w * 0.49, y: top - 24 * u, w: box.w * 0.50, h: bottom - top + 28 * u };
   if (d.chartStage) {
-    const canvas = d.chartStage.render(playback, d.frame, d.fps ?? 30, stageBox.w, stageBox.h);
-    ctx.drawImage(canvas, stageBox.x, stageBox.y, stageBox.w, stageBox.h);
+    // The upstream perspective camera keeps a fixed vertical FOV. Giving it
+    // a tall, narrow AB slot crops the left/right pads. Fit a 4:3 viewport
+    // inside the slot instead, preserving both framing and proportions.
+    const stageW = Math.min(stageBox.w, stageBox.h * 4 / 3) * 0.94;
+    const stageH = stageW * 3 / 4;
+    const stageX = stageBox.x + (stageBox.w - stageW) / 2;
+    const stageY = stageBox.y + (stageBox.h - stageH) / 2;
+    const canvas = d.chartStage.render(playback, d.frame, d.fps ?? 30, stageW, stageH);
+    ctx.drawImage(canvas, stageX, stageY, stageW, stageH);
   } else {
     ctx.fillStyle = color.muted; ctx.font = `600 ${labelSize}px ${font.mono}`;
     ctx.fillText('3Dステップを準備中…', stageBox.x, stageBox.y + stageBox.h / 2, stageBox.w);
