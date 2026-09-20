@@ -13,8 +13,9 @@ export const ANIMATED_CONVERSATION_PLATE = 'images/studio/mono-wire-stage-animat
 export const CONVERSATION_SCENERY = 'images/studio/mono-wire-scenery.webp';
 export const CONVERSATION_CHARACTERS = 'images/studio/mono-wire-characters.webp';
 
-export function sceneImageSources(scenes: readonly (PoseScene & { type: string; image?: { src: string } })[]): string[] {
+export function sceneImageSources(scenes: readonly (PoseScene & { type: string; image?: { src: string }; chartGuide?: { jacket: { src: string } } })[]): string[] {
   return [
+    ...scenes.flatMap((scene) => scene.chartGuide ? [scene.chartGuide.jacket.src] : []),
     ...scenes.flatMap((scene) => scene.image ? [scene.image.src] : []),
     ...scenes.filter((scene) => scene.type === 'turn').flatMap((scene) =>
       (['WIRE', 'MONO'] as const).map((who) => POSE_IMAGES[characterPose(scene, who)])),

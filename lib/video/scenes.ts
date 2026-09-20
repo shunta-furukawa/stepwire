@@ -1,3 +1,4 @@
+import { chartGuides, type ChartGuide } from './chart-guide';
 import type { ArticleVideoInput, NarrationInput, VideoBlock } from '../content/article';
 import type { ChartClip, ChartPlayback } from './chart-model';
 import { chartPlaybackSeconds } from './chart-playback';
@@ -58,6 +59,7 @@ export interface Scene {
   /** `image` scenes, and the headline when the article has a hero. */
   image?: MediaRef;
   chartPlayback?: ChartPlayback;
+  chartGuide?: ChartGuide;
   /** The small line above a headline: category and date. */
   kicker?: string;
   /**
@@ -388,6 +390,7 @@ export function buildSceneSequence(
   }
   const gallery = article.media.filter((image) => !placed.has(image.src));
 
+  const guides = chartGuides(article);
   for (const section of sections) {
     const blocks: VideoBlock[] = article.blocks?.[section.key] ?? [
       { kind: 'paragraph', text: section.source },
@@ -396,12 +399,14 @@ export function buildSceneSequence(
     let pending: MediaRef | undefined;
     let activeChart: ChartClip | undefined;
     let chartShown = false;
+    let activeGuide = guides.find(g => g.title === article.labels?.[section.key])
+      ?? (guides.length === 1 ? guides[0] : undefined);
     const flushUnshownChart = () => {
       if (!activeChart || chartShown) return;
       const chartPlayback: ChartPlayback = { clip: activeChart, mode: 'overview' };
       const timing = typed(activeChart.title, 'body', fps);
       cards.push({ id: section.type, type: section.type, text: activeChart.title, ...timing,
-        durationInFrames: Math.max(timing.durationInFrames, Math.ceil(chartPlaybackSeconds(chartPlayback) * fps)), chartPlayback });
+        durationInFrames: Math.max(timing.durationInFrames, Math.ceil(chartPlaybackSeconds(chartPlayback) * fps)), chartPlayback, chartGuide: activeGuide });
       chartShown = true;
     };
 
@@ -409,6 +414,8 @@ export function buildSceneSequence(
       if (block.kind === 'chart') {
         flushUnshownChart();
         activeChart = block.clip;
+        activeGuide = guides.find(g => g.title === new URL(block.clip.url).searchParams.get('t'))
+          ?? (guides.length === 1 ? guides[0] : undefined);
         chartShown = false;
         pending = undefined;
         continue;
@@ -425,6 +432,11 @@ export function buildSceneSequence(
         continue;
       }
       if (cards.length >= section.max) break;
+      // An authored section heading changes identity before its first chart clip.
+      if (block.kind === 'paragraph') {
+        const heading = block.text.replace(/^#+\s*/, '');
+        activeGuide = guides.find(g => heading === g.title || heading.startsWith(`${g.title}：`)) ?? activeGuide;
+      }
       // Chunked per paragraph, not per section: a paragraph break is a break
       // the author chose, and a picture is bound to a paragraph.
       const budget = pending || activeChart ? Math.round(profile.budget * profile.pictureBudget) : profile.budget;
@@ -443,6 +455,7 @@ export function buildSceneSequence(
           ...(block.kind === 'turn' ? { speaker: block.speaker, mood: block.mood } : {}),
           ...(pending ? { image: pending } : {}),
           ...(chartPlayback ? { chartPlayback } : {}),
+          ...(activeGuide ? { chartGuide: activeGuide } : {}),
         });
         if (activeChart) chartShown = true;
       }

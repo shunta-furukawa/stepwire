@@ -7,6 +7,7 @@ import { ANIMATED_CONVERSATION_PLATE, CONVERSATION_PLATE, CONVERSATION_SCENERY, 
 import { drawStageMotion, drawWireExpression } from './stage-motion';
 import { drawConversationActors } from './stage-actors';
 import { drawChart } from './chart';
+import { drawSongIdentity } from './chart-guide';
 
 /** The art contains no copy or result data. Every label remains article-driven. */
 export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
@@ -53,7 +54,8 @@ export function drawIllustratedTurn(d: DrawContext, scene: Scene): boolean {
   ctx.fillText(scene.label ?? 'SESSION', w - margin, 44 * u);
   ctx.textAlign = 'left';
 
-  fitText(scene.stageTitle ?? scene.label ?? 'MONO × WIRE', margin, 108 * u,
+  if (scene.chartGuide) drawSongIdentity(d, scene.chartGuide);
+  else fitText(scene.stageTitle ?? scene.label ?? 'MONO × WIRE', margin, 108 * u,
     w - margin * 2, landscape ? h * 0.13 : h * 0.13, landscape ? 74 * u : 60 * u,
     font.impact, color.fg);
 
