@@ -6,8 +6,17 @@ import { chartAudioRegions } from '../lib/video/canvas/chart-audio';
 import { mixSoundtrack } from '../lib/video/canvas/mix';
 import { parseArticle, toVideoInput } from '../lib/content/article';
 import { buildSceneSequence, type SceneSequence } from '../lib/video/scenes';
+import { thumbnailPlan, thumbnailImageSources } from '../lib/video/canvas/thumbnail';
+import { sceneImageSources } from '../lib/video/canvas/images';
 
 describe('AB chart exports', () => {
+  it('does not turn an equal-speed reinterpretation into a second song', () => {
+    const path = 'content/articles/2026-09-11-miserable-life-footwork.mdx';
+    const article = toVideoInput(parseArticle(readFileSync(path, 'utf8'), { filePath: path }));
+    expect(thumbnailPlan(article).charts?.map(g => g.title)).toEqual(['miserable life and worthless thoughts']);
+    const scenes = buildSceneSequence(article, 'STEPWIRE_NEWS').scenes;
+    expect(scenes.filter(s => s.chartPlayback).every(s => s.chartGuide?.title === 'miserable life and worthless thoughts')).toBe(true);
+  });
   it('shares timing, highlights and total length, while preserving independent foot overrides', () => {
     const clip = prepareChartClip('https://step-analyzer-beta.vercel.app/?n=10000100&n2=00010010-10000000&b=120,4:240&s=2:1&f=0L&f2=0R&df=417&df2=315&hl=0&tr=mirror', 'AB');
     expect(clip.difficultyLabel).toBe('鬼17');
@@ -41,6 +50,21 @@ describe('AB chart exports', () => {
     });
     expect(counts).toEqual([[{steps:717,shocks:0},{steps:567,shocks:0}],[{steps:609,shocks:50},{steps:659,shocks:0}]]);
     const seq = buildSceneSequence(toVideoInput(a), 'STEPWIRE_NEWS');
+    const plan = thumbnailPlan(toVideoInput(a));
+    expect(plan.charts?.map(g => [g.title, g.level, g.comparison?.level])).toEqual([
+      ['ZENDEGI DANCE', '17', '15'], ['Daisycutter', '17', '17'],
+    ]);
+    expect(new Set(plan.charts?.map(g => g.jacket.src)).size).toBe(2);
+    for (const guide of plan.charts ?? []) {
+      expect(thumbnailImageSources(plan)).toContain(guide.jacket.src);
+      expect(sceneImageSources(seq.scenes)).toContain(guide.jacket.src);
+    }
+    const zendegi = seq.scenes.filter(s => s.type === 'turn' && s.id.startsWith('context-'));
+    expect(zendegi.length).toBeGreaterThan(0);
+    expect(zendegi.every(s => s.chartGuide?.title === 'ZENDEGI DANCE')).toBe(true);
+    const daisyIntro = seq.scenes.find(s => s.text?.startsWith('DaisycutterはBPM191'));
+    expect(daisyIntro?.chartPlayback).toBeUndefined();
+    expect(daisyIntro?.chartGuide?.title).toBe('Daisycutter');
     expect(seq.scenes.filter(s => s.chartPlayback).every(s => !!s.chartPlayback?.clip.comparison)).toBe(true);
     expect(seq.scenes.some(s => s.text?.includes('負担の種類が違う'))).toBe(true);
     expect(seq.durationInFrames / seq.fps).toBeLessThan(260);

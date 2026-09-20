@@ -75,6 +75,8 @@ export const mediaSchema = imageRefSchema.extend({
   caption: z.string().max(120).optional(),
   /** A hint for how the video frames it. */
   kind: z.enum(['jacket', 'screenshot', 'post', 'photo']).optional(),
+  /** Exact song title for binding a jacket to chart-guide scenes. */
+  song: z.string().min(1).optional(),
 });
 export type MediaRef = z.infer<typeof mediaSchema>;
 

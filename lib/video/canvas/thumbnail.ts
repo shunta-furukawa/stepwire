@@ -1,8 +1,10 @@
+import { chartGuides, type ChartGuide } from '../chart-guide';
+import { drawGuideBadge, drawGuideJacket } from './chart-guide';
 import type { ArticleVideoInput } from '../../content/article';
 import type { MediaRef } from '../../content/schema';
 import { CATEGORY_META } from '../../content/categories';
-import { DIFFICULTIES, difficultyLabel, formatScore } from '../../content/figures';
-import { FOOT_BLOBS, isFootCircle, parseDiffParam } from '../../vendor/step-analyzer/difficulty';
+import { difficultyLabel, formatScore } from '../../content/figures';
+import { FOOT_BLOBS, isFootCircle } from '../../vendor/step-analyzer/difficulty';
 import { color, difficulty, font, tracking } from '../../design/tokens';
 import { formatDate } from '../../format';
 import { wrapText } from './text';
@@ -26,7 +28,8 @@ import type { Scene } from '../scenes';
  */
 
 export interface ThumbnailPlan {
-  chart?: { title: string; artist: string; jacket: MediaRef; difficulty: keyof typeof difficulty; level: string };
+  chart?: ChartGuide;
+  charts?: ChartGuide[];
   headline: string;
   kicker: string;
   /** Pictures for the tile column, hero excluded, at most three. */
@@ -77,23 +80,11 @@ export function thumbnailPlan(article: ArticleVideoInput): ThumbnailPlan {
     blocks.some((block) => block.kind === 'turn'),
   );
 
-  const jacket = article.media.find((item) => item.kind === 'jacket' && item.src === backdrop?.src);
-  const embedded = Object.values(article.blocks ?? {}).flat().find((block) => block.kind === 'chart');
-  let chart: ThumbnailPlan['chart'];
-  if (article.category === 'CHARTS' && jacket && embedded?.kind === 'chart') {
-    const params = new URL(embedded.clip.url).searchParams;
-    const parsed = parseDiffParam(params.get('df') ?? undefined);
-    const chartDifficulty = parsed.cls === null ? undefined : DIFFICULTIES[parsed.cls];
-    const titles = Object.values(article.blocks ?? {}).flat().flatMap((block) => block.kind === 'chart' && block.clip.comparison
-      ? [new URL(block.clip.url).searchParams.get('t')?.trim()].filter((value): value is string => !!value) : []);
-    const title = [...new Set(titles)].join(' / ') || params.get('t')?.trim();
-    if (title && chartDifficulty && Number(parsed.lvl) >= 1 && Number(parsed.lvl) <= 19) {
-      chart = { title, artist: params.get('st') ?? '', jacket, difficulty: chartDifficulty, level: parsed.lvl };
-    }
-  }
+  const charts = chartGuides(article);
+  const chart = charts[0];
 
   return {
-    ...(chart ? { chart } : {}),
+    ...(chart ? { chart, charts } : {}),
     headline: article.shortTitle ?? article.title,
     kicker: `${CATEGORY_META[article.category].label} · ${formatDate(article.publishedAt)}`,
     tiles,
@@ -105,6 +96,7 @@ export function thumbnailPlan(article: ArticleVideoInput): ThumbnailPlan {
 
 export function thumbnailImageSources(plan: ThumbnailPlan): string[] {
   return [...new Set([
+    ...(plan.charts ?? []).map(chart => chart.jacket.src),
     ...(plan.chart ? [plan.chart.jacket.src, CONVERSATION_SCENERY, CONVERSATION_CHARACTERS] : []),
     ...(plan.backdrop ? [plan.backdrop.src] : []),
     ...plan.tiles.map((tile) => tile.src),
@@ -272,6 +264,7 @@ function cover(
 }
 
 export function drawThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
+  if ((plan.charts?.length ?? 0) > 1 && d.width > d.height) return drawMultiChartThumbnail(d, plan);
   if (plan.chart && d.width > d.height) return drawChartThumbnail(d, plan.chart, plan.headline);
   const { ctx, width, height } = d;
   const s = width / 1280;
@@ -526,6 +519,56 @@ function drawChartThumbnail(d: ThumbnailContext, chart: NonNullable<ThumbnailPla
   ctx.fillStyle = color.deep; ctx.fillRect(32, 625, 1216, 71);
   ctx.fillStyle = color.accent; ctx.fillRect(32, 625, 7, 71);
   const hook = fitHeadline(headline, { width: 1160, height: 55 }, (text, size) => {
+    ctx.font = `400 ${size}px ${font.impact}`; return ctx.measureText(text).width;
+  });
+  ctx.font = `400 ${hook.size}px ${font.impact}`; ctx.fillStyle = color.accent;
+  hook.lines.forEach((line, i) => ctx.fillText(line, 58, 634 + i * hook.size * 1.04));
+  ctx.restore();
+}
+
+/** Two songs retain independent jackets and A/B levels instead of sharing the hero. */
+function drawMultiChartThumbnail(d: ThumbnailContext, plan: ThumbnailPlan) {
+  const { ctx } = d;
+  ctx.save(); ctx.scale(d.width / 1280, d.height / 720);
+  ctx.fillStyle = color.deep; ctx.fillRect(0, 0, 1280, 720);
+  const scenery = d.images.get(CONVERSATION_SCENERY);
+  if (scenery) cover(ctx, scenery, 0, 0, 1280, 720);
+  ctx.fillStyle = 'rgba(0,0,0,.72)'; ctx.fillRect(0, 0, 1280, 720);
+  const scene: Scene = { id: 'thumbnail', type: 'turn', durationInFrames: 1,
+    index: 0, total: 1, speaker: 'WIRE', mood: 'grin',
+    characterPoses: { WIRE: 'default', MONO: 'default' } };
+  const stage = { ...d, width: 1280, height: 720, progress: 1, frame: 80, fps: 30 };
+  drawStageMotion(stage, scene, -160, 1100, false);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+  ctx.font = `900 36px ${font.display}`; ctx.fillStyle = color.fg; ctx.fillText('STEP', 40, 28);
+  const step = ctx.measureText('STEP').width;
+  ctx.fillStyle = color.accent; ctx.fillText('WIRE', 40 + step, 28);
+  ctx.font = `700 22px ${font.mono}`; ctx.textAlign = 'right'; ctx.fillStyle = color.fg;
+  ctx.fillText('2 SONGS / A・B CHART GUIDE', 1240, 38); ctx.textAlign = 'left';
+  (plan.charts ?? []).slice(0, 2).forEach((guide, i) => {
+    const x = 280 + i * 380;
+    ctx.fillStyle = 'rgba(8,8,9,.88)'; ctx.fillRect(x - 16, 103, 356, 493);
+    drawGuideJacket(d, guide, x + 30, 122, 260);
+    const title = fitHeadline(guide.title, { width: 324, height: 95 }, (text, size) => {
+      ctx.font = `400 ${size}px ${font.impact}`; return ctx.measureText(text).width;
+    });
+    ctx.font = `400 ${title.size}px ${font.impact}`; ctx.fillStyle = color.fg;
+    title.lines.forEach((line, row) => ctx.fillText(line, x, 402 + row * title.size * 1.04));
+    drawGuideBadge(d, guide, x + 4, 523, 30, guide.comparison ? 'A' : '');
+    if (guide.comparison) drawGuideBadge(d, guide.comparison, x + 178, 523, 30, 'B');
+  });
+  const actors = d.images.get(CONVERSATION_CHARACTERS);
+  if (actors) {
+    drawConversationActors({ ...stage, width: 560, height: 380 }, scene, actors, 240, 380, ['WIRE']);
+    ctx.save(); ctx.translate(720, 0);
+    drawConversationActors({ ...stage, width: 560, height: 380 }, scene, actors, 240, 380, ['MONO']);
+    ctx.restore();
+  } else { drawWire(ctx, 32, 365, 210, 'grin', 1); drawMono(ctx, 1040, 365, 210); }
+  ctx.font = `700 19px ${font.mono}`; ctx.fillStyle = color.fg;
+  ctx.fillText('WIRE / ASSISTANT AI', 32, 585); ctx.fillText('MONO', 1120, 585);
+  ctx.fillStyle = color.deep; ctx.fillRect(32, 625, 1216, 71);
+  ctx.fillStyle = color.accent; ctx.fillRect(32, 625, 7, 71);
+  const hook = fitHeadline(plan.headline, { width: 1160, height: 55 }, (text, size) => {
     ctx.font = `400 ${size}px ${font.impact}`; return ctx.measureText(text).width;
   });
   ctx.font = `400 ${hook.size}px ${font.impact}`; ctx.fillStyle = color.accent;
