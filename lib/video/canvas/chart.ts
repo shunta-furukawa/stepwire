@@ -81,8 +81,14 @@ function drawSingleChart(d: DrawContext, playback: ChartPlayback, box: { x: numb
     if (y < receptor - size / 2) continue;
     const feet = clip.footsteps[i]?.feet;
     if (ev.shock) {
-      ctx.strokeStyle = color.accent; ctx.lineWidth = 4 * u; ctx.strokeRect(laneX, y - size / 2, laneW, size);
-      ctx.fillStyle = color.fg; ctx.font = `700 ${labelSize}px ${font.mono}`; ctx.fillText('SHOCK', laneX + 6 * u, y - size / 2);
+      // Match Step Analyzer's video export, including its original arrow path.
+      if (ev.row.beat < state.beat - 0.05) continue;
+      ctx.fillStyle = 'rgba(125, 249, 255, 0.16)';
+      ctx.fillRect(laneX, y - size * 0.3, laneW, size * 0.6);
+      for (let p = 0; p < 4; p++) {
+        drawGhostArrow(ctx, laneX + (p + 0.5) * cell, y, size * 0.5,
+          ARROW_ROTATIONS[p] ?? 0, '#7df9ff', 'rgba(125, 249, 255, 0.16)');
+      }
     }
     for (const p of ev.panels) {
       const x = laneX + (p + 0.5) * cell;
