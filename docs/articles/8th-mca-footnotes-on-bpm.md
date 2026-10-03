@@ -23,4 +23,4 @@ Article: `content/articles/2026-10-03-8th-mca-footnotes-on-bpm.mdx`, `status: re
 - From Recent: 魄 EXPERT 14 GFC, +1,730 → `pb`; QuoN CHALLENGE 17. QuoN also shows a green +431,730, but it is not marked `pb` because the operator quit that play partway.
 - 燭's E plays: the soflan stop partway through. QuoN: the operator ran out of stamina and stopped partway. ロリ神 is CHALLENGE 12; a PFC is too far for now and it is shelved. These lines are the operator's words, tidied.
 - ZENDEGI DANCE: the operator asked for it not to be mentioned. The prose does not name it. Its row stays in the full play log with no note.
-- Sky word for the weather is still open; the card shows 20℃ only.
+- Weather: the operator chose 晴れ → `晴れ · 20℃`.
