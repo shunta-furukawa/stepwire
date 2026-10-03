@@ -17,7 +17,10 @@ Article: `content/articles/2026-10-03-8th-mca-footnotes-on-bpm.mdx`, `status: re
 - The NEWS song list comes from DDRCommunity, because the official post does not name the songs in its text.
 - Weather: JMA Tokyo 10-minute values, 21:40–23:00, 19.4–19.9 ℃, no precipitation. The sky word is left to the operator.
 
-## Open
+## Operator answers (2026-10-03)
 
-- FLARE SKILL after the session (previous article: 88,894 / SUN) is not provided, so the card omits it.
-- No operator comment yet on 燭's E plays, QuoN, ZENDEGI DANCE or ロリ神.
+- GhostStep Training and Scores → Recent screenshots supplied (`ghoststep-flare-skill.webp`, `ghoststep-recent.webp`). FLARE SKILL 88,894 / SUN+++, unchanged from the last record, so `before` = `after`.
+- From Recent: 魄 EXPERT 14 GFC, +1,730 → `pb`; QuoN CHALLENGE 17. QuoN also shows a green +431,730, but it is not marked `pb` because the operator quit that play partway.
+- 燭's E plays: the soflan stop partway through. QuoN: the operator ran out of stamina and stopped partway. ロリ神 is CHALLENGE 12; a PFC is too far for now and it is shelved. These lines are the operator's words, tidied.
+- ZENDEGI DANCE: the operator asked for it not to be mentioned. The prose does not name it. Its row stays in the full play log with no note.
+- Sky word for the weather is still open; the card shows 20℃ only.
