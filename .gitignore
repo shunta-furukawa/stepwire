@@ -33,3 +33,6 @@ out/
 
 # whisper.cpp and its models, installed on demand by `pnpm narration:transcribe`
 .whisper/
+
+# Extracted from the versioned official BPL artwork bundle.
+/public/bpl/assets/

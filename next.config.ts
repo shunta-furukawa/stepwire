@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
     '/**': ['./content/**/*'],
   },
   typedRoutes: true,
+  async rewrites() {
+    // Serve the standalone archive without the blog's React layout.
+    return [{ source: '/bpl', destination: '/bpl/index.html' }];
+  },
 };
 
 export default nextConfig;

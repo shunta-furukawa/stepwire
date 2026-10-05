@@ -10,6 +10,7 @@ export default defineConfig([
     'video/out/**',
     'video/data/**',
     'next-env.d.ts',
+    'public/bpl/**',
   ]),
   coreWebVitals,
   nextTypescript,

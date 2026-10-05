@@ -43,6 +43,14 @@ export function Header() {
               </Link>
             </li>
           ))}
+          <li className="shrink-0">
+            <a
+              href="/bpl"
+              className="block border-r border-line px-md py-sm font-mono text-micro font-bold uppercase tracking-wider transition-colors hover:bg-accent hover:text-on-accent"
+            >
+              BPL
+            </a>
+          </li>
           <li className="ml-auto shrink-0">
             <Link
               href="/studio"
