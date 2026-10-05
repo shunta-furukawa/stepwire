@@ -12,3 +12,9 @@ first frame.
 The OFL asks that the licence travels with the font; it does not ask for a
 credit on the card. The website itself stays on the system stack — this
 file is 1.1 MB (WOFF2, the full face) and is fetched only when something draws with it.
+
+`BplShare.ttf` is a TrueType subset of the bundled Dela Gothic One font,
+used by the BPL social-card renderer (Satori requires TTF/OTF rather than WOFF2).
+It retains the original font name; the SIL OFL in `OFL-DelaGothicOne.txt` applies.
+The subset includes printable ASCII plus characters in the BPL data, share model,
+and image renderer. Regenerate with fontTools + brotli when adding new names.

@@ -4,12 +4,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   outputFileTracingIncludes: {
-    '/**': ['./content/**/*'],
+    '/**': ['./content/**/*', './public/bpl/index.html', './public/fonts/BplShare.ttf', './public/brand/wordmark.svg'],
   },
   typedRoutes: true,
   async rewrites() {
     // Serve the standalone archive without the blog's React layout.
-    return [{ source: '/bpl', destination: '/bpl/index.html' }];
+    return [{ source: '/bpl', destination: '/bpl/s' }];
   },
 };
 
