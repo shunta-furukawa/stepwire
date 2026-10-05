@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   typedRoutes: true,
   async rewrites() {
     // Serve the standalone archive without the blog's React layout.
-    return [{ source: '/bpl', destination: '/bpl/s' }];
+    return { beforeFiles: [{ source: '/bpl', destination: '/bpl/s' }] };
   },
 };
 
