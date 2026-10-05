@@ -62,15 +62,15 @@ export type ImageRef = z.infer<typeof imageRefSchema>;
  * An image the article carries into the video.
  *
  * `credit` is required here where it is optional on `heroImage`: a jacket, a
- * screenshot or somebody's post in a published video is a quotation, and a
- * quotation without attribution is not one. The validator refuses the article
- * rather than the video quietly omitting the line.
+ * screenshot or somebody's post must retain its attribution. A credit does not
+ * establish permission or a lawful quotation. Review the actual use separately
+ * for the website, social image and exported video.
  */
 export const mediaSchema = imageRefSchema.extend({
   src: z
     .string()
     .regex(/^\/?images\/[\w./-]+\.(png|jpg|jpeg|webp)$/, 'media must be a file under public/images/'),
-  credit: z.string().min(1, 'every media image needs a credit — it is a quotation'),
+  credit: z.string().min(1, 'every media image needs attribution — usage rights require separate review'),
   /** Shown under the image. What the reader is looking at, not what it means. */
   caption: z.string().max(120).optional(),
   /** A hint for how the video frames it. */

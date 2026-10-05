@@ -183,9 +183,11 @@ above it in portrait — so the operator talks about a result while the result
 is on screen. Pictures the prose never places still get their own card after
 the reported fact.
 
-A jacket, a screenshot or somebody's post in a published video is a quotation,
-and the credit is what makes it one. The validator refuses an article without
-one rather than the video quietly omitting the line.
+A credit records attribution; it does not establish permission or a lawful
+quotation. Review each use separately, including the website, social thumbnail
+and exported video. The validator checks that attribution is present, not that
+reuse is legally cleared. Record the source, rightsholder, applicable permission
+or reviewed basis, scope and date before approving reuse.
 
 ### The field
 

@@ -196,8 +196,8 @@ export function parseArticle(raw: string, options: ParseOptions): Article {
     }),
   ) as Record<SectionKey, ArticleSection>;
 
-  // A picture in the prose is a quotation like any other, so it has to be one
-  // the frontmatter declared with a credit. Binding it here means the page and
+  // A picture in the prose must be declared with attribution; this binding
+  // does not establish reuse rights. Keeping it here means the page and
   // the video read the caption and the credit from one place.
   for (const key of SECTION_KEYS) {
     for (const block of sections[key].blocks) {

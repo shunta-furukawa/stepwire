@@ -1045,8 +1045,8 @@ const drawNarration: Drawer = (d, scene) => {
 /**
  * An image the article carries, full-bleed, with its credit.
  *
- * The credit is drawn in the accent and never omitted: a jacket or a post in a
- * published video is a quotation, and the line under it is what makes it one.
+ * Attribution is drawn in the accent and never omitted. Rendering the credit
+ * does not establish permission or a lawful quotation; review reuse separately.
  */
 const drawImage: Drawer = (d, scene) => {
   const { ctx, width, height } = d;

@@ -1,0 +1,1426 @@
+{
+  "note": "Inventory only. Credits and article source URLs are evidence, not permission. Draft assets under public/ are still directly accessible. Sources may describe the article rather than the precise image origin. Website, social thumbnails and video reuse need separate review.",
+  "assets": [
+    {
+      "path": "public/images/articles/2026-09-03-esw-7th-mca/official-post.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-03-extra-savior-world-7th-music-creator-audition.mdx",
+          "status": "published",
+          "usage": "hero",
+          "credit": "© Konami Arcade Games — @DDR_573 の告知画像より",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2094683017671520571",
+            "https://x.com/MONO_DDR/status/2095502936768221669"
+          ]
+        },
+        {
+          "article": "2026-09-03-extra-savior-world-7th-music-creator-audition.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "© Konami Arcade Games — @DDR_573 の告知画像より",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2094683017671520571",
+            "https://x.com/MONO_DDR/status/2095502936768221669"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-03-esw-7th-mca/result-decryption.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-03-extra-savior-world-7th-music-creator-audition.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2094683017671520571",
+            "https://x.com/MONO_DDR/status/2095502936768221669"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-03-esw-7th-mca/result-eyesight.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-03-extra-savior-world-7th-music-creator-audition.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2094683017671520571",
+            "https://x.com/MONO_DDR/status/2095502936768221669"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-03-esw-7th-mca/result-ill-be-with-you.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-03-extra-savior-world-7th-music-creator-audition.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2094683017671520571",
+            "https://x.com/MONO_DDR/status/2095502936768221669"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-aoba.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-danzai.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "hero",
+          "credit": "MONO DDR",
+          "kind": null,
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        },
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-decryption.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-dopamine.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-eyesight.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-perfect-eater.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-sod.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-summer-fairytale.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-05-aaa-hunt/result-tagmix.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-05-aaa-hunt-and-a-credit-of-17s.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096181268354638252",
+            "https://x.com/MONO_DDR/status/2096180942104834334",
+            "https://x.com/MONO_DDR/status/2096181485808337290"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-06-bemani-daisuki/goods-acrylic-cards.png",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-06-bemani-daisuki-2026.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "© Konami Arcade Games / BEMANI DAISUKIキャンペーン2026公式サイト",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2094343786692501816",
+            "https://p.eagate.573.jp/game/bemani/bemani_daisuki_2026/"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-06-bemani-daisuki/goods-clock.png",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-06-bemani-daisuki-2026.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "© Konami Arcade Games / BEMANI DAISUKIキャンペーン2026公式サイト",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2094343786692501816",
+            "https://p.eagate.573.jp/game/bemani/bemani_daisuki_2026/"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-06-bemani-daisuki/goods-keyholder.png",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-06-bemani-daisuki-2026.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "© Konami Arcade Games / BEMANI DAISUKIキャンペーン2026公式サイト",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2094343786692501816",
+            "https://p.eagate.573.jp/game/bemani/bemani_daisuki_2026/"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-06-bemani-daisuki/goods-passes.png",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-06-bemani-daisuki-2026.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "© Konami Arcade Games / BEMANI DAISUKIキャンペーン2026公式サイト",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2094343786692501816",
+            "https://p.eagate.573.jp/game/bemani/bemani_daisuki_2026/"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-06-bemani-daisuki/goods-tshirt.png",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-06-bemani-daisuki-2026.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "© Konami Arcade Games / BEMANI DAISUKIキャンペーン2026公式サイト",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2094343786692501816",
+            "https://p.eagate.573.jp/game/bemani/bemani_daisuki_2026/"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-06-bemani-daisuki/official-post.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-06-bemani-daisuki-2026.mdx",
+          "status": "published",
+          "usage": "hero",
+          "credit": "© Konami Arcade Games / DDRチーム公式X (@DDR_573)",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2094343786692501816",
+            "https://p.eagate.573.jp/game/bemani/bemani_daisuki_2026/"
+          ]
+        },
+        {
+          "article": "2026-09-06-bemani-daisuki-2026.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "© Konami Arcade Games / DDRチーム公式X (@DDR_573)",
+          "kind": "post",
+          "sources": [
+            "https://x.com/DDR_573/status/2094343786692501816",
+            "https://p.eagate.573.jp/game/bemani/bemani_daisuki_2026/"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-07-duo-and-hololive/event-overview.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-07-duo-and-hololive.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "KONAMI公式サイト / © COVER / © QualiArts, Inc.",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096966983246110940",
+            "https://p.eagate.573.jp/game/bemani/hololive-dreams/present/phase1/index.html",
+            "https://x.com/echospherics/status/2096850319502442625"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-07-duo-and-hololive/hololive-opening.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-07-duo-and-hololive.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "KONAMI公式キャンペーン掲載画像 / © COVER",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096966983246110940",
+            "https://p.eagate.573.jp/game/bemani/hololive-dreams/present/phase1/index.html",
+            "https://x.com/echospherics/status/2096850319502442625"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-07-duo-and-hololive/result-1.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-07-duo-and-hololive.mdx",
+          "status": "draft",
+          "usage": "hero",
+          "credit": "MONO DDR",
+          "kind": null,
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096966983246110940",
+            "https://p.eagate.573.jp/game/bemani/hololive-dreams/present/phase1/index.html",
+            "https://x.com/echospherics/status/2096850319502442625"
+          ]
+        },
+        {
+          "article": "2026-09-07-duo-and-hololive.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096966983246110940",
+            "https://p.eagate.573.jp/game/bemani/hololive-dreams/present/phase1/index.html",
+            "https://x.com/echospherics/status/2096850319502442625"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-07-duo-and-hololive/result-2.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-07-duo-and-hololive.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096966983246110940",
+            "https://p.eagate.573.jp/game/bemani/hololive-dreams/present/phase1/index.html",
+            "https://x.com/echospherics/status/2096850319502442625"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-07-duo-and-hololive/result-infinite-world.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-07-duo-and-hololive.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096966983246110940",
+            "https://p.eagate.573.jp/game/bemani/hololive-dreams/present/phase1/index.html",
+            "https://x.com/echospherics/status/2096850319502442625"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-07-duo-and-hololive/result-silent-flame.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-07-duo-and-hololive.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/MONO_DDR/status/2096966983246110940",
+            "https://p.eagate.573.jp/game/bemani/hololive-dreams/present/phase1/index.html",
+            "https://x.com/echospherics/status/2096850319502442625"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/ghoststep.webp",
+      "review": "pending",
+      "uses": []
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/liar-dancer-chart-83s.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "譜面参考: おーしま / O4MA. Ch · YouTube l6KkMnftq1c · 1:23付近",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/liar-dancer-result.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/override-result.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/session-history.webp",
+      "review": "pending",
+      "uses": []
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/tetris-chart-line.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "譜面参考: おーしま / O4MA. Ch · YouTube 69bwtjRNm00 · 2:24付近",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/tetris-chart-square.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "譜面参考: おーしま / O4MA. Ch · YouTube 69bwtjRNm00 · 2:24付近",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/tetris-chart-t.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "譜面参考: おーしま / O4MA. Ch · YouTube 69bwtjRNm00 · 2:24付近",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/tetris-chart-zigzag.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "譜面参考: おーしま / O4MA. Ch · YouTube 69bwtjRNm00 · 2:24付近",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-10-teto-first-session/tetris-result.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "hero",
+          "credit": "MONO DDR",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        },
+        {
+          "article": "2026-09-10-teto-first-session.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://x.com/MONO_DDR/status/2097991179111653631",
+            "https://x.com/MONO_DDR/status/2097992025367027817",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/session-history.webp",
+            "https://www.youtube.com/watch?v=69bwtjRNm00&t=144s",
+            "https://www.youtube.com/watch?v=l6KkMnftq1c&t=83s",
+            "https://stepwire.vercel.app/images/articles/2026-09-10-teto-first-session/ghoststep.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-15-bpl-s5-tt0-extra-savior/jacket-bye-or-not.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-15-bpl-s5-triple-tribe-zero-extra-savior.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "KONAMI 公式イベントページより · ©Konami Arcade Games",
+          "kind": "jacket",
+          "sources": [
+            "https://x.com/DDR_573/status/2099755517707243960",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://p.eagate.573.jp/game/bpl/season5/event/triple_tribe_zero/index.html",
+            "https://x.com/BemaniProLeague/status/1944955156594090253",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/howto/how_ea_pass.html",
+            "https://p.eagate.573.jp/game/2dx/26/newsong/46_zendegi_dance.html",
+            "https://x.com/3t1a/status/1328538174113476609",
+            "https://remywiki.com/AC_DDR_WORLD",
+            "https://remywiki.com/EYE_OF_THE_HEAVEN",
+            "https://remywiki.com/Bye_or_not",
+            "https://remywiki.com/ZENDEGI_DANCE",
+            "https://remywiki.com/Daisycutter",
+            "https://remywiki.com/Shippuujinrai",
+            "https://remywiki.com/Firestorm"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-15-bpl-s5-tt0-extra-savior/jacket-daisycutter.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-15-bpl-s5-triple-tribe-zero-extra-savior.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "KONAMI 公式イベントページより · ©Konami Arcade Games",
+          "kind": "jacket",
+          "sources": [
+            "https://x.com/DDR_573/status/2099755517707243960",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://p.eagate.573.jp/game/bpl/season5/event/triple_tribe_zero/index.html",
+            "https://x.com/BemaniProLeague/status/1944955156594090253",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/howto/how_ea_pass.html",
+            "https://p.eagate.573.jp/game/2dx/26/newsong/46_zendegi_dance.html",
+            "https://x.com/3t1a/status/1328538174113476609",
+            "https://remywiki.com/AC_DDR_WORLD",
+            "https://remywiki.com/EYE_OF_THE_HEAVEN",
+            "https://remywiki.com/Bye_or_not",
+            "https://remywiki.com/ZENDEGI_DANCE",
+            "https://remywiki.com/Daisycutter",
+            "https://remywiki.com/Shippuujinrai",
+            "https://remywiki.com/Firestorm"
+          ]
+        },
+        {
+          "article": "2026-09-19-triple-tribe-zero-ab.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "KONAMI / Triple Tribe ZERO公式",
+          "kind": "jacket",
+          "sources": [
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://step-analyzer-beta.vercel.app/?t=ZENDEGI+DANCE&st=ARM+x+BEMANI+Sound+Team+%22U1+overground%22&df=417&df2=315&b=80%2C28%3A160%2C84%3A80%2C88%3A160%2C152%3A80%2C160%3A160%2C176%3A80%2C188%3A160%2C200%3A80%2C202%3A160%2C214%3A80%2C216%3A160&s=240%3A0.375%2C243%3A0.375&hs=1.85&d=zVjRksMgCPwiZ6T5_3-7NhHYXbDJvdyc04mwwAqaGNM5uQ3RG8DmNFdCQNUYNhVN8HSwRo0o14YMW3iMzGkqxJrJl0Tc89OPWhJr6c6GTWXFfhePa2Lww8sLfD7IkeLEGep1kCfk49DI1Sg-n4EPXCMp_S16bkdayD7PEjMJZkghxwZ8dQM9sQlYaUvrLZrxL_RHbbxkEQ-asHmJBh3M1ec6xDWuzUxStLdhnAC0I0WuS7njPunc1xrFr1wwTIlOAnfd9ciAjI5eGTjW9hQgWxuWsOs5byQ4pfF1cCCYXoJm4Mw5UJ8AZ5A-QeCIjFyImdBgO-KAAPQuOqQI3V-qLkCMdCkjinI3u0QnGm4KO6SYMeAhJfz9drRxv4e1gDv9YdtuRxMnBC4-Cz5e2Y5KqZIiu5xT-OqzttyOdtPpWWxm42y0yBMTqHPWbQ7vJ8klvh_NpVHepMQTxu3INcXCR_6FaIR_bVaERruDw5L2Z_rD9g9ei0mbrCEazzENDVyM04HoutMdeS37cdkXbqvkReacwZ2EHB-453z1MP4pjnd35bIiRE3hdeHrCczHS_wiPlJbgeqw2lgZwszr8uRU6tTa5DM6MTENrIHoIxF51tdA9fCSUv8K1VXOOPdmwdAKpuK4K1ERSBRL1KBU5bhTiI20AmwSibuEPqRaf5jJ3qHtEPkaPy6JBzOIigMmhYF0Z4-jiV_VQXDTXB8f7xzUZ9nkPZ0piqojL6EcUKcAJrDi9CSFoSFkovSH_VQzDObeYXWyG8LmA1OUTAa_s43cAezMEvWzRHzVLCH56LlPB9QGzgOauDT3kcuc_CxTY9gaSVpvMBF_obNKhlS2XyGBL8DZGdfPmKCBixDwQHw4CysJrkpq1c3a2PtvAKNu472FybLLrRTTW1ocTj5s25Kq1Fh2wz5rzTvySzsL-KybHyL7vzvh02b-AA&d2=xVdRtusgCFwR50jc_95ujQIzo2n6d329AQSHATXta42HiX2YuFJ1lmEupQ_py_Kc9g_idVxfIWH1MJwAKh6jSxUipb35Jf8WucyqAN3515t5LYAiPQ17gsYg8ovAHjhDlIDUm9tC3YhypMOHxjgH1IV-fyjQMYVmSgblJKLKuGlnHhk0XRo5BbkYQKm0ULY54ddYAIRNttS3TZgm3og8NCVMq7YUBNmSURnZlnKnwAsFdx1lT7GeHiY1ScCTq5MZ9pR8UE6DUEsGiGVi4l5l1XWsPM6PozsF3yZcdRQNjvJUjKF9W8GLICBKeL-OuQahExRfSeWEeGHcsptrvF9HQNiJvL6SoC3lIhyrLS-SaGz7DBXo2-UYeHjtbkjZFnSHYhyvNfIi356_dHmBEi5gyD7jLnKmVH7dZwVKPO0B28j1fWKMcVCuz7_e-iAyHlcvU3yHOOt3CWvRVMeH9QDDuDl7l9CBoQroZTmwvfBO-zeAsJZ0DMJl6Icxd2EFk1QqPnqFsBPT6hgxQmVaWnehHwCHWDGIyiH47NdAKSg0W7qDCOXmezP8Skz9kmr7YoFgoBazvvm32xqD3hv-LO0t4E3W93_87K9fUREApWBDUlm3OG7gx6gbeo3bmJexOgHGl5_b7dRTdrfTKwsf4YDc6v_5vZ9hQvhzWWQbewd3E5hSiwEVSrlQPE6M__UgQKuNnKkUwOXgGey8HwhM1VliVUZruL4lokk9vpGIsQ137-C4lKKMOdHrxP4B&c=160098-f9cb00",
+            "https://step-analyzer-beta.vercel.app/?t=Daisycutter&st=ETIA.&df=417&df2=317&b=191&hs=1.45&f=2520R-2592R-2880R-2952R-3024R-6384C-10032C-10128C-12048C-12252R-12432C-12816C-16176C-16704R-17712C-17808C&f2=5736R&d=vVZbjsMwCDwREiTn6P2vs7XNYwY73Wo_FlU1NjAM2E6iyiJt_tcFi9_VrelgOU_9niFqYr7uhg1ErumsdleKqdsKwxT2xMGtmoPdWkmlzP4HQ6WI6KzGcDUXT7oYo7KeDo-_QWGBPf1PjpdD3k0fHgZVRn6FGmxwAO5YSNBFs0ZgLptcvjw297hV6ABgllUGFwVmlX84EEUk7N2gGp44rr4Uxwx7d0GvIpFYNyCoZwlOWqMtBCiODn-rJ-T1FpxvW-mZaiu1CtOTDjmPet7bKhVibR63CqStKmeqARbmuGpYXaoa4N5ln9WLSnMgDLcXiLyafLEw6A5lnjCLVq_ZdJgF2Urk6nKyNSYLjEI04ahCOyNEKu_-4vA2BJyfrGcETEUcEDqIJkJ0ffzwGXn7GGc2gHw7fC8Mb-ZSNhBJk2L48bVgOPqb4KsMCFx8V1_zWnyq0vth3lB8PSU2TqX4qKUOTCdCOHAFazxdNUOUStFSxSgbx5Zj50BwPeU-l4ANETvsmrKX0TC0O9VxuztmC7_ZvI53yRGAsoXCQDmBEg5BQ35jsPfgqaL_7AEv2L52H3tAkg5IV-vE5JB3kvIcJnX-Cn2M9HG2R7m7ldoLzFcdYYCPsWbltOTMADkWBBRRIpjBNg0CiEqBCpXZJhwHTIHh4RmzCTFnOkbfr_7uqv-xig_vkESksopbJhmKoB3MDQEAWrpnBmwwwCOGojAjByYMC6xL7y2zJoxeYzyny4HtlQaxOJ3SNjHLNoFAYjWP6guEb08rnFGsLbaucuEdALakFSVl0ZNC7LCYMH3oqtVaTcG-hO7v-jeY0UB5iAHF8Mv80RySD4C_jnMb_bulvghbCpYf&d2=nVcLluMgDDsR7-Hm_nfbBGMsyZB2lnaKv7JMCMn0zqOJ_r8Guz9j-qj3CbhWQI-4GPaIjjC_ZwRMBwT4YgQDLNt0Q8Cu4DMuVAYApJlluSE1ZdRrrwe7AqCbQ0-eI8Apnewxvy3Su_3IAPmFBLUVqEGSQeBYbOuy14T_ogDVamG0ray0WoOqyXJmFwoJkAWasU4BjrDjNRRJzRjwEscuyzAp3MIn1M_ayt7Cdf8dOYbw53XUu2jeslAh-Q0euxsGe1gC2bjJvt8LM-_P65weOZeACKW1D2BesQgZdzVdpt-OUzbkUWPZKSjN6XpYSn0JeTEhC9EaZSHGFiFKPZ9YCZcx6QUBSxEHhO4Md37OxEHdpttToZ4jxK7PnwKCu97iq5HpzzmeTz9UIF7Jd66e_dIl5HdYlyybCCNAHUJyu88N22_qYAYLIWOmHbNUI3sCcOUKkM4dQIVHIHuZgYEPPgLDe2okraHiCQd-24jgxvEzA4laNmQQvUJsAFhmWVqf0ZTSllGX6w3KvgX8LYsga8DRLmALvBxLWO02sQwxZKOpzGPwgyonCGYYdderQHwyHzzMgBNdwHbfGVoFIAKCZiS4VrayUlyRMBkI5e7SKuBMBea1EzeBXBm7A5oPAzpPD1tT0roet2lrEmzg_wYwRmHQsRfbGMRGDF7i3WBpj7gzA9uJ1di-BRz9cxz_b0L-ewD3N7-s13jhvdx3i_fr2DTQ7YeAARbKMgqlfLSET1EUYQG48O0_s0JBCOCrT8_riABIDaHnqC1QWCax7ooNAGCttVeGsYpj24Ko60f1Z8pHUXmjnKO8Of8D&c=ffc37c-6e005b"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-15-bpl-s5-tt0-extra-savior/jacket-eye-of-the-heaven.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-15-bpl-s5-triple-tribe-zero-extra-savior.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "KONAMI 公式イベントページより · ©Konami Arcade Games",
+          "kind": "jacket",
+          "sources": [
+            "https://x.com/DDR_573/status/2099755517707243960",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://p.eagate.573.jp/game/bpl/season5/event/triple_tribe_zero/index.html",
+            "https://x.com/BemaniProLeague/status/1944955156594090253",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/howto/how_ea_pass.html",
+            "https://p.eagate.573.jp/game/2dx/26/newsong/46_zendegi_dance.html",
+            "https://x.com/3t1a/status/1328538174113476609",
+            "https://remywiki.com/AC_DDR_WORLD",
+            "https://remywiki.com/EYE_OF_THE_HEAVEN",
+            "https://remywiki.com/Bye_or_not",
+            "https://remywiki.com/ZENDEGI_DANCE",
+            "https://remywiki.com/Daisycutter",
+            "https://remywiki.com/Shippuujinrai",
+            "https://remywiki.com/Firestorm"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-15-bpl-s5-tt0-extra-savior/jacket-firestorm.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-15-bpl-s5-triple-tribe-zero-extra-savior.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "KONAMI 公式 SOUND VOLTEX サイトより · ©KONAMI",
+          "kind": "jacket",
+          "sources": [
+            "https://x.com/DDR_573/status/2099755517707243960",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://p.eagate.573.jp/game/bpl/season5/event/triple_tribe_zero/index.html",
+            "https://x.com/BemaniProLeague/status/1944955156594090253",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/howto/how_ea_pass.html",
+            "https://p.eagate.573.jp/game/2dx/26/newsong/46_zendegi_dance.html",
+            "https://x.com/3t1a/status/1328538174113476609",
+            "https://remywiki.com/AC_DDR_WORLD",
+            "https://remywiki.com/EYE_OF_THE_HEAVEN",
+            "https://remywiki.com/Bye_or_not",
+            "https://remywiki.com/ZENDEGI_DANCE",
+            "https://remywiki.com/Daisycutter",
+            "https://remywiki.com/Shippuujinrai",
+            "https://remywiki.com/Firestorm"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-15-bpl-s5-tt0-extra-savior/jacket-shippu-jinrai.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-15-bpl-s5-triple-tribe-zero-extra-savior.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "KONAMI 公式イベントページより · ©Konami Arcade Games",
+          "kind": "jacket",
+          "sources": [
+            "https://x.com/DDR_573/status/2099755517707243960",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://p.eagate.573.jp/game/bpl/season5/event/triple_tribe_zero/index.html",
+            "https://x.com/BemaniProLeague/status/1944955156594090253",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/howto/how_ea_pass.html",
+            "https://p.eagate.573.jp/game/2dx/26/newsong/46_zendegi_dance.html",
+            "https://x.com/3t1a/status/1328538174113476609",
+            "https://remywiki.com/AC_DDR_WORLD",
+            "https://remywiki.com/EYE_OF_THE_HEAVEN",
+            "https://remywiki.com/Bye_or_not",
+            "https://remywiki.com/ZENDEGI_DANCE",
+            "https://remywiki.com/Daisycutter",
+            "https://remywiki.com/Shippuujinrai",
+            "https://remywiki.com/Firestorm"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-15-bpl-s5-tt0-extra-savior/jacket-zendegi-dance.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-15-bpl-s5-triple-tribe-zero-extra-savior.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "KONAMI 公式イベントページより · ©Konami Arcade Games",
+          "kind": "jacket",
+          "sources": [
+            "https://x.com/DDR_573/status/2099755517707243960",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://p.eagate.573.jp/game/bpl/season5/event/triple_tribe_zero/index.html",
+            "https://x.com/BemaniProLeague/status/1944955156594090253",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/howto/how_ea_pass.html",
+            "https://p.eagate.573.jp/game/2dx/26/newsong/46_zendegi_dance.html",
+            "https://x.com/3t1a/status/1328538174113476609",
+            "https://remywiki.com/AC_DDR_WORLD",
+            "https://remywiki.com/EYE_OF_THE_HEAVEN",
+            "https://remywiki.com/Bye_or_not",
+            "https://remywiki.com/ZENDEGI_DANCE",
+            "https://remywiki.com/Daisycutter",
+            "https://remywiki.com/Shippuujinrai",
+            "https://remywiki.com/Firestorm"
+          ]
+        },
+        {
+          "article": "2026-09-19-triple-tribe-zero-ab.mdx",
+          "status": "draft",
+          "usage": "hero",
+          "credit": "KONAMI / Triple Tribe ZERO公式",
+          "kind": null,
+          "sources": [
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://step-analyzer-beta.vercel.app/?t=ZENDEGI+DANCE&st=ARM+x+BEMANI+Sound+Team+%22U1+overground%22&df=417&df2=315&b=80%2C28%3A160%2C84%3A80%2C88%3A160%2C152%3A80%2C160%3A160%2C176%3A80%2C188%3A160%2C200%3A80%2C202%3A160%2C214%3A80%2C216%3A160&s=240%3A0.375%2C243%3A0.375&hs=1.85&d=zVjRksMgCPwiZ6T5_3-7NhHYXbDJvdyc04mwwAqaGNM5uQ3RG8DmNFdCQNUYNhVN8HSwRo0o14YMW3iMzGkqxJrJl0Tc89OPWhJr6c6GTWXFfhePa2Lww8sLfD7IkeLEGep1kCfk49DI1Sg-n4EPXCMp_S16bkdayD7PEjMJZkghxwZ8dQM9sQlYaUvrLZrxL_RHbbxkEQ-asHmJBh3M1ec6xDWuzUxStLdhnAC0I0WuS7njPunc1xrFr1wwTIlOAnfd9ciAjI5eGTjW9hQgWxuWsOs5byQ4pfF1cCCYXoJm4Mw5UJ8AZ5A-QeCIjFyImdBgO-KAAPQuOqQI3V-qLkCMdCkjinI3u0QnGm4KO6SYMeAhJfz9drRxv4e1gDv9YdtuRxMnBC4-Cz5e2Y5KqZIiu5xT-OqzttyOdtPpWWxm42y0yBMTqHPWbQ7vJ8klvh_NpVHepMQTxu3INcXCR_6FaIR_bVaERruDw5L2Z_rD9g9ei0mbrCEazzENDVyM04HoutMdeS37cdkXbqvkReacwZ2EHB-453z1MP4pjnd35bIiRE3hdeHrCczHS_wiPlJbgeqw2lgZwszr8uRU6tTa5DM6MTENrIHoIxF51tdA9fCSUv8K1VXOOPdmwdAKpuK4K1ERSBRL1KBU5bhTiI20AmwSibuEPqRaf5jJ3qHtEPkaPy6JBzOIigMmhYF0Z4-jiV_VQXDTXB8f7xzUZ9nkPZ0piqojL6EcUKcAJrDi9CSFoSFkovSH_VQzDObeYXWyG8LmA1OUTAa_s43cAezMEvWzRHzVLCH56LlPB9QGzgOauDT3kcuc_CxTY9gaSVpvMBF_obNKhlS2XyGBL8DZGdfPmKCBixDwQHw4CysJrkpq1c3a2PtvAKNu472FybLLrRTTW1ocTj5s25Kq1Fh2wz5rzTvySzsL-KybHyL7vzvh02b-AA&d2=xVdRtusgCFwR50jc_95ujQIzo2n6d329AQSHATXta42HiX2YuFJ1lmEupQ_py_Kc9g_idVxfIWH1MJwAKh6jSxUipb35Jf8WucyqAN3515t5LYAiPQ17gsYg8ovAHjhDlIDUm9tC3YhypMOHxjgH1IV-fyjQMYVmSgblJKLKuGlnHhk0XRo5BbkYQKm0ULY54ddYAIRNttS3TZgm3og8NCVMq7YUBNmSURnZlnKnwAsFdx1lT7GeHiY1ScCTq5MZ9pR8UE6DUEsGiGVi4l5l1XWsPM6PozsF3yZcdRQNjvJUjKF9W8GLICBKeL-OuQahExRfSeWEeGHcsptrvF9HQNiJvL6SoC3lIhyrLS-SaGz7DBXo2-UYeHjtbkjZFnSHYhyvNfIi356_dHmBEi5gyD7jLnKmVH7dZwVKPO0B28j1fWKMcVCuz7_e-iAyHlcvU3yHOOt3CWvRVMeH9QDDuDl7l9CBoQroZTmwvfBO-zeAsJZ0DMJl6Icxd2EFk1QqPnqFsBPT6hgxQmVaWnehHwCHWDGIyiH47NdAKSg0W7qDCOXmezP8Skz9kmr7YoFgoBazvvm32xqD3hv-LO0t4E3W93_87K9fUREApWBDUlm3OG7gx6gbeo3bmJexOgHGl5_b7dRTdrfTKwsf4YDc6v_5vZ9hQvhzWWQbewd3E5hSiwEVSrlQPE6M__UgQKuNnKkUwOXgGey8HwhM1VliVUZruL4lokk9vpGIsQ137-C4lKKMOdHrxP4B&c=160098-f9cb00",
+            "https://step-analyzer-beta.vercel.app/?t=Daisycutter&st=ETIA.&df=417&df2=317&b=191&hs=1.45&f=2520R-2592R-2880R-2952R-3024R-6384C-10032C-10128C-12048C-12252R-12432C-12816C-16176C-16704R-17712C-17808C&f2=5736R&d=vVZbjsMwCDwREiTn6P2vs7XNYwY73Wo_FlU1NjAM2E6iyiJt_tcFi9_VrelgOU_9niFqYr7uhg1ErumsdleKqdsKwxT2xMGtmoPdWkmlzP4HQ6WI6KzGcDUXT7oYo7KeDo-_QWGBPf1PjpdD3k0fHgZVRn6FGmxwAO5YSNBFs0ZgLptcvjw297hV6ABgllUGFwVmlX84EEUk7N2gGp44rr4Uxwx7d0GvIpFYNyCoZwlOWqMtBCiODn-rJ-T1FpxvW-mZaiu1CtOTDjmPet7bKhVibR63CqStKmeqARbmuGpYXaoa4N5ln9WLSnMgDLcXiLyafLEw6A5lnjCLVq_ZdJgF2Urk6nKyNSYLjEI04ahCOyNEKu_-4vA2BJyfrGcETEUcEDqIJkJ0ffzwGXn7GGc2gHw7fC8Mb-ZSNhBJk2L48bVgOPqb4KsMCFx8V1_zWnyq0vth3lB8PSU2TqX4qKUOTCdCOHAFazxdNUOUStFSxSgbx5Zj50BwPeU-l4ANETvsmrKX0TC0O9VxuztmC7_ZvI53yRGAsoXCQDmBEg5BQ35jsPfgqaL_7AEv2L52H3tAkg5IV-vE5JB3kvIcJnX-Cn2M9HG2R7m7ldoLzFcdYYCPsWbltOTMADkWBBRRIpjBNg0CiEqBCpXZJhwHTIHh4RmzCTFnOkbfr_7uqv-xig_vkESksopbJhmKoB3MDQEAWrpnBmwwwCOGojAjByYMC6xL7y2zJoxeYzyny4HtlQaxOJ3SNjHLNoFAYjWP6guEb08rnFGsLbaucuEdALakFSVl0ZNC7LCYMH3oqtVaTcG-hO7v-jeY0UB5iAHF8Mv80RySD4C_jnMb_bulvghbCpYf&d2=nVcLluMgDDsR7-Hm_nfbBGMsyZB2lnaKv7JMCMn0zqOJ_r8Guz9j-qj3CbhWQI-4GPaIjjC_ZwRMBwT4YgQDLNt0Q8Cu4DMuVAYApJlluSE1ZdRrrwe7AqCbQ0-eI8Apnewxvy3Su_3IAPmFBLUVqEGSQeBYbOuy14T_ogDVamG0ray0WoOqyXJmFwoJkAWasU4BjrDjNRRJzRjwEscuyzAp3MIn1M_ayt7Cdf8dOYbw53XUu2jeslAh-Q0euxsGe1gC2bjJvt8LM-_P65weOZeACKW1D2BesQgZdzVdpt-OUzbkUWPZKSjN6XpYSn0JeTEhC9EaZSHGFiFKPZ9YCZcx6QUBSxEHhO4Md37OxEHdpttToZ4jxK7PnwKCu97iq5HpzzmeTz9UIF7Jd66e_dIl5HdYlyybCCNAHUJyu88N22_qYAYLIWOmHbNUI3sCcOUKkM4dQIVHIHuZgYEPPgLDe2okraHiCQd-24jgxvEzA4laNmQQvUJsAFhmWVqf0ZTSllGX6w3KvgX8LYsga8DRLmALvBxLWO02sQwxZKOpzGPwgyonCGYYdderQHwyHzzMgBNdwHbfGVoFIAKCZiS4VrayUlyRMBkI5e7SKuBMBea1EzeBXBm7A5oPAzpPD1tT0roet2lrEmzg_wYwRmHQsRfbGMRGDF7i3WBpj7gzA9uJ1di-BRz9cxz_b0L-ewD3N7-s13jhvdx3i_fr2DTQ7YeAARbKMgqlfLSET1EUYQG48O0_s0JBCOCrT8_riABIDaHnqC1QWCax7ooNAGCttVeGsYpj24Ko60f1Z8pHUXmjnKO8Of8D&c=ffc37c-6e005b"
+          ]
+        },
+        {
+          "article": "2026-09-19-triple-tribe-zero-ab.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "KONAMI / Triple Tribe ZERO公式",
+          "kind": "jacket",
+          "sources": [
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://step-analyzer-beta.vercel.app/?t=ZENDEGI+DANCE&st=ARM+x+BEMANI+Sound+Team+%22U1+overground%22&df=417&df2=315&b=80%2C28%3A160%2C84%3A80%2C88%3A160%2C152%3A80%2C160%3A160%2C176%3A80%2C188%3A160%2C200%3A80%2C202%3A160%2C214%3A80%2C216%3A160&s=240%3A0.375%2C243%3A0.375&hs=1.85&d=zVjRksMgCPwiZ6T5_3-7NhHYXbDJvdyc04mwwAqaGNM5uQ3RG8DmNFdCQNUYNhVN8HSwRo0o14YMW3iMzGkqxJrJl0Tc89OPWhJr6c6GTWXFfhePa2Lww8sLfD7IkeLEGep1kCfk49DI1Sg-n4EPXCMp_S16bkdayD7PEjMJZkghxwZ8dQM9sQlYaUvrLZrxL_RHbbxkEQ-asHmJBh3M1ec6xDWuzUxStLdhnAC0I0WuS7njPunc1xrFr1wwTIlOAnfd9ciAjI5eGTjW9hQgWxuWsOs5byQ4pfF1cCCYXoJm4Mw5UJ8AZ5A-QeCIjFyImdBgO-KAAPQuOqQI3V-qLkCMdCkjinI3u0QnGm4KO6SYMeAhJfz9drRxv4e1gDv9YdtuRxMnBC4-Cz5e2Y5KqZIiu5xT-OqzttyOdtPpWWxm42y0yBMTqHPWbQ7vJ8klvh_NpVHepMQTxu3INcXCR_6FaIR_bVaERruDw5L2Z_rD9g9ei0mbrCEazzENDVyM04HoutMdeS37cdkXbqvkReacwZ2EHB-453z1MP4pjnd35bIiRE3hdeHrCczHS_wiPlJbgeqw2lgZwszr8uRU6tTa5DM6MTENrIHoIxF51tdA9fCSUv8K1VXOOPdmwdAKpuK4K1ERSBRL1KBU5bhTiI20AmwSibuEPqRaf5jJ3qHtEPkaPy6JBzOIigMmhYF0Z4-jiV_VQXDTXB8f7xzUZ9nkPZ0piqojL6EcUKcAJrDi9CSFoSFkovSH_VQzDObeYXWyG8LmA1OUTAa_s43cAezMEvWzRHzVLCH56LlPB9QGzgOauDT3kcuc_CxTY9gaSVpvMBF_obNKhlS2XyGBL8DZGdfPmKCBixDwQHw4CysJrkpq1c3a2PtvAKNu472FybLLrRTTW1ocTj5s25Kq1Fh2wz5rzTvySzsL-KybHyL7vzvh02b-AA&d2=xVdRtusgCFwR50jc_95ujQIzo2n6d329AQSHATXta42HiX2YuFJ1lmEupQ_py_Kc9g_idVxfIWH1MJwAKh6jSxUipb35Jf8WucyqAN3515t5LYAiPQ17gsYg8ovAHjhDlIDUm9tC3YhypMOHxjgH1IV-fyjQMYVmSgblJKLKuGlnHhk0XRo5BbkYQKm0ULY54ddYAIRNttS3TZgm3og8NCVMq7YUBNmSURnZlnKnwAsFdx1lT7GeHiY1ScCTq5MZ9pR8UE6DUEsGiGVi4l5l1XWsPM6PozsF3yZcdRQNjvJUjKF9W8GLICBKeL-OuQahExRfSeWEeGHcsptrvF9HQNiJvL6SoC3lIhyrLS-SaGz7DBXo2-UYeHjtbkjZFnSHYhyvNfIi356_dHmBEi5gyD7jLnKmVH7dZwVKPO0B28j1fWKMcVCuz7_e-iAyHlcvU3yHOOt3CWvRVMeH9QDDuDl7l9CBoQroZTmwvfBO-zeAsJZ0DMJl6Icxd2EFk1QqPnqFsBPT6hgxQmVaWnehHwCHWDGIyiH47NdAKSg0W7qDCOXmezP8Skz9kmr7YoFgoBazvvm32xqD3hv-LO0t4E3W93_87K9fUREApWBDUlm3OG7gx6gbeo3bmJexOgHGl5_b7dRTdrfTKwsf4YDc6v_5vZ9hQvhzWWQbewd3E5hSiwEVSrlQPE6M__UgQKuNnKkUwOXgGey8HwhM1VliVUZruL4lokk9vpGIsQ137-C4lKKMOdHrxP4B&c=160098-f9cb00",
+            "https://step-analyzer-beta.vercel.app/?t=Daisycutter&st=ETIA.&df=417&df2=317&b=191&hs=1.45&f=2520R-2592R-2880R-2952R-3024R-6384C-10032C-10128C-12048C-12252R-12432C-12816C-16176C-16704R-17712C-17808C&f2=5736R&d=vVZbjsMwCDwREiTn6P2vs7XNYwY73Wo_FlU1NjAM2E6iyiJt_tcFi9_VrelgOU_9niFqYr7uhg1ErumsdleKqdsKwxT2xMGtmoPdWkmlzP4HQ6WI6KzGcDUXT7oYo7KeDo-_QWGBPf1PjpdD3k0fHgZVRn6FGmxwAO5YSNBFs0ZgLptcvjw297hV6ABgllUGFwVmlX84EEUk7N2gGp44rr4Uxwx7d0GvIpFYNyCoZwlOWqMtBCiODn-rJ-T1FpxvW-mZaiu1CtOTDjmPet7bKhVibR63CqStKmeqARbmuGpYXaoa4N5ln9WLSnMgDLcXiLyafLEw6A5lnjCLVq_ZdJgF2Urk6nKyNSYLjEI04ahCOyNEKu_-4vA2BJyfrGcETEUcEDqIJkJ0ffzwGXn7GGc2gHw7fC8Mb-ZSNhBJk2L48bVgOPqb4KsMCFx8V1_zWnyq0vth3lB8PSU2TqX4qKUOTCdCOHAFazxdNUOUStFSxSgbx5Zj50BwPeU-l4ANETvsmrKX0TC0O9VxuztmC7_ZvI53yRGAsoXCQDmBEg5BQ35jsPfgqaL_7AEv2L52H3tAkg5IV-vE5JB3kvIcJnX-Cn2M9HG2R7m7ldoLzFcdYYCPsWbltOTMADkWBBRRIpjBNg0CiEqBCpXZJhwHTIHh4RmzCTFnOkbfr_7uqv-xig_vkESksopbJhmKoB3MDQEAWrpnBmwwwCOGojAjByYMC6xL7y2zJoxeYzyny4HtlQaxOJ3SNjHLNoFAYjWP6guEb08rnFGsLbaucuEdALakFSVl0ZNC7LCYMH3oqtVaTcG-hO7v-jeY0UB5iAHF8Mv80RySD4C_jnMb_bulvghbCpYf&d2=nVcLluMgDDsR7-Hm_nfbBGMsyZB2lnaKv7JMCMn0zqOJ_r8Guz9j-qj3CbhWQI-4GPaIjjC_ZwRMBwT4YgQDLNt0Q8Cu4DMuVAYApJlluSE1ZdRrrwe7AqCbQ0-eI8Apnewxvy3Su_3IAPmFBLUVqEGSQeBYbOuy14T_ogDVamG0ray0WoOqyXJmFwoJkAWasU4BjrDjNRRJzRjwEscuyzAp3MIn1M_ayt7Cdf8dOYbw53XUu2jeslAh-Q0euxsGe1gC2bjJvt8LM-_P65weOZeACKW1D2BesQgZdzVdpt-OUzbkUWPZKSjN6XpYSn0JeTEhC9EaZSHGFiFKPZ9YCZcx6QUBSxEHhO4Md37OxEHdpttToZ4jxK7PnwKCu97iq5HpzzmeTz9UIF7Jd66e_dIl5HdYlyybCCNAHUJyu88N22_qYAYLIWOmHbNUI3sCcOUKkM4dQIVHIHuZgYEPPgLDe2okraHiCQd-24jgxvEzA4laNmQQvUJsAFhmWVqf0ZTSllGX6w3KvgX8LYsga8DRLmALvBxLWO02sQwxZKOpzGPwgyonCGYYdderQHwyHzzMgBNdwHbfGVoFIAKCZiS4VrayUlyRMBkI5e7SKuBMBea1EzeBXBm7A5oPAzpPD1tT0roet2lrEmzg_wYwRmHQsRfbGMRGDF7i3WBpj7gzA9uJ1di-BRz9cxz_b0L-ewD3N7-s13jhvdx3i_fr2DTQ7YeAARbKMgqlfLSET1EUYQG48O0_s0JBCOCrT8_riABIDaHnqC1QWCax7ooNAGCttVeGsYpj24Ko60f1Z8pHUXmjnKO8Of8D&c=ffc37c-6e005b"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-09-15-bpl-s5-tt0-extra-savior/official-post.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-15-bpl-s5-triple-tribe-zero-extra-savior.mdx",
+          "status": "review",
+          "usage": "hero",
+          "credit": "DDRチーム【公式】 / X · ©Konami Arcade Games",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2099755517707243960",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://p.eagate.573.jp/game/bpl/season5/event/triple_tribe_zero/index.html",
+            "https://x.com/BemaniProLeague/status/1944955156594090253",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/howto/how_ea_pass.html",
+            "https://p.eagate.573.jp/game/2dx/26/newsong/46_zendegi_dance.html",
+            "https://x.com/3t1a/status/1328538174113476609",
+            "https://remywiki.com/AC_DDR_WORLD",
+            "https://remywiki.com/EYE_OF_THE_HEAVEN",
+            "https://remywiki.com/Bye_or_not",
+            "https://remywiki.com/ZENDEGI_DANCE",
+            "https://remywiki.com/Daisycutter",
+            "https://remywiki.com/Shippuujinrai",
+            "https://remywiki.com/Firestorm"
+          ]
+        },
+        {
+          "article": "2026-09-15-bpl-s5-triple-tribe-zero-extra-savior.mdx",
+          "status": "review",
+          "usage": "media",
+          "credit": "DDRチーム【公式】 / X · ©Konami Arcade Games",
+          "kind": "post",
+          "sources": [
+            "https://x.com/DDR_573/status/2099755517707243960",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/info/index.html#info262",
+            "https://p.eagate.573.jp/game/bpl/season5/event/triple_tribe_zero/index.html",
+            "https://x.com/BemaniProLeague/status/1944955156594090253",
+            "https://p.eagate.573.jp/game/ddr/ddrworld/howto/how_ea_pass.html",
+            "https://p.eagate.573.jp/game/2dx/26/newsong/46_zendegi_dance.html",
+            "https://x.com/3t1a/status/1328538174113476609",
+            "https://remywiki.com/AC_DDR_WORLD",
+            "https://remywiki.com/EYE_OF_THE_HEAVEN",
+            "https://remywiki.com/Bye_or_not",
+            "https://remywiki.com/ZENDEGI_DANCE",
+            "https://remywiki.com/Daisycutter",
+            "https://remywiki.com/Shippuujinrai",
+            "https://remywiki.com/Firestorm"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/any-percent-pfc.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/bloody-iron-maiden-pfc.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/footnotes-best.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "hero",
+          "credit": "MONO DDR",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        },
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/footnotes-difficult-pfc.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/footnotes-first-aaa.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/footnotes-first.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-flare-skill.webp",
+      "review": "pending",
+      "uses": []
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp",
+      "review": "pending",
+      "uses": []
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/harukaze-restart-pfc.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/keep-on-movin-pfc.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/monstafesta-first.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/monstafesta-pfc.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+      "review": "pending",
+      "uses": []
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-2.webp",
+      "review": "pending",
+      "uses": []
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-3.webp",
+      "review": "pending",
+      "uses": []
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/shoku-pfc.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/turning-down.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-10-03-8th-mca-footnotes-on-bpm.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "MONO DDR",
+          "kind": "photo",
+          "sources": [
+            "https://x.com/DDR_573/status/2104831227769532838",
+            "https://ddrcommunity.com/ddr-world-extra-savior-world-the-8th-music-creator-audition/",
+            "https://x.com/MONO_DDR/status/2106021866343374930",
+            "https://x.com/MONO_DDR/status/2106022273375453374",
+            "https://x.com/MONO_DDR/status/2106022652632879353",
+            "https://x.com/MONO_DDR/status/2106023043734872258",
+            "https://x.com/MONO_DDR/status/2106023214044663825",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/session-history-1.webp",
+            "https://stepwire.vercel.app/images/articles/2026-10-03-8th-mca-footnotes-on-bpm/ghoststep-recent.webp"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/miserable-life-footwork/jacket.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-11-miserable-life-footwork.mdx",
+          "status": "draft",
+          "usage": "hero",
+          "credit": "楽曲ジャケット（本人提供）",
+          "kind": null,
+          "sources": [
+            "https://x.com/mono_ddr/status/2092982903663939910",
+            "https://step-analyzer-beta.vercel.app/?d=rVgLcusgDDwRMyi-_91eavTZlURw2qdJjb5oJWOMOyfTSPKvFK-suOZU3eu6FTqGx2R5DrkHcUVwb5bUwozSDyop4ebrhmCFwnWCNKnwBXI3zoN8YMAJmjmdGzcmndw9Io38ZDDYElCEHCZoYha9WBCBwwwz38t0nzgYYxcNkmqNjUQGKQylw_vsqQnRu4RUkwH1GnOODktO3-JF5MCPfdldgrOQk8fDokwUcrfgZyVFdZ3zmGHvBqNUfOnFliDBvjyeSBoORR7KUleLiPqM0PXPQUBMmT-m73xQAH7_LGzCd_0orbEezAfBj0C0NaYKeMNc0shzfCGzuGno1z18oCYgse2LKR_tJ7Gm8HFva-64gw_x39_mg5CTl_3E_EQ9Ro2p0i4pu0cKFHmhBUxX86GDZ6dYFXSXhwuVJlqTecNvyQJF51q6Qj_6FOsiPLI8Gn8XMI0E_kAQ8El7YpiEL6BmbsRcwr7dhJp-Bux7JQRk9xWMVR1DMWbkN154qlpAX-rAtZggz4mhS14cH5reCMqpSUkarhNPPq070N_s4-RQSGiociWBaycn2jauc-Hd4kmnP0A_3Jm-jkKsPjpZAfHOzefyTFdeg2GB08-itiMpwZrgiu-4cX8LCDRIYAiLP32wFZir0qmWTOlpsoSDMmt-AdV0VW-nd_8TUAOQaOGHsNN378SWuswNE7iW7VE2A06A0pgS6vAJFRjbD-92gy7hNisgMIvtLpIGnCCBIsgS21NKthMC_JL4JVXdCjK3q6IcLvarAPICjcv0r3fodd1JJNxlLc3Q3JyL4i9aVHUzGCFAWsQEkMBK5pJiJHQAZnFjm3Y-Pa7MAjHUggei8ILdTkJWFz5GNsGG32TcxCzmo9hq_qOdjaVbRbICymdLbpONdsvsdtnzLhbsMWrA_3vBkg0xf8Mh7R6c9gDVQjbgX1Ef8doY8qqJ16LhzE3zdq_BW7QZPUivvE59JqEgKh8-DaIhTWv89idI7lpmN6k04dT2xpxUX4lFxXZpWZTKcSEVKad3eXl5_wM&b=157%2C68%3A314%2C188%3A157%2C211%3A314%2C211.5%3A157%2C211.75%3A78.5%2C212%3A157%2C214%3A314%2C216%3A157%2C255%3A314%2C256%3A157%2C256.5%3A78.5%2C257%3A157%2C289%3A78.5%2C290.5%3A314%2C300.5%3A78.5%2C302%3A314%2C308%3A157%2C310%3A314%2C312%3A157%2C315%3A314%2C319%3A157%2C321%3A314%2C325%3A157%2C331%3A78.5%2C332.5%3A314%2C340.5%3A78.5%2C342%3A157%2C348%3A314%2C350%3A157%2C353%3A314%2C357%3A157%2C359%3A314%2C363%3A157%2C365%3A314%2C367%3A235.5%2C368.5%3A157%2C369.5%3A78.5&t=miserable+life+and+worthless+thoughts&st=%E3%82%81%E3%82%81%E3%82%81&df=418&c=fff6f6-57ee00",
+            "https://youtu.be/JPzXBZ4xtdQ"
+          ]
+        },
+        {
+          "article": "2026-09-11-miserable-life-footwork.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "楽曲ジャケット（本人提供）",
+          "kind": "jacket",
+          "sources": [
+            "https://x.com/mono_ddr/status/2092982903663939910",
+            "https://step-analyzer-beta.vercel.app/?d=rVgLcusgDDwRMyi-_91eavTZlURw2qdJjb5oJWOMOyfTSPKvFK-suOZU3eu6FTqGx2R5DrkHcUVwb5bUwozSDyop4ebrhmCFwnWCNKnwBXI3zoN8YMAJmjmdGzcmndw9Io38ZDDYElCEHCZoYha9WBCBwwwz38t0nzgYYxcNkmqNjUQGKQylw_vsqQnRu4RUkwH1GnOODktO3-JF5MCPfdldgrOQk8fDokwUcrfgZyVFdZ3zmGHvBqNUfOnFliDBvjyeSBoORR7KUleLiPqM0PXPQUBMmT-m73xQAH7_LGzCd_0orbEezAfBj0C0NaYKeMNc0shzfCGzuGno1z18oCYgse2LKR_tJ7Gm8HFva-64gw_x39_mg5CTl_3E_EQ9Ro2p0i4pu0cKFHmhBUxX86GDZ6dYFXSXhwuVJlqTecNvyQJF51q6Qj_6FOsiPLI8Gn8XMI0E_kAQ8El7YpiEL6BmbsRcwr7dhJp-Bux7JQRk9xWMVR1DMWbkN154qlpAX-rAtZggz4mhS14cH5reCMqpSUkarhNPPq070N_s4-RQSGiociWBaycn2jauc-Hd4kmnP0A_3Jm-jkKsPjpZAfHOzefyTFdeg2GB08-itiMpwZrgiu-4cX8LCDRIYAiLP32wFZir0qmWTOlpsoSDMmt-AdV0VW-nd_8TUAOQaOGHsNN378SWuswNE7iW7VE2A06A0pgS6vAJFRjbD-92gy7hNisgMIvtLpIGnCCBIsgS21NKthMC_JL4JVXdCjK3q6IcLvarAPICjcv0r3fodd1JJNxlLc3Q3JyL4i9aVHUzGCFAWsQEkMBK5pJiJHQAZnFjm3Y-Pa7MAjHUggei8ILdTkJWFz5GNsGG32TcxCzmo9hq_qOdjaVbRbICymdLbpONdsvsdtnzLhbsMWrA_3vBkg0xf8Mh7R6c9gDVQjbgX1Ef8doY8qqJ16LhzE3zdq_BW7QZPUivvE59JqEgKh8-DaIhTWv89idI7lpmN6k04dT2xpxUX4lFxXZpWZTKcSEVKad3eXl5_wM&b=157%2C68%3A314%2C188%3A157%2C211%3A314%2C211.5%3A157%2C211.75%3A78.5%2C212%3A157%2C214%3A314%2C216%3A157%2C255%3A314%2C256%3A157%2C256.5%3A78.5%2C257%3A157%2C289%3A78.5%2C290.5%3A314%2C300.5%3A78.5%2C302%3A314%2C308%3A157%2C310%3A314%2C312%3A157%2C315%3A314%2C319%3A157%2C321%3A314%2C325%3A157%2C331%3A78.5%2C332.5%3A314%2C340.5%3A78.5%2C342%3A157%2C348%3A314%2C350%3A157%2C353%3A314%2C357%3A157%2C359%3A314%2C363%3A157%2C365%3A314%2C367%3A235.5%2C368.5%3A157%2C369.5%3A78.5&t=miserable+life+and+worthless+thoughts&st=%E3%82%81%E3%82%81%E3%82%81&df=418&c=fff6f6-57ee00",
+            "https://youtu.be/JPzXBZ4xtdQ"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/miserable-life-footwork/result.webp",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-11-miserable-life-footwork.mdx",
+          "status": "draft",
+          "usage": "media",
+          "credit": "MONO DDR / X（本人のプレー写真）",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/mono_ddr/status/2092982903663939910",
+            "https://step-analyzer-beta.vercel.app/?d=rVgLcusgDDwRMyi-_91eavTZlURw2qdJjb5oJWOMOyfTSPKvFK-suOZU3eu6FTqGx2R5DrkHcUVwb5bUwozSDyop4ebrhmCFwnWCNKnwBXI3zoN8YMAJmjmdGzcmndw9Io38ZDDYElCEHCZoYha9WBCBwwwz38t0nzgYYxcNkmqNjUQGKQylw_vsqQnRu4RUkwH1GnOODktO3-JF5MCPfdldgrOQk8fDokwUcrfgZyVFdZ3zmGHvBqNUfOnFliDBvjyeSBoORR7KUleLiPqM0PXPQUBMmT-m73xQAH7_LGzCd_0orbEezAfBj0C0NaYKeMNc0shzfCGzuGno1z18oCYgse2LKR_tJ7Gm8HFva-64gw_x39_mg5CTl_3E_EQ9Ro2p0i4pu0cKFHmhBUxX86GDZ6dYFXSXhwuVJlqTecNvyQJF51q6Qj_6FOsiPLI8Gn8XMI0E_kAQ8El7YpiEL6BmbsRcwr7dhJp-Bux7JQRk9xWMVR1DMWbkN154qlpAX-rAtZggz4mhS14cH5reCMqpSUkarhNPPq070N_s4-RQSGiociWBaycn2jauc-Hd4kmnP0A_3Jm-jkKsPjpZAfHOzefyTFdeg2GB08-itiMpwZrgiu-4cX8LCDRIYAiLP32wFZir0qmWTOlpsoSDMmt-AdV0VW-nd_8TUAOQaOGHsNN378SWuswNE7iW7VE2A06A0pgS6vAJFRjbD-92gy7hNisgMIvtLpIGnCCBIsgS21NKthMC_JL4JVXdCjK3q6IcLvarAPICjcv0r3fodd1JJNxlLc3Q3JyL4i9aVHUzGCFAWsQEkMBK5pJiJHQAZnFjm3Y-Pa7MAjHUggei8ILdTkJWFz5GNsGG32TcxCzmo9hq_qOdjaVbRbICymdLbpONdsvsdtnzLhbsMWrA_3vBkg0xf8Mh7R6c9gDVQjbgX1Ef8doY8qqJ16LhzE3zdq_BW7QZPUivvE59JqEgKh8-DaIhTWv89idI7lpmN6k04dT2xpxUX4lFxXZpWZTKcSEVKad3eXl5_wM&b=157%2C68%3A314%2C188%3A157%2C211%3A314%2C211.5%3A157%2C211.75%3A78.5%2C212%3A157%2C214%3A314%2C216%3A157%2C255%3A314%2C256%3A157%2C256.5%3A78.5%2C257%3A157%2C289%3A78.5%2C290.5%3A314%2C300.5%3A78.5%2C302%3A314%2C308%3A157%2C310%3A314%2C312%3A157%2C315%3A314%2C319%3A157%2C321%3A314%2C325%3A157%2C331%3A78.5%2C332.5%3A314%2C340.5%3A78.5%2C342%3A157%2C348%3A314%2C350%3A157%2C353%3A314%2C357%3A157%2C359%3A314%2C363%3A157%2C365%3A314%2C367%3A235.5%2C368.5%3A157%2C369.5%3A78.5&t=miserable+life+and+worthless+thoughts&st=%E3%82%81%E3%82%81%E3%82%81&df=418&c=fff6f6-57ee00",
+            "https://youtu.be/JPzXBZ4xtdQ"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/teto-triple-pack/liar-dancer-mv.jpg",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-09-teto-triple-pack.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "マサラダ / YouTube · ライアーダンサー",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://www.youtube.com/watch?v=LLjfal8jCYI",
+            "https://www.youtube.com/watch?v=UHbmkxv-874",
+            "https://www.youtube.com/watch?v=Soy4jGPHr3g",
+            "https://ja.chordwiki.org/wiki/%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%89%EF%BC%88%E5%90%89%E7%94%B0%E5%A4%9C%E4%B8%96%EF%BC%89",
+            "https://x.com/sisterofoira/status/1681281912579723264",
+            "https://x.com/hiiragi_magne/status/1854889839935865060",
+            "https://www.billboard-japan.com/d_news/detail/144653/2"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/teto-triple-pack/override-mv.jpg",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-09-teto-triple-pack.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "吉田夜世 / YouTube · オーバーライド",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://www.youtube.com/watch?v=LLjfal8jCYI",
+            "https://www.youtube.com/watch?v=UHbmkxv-874",
+            "https://www.youtube.com/watch?v=Soy4jGPHr3g",
+            "https://ja.chordwiki.org/wiki/%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%89%EF%BC%88%E5%90%89%E7%94%B0%E5%A4%9C%E4%B8%96%EF%BC%89",
+            "https://x.com/sisterofoira/status/1681281912579723264",
+            "https://x.com/hiiragi_magne/status/1854889839935865060",
+            "https://www.billboard-japan.com/d_news/detail/144653/2"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/teto-triple-pack/stepwire-video-thumbnail.jpg",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-09-teto-triple-pack.mdx",
+          "status": "published",
+          "usage": "thumbnail",
+          "credit": "MONO DDR / STEPWIRE — 原曲MV画像: 吉田夜世・マサラダ・柊マグネタイト",
+          "kind": null,
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://www.youtube.com/watch?v=LLjfal8jCYI",
+            "https://www.youtube.com/watch?v=UHbmkxv-874",
+            "https://www.youtube.com/watch?v=Soy4jGPHr3g",
+            "https://ja.chordwiki.org/wiki/%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%89%EF%BC%88%E5%90%89%E7%94%B0%E5%A4%9C%E4%B8%96%EF%BC%89",
+            "https://x.com/sisterofoira/status/1681281912579723264",
+            "https://x.com/hiiragi_magne/status/1854889839935865060",
+            "https://www.billboard-japan.com/d_news/detail/144653/2"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "public/images/articles/teto-triple-pack/tetoris-mv.jpg",
+      "review": "pending",
+      "uses": [
+        {
+          "article": "2026-09-09-teto-triple-pack.mdx",
+          "status": "published",
+          "usage": "media",
+          "credit": "柊マグネタイト / YouTube · テトリス",
+          "kind": "screenshot",
+          "sources": [
+            "https://x.com/DDR_573/status/2097581211883614475",
+            "https://www.youtube.com/watch?v=LLjfal8jCYI",
+            "https://www.youtube.com/watch?v=UHbmkxv-874",
+            "https://www.youtube.com/watch?v=Soy4jGPHr3g",
+            "https://ja.chordwiki.org/wiki/%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%89%EF%BC%88%E5%90%89%E7%94%B0%E5%A4%9C%E4%B8%96%EF%BC%89",
+            "https://x.com/sisterofoira/status/1681281912579723264",
+            "https://x.com/hiiragi_magne/status/1854889839935865060",
+            "https://www.billboard-japan.com/d_news/detail/144653/2"
+          ]
+        }
+      ]
+    }
+  ]
+}

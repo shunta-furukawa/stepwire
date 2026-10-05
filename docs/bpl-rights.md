@@ -17,3 +17,15 @@ Remaining checks:
 2. Review the scope of systematic result collection and the source site's terms before adding automated collection.
 3. Historical Git commits and earlier Vercel deployment URLs can still contain the removed artwork. This change removes it from the current tree/deployment; it does not rewrite Git history or delete old deployments.
 4. This review covers the BPL archive. Existing STEPWIRE article illustrations/screenshots require a separate inventory if extending the review to the publication.
+
+## Follow-up audit — 2026-10-06 JST
+
+- Vercel project reports SSO protection `all_except_custom_domains`. Two historical URLs (deployments `dpl_J62oPQCXzuiFvxK8zse6SFNADbJN` and `dpl_5NfWKFypGjLV8Vcz4ByBeSZ78m5D`) redirect unauthenticated artwork requests to Vercel login. This is access protection, not deletion. No deployment was deleted or project setting changed.
+- GitHub repository visibility is **public**. Historical artwork archives remain in commits beginning at `c2a449c82a2e39556d30e3df9fac2144e6b270d1`. The two blob IDs are `4d9c5102f35c0119a4346b06552468de2eb91598` and `b4c4419085948f5319b0a2dc39f6c38e9e76cdea`. Current default/production branch is `claude/stepwire-ddr-news-mvp-1eugh6`.
+- Historical removal would require rewriting affected commits and updating the remote branch with a lease. Existing clones, GitHub cached commit views, pull-request refs, forks and old Vercel deployments are separate copies; rewriting a branch does not guarantee their removal. Prepare a recovery copy outside public hosting, coordinate other clones and contact GitHub support about remaining cached objects if necessary. This destructive operation has not been performed.
+- `pnpm rights:check` checks BPL metadata fields, known legacy artwork references, copied bundles and unreviewed non-text files. Original SW app icons are identified by SHA-256 in `docs/bpl-original-icons.json`. Production builds run the policy check after cleaning legacy extracted assets. This is regression prevention, not automated legal approval; it cannot identify every artwork URL assembled by code.
+- `pnpm rights:audit --write` regenerates `docs/article-assets-review.json`: 65 article image files/references, 35 used by published articles, all pending individual review. Credits and article sources are recorded, not interpreted as permission. Article bodies and image publication are unchanged in this follow-up.
+- Draft/review status does **not** protect static files in `public/` or the existing public studio previews. Those are part of the next article-by-article review; an asset must be removed from the deployed output to become unavailable there.
+- Corrected schema, renderer comments and video documentation that incorrectly implied attribution alone makes image reuse a quotation.
+
+Reference checked: https://www.konami.com/siteinfo/ja/ . Source-site terms and each rightsholder's applicable guidelines must be reviewed for the actual use; this inventory does not determine whether an individual quotation is lawful.

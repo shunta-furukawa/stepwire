@@ -2,7 +2,7 @@
   "name": "stepwire",
   "version": "0.1.0",
   "private": true,
-  "description": "STEPWIRE — DDR Sessions, Charts & Culture. MONO DDR's session blog as a Git repository: collection, drafting, publishing and video generation from one structured content source.",
+  "description": "STEPWIRE \u2014 DDR Sessions, Charts & Culture. MONO DDR's session blog as a Git repository: collection, drafting, publishing and video generation from one structured content source.",
   "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=22"
@@ -10,7 +10,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/prepare-bpl.mjs && node scripts/dev.mjs",
-    "build": "node scripts/prepare-bpl.mjs && next build",
+    "build": "node scripts/prepare-bpl.mjs && node scripts/check-bpl-assets.mjs && next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -22,7 +22,9 @@
     "article:from-post": "tsx scripts/create-article.ts --from-post",
     "news:collect": "tsx scripts/collect-news.ts",
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm content:validate && pnpm build",
-    "narration:transcribe": "tsx scripts/transcribe.ts"
+    "narration:transcribe": "tsx scripts/transcribe.ts",
+    "rights:check": "node --test scripts/bpl-asset-policy.test.mjs && node scripts/check-bpl-assets.mjs",
+    "rights:audit": "node scripts/audit-article-assets.mjs"
   },
   "dependencies": {
     "@types/three": "0.184.0",
