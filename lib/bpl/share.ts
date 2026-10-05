@@ -1,4 +1,5 @@
 import data from '../../public/bpl/data.json';
+import { matrixModel, matrixOptions } from '../../public/bpl/matrix.js';
 import brand from '../../public/bpl/brand.json';
 
 const teams: Record<string, {name:string;short:string;color:string}> = data.teams;
@@ -9,13 +10,14 @@ const label = (s:string|number) => String(s)==='0'?'ZERO':String(s)==='all'?'全
 export function shareModel(input: URLSearchParams) {
   const p = new URLSearchParams();
   const view = input.get('view') || 's6';
-  if (!['s6','preview','seasons','teams','team','players','player','versus','match','about'].includes(view)) throw new RangeError('Unknown view');
+  if (!['s6','preview','matrix','seasons','teams','team','players','player','versus','match','about'].includes(view)) throw new RangeError('Unknown view');
   p.set('view',view);
   const person = (id:string) => data.players.find(x=>x.id===id);
-  for(const key of ['hideResults','previewA','previewB','id','rosterSeason','season','team','stage','query','playerSeason','playerTeam','sort','a','b','vsSeason','vsFormat','partnerA','partnerB']) {
+  for(const key of [...Object.keys(matrixOptions),'hideResults','previewA','previewB','id','rosterSeason','season','team','stage','query','playerSeason','playerTeam','sort','a','b','vsSeason','vsFormat','partnerA','partnerB']) {
     const value=input.get(key); if(value===null)continue;
     let valid=false;
-    if(key==='hideResults')valid=['0','1'].includes(value);
+    if(Object.hasOwn(matrixOptions,key))valid=(matrixOptions[key as keyof typeof matrixOptions] as string[]).includes(value);
+    else if(key==='hideResults')valid=['0','1'].includes(value);
     else if(['previewA','previewB'].includes(key))valid=data.players.some(x=>x.history.some(h=>h.season===6&&h.team===value));
     else if(key==='id')valid=view==='match'?data.matches.some(m=>m.id===value):view==='team'?Object.hasOwn(teams,value):view==='player'?!!person(value):false;
     else if(['season','playerSeason','vsSeason','rosterSeason'].includes(key))valid=seasons.includes(value);
@@ -34,12 +36,19 @@ export function shareModel(input: URLSearchParams) {
   const get=(key:string,fallback='all')=>p.get(key)||fallback;
   let title='BPL DDR 戦績', detail='シーズン・チーム・選手・直接対決', metric=`${matches.length}試合`, eyebrow='ARCHIVE', color='#b4da46';
   let score='', left='',right='';
-  if(view==='s6'||view==='preview') {
+  let matrix: ReturnType<typeof matrixModel> | null = null;
+  if(view==='s6'||view==='preview'||view==='matrix') {
     title='S6 観戦ガイド';detail='7チーム・28選手 / 新体制と過去の対戦';metric='推しチーム・対戦プレビュー・結果非表示';eyebrow='SEASON 6';
-    if(view==='preview'){
+    if(view==='preview'||view==='matrix'){
       const a=p.get('previewA'),b=p.get('previewB');if(!a||!b||a===b)throw new RangeError('Choose two S6 teams');
       title=`${teams[a]!.short} vs ${teams[b]!.short}`;detail='S6 対戦プレビュー / 出場選手・対戦順は未発表';
       metric=`S5以前のチーム対戦 ${data.matches.filter(m=>m.season<6&&m.teams.includes(a)&&m.teams.includes(b)).length}試合`;eyebrow='PREVIEW';
+      if(view==='matrix'){
+        matrix=matrixModel(data,a,b,Object.fromEntries(p));
+        title=`${teams[a]!.short} × ${teams[b]!.short}`;eyebrow='HEAD TO HEAD';
+        detail=Object.entries(matrix.filters).map(([k,v])=>v==='all'?(k==='matrixSeason'?'S2–S5':k==='matrixFormat'?'Single + Duo':k==='matrixCategory'?'全区分':'全傾向'):k==='matrixSeason'?'S'+v:v==='tag'?'Duo':v==='single'?'Single':v).join(' / ');
+        metric='S6登録選手の過去対戦 / 行の選手から見た個人EX SCORE比較';
+      }
     }
   } else if(view==='seasons') {
     const s=get('season'),t=get('team'),stage=get('stage');
@@ -63,6 +72,6 @@ export function shareModel(input: URLSearchParams) {
   else if(view==='teams'){title='チーム一覧';metric='所属選手・過去戦績';eyebrow='TEAMS';}
   else {title='記録について';metric='集計方法・公式出典';eyebrow='SOURCES';}
   if(hidden&&['team','player','seasons','versus'].includes(view))detail+=' / S6結果非表示';
-  return {params:p,view,id,title,detail,metric,eyebrow,color,score,left,right,description:`${title}。${detail}。${metric}。STEPWIREの非公式BPL DDR戦績アーカイブ。`};
+  return {params:p,matrix,view,id,title,detail,metric,eyebrow,color,score,left,right,description:`${title}。${detail}。${metric}。STEPWIREの非公式BPL DDR戦績アーカイブ。`};
 }
 export function escapeHtml(value:string) {return value.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));}
