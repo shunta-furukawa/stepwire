@@ -63,6 +63,10 @@ export default async function HomePage() {
           </section>
 
           <aside className="space-y-2xl">
+            <a href="/bpl" className="sw-records-link">
+              <span>BPL DDR 戦績<small>シーズン・チーム・選手・直接対決</small></span>
+              <span aria-hidden="true">↗</span>
+            </a>
             <section aria-labelledby="desks-heading">
               <SectionHeading id="desks-heading" label="SECTIONS" description="読みもの" as="h2" />
               <ul className="mt-md space-y-md">

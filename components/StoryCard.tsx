@@ -11,7 +11,7 @@ import { FixtureBanner } from './FixtureBanner';
  */
 export function LeadStory({ article }: { article: Article }) {
   return (
-    <article className="border-b-4 border-line-strong pb-xl">
+    <article className="sw-lead">
       <div className="flex flex-wrap items-center gap-sm">
         <ImportanceFlag importance={article.importance} />
         <CategoryChip category={article.category} />

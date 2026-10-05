@@ -14,7 +14,7 @@ export function SectionHeading({
   id?: string;
 }) {
   return (
-    <div className="border-b-2 border-line-strong pb-sm">
+    <div className="sw-section-heading border-b-2 border-line-strong pb-sm">
       <Tag
         id={id}
         className="flex items-baseline gap-md font-mono text-micro font-bold uppercase tracking-wider"

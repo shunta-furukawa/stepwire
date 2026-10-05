@@ -1,43 +1,18 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
-/**
- * The STEPWIRE wordmark.
- *
- * `stacked` sets STEP over WIRE as a two-line block — the masthead treatment.
- * `inline` sets it on one line for compact contexts. Both are pure type: the
- * brand has no logo asset to load, break, or get out of sync with the video.
- */
+/** Both sizes use the master alphabet in scripts/build-brand.mjs. */
 export function Wordmark({
   variant = 'inline',
   className = '',
-}: {
-  variant?: 'inline' | 'stacked';
-  className?: string;
-}) {
-  if (variant === 'stacked') {
-    return (
-      <span className={`block font-display leading-[0.82] tracking-display ${className}`}>
-        <span className="block font-black">STEP</span>
-        <span className="block font-black text-accent">WIRE</span>
-      </span>
-    );
-  }
-
-  return (
-    <span className={`font-display font-black tracking-display ${className}`}>
-      STEP<span className="text-accent">WIRE</span>
-    </span>
-  );
+}: { variant?: 'inline' | 'stacked'; className?: string }) {
+  return <span className={`inline-block max-w-full ${className}`} data-variant={variant}>
+    <Image src="/brand/wordmark.svg" alt="STEPWIRE" width={834} height={104} className="sw-wordmark" unoptimized />
+  </span>;
 }
 
 export function MastheadLink({ className = '' }: { className?: string }) {
-  return (
-    <Link
-      href="/"
-      className={`inline-block ${className}`}
-      aria-label="STEPWIRE — home"
-    >
-      <Wordmark className="text-h3" />
-    </Link>
-  );
+  return <Link href="/" className={`sw-home ${className}`} aria-label="STEPWIRE ホーム">
+    <Image src="/brand/wordmark.svg" alt="STEPWIRE" width={834} height={104} className="sw-logo" priority unoptimized />
+  </Link>;
 }

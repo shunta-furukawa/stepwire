@@ -5,7 +5,7 @@ import { site } from '@/lib/site';
 
 export function Footer() {
   return (
-    <footer className="facet streak mt-3xl border-t-4 border-accent bg-deep text-fg">
+    <footer className="facet mt-3xl border-t-4 border-accent bg-deep text-fg">
       <div className="mx-auto grid max-w-[1180px] gap-xl px-md py-2xl sm:grid-cols-[1fr_auto]">
         <div>
           <Wordmark variant="stacked" className="text-h2 sm:text-h1" />
@@ -32,6 +32,7 @@ export function Footer() {
                 STEPWIREについて
               </Link>
             </li>
+            <li><a href="/bpl" className="hover:text-accent-hot">BPL戦績</a></li>
             <li>
               <a href="/feed.xml" className="hover:text-accent-hot">
                 RSS

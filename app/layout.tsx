@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
+  icons: { icon: "/brand/icon.svg" },
   authors: [{ name: site.operator }],
   creator: site.operator,
   publisher: site.name,
