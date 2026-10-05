@@ -1,6 +1,6 @@
 import {describe,it,expect} from 'vitest';
 import data from '../public/bpl/data.json';
-import {matrixRows,matrixTally,matrixModel} from '../public/bpl/matrix.js';
+import {matrixRows,matrixTally,matrixModel,matrixTone} from '../public/bpl/matrix.js';
 import {shareModel} from '../lib/bpl/share';
 describe('player matrix',()=>{
  it('uses opposing individual EX scores in Duo, never pair points',()=>{
@@ -18,7 +18,15 @@ describe('player matrix',()=>{
  it('separates zero records, draws, and a true zero win rate',()=>{
   expect(matrixTally([]).rate).toBeNull();
   expect(matrixTally([{scoreA:1,scoreB:1},{scoreA:1,scoreB:2}])).toMatchObject({w:0,d:1,l:1,rate:0,n:2});
-  expect(matrixTally([{scoreA:2,scoreB:1},{scoreA:1,scoreB:1}]).rate).toBe(50);
+  expect(matrixTally([{scoreA:2,scoreB:1},{scoreA:1,scoreB:1}]).rate).toBe(100);
+ });
+ it('leaves draws out of the denominator and uses neutral colors at 50 percent',()=>{
+  expect(matrixTally([{scoreA:1,scoreB:1}]).rate).toBeNull();
+  const even=matrixTally([{scoreA:2,scoreB:1},{scoreA:1,scoreB:2},{scoreA:1,scoreB:1}]);
+  expect(even.rate).toBe(50);expect(even.d).toBe(1);
+  expect(matrixTone(50)).toEqual({color:'#ecece7',background:'#222225'});
+  expect(matrixTone(100).color).toBe('#c2e975');expect(matrixTone(0).color).toBe('#ffaaa7');
+  expect(matrixTone(null).color).toBe('#96969c');
  });
  it('filters the official battle category and style together',()=>{
   const rows=matrixRows(data.matches,'THOR','KANAME',{matrixCategory:'GOLD',matrixStyle:'STANDARD'});

@@ -14,8 +14,10 @@ The archive landing view is now `#s6`. `#seasons` retains the historical archive
 
 ## 選手対戦マトリクス
 
-S6登録選手の4×4表は、過去所属を横断してS2・S4・S5の個人EX SCOREを比較する。ZEROとS6は含めない。勝率は勝数÷曲数（引分含む）、小数点以下四捨五入。記録0曲の勝率はnullで、0%とは区別する。Duoは相手側の選手のみ比較し、公式ペア得点とは別。
+S6登録選手の4×4表は、過去所属を横断してS2・S4・S5の個人EX SCOREを比較する。ZEROとS6は含めない。勝率は勝数÷（勝数＋敗数）、引分は分母から除外、小数点以下四捨五入。記録0曲・引分のみの勝率はnullで、0%とは区別する。Duoは相手側の選手のみ比較し、公式ペア得点とは別。
 
 `public/bpl/matrix.js`をブラウザとOGサーバーで共用。`matrixSeason`、`matrixFormat`、`matrixCategory`、`matrixStyle`で絞り込む。カテゴリーは各対戦の公式themeを使用し、POPULARや指定曲にSTANDARD/TRICKYを推測して付与しない。セルを選択すると同条件でカテゴリ別集計と楽曲別スコアを表示し、試合詳細の公式出典に進める。
 
 表の専用URLは`/bpl/s?view=matrix&previewA=round1&previewB=gigo&matrixCategory=GOLD`。専用OGは同じ条件の表を1200×630で生成。画像プレビュー内では対応ブラウザのWeb Share files APIでPNGを共有でき、未対応の場合は画像を開いて保存する。集計データ・ルールの自動更新は行わない。
+
+勝率50%は無彩色、50%超は緑、50%未満は赤系。表・カテゴリ詳細・共有画像で共通の色関数を使用する。

@@ -2,6 +2,7 @@
 import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { matrixTone } from '../../../public/bpl/matrix.js';
 import { shareModel } from '@/lib/bpl/share';
 
 export async function GET(request: Request) {
@@ -16,9 +17,9 @@ export async function GET(request: Request) {
         <div style={{display:'flex',fontSize:17,color:'#bbbdb6',marginTop:8,marginBottom:14}}>{m.detail}</div>
         <div style={{display:'flex',flexDirection:'column',width:'100%'}}>
           <div style={{display:'flex',height:38,alignItems:'center'}}><div style={{display:'flex',width:168,fontSize:16,color:'#a4a69d'}}>行 → 列</div>{table.right.map(p=><div key={p.id} style={{display:'flex',width:240,justifyContent:'center',fontSize:20}}>{p.name}</div>)}</div>
-          {table.left.map((p,i)=><div key={p.id} style={{display:'flex',height:84,borderTop:'1px solid #3a3a40'}}><div style={{display:'flex',width:168,alignItems:'center',fontSize:21}}>{p.name}</div>{table.cells[i]!.map((c,j)=><div key={j} style={{display:'flex',flexDirection:'column',width:240,alignItems:'center',justifyContent:'center',background:c.n?'#202619':'#151519',borderLeft:'4px solid #0a0a0b',borderBottom:'4px solid #0a0a0b'}}><div style={{display:'flex',fontSize:30,color:c.n?'#c2e975':'#888b81'}}>{c.n?c.rate+'%':'—'}</div><div style={{display:'flex',fontSize:15,color:'#d0d1ca'}}>{c.n?`${c.w}勝 ${c.d}分 ${c.l}敗 · ${c.n}曲`:'該当記録なし · 0曲'}</div></div>)}</div>)}
+          {table.left.map((p,i)=><div key={p.id} style={{display:'flex',height:84,borderTop:'1px solid #3a3a40'}}><div style={{display:'flex',width:168,alignItems:'center',fontSize:21}}>{p.name}</div>{table.cells[i]!.map((c,j)=><div key={j} style={{display:'flex',flexDirection:'column',width:240,alignItems:'center',justifyContent:'center',background:matrixTone(c.rate).background,borderLeft:'4px solid #0a0a0b',borderBottom:'4px solid #0a0a0b'}}><div style={{display:'flex',fontSize:30,color:matrixTone(c.rate).color}}>{c.rate===null?'—':c.rate+'%'}</div><div style={{display:'flex',fontSize:15,color:'#d0d1ca'}}>{c.n?`${c.w}勝 ${c.d}分 ${c.l}敗 · ${c.n}曲`:'該当記録なし · 0曲'}</div></div>)}</div>)}
         </div>
-        <div style={{display:'flex',flexDirection:'column',fontSize:14,color:'#a4a69d',marginTop:12,gap:5}}><span>行の選手基準・勝率＝勝数 ÷ 曲数（引分含む）・Duoは個人EX SCORE比較</span><span>S5以前の所属を横断 / ZERO除外 / 公式記録に基づく非公式集計 · STEPWIRE</span></div>
+        <div style={{display:'flex',flexDirection:'column',fontSize:14,color:'#a4a69d',marginTop:12,gap:5}}><span>行の選手基準・勝率＝勝ち ÷（勝ち＋負け）・Duoは個人EX SCORE比較</span><span>緑：勝ち越し / 無彩色：五分 / 赤：負け越し / 引分のみは — / S5以前・ZERO除外 / 非公式</span></div>
       </div>,{width:1200,height:630,fonts:[{name:'Bpl',data:font,style:'normal',weight:400}],headers:{'Cache-Control':'public, s-maxage=86400, stale-while-revalidate=604800'}});
     }
     return new ImageResponse(<div style={{width:'100%',height:'100%',display:'flex',flexDirection:'column',justifyContent:'space-between',padding:56,background:'#0a0a0b',color:'#ecece7',fontFamily:'Bpl',borderTop:`12px solid ${m.color}`}}>

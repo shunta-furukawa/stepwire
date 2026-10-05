@@ -113,7 +113,7 @@ let activeShareMatch=null, initialShareMatch=null, pendingShareState=null;
 const shareKeys=['season','team','stage','query','playerSeason','playerTeam','sort','a','b','vsSeason','vsFormat','partnerA','partnerB','previewA','previewB','matrixSeason','matrixFormat','matrixCategory','matrixStyle'];
 function shareContext(matrixOnly=false){
  const [raw,...args]=location.hash.slice(1).split('/').map(decodeURIComponent),view=matrixOnly?'matrix':activeShareMatch?'match':raw||'s6';
- const p=new URLSearchParams({view});p.set('hideResults',s6SessionPrefs.hideResults?'1':'0');let title='BPL DDR 戦績';
+ const p=new URLSearchParams({view});if(view==='matrix')p.set('matrixVersion','2');p.set('hideResults',s6SessionPrefs.hideResults?'1':'0');let title='BPL DDR 戦績';
  if(view==='match'){p.set('id',activeShareMatch);const m=allArchiveMatches.find(m=>m.id===activeShareMatch);title=m.teams.map(t=>team(t).short).join(' vs ')+(m.season===6&&s6SessionPrefs.hideResults?' · 結果非表示':' · '+m.points.join(' : '))}
  else if(view==='s6'||view==='preview'||view==='matrix'){for(const k of Object.keys(Matrix.matrixOptions))p.set(k,state[k]);p.set('previewA',state.previewA);p.set('previewB',state.previewB);title=view==='s6'?'S6 観戦ガイド':teamName(state.previewA,6)+' vs '+teamName(state.previewB,6)}
  else if(view==='team'){p.set('id',args[0]);const roster=document.querySelector('#team-roster-season');if(roster)p.set('rosterSeason',roster.value);title=team(args[0]).name}

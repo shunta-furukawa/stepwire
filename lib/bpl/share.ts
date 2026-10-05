@@ -11,7 +11,7 @@ export function shareModel(input: URLSearchParams) {
   const p = new URLSearchParams();
   const view = input.get('view') || 's6';
   if (!['s6','preview','matrix','seasons','teams','team','players','player','versus','match','about'].includes(view)) throw new RangeError('Unknown view');
-  p.set('view',view);
+  p.set('view',view);if(view==='matrix')p.set('matrixVersion','2');
   const person = (id:string) => data.players.find(x=>x.id===id);
   for(const key of [...Object.keys(matrixOptions),'hideResults','previewA','previewB','id','rosterSeason','season','team','stage','query','playerSeason','playerTeam','sort','a','b','vsSeason','vsFormat','partnerA','partnerB']) {
     const value=input.get(key); if(value===null)continue;
