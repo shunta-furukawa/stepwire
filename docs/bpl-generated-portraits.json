@@ -1,0 +1,326 @@
+{
+  "version": 1,
+  "description": "Generated illustrations based on publicly available player photographs. This provenance inventory is not rights clearance. Official photographs are not bundled.",
+  "portraits": {
+    "MAMURU3": {
+      "src": "/bpl/portraits/mamuru3.webp",
+      "sha256": "eff59f4eb1f8850a2b00fa4f8f58d79e182ee989922cf5a5a935a8f6a4109501",
+      "referenceSha256": "e3fa5949f9804d3b97c381442e6e495226a6431e15eed7ddf80bcc9b1d5aa820",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/game_panic/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "NOTTY": {
+      "src": "/bpl/portraits/notty.webp",
+      "sha256": "35d83c5431176f0e45f61407fce9586483048c68eb3d0d6007767958e0614b51",
+      "referenceSha256": "c9b697f6cac045f24ea856af9c838921c9f2614861e37addc93b1bd68db49d2a",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/apina_vrames/02/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "PO": {
+      "src": "/bpl/portraits/po.webp",
+      "sha256": "3e0adaadceb16c0d11d23abe031df6a1b9bc085f2bb39f6755bf83dbc9457529",
+      "referenceSha256": "86ca8c8a65f9817d02b2277bbb19177642014dbc80eafb462fba8ed603db2dfd",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season4/ddr/team/apina_vrames/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "HO4-KETI": {
+      "src": "/bpl/portraits/ho4-keti.webp",
+      "sha256": "571c209c24018891b895603a3dc818dafe473ff7c1de5c84d3096df8ca9fee8e",
+      "referenceSha256": "3d30e93ce2a6b91e67dd35dc484cefc422230bfe1e21f03f20f3e915b27d0199",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/game_panic/01/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "GIEZ-ACS": {
+      "src": "/bpl/portraits/giez-acs.webp",
+      "sha256": "a15981481a3970f1ad0dee743051ced3edb02cc938479a5dcd8d7cd77be33d38",
+      "referenceSha256": "e8e98e204b953390eb3b2b7eb4642e5addc2a4c9142c9b03919ef8c190b76b49",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/game_panic/02/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "YO4-YEAH": {
+      "src": "/bpl/portraits/yo4-yeah.webp",
+      "sha256": "2f6a16b49d61c33d87a1dc2ba6e440bc1834ac7892e1ffe1fd4317784aef19b5",
+      "referenceSha256": "b2822fed9bf8ae1f46a0c841b077ad28d7435508fd523a3de9a17f936fe1f3d1",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/apina_vrames/04/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "HIBIKI": {
+      "src": "/bpl/portraits/hibiki.webp",
+      "sha256": "7c20bb59cfab43cd056512c9f1af8857ecc41ec81d119bd87c0321f5567e327a",
+      "referenceSha256": "a98973c7e35f8ea98ae35c3708a67dfa49a4b277c74fc1ceedda71a43bac7a87",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/gigo/01/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "UN-LIM": {
+      "src": "/bpl/portraits/un-lim.webp",
+      "sha256": "ed806d853881ece9dd7564807f6a58af9018f1df0afb059eebe92052b5a7c8a0",
+      "referenceSha256": "8513cd04702cea1db10583a3e9c5514e0a908168e090a413f13fee91f846b368",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/gigo/02/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "TSUYOSHI": {
+      "src": "/bpl/portraits/tsuyoshi.webp",
+      "sha256": "fd2fd81b41fd765362db6521e66da850c2114cfa34d34c3080b8abc7e0150126",
+      "referenceSha256": "41effaab1d0d7819137fbcfe86f31100b7bd6ebef4955262d06522e67cdd1dc7",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/gigo/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "NAYU": {
+      "src": "/bpl/portraits/nayu.webp",
+      "sha256": "1346f416b37de008a92cf3d18b4ba3cc3e41ecb786e5bdc02900e6fe2812893d",
+      "referenceSha256": "513d4b5bed59a567527469d989500703cce9ae32f58f47f6438d4f03d72aec6a",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/leisure_land/01/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "RIN-GO!!": {
+      "src": "/bpl/portraits/rin-go.webp",
+      "sha256": "27b5d1298eff43bf0639ab3588abe2aac90df16e908f79c54ca6985bda9c9493",
+      "referenceSha256": "d178e5603dedcafa1f6c753319f85be5699e876e22c7aa03406ac199aa20a0ab",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/leisure_land/02/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "YUK1-S": {
+      "src": "/bpl/portraits/yuk1-s.webp",
+      "sha256": "5da0c4842d632e82fca6b324780695f20918ce2cafe34947371bc35e1599717a",
+      "referenceSha256": "a420be6b37112576d230906cf6528ae3e2af489a8c37249240f1f7189ee8a49f",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season4/ddr/team/leisure_land/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "O4MA.": {
+      "src": "/bpl/portraits/o4ma.webp",
+      "sha256": "9b744a256b402f778a86af5075f41008c7d540fdf859a75341bb23b1652cf791",
+      "referenceSha256": "05559718825b6eb72cea3078a0c7e83a2b87333c529529543d682377c72cca2d",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season4/ddr/team/round1/01/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "ZERO.": {
+      "src": "/bpl/portraits/zero.webp",
+      "sha256": "fe723a7d582b1c6609492b87e2dad2d565c46f6826adaa4a05f5da2bc29f5b55",
+      "referenceSha256": "142fc90e7b58a871ad4c1e503e6581f10d728a9a4057378e367542ecc06b48ef",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/round1/02/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "UN-RE": {
+      "src": "/bpl/portraits/un-re.webp",
+      "sha256": "4e97967e01c18ec62b2dfc1dd8b7c8a1d791c0ec4d14618ee3c51a0d881d7992",
+      "referenceSha256": "9be49378b6361a57cc7cbda80650f2bedc16c6e8493d49575fd5813abb8b2469",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season2/ddr/team/round1/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "KANAME": {
+      "src": "/bpl/portraits/kaname.webp",
+      "sha256": "53cdf0767aaee6e51dc11f5d9fcdfab8ee7a01b3c113c644be1acbd816d8e18f",
+      "referenceSha256": "34d888b8c1e15b1035c7ecbe2e0290c97f38517dcde36ba2ed84b31755823dec",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/silkhat/01/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "GINXYASU": {
+      "src": "/bpl/portraits/ginxyasu.webp",
+      "sha256": "43cd695470969b2887d6736d865b2f2f63fec8b7984a48e1d7b8f44e2ab8533c",
+      "referenceSha256": "35afea0c26b0760c77e12fba5ebc833afa996290205309b876339d503e37beed",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/silkhat/04/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "ABETAKU": {
+      "src": "/bpl/portraits/abetaku.webp",
+      "sha256": "5e2b5dbbf73e710ba13e189f201af74a23f0fd5c0a9b36a311cb0ed55fcb8333",
+      "referenceSha256": "6c48ddcbc01d60b27ac7aa291f92c8aee875ab9e64488f80ec3451db1a7a43bd",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season2/ddr/team/silkhat/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "YOSHIMIZ": {
+      "src": "/bpl/portraits/yoshimiz.webp",
+      "sha256": "5ba3a592ba7b7e3fcba02f45fc5a09a57a2a9b01b905c7fa368bf5712e43ed91",
+      "referenceSha256": "727340d7db167a702377a5f2506b886789a2c760e430b73815a6ef6063998fa2",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/taitostation_tradz/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "RINBO-": {
+      "src": "/bpl/portraits/rinbo.webp",
+      "sha256": "469e5159005bbf1fb02cf523e147ad99666b088b893eb2ab7b84e013bdecb47d",
+      "referenceSha256": "2fa20f49d77efe6d6dacb368867f35b99313d80ebe83306aedc28a9f6e5ddce7",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/apina_vrames/01/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "OOON!!": {
+      "src": "/bpl/portraits/ooon.webp",
+      "sha256": "3fb56b95c5afc1857d8ca27b2a07c35b19d860ffb4a615189d1b47bb3ed10235",
+      "referenceSha256": "dcb28ed7b9cd6fdc698017d6d4f10cbb38acdc00bdecf033fe9df1102db6a956",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season2/ddr/team/supernova_tohoku/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "YUDAI": {
+      "src": "/bpl/portraits/yudai.webp",
+      "sha256": "bc388feb3b727cbcfdb1607a1305cc34e89d9f259a3dbb6289869bf5d7d7b94a",
+      "referenceSha256": "d15c7c8554d572ba749916172f9f9e03ad8b91e1e91e40adbf692136127097c4",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season2/ddr/team/taitostation_tradz/01/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "THOR": {
+      "src": "/bpl/portraits/thor.webp",
+      "sha256": "20507415ec0238fd3acf29f8c56ff6c119d9acd4592f2ad5621fc3f5a2f9d194",
+      "referenceSha256": "4c3693ac711743e5c3d9f3d063cc91f83905f50d43535cb604ac6ee4585a2fa3",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/taitostation_tradz/02/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "MENN": {
+      "src": "/bpl/portraits/menn.webp",
+      "sha256": "5240ad360ca006bf70a6ad232b35a9a23420798372b2e17f42f3f5e30fdeed23",
+      "referenceSha256": "d9dcbf597dcdac525db6a09e25a2eb0f79c657d83518374a4751f2605c0dcd12",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season2/ddr/team/taitostation_tradz/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "$RYO$": {
+      "src": "/bpl/portraits/ryo.webp",
+      "sha256": "94eee401019fdffc662f4bfd5f5ba3e6e4cf59a2766d3af25abf3ca7a3625710",
+      "referenceSha256": "1020b305f456e394576e3c21820e669881520bc5c71ef1e148853273a652935a",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/round1/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "A.N.C.B.": {
+      "src": "/bpl/portraits/ancb.webp",
+      "sha256": "1d668722036d3f46211c8e386af3d2ee1a02a653443e15717f85d21479bed9c1",
+      "referenceSha256": "4da1e96629326c1f71ecdc3eec7bac27e73f56a0cd095c45190f2d3fc9e3e025",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/silkhat/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "MOO-G.56": {
+      "src": "/bpl/portraits/moo-g56.webp",
+      "sha256": "8ed3a08836b2b92d727c143b532277ad99b8616e4bc92f8162dcc2d5c480aa6d",
+      "referenceSha256": "ae05eb0a8cfb0a67e28ed1cd48253ab5cce1748203ab74005d2f0db185ef6ee6",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/taitostation_tradz/04/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "NISSY": {
+      "src": "/bpl/portraits/nissy.webp",
+      "sha256": "6b5882f61c4167dd40edf20f0947260edccbabf7f8b7b2aa151331fe67751c51",
+      "referenceSha256": "00f78b02f746397134f540a82861b93546a3918bae2a5cbbc5285d7c48c9e433",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/apina_vrames/03/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "TANUKI-C": {
+      "src": "/bpl/portraits/tanuki-c.webp",
+      "sha256": "7747ec4d0444164a17e0a0dae81a7194f2cfa419dfcabbc0eb39717a54819dac",
+      "referenceSha256": "32e216bb2fdeaca50783db240716aa727eee2276e972d6d89b1b2a37bdfdef5c",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "ALPAA": {
+      "src": "/bpl/portraits/alpaa.webp",
+      "sha256": "a25bb2fce99de91c21461d03740e969f93e04454c27c2813b709ace706b12cf2",
+      "referenceSha256": "8483dadc92e2a2e8b086b33f58066a52b556dd0583bad58e897e965b29f950a2",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "CHI-.": {
+      "src": "/bpl/portraits/chi.webp",
+      "sha256": "9ce9dbac041dc29759cb9f3b177bd77b5dfd5956eacb62084321fdad2ec409f5",
+      "referenceSha256": "15264008bfd566814d1293f3eccd9b87d3f3cd4f38a9a02f0f366e2c21ad1303",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "GOMANA2": {
+      "src": "/bpl/portraits/gomana2.webp",
+      "sha256": "46517a0ac4061e26e02fb603eff4831564c483875379f1ec6f9c0328630aab94",
+      "referenceSha256": "c80cfb97d65a0727f248fc5fa88d8347effbe4ceed0ef0e2ae87dcfafd80d861",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "KEI-EDGE": {
+      "src": "/bpl/portraits/kei-edge.webp",
+      "sha256": "ee23b32656db2c723c4e7870949cc81c80a03966dbe938284d8af3c72347210a",
+      "referenceSha256": "746bd8601147cbc1de240a20f53cdcd6f4f8ed6f66142212f39ad9bf6214ba15",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season5/ddr/team/round1/04/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "TRICAL-Y": {
+      "src": "/bpl/portraits/trical-y.webp",
+      "sha256": "71ca346f6807fc9a68bda394552cea4d578f04d6177d5948f2e0f2264c352771",
+      "referenceSha256": "7e3406b0eb7da1d3be52470a910f27ddea2af97af909d18110712f7005af3f7c",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "FEFEMZ": {
+      "src": "/bpl/portraits/fefemz.webp",
+      "sha256": "cf4cf7e977a03f673f03f525c673f38f325c755351c9c562c2669bca7816f2de",
+      "referenceSha256": "a73e5f8d7ffde91ac73f418e6e9a3730867a32d59ad1b2d09885ba2148a53c0f",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "SHIZU": {
+      "src": "/bpl/portraits/shizu.webp",
+      "sha256": "7072eaf21b8529ff96637c93235fe9a15bcff090ab27a19252848a6f2594d1dd",
+      "referenceSha256": "da51445b2b80b92db6bfbeba038f80b85a7ae867b5552d1abbf25a2e44b1b086",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season2/ddr/zero/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "MSKNP": {
+      "src": "/bpl/portraits/msknp.webp",
+      "sha256": "dbffd0246f167a995fe3fca9225d0393434140739d08b8366e0d79eb9f68e969",
+      "referenceSha256": "9091e9a3c3e895617ebd1f000e53dc959d7cc0b316eba6607437c750b801c74d",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season2/ddr/zero/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "DIS": {
+      "src": "/bpl/portraits/dis.webp",
+      "sha256": "6401797b41c55a85f8d3ba78540b71c841ca5be4579d8f801c6255a16ccbca13",
+      "referenceSha256": "99625c4f1381ce8c2aa3e21af15303344071a61705cce9e774ae58f94cf65339",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "NOVIN": {
+      "src": "/bpl/portraits/novin.webp",
+      "sha256": "83f89bd30a70e2b7c0c8fb7dbd56a4013247dc04e2a16c9e918e2ac3464e5e61",
+      "referenceSha256": "ebf3520e7ee391d0b52b310df8b280fdcc074177427a44eb8af69af7e7f8ec64",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    },
+    "KIKUCHI": {
+      "src": "/bpl/portraits/kikuchi.webp",
+      "sha256": "865f54529c4c59c9d09250d4b7ea8a1e5f82de2ad7b399844da5b2f9600dddcc",
+      "referenceSha256": "fbabaebf15eb067952e892050999104ef18ab580ae3610b4b2cc0c4bdd85796c",
+      "sourceUrl": "https://p.eagate.573.jp/game/bpl/season6/draft/index.html",
+      "generationMethod": "OpenAI built-in imagegen",
+      "rightsStatus": "reference-based; likeness and other rights not cleared"
+    }
+  }
+}

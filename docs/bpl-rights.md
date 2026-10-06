@@ -39,3 +39,12 @@ Verified both archive blob IDs are unreachable from the reconstructed head. All 
 Existing clones must synchronize to the rewritten history before pushing; do not merge or push the old affected commits back into the repository. Preserve any uncommitted work first. The local working copy used for this cleanup was clean.
 
 This operation removes the archives from current branch history, not GitHub's retained unreachable objects/cached SHA views, old clones, or protected Vercel deployments. No guarantee of server-side physical deletion is made. Removing those copies requires separate platform cleanup; article image reviews are also still pending.
+
+## Generated player illustrations — 2026-10-06 JST
+
+At the operator's request, the generic player symbols are replaced with AI-generated chibi illustrations. The approved O4MA. illustration is the style reference for the set. Public official player photographs are used to identify facial features, while each output uses an independently composed front-facing bust and plain clothing without official uniforms, logos or text. These are **reference-based generated illustrations, not rights-cleared assets**. Changing style, pose or composition does not by itself resolve likeness, copyright or other rights questions. No player or team endorsement is asserted.
+
+- `docs/bpl-generated-portraits.json` records player IDs, public profile-page sources, generated-file hashes, reference-photo hashes, generation method and the unresolved rights status. The inventory is technical provenance, not a permission record.
+- Only the generated WebP portraits are deployed under `public/bpl/portraits/`. Source photographs are not checked in or bundled. The interface labels the illustrations as unofficial AI-made depictions in the archive's display/source information.
+- The existing cleanup of `public/bpl/assets/`, legacy CDN-reference checks, original SW-icon hash inventory and vendor archive rejection remain in place. The new allowance is restricted to exact inventoried generated files with matching player mappings, and also rejects serving the recorded reference-photo bytes.
+- This change does not restore official photographs, jackets, logos or backgrounds, nor change article publication, past Git objects, historical deployments, PWA settings or sharing-image artwork.
