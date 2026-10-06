@@ -55,7 +55,7 @@ export function checkBplAssets(root, approvedIcons, generated = { portraits: {} 
         if (/eacache\.|\/bpl\/assets\//i.test(bytes.toString())) issues.push(`${name}: legacy artwork reference`);
       } else {
         const hash = createHash('sha256').update(bytes).digest('hex');
-        if (approvedIcons[name] !== hash && generatedHashes[name] !== hash) issues.push(`${name}: unreviewed file (only original SW icons and inventoried generated portraits are allowed)`);
+        if (approvedIcons[name] !== hash && generatedHashes[name] !== hash) issues.push(`${name}: unreviewed file (only inventoried original artwork and generated portraits are allowed)`);
       }
     }
   }
