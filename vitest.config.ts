@@ -1,6 +1,8 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+  resolve: { alias: { '@': fileURLToPath(new URL('.', import.meta.url)) } },
   test: {
     // Node environment only: everything under test is pure logic — schema
     // validation, URL normalisation, deduplication, markdown parsing and scene

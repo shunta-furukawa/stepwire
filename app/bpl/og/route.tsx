@@ -1,14 +1,21 @@
 /* eslint-disable @next/next/no-img-element -- ImageResponse embeds data URIs. */
 import { ImageResponse } from 'next/og';
+import sharp from 'sharp';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { matrixTone } from '../../../public/bpl/matrix.js';
 import { shareModel } from '@/lib/bpl/share';
+import { EntityCard } from '@/lib/bpl/entity-card';
 
 export async function GET(request: Request) {
   try {
     const m=shareModel(new URL(request.url).searchParams);
     const [font,logo]=await Promise.all([readFile(join(process.cwd(),'public/fonts/BplShare.ttf')),readFile(join(process.cwd(),'public/brand/wordmark.svg'))]);
+    if(m.entity){
+      const paths=m.entity.kind==='player'?[m.entity.portrait]:m.entity.roster.members.map(member=>member.portrait);
+      const images=Object.fromEntries(await Promise.all(paths.filter((path):path is string=>path!==null).map(async path=>[path,`data:image/png;base64,${(await sharp(await readFile(join(process.cwd(),'public',path))).resize(320,320,{fit:'inside',withoutEnlargement:true}).png().toBuffer()).toString('base64')}`])));
+      return new ImageResponse(<EntityCard model={m} logo={`data:image/svg+xml;base64,${logo.toString('base64')}`} images={images}/>,{width:1200,height:630,fonts:[{name:'Bpl',data:font,style:'normal',weight:400}],headers:{'Cache-Control':'public, s-maxage=86400, stale-while-revalidate=604800'}});
+    }
     if(m.matrix){
       const table=m.matrix;
       return new ImageResponse(<div style={{display:'flex',flexDirection:'column',width:'100%',height:'100%',padding:'26px 36px',background:'#0a0a0b',color:'#ecece7',fontFamily:'Bpl',borderTop:'8px solid #b4da46'}}>
