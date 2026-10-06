@@ -31,6 +31,8 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
 #dialog-content{max-height:calc(var(--match-dialog-height) - 66px);overflow-y:auto;overscroll-behavior:contain;padding:0 32px 32px}
 #close-dialog{top:10px;right:12px;z-index:1;display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);background:var(--panel);color:var(--text)}
 #close-dialog:hover{border-color:var(--accent);color:var(--accent)}
+#match-dialog .dialog-score{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+#match-dialog .detail-logo{max-width:100%}
 @media(max-width:650px){#dialog-content{padding:0 15px 24px}}
 @media(max-width:1050px){.bpl-header nav{margin-left:auto}.bpl-header nav a{padding:13px 8px}.nav-copy b{font-size:13px}}
 @media(max-width:650px){.bpl-header{display:block;padding:22px 16px 0}.bpl-header .brand{margin-bottom:18px}.bpl-header nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));width:100%;gap:0;margin:0}.bpl-header nav a{min-height:70px;padding:9px 2px;gap:7px}.bpl-header .nav-copy b{font-size:11px}.bpl-header nav a>.view-icon{width:20px;height:20px}main{padding-top:26px}.intro-stats{gap:20px}.intro-stat strong{font-size:30px}.season-button{border-radius:0}.toolbar{gap:12px}.view-count{font-size:12px}.team-strip a{border-radius:0}}

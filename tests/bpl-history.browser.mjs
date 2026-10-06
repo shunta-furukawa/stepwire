@@ -205,7 +205,8 @@ async function checkPinnedMatchClose(label,viewport){
       assert.ok(box.y+box.height<=content.y,'scrolling match text must not overlap the close target');
       assert.equal(await close.evaluate(node=>{const r=node.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===node}),true,'close must be the actual pointer target');
       assert.equal(await dialog.evaluate(node=>node.scrollTop),0,'outer dialog never scrolls');
-      assert.ok(await body.evaluate(node=>node.scrollWidth<=node.clientWidth+1),'match body has no horizontal overflow');
+      const overflow=await body.evaluate(node=>({width:node.clientWidth,scrollWidth:node.scrollWidth,wide:[...node.querySelectorAll('*')].filter(child=>child.getBoundingClientRect().right>node.getBoundingClientRect().right+1).map(child=>child.className)}));
+      assert.ok(overflow.scrollWidth<=overflow.width+1,'match body has no horizontal overflow: '+JSON.stringify({label,...overflow}));
       return box;
     };
     await checkPinned();await screenshot(target,label+'-match-close-top');
