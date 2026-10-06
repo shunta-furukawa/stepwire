@@ -4,6 +4,7 @@ import vm from 'node:vm';
 import { describe, expect, it } from 'vitest';
 import * as jackets from '../public/bpl/jackets.js';
 import palettes from '../public/bpl/jacket-colors.json';
+import provenance from '../docs/bpl-jacket-palettes.json';
 import data from '../public/bpl/data.json';
 import brand from '../public/bpl/brand.json';
 import * as routing from '../public/bpl/routing.js';
@@ -66,8 +67,39 @@ describe('BPL approved four-color jacket dataset', () => {
     }
     // Lock the approved title/ID/color mapping without depending on JSON whitespace.
     const approved = Object.keys(songs).sort().map(name => [name, ...['id', ...quadrants].map(key => songs[name]![key as keyof Palette])]);
-    expect(createHash('sha256').update(JSON.stringify(approved)).digest('hex')).toBe('93c41cbaba2e2657ef915889ede54f473826166779401bed0e21928db1164f30');
+    expect(createHash('sha256').update(JSON.stringify(approved)).digest('hex')).toBe('5c2ca89f8200b1c80516e6bdabc8fe55edc4b1f6fba16319206cbdb464fef729');
     expect(JSON.stringify(palettes)).not.toMatch(/https?:|data:|base64|<img|url\(/i);
+  });
+
+  it('retains the exact approved moderate comparison palettes and matching provenance', () => {
+    const approved = {
+      'Wuv U': ['#faf1dd', '#31adc7', '#bb72af', '#eb5796'],
+      'ALPACORE': ['#26cbee', '#26cdf5', '#ffffff', '#1dcdf6'],
+      'CHAOS': ['#873216', '#983410', '#772931', '#5b1816'],
+      'ビューティフル レシート': ['#42e0cc', '#71f377', '#76e840', '#ebef29'],
+      '888': ['#030303', '#020303', '#636179', '#472835'],
+      '50th Memorial Songs -The BEMANI History-': ['#b2071a', '#b30417', '#b40517', '#b30316'],
+      'MAX 300': ['#be4734', '#b7371d', '#cc3d53', '#d7323f'],
+    };
+    for (const [title, colors] of Object.entries(approved)) {
+      expect(quadrants.map(key => songs[title]![key]), title).toEqual(colors);
+    }
+    expect(Object.keys(provenance.songs).sort()).toEqual(Object.keys(songs).sort());
+    expect(provenance.coverage).toEqual({ totalSongs: 213, sampledSongs: 206, unresolved: missing });
+    expect(provenance.paletteFile).toBe('/bpl/jacket-colors.json');
+    expect(createHash('sha256').update(readFileSync('public/bpl/jacket-colors.json')).digest('hex')).toBe(provenance.paletteSha256);
+    // Source associations, hashes and dimensions must match the original 206-source inventory.
+    const sourceFields = ['name', 'sourcePage', 'sourceImage', 'sourceTitle', 'imageSha256', 'sourceDimensions'] as const;
+    const sources = Object.entries(provenance.songs).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([name, source]) => [name, ...sourceFields.map(key => source[key])]);
+    expect(createHash('sha256').update(JSON.stringify(sources)).digest('hex')).toBe('1db640575990424f593658bd62afcd6f1b515bf3304469ece063700c2731f17d');
+    expect(provenance.algorithm).toBe('oklab-moderate-quadrants-v2');
+    expect(provenance.selector).toEqual({
+      areaExponent: 0.7, chromaWeight: 2, chromaExponent: 2, chromaReference: 0.1,
+      minimumClusterFraction: 0.05, neutralFallbackChroma: 0.06,
+      fallback: 'oklab-dominant-quadrants-v1', darkLightnessThreshold: 0.18,
+      darkAreaThreshold: 0.65, darkMultiplier: 0.7,
+      tieBreak: 'stable descending cluster fraction, then first maximum',
+    });
   });
 
   it('keeps top-left, top-right, bottom-left, bottom-right in that order', () => {
@@ -118,9 +150,10 @@ describe('BPL approved four-color jacket dataset', () => {
     expect(rules.length).toBeGreaterThan(0);
     const declarations = rules.map(match => match[1]).join(';');
     expect((declarations.match(/radial-gradient\(/g) ?? [])).toHaveLength(3);
+    const background = declarations.match(/background:\s*([^;]+);/)?.[1]?.replace(/\s+/g, ' ').trim();
+    expect(background).toBe('radial-gradient(ellipse at left top, var(--jacket-tl) 0%, transparent 72%), radial-gradient(ellipse at right top, var(--jacket-tr) 0%, transparent 72%), radial-gradient(ellipse at left bottom, var(--jacket-bl) 0%, transparent 72%), var(--jacket-br)');
     for (const [corner, variable] of [['left top', 'tl'], ['right top', 'tr'], ['left bottom', 'bl']]) {
-      expect(declarations).toContain(`at ${corner}`);
-      expect(declarations).toContain(`var(--jacket-${variable})`);
+      expect(declarations).toContain(`radial-gradient(ellipse at ${corner}, var(--jacket-${variable}) 0%, transparent 72%)`);
     }
     expect(declarations).toMatch(/,\s*var\(--jacket-br\)\s*;/);
     expect(declarations).not.toMatch(/(?:^|;)\s*(?:width|height|min-width|min-height|max-width|max-height|font(?:-[a-z-]+)?|line-height|letter-spacing)\s*:/i);

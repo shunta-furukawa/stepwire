@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "startedAt": "2026-10-06T12:43:55.200652+00:00",
-  "algorithm": "oklab-dominant-quadrants-v1",
-  "method": "Five Oklab clusters per quadrant; alpha<32 ignored; alpha-weighted cluster mass mildly favors chroma and avoids tiny highlights; representative is an RGB pixel from the at-most-128px analysis thumbnail, closest to the chosen perceptual center. No color invention, RGB averaging, or source-image persistence.",
+  "startedAt": "2026-10-06T14:38:48.583834+00:00",
+  "algorithm": "oklab-moderate-quadrants-v2",
+  "method": "Five Oklab clusters per quadrant; alpha<32 ignored; alpha-weighted cluster area to exponent 0.7 with moderate chroma weighting; clusters under 5% excluded; use the original selector when no eligible cluster has Oklab chroma >=0.06; preserve the existing dark penalty. The representative is an RGB pixel from the at-most-128px analysis thumbnail, closest to the chosen perceptual center. No pixel chroma boost, color invention, RGB averaging, or source-image persistence.",
   "rightsStatus": "Technical color provenance only. No copyright or other rights clearance is asserted.",
   "songs": {
     "50th Memorial Songs -The BEMANI History-": {
@@ -15,7 +15,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:29.312304+00:00"
+      "sampledAt": "2026-10-06T14:38:48.583834+00:00"
     },
     "8000000": {
       "name": "8000000",
@@ -27,7 +27,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:29.467936+00:00"
+      "sampledAt": "2026-10-06T14:38:48.949480+00:00"
     },
     "888": {
       "name": "888",
@@ -39,7 +39,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:33.841510+00:00"
+      "sampledAt": "2026-10-06T14:38:54.046048+00:00"
     },
     "ACE FOR ACES": {
       "name": "ACE FOR ACES",
@@ -51,7 +51,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:34.012691+00:00"
+      "sampledAt": "2026-10-06T14:38:53.961051+00:00"
     },
     "AFRONOVA": {
       "name": "AFRONOVA",
@@ -63,7 +63,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:38.510548+00:00"
+      "sampledAt": "2026-10-06T14:38:58.886992+00:00"
     },
     "ALPACORE": {
       "name": "ALPACORE",
@@ -75,7 +75,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:38.493396+00:00"
+      "sampledAt": "2026-10-06T14:38:58.789875+00:00"
     },
     "ANTI ANTHEM": {
       "name": "ANTI ANTHEM",
@@ -87,7 +87,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:43.302026+00:00"
+      "sampledAt": "2026-10-06T14:39:05.979628+00:00"
     },
     "Ace out": {
       "name": "Ace out",
@@ -99,7 +99,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:43.323243+00:00"
+      "sampledAt": "2026-10-06T14:39:06.217511+00:00"
     },
     "Afterimage d'automne": {
       "name": "Afterimage d'automne",
@@ -111,7 +111,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:48.595393+00:00"
+      "sampledAt": "2026-10-06T14:39:12.707410+00:00"
     },
     "Anti-Matter": {
       "name": "Anti-Matter",
@@ -123,7 +123,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:48.496636+00:00"
+      "sampledAt": "2026-10-06T14:39:12.807149+00:00"
     },
     "Astrogazer": {
       "name": "Astrogazer",
@@ -135,7 +135,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:54.909573+00:00"
+      "sampledAt": "2026-10-06T14:39:19.730744+00:00"
     },
     "B4U (\"VOLTAGE\" Special)": {
       "name": "B4U (\"VOLTAGE\" Special)",
@@ -147,7 +147,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:36:54.763608+00:00"
+      "sampledAt": "2026-10-06T14:39:19.717092+00:00"
     },
     "BITTER CHOCOLATE STRIKER": {
       "name": "BITTER CHOCOLATE STRIKER",
@@ -159,7 +159,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:00.567383+00:00"
+      "sampledAt": "2026-10-06T14:39:26.391810+00:00"
     },
     "BREAKING THE FUTURE": {
       "name": "BREAKING THE FUTURE",
@@ -171,7 +171,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:00.479326+00:00"
+      "sampledAt": "2026-10-06T14:39:26.386542+00:00"
     },
     "Blew My Mind": {
       "name": "Blew My Mind",
@@ -183,7 +183,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:04.975268+00:00"
+      "sampledAt": "2026-10-06T14:39:31.107473+00:00"
     },
     "Bounce Trippy": {
       "name": "Bounce Trippy",
@@ -195,7 +195,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:05.268185+00:00"
+      "sampledAt": "2026-10-06T14:39:31.448803+00:00"
     },
     "CHAOS": {
       "name": "CHAOS",
@@ -207,7 +207,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:10.498621+00:00"
+      "sampledAt": "2026-10-06T14:39:37.183412+00:00"
     },
     "CHAOS Terror-Tech Mix": {
       "name": "CHAOS Terror-Tech Mix",
@@ -219,7 +219,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:10.729039+00:00"
+      "sampledAt": "2026-10-06T14:39:37.414152+00:00"
     },
     "Chronos": {
       "name": "Chronos",
@@ -231,7 +231,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:15.721130+00:00"
+      "sampledAt": "2026-10-06T14:39:43.783059+00:00"
     },
     "Chronos (walk with you remix)": {
       "name": "Chronos (walk with you remix)",
@@ -243,7 +243,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:15.974977+00:00"
+      "sampledAt": "2026-10-06T14:39:43.916196+00:00"
     },
     "Cleopatrysm": {
       "name": "Cleopatrysm",
@@ -255,7 +255,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:20.581036+00:00"
+      "sampledAt": "2026-10-06T14:39:49.832354+00:00"
     },
     "Come To m1dy": {
       "name": "Come To m1dy",
@@ -267,7 +267,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:20.635104+00:00"
+      "sampledAt": "2026-10-06T14:39:49.913673+00:00"
     },
     "Come to Life": {
       "name": "Come to Life",
@@ -279,7 +279,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:25.622231+00:00"
+      "sampledAt": "2026-10-06T14:39:56.081486+00:00"
     },
     "Condor": {
       "name": "Condor",
@@ -291,7 +291,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:25.680864+00:00"
+      "sampledAt": "2026-10-06T14:39:56.244347+00:00"
     },
     "Cosmic Hurricane": {
       "name": "Cosmic Hurricane",
@@ -303,7 +303,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:31.386913+00:00"
+      "sampledAt": "2026-10-06T14:40:01.770703+00:00"
     },
     "Cosy Catastrophe": {
       "name": "Cosy Catastrophe",
@@ -315,7 +315,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:31.457832+00:00"
+      "sampledAt": "2026-10-06T14:40:01.808642+00:00"
     },
     "Crazy Hot": {
       "name": "Crazy Hot",
@@ -327,7 +327,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:37.861874+00:00"
+      "sampledAt": "2026-10-06T14:40:07.467514+00:00"
     },
     "Crystarium": {
       "name": "Crystarium",
@@ -339,7 +339,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:37.940722+00:00"
+      "sampledAt": "2026-10-06T14:40:07.486010+00:00"
     },
     "Cytokinesis": {
       "name": "Cytokinesis",
@@ -351,7 +351,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:43.937035+00:00"
+      "sampledAt": "2026-10-06T14:40:12.107301+00:00"
     },
     "DDR TAGMIX -LAST DanceR-": {
       "name": "DDR TAGMIX -LAST DanceR-",
@@ -363,7 +363,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:43.927115+00:00"
+      "sampledAt": "2026-10-06T14:40:12.276276+00:00"
     },
     "DEAD END (\"GROOVE RADAR\" Special)": {
       "name": "DEAD END (\"GROOVE RADAR\" Special)",
@@ -375,7 +375,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:48.952811+00:00"
+      "sampledAt": "2026-10-06T14:40:17.464073+00:00"
     },
     "DIABLOSIS::Nāga": {
       "name": "DIABLOSIS::Nāga",
@@ -387,7 +387,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:49.155207+00:00"
+      "sampledAt": "2026-10-06T14:40:17.607370+00:00"
     },
     "DYNAMITE RAVE": {
       "name": "DYNAMITE RAVE",
@@ -399,7 +399,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:56.192324+00:00"
+      "sampledAt": "2026-10-06T14:40:23.282408+00:00"
     },
     "Dance Celebration (System 7 Remix)": {
       "name": "Dance Celebration (System 7 Remix)",
@@ -411,7 +411,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:37:56.281136+00:00"
+      "sampledAt": "2026-10-06T14:40:23.468823+00:00"
     },
     "Dance Dance Revolution(X-Special)": {
       "name": "Dance Dance Revolution(X-Special)",
@@ -423,7 +423,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:00.871802+00:00"
+      "sampledAt": "2026-10-06T14:40:29.503056+00:00"
     },
     "Dance Phenomena": {
       "name": "Dance Phenomena",
@@ -435,7 +435,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:00.931649+00:00"
+      "sampledAt": "2026-10-06T14:40:29.650852+00:00"
     },
     "Dance wiz the Rhythm": {
       "name": "Dance wiz the Rhythm",
@@ -447,7 +447,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:06.531232+00:00"
+      "sampledAt": "2026-10-06T14:40:36.941912+00:00"
     },
     "Deep tenDon Reflex": {
       "name": "Deep tenDon Reflex",
@@ -459,7 +459,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:06.457770+00:00"
+      "sampledAt": "2026-10-06T14:40:37.012290+00:00"
     },
     "Destination": {
       "name": "Destination",
@@ -471,7 +471,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:11.929001+00:00"
+      "sampledAt": "2026-10-06T14:40:45.208276+00:00"
     },
     "Diamond Night": {
       "name": "Diamond Night",
@@ -483,7 +483,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:11.934202+00:00"
+      "sampledAt": "2026-10-06T14:40:44.964576+00:00"
     },
     "Dispersion Star": {
       "name": "Dispersion Star",
@@ -495,7 +495,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:17.565478+00:00"
+      "sampledAt": "2026-10-06T14:40:51.073627+00:00"
     },
     "Elemental Creation": {
       "name": "Elemental Creation",
@@ -507,7 +507,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:17.665673+00:00"
+      "sampledAt": "2026-10-06T14:40:51.030703+00:00"
     },
     "Engraved Mark": {
       "name": "Engraved Mark",
@@ -519,7 +519,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:23.039262+00:00"
+      "sampledAt": "2026-10-06T14:40:56.148612+00:00"
     },
     "Euphoric Fragmentation": {
       "name": "Euphoric Fragmentation",
@@ -531,7 +531,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:22.970882+00:00"
+      "sampledAt": "2026-10-06T14:40:56.064245+00:00"
     },
     "FUNKY SUMMER BEACH": {
       "name": "FUNKY SUMMER BEACH",
@@ -543,7 +543,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:30.277853+00:00"
+      "sampledAt": "2026-10-06T14:41:03.834003+00:00"
     },
     "Fascination ～eternal love mix～": {
       "name": "Fascination ～eternal love mix～",
@@ -555,7 +555,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:29.547172+00:00"
+      "sampledAt": "2026-10-06T14:41:03.575759+00:00"
     },
     "Firestorm": {
       "name": "Firestorm",
@@ -567,7 +567,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:36.003691+00:00"
+      "sampledAt": "2026-10-06T14:41:10.246963+00:00"
     },
     "Flow (True Style)": {
       "name": "Flow (True Style)",
@@ -579,7 +579,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:35.870495+00:00"
+      "sampledAt": "2026-10-06T14:41:10.118642+00:00"
     },
     "GERBERA": {
       "name": "GERBERA",
@@ -591,7 +591,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:42.669522+00:00"
+      "sampledAt": "2026-10-06T14:41:17.070860+00:00"
     },
     "GHOST KINGDOM": {
       "name": "GHOST KINGDOM",
@@ -603,7 +603,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:42.576235+00:00"
+      "sampledAt": "2026-10-06T14:41:17.024407+00:00"
     },
     "Get Your Wish": {
       "name": "Get Your Wish",
@@ -615,7 +615,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:48.771242+00:00"
+      "sampledAt": "2026-10-06T14:41:22.436311+00:00"
     },
     "Glitter Flatter Scatter": {
       "name": "Glitter Flatter Scatter",
@@ -627,7 +627,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:48.869528+00:00"
+      "sampledAt": "2026-10-06T14:41:22.139984+00:00"
     },
     "Going Hypersonic": {
       "name": "Going Hypersonic",
@@ -639,7 +639,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:54.908637+00:00"
+      "sampledAt": "2026-10-06T14:41:26.816299+00:00"
     },
     "Golden Arrow": {
       "name": "Golden Arrow",
@@ -651,7 +651,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:38:54.798321+00:00"
+      "sampledAt": "2026-10-06T14:41:26.864063+00:00"
     },
     "Good Looking": {
       "name": "Good Looking",
@@ -663,7 +663,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:00.650614+00:00"
+      "sampledAt": "2026-10-06T14:41:33.360492+00:00"
     },
     "HAPPY☆LUCKY☆YEAPPY": {
       "name": "HAPPY☆LUCKY☆YEAPPY",
@@ -675,7 +675,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:00.836017+00:00"
+      "sampledAt": "2026-10-06T14:41:33.603629+00:00"
     },
     "HEART BEAT FORMULA": {
       "name": "HEART BEAT FORMULA",
@@ -687,7 +687,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:07.337757+00:00"
+      "sampledAt": "2026-10-06T14:41:39.091318+00:00"
     },
     "Healing Vision ～Angelic mix～": {
       "name": "Healing Vision ～Angelic mix～",
@@ -699,7 +699,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:07.410871+00:00"
+      "sampledAt": "2026-10-06T14:41:39.408731+00:00"
     },
     "Healing Vision(X-Special)": {
       "name": "Healing Vision(X-Special)",
@@ -711,7 +711,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:15.175990+00:00"
+      "sampledAt": "2026-10-06T14:41:45.538897+00:00"
     },
     "Healing-D-Vision": {
       "name": "Healing-D-Vision",
@@ -723,7 +723,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:15.275338+00:00"
+      "sampledAt": "2026-10-06T14:41:45.576354+00:00"
     },
     "Helios": {
       "name": "Helios",
@@ -735,7 +735,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:23.919958+00:00"
+      "sampledAt": "2026-10-06T14:41:50.394325+00:00"
     },
     "Hella Deep": {
       "name": "Hella Deep",
@@ -747,7 +747,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:23.912111+00:00"
+      "sampledAt": "2026-10-06T14:41:50.259278+00:00"
     },
     "Horatio": {
       "name": "Horatio",
@@ -759,7 +759,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:33.421944+00:00"
+      "sampledAt": "2026-10-06T14:41:54.950743+00:00"
     },
     "I'm so Happy": {
       "name": "I'm so Happy",
@@ -771,7 +771,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:33.378790+00:00"
+      "sampledAt": "2026-10-06T14:41:55.064853+00:00"
     },
     "IMANOGUILTS": {
       "name": "IMANOGUILTS",
@@ -783,7 +783,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:44.073322+00:00"
+      "sampledAt": "2026-10-06T14:42:00.660658+00:00"
     },
     "INFINITE WORLD": {
       "name": "INFINITE WORLD",
@@ -795,7 +795,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:43.888195+00:00"
+      "sampledAt": "2026-10-06T14:42:00.561862+00:00"
     },
     "INSERTiON": {
       "name": "INSERTiON",
@@ -807,7 +807,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:52.119075+00:00"
+      "sampledAt": "2026-10-06T14:42:05.784847+00:00"
     },
     "IX": {
       "name": "IX",
@@ -819,7 +819,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:39:52.154560+00:00"
+      "sampledAt": "2026-10-06T14:42:05.885843+00:00"
     },
     "Illegal Function Call": {
       "name": "Illegal Function Call",
@@ -831,7 +831,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:00.518550+00:00"
+      "sampledAt": "2026-10-06T14:42:10.582169+00:00"
     },
     "Ishtar": {
       "name": "Ishtar",
@@ -843,7 +843,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:00.501758+00:00"
+      "sampledAt": "2026-10-06T14:42:10.652252+00:00"
     },
     "JOMANDA": {
       "name": "JOMANDA",
@@ -855,7 +855,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:08.832179+00:00"
+      "sampledAt": "2026-10-06T14:42:15.770924+00:00"
     },
     "Jetcoaster Windy": {
       "name": "Jetcoaster Windy",
@@ -867,7 +867,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:09.055937+00:00"
+      "sampledAt": "2026-10-06T14:42:15.947642+00:00"
     },
     "KHAMEN BREAK": {
       "name": "KHAMEN BREAK",
@@ -879,7 +879,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:17.379024+00:00"
+      "sampledAt": "2026-10-06T14:42:28.300172+00:00"
     },
     "LIKE A VAMPIRE": {
       "name": "LIKE A VAMPIRE",
@@ -891,7 +891,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:17.391521+00:00"
+      "sampledAt": "2026-10-06T14:42:28.334610+00:00"
     },
     "Leaving…": {
       "name": "Leaving…",
@@ -903,7 +903,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:25.660961+00:00"
+      "sampledAt": "2026-10-06T14:42:36.529716+00:00"
     },
     "Let's DANCE aROUND!!": {
       "name": "Let's DANCE aROUND!!",
@@ -915,7 +915,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:25.739899+00:00"
+      "sampledAt": "2026-10-06T14:42:36.760227+00:00"
     },
     "London EVOLVED ver.A": {
       "name": "London EVOLVED ver.A",
@@ -927,7 +927,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:32.008121+00:00"
+      "sampledAt": "2026-10-06T14:42:40.951486+00:00"
     },
     "London EVOLVED ver.B": {
       "name": "London EVOLVED ver.B",
@@ -939,7 +939,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:32.045038+00:00"
+      "sampledAt": "2026-10-06T14:42:40.868982+00:00"
     },
     "Lose Your Sense": {
       "name": "Lose Your Sense",
@@ -951,7 +951,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:41.667391+00:00"
+      "sampledAt": "2026-10-06T14:42:47.257350+00:00"
     },
     "Love You More": {
       "name": "Love You More",
@@ -963,7 +963,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:41.815751+00:00"
+      "sampledAt": "2026-10-06T14:42:47.285571+00:00"
     },
     "MAX 300": {
       "name": "MAX 300",
@@ -975,7 +975,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:51.261934+00:00"
+      "sampledAt": "2026-10-06T14:42:54.033369+00:00"
     },
     "MAX 300(X-Special)": {
       "name": "MAX 300(X-Special)",
@@ -987,7 +987,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:51.232166+00:00"
+      "sampledAt": "2026-10-06T14:42:54.017948+00:00"
     },
     "MAX 360": {
       "name": "MAX 360",
@@ -999,7 +999,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:58.754406+00:00"
+      "sampledAt": "2026-10-06T14:42:59.127591+00:00"
     },
     "MAXX UNLIMITED": {
       "name": "MAXX UNLIMITED",
@@ -1011,7 +1011,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:40:58.778316+00:00"
+      "sampledAt": "2026-10-06T14:42:59.193001+00:00"
     },
     "MAXX UNLIMITED(X-Special)": {
       "name": "MAXX UNLIMITED(X-Special)",
@@ -1023,7 +1023,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:41:04.385230+00:00"
+      "sampledAt": "2026-10-06T14:43:22.031520+00:00"
     },
     "Magnetic": {
       "name": "Magnetic",
@@ -1035,7 +1035,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:41:05.909248+00:00"
+      "sampledAt": "2026-10-06T14:43:21.960572+00:00"
     },
     "Mythomane": {
       "name": "Mythomane",
@@ -1047,7 +1047,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:41:11.900657+00:00"
+      "sampledAt": "2026-10-06T14:43:27.066684+00:00"
     },
     "New Century": {
       "name": "New Century",
@@ -1059,7 +1059,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:41:11.985509+00:00"
+      "sampledAt": "2026-10-06T14:43:27.089416+00:00"
     },
     "New Decade": {
       "name": "New Decade",
@@ -1071,7 +1071,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:41:19.784883+00:00"
+      "sampledAt": "2026-10-06T14:43:34.113901+00:00"
     },
     "New Generation": {
       "name": "New Generation",
@@ -1083,7 +1083,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:41:19.884032+00:00"
+      "sampledAt": "2026-10-06T14:43:34.356514+00:00"
     },
     "New Millennium": {
       "name": "New Millennium",
@@ -1095,7 +1095,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:41:27.395998+00:00"
+      "sampledAt": "2026-10-06T14:43:39.668739+00:00"
     },
     "New York EVOLVED (Type C)": {
       "name": "New York EVOLVED (Type C)",
@@ -1107,7 +1107,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:41:27.189363+00:00"
+      "sampledAt": "2026-10-06T14:43:39.661341+00:00"
     },
     "New York EVOLVED Type B": {
       "name": "New York EVOLVED Type B",
@@ -1119,7 +1119,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:10.189215+00:00"
+      "sampledAt": "2026-10-06T14:43:45.579701+00:00"
     },
     "No Life Queen [DJ Command Remix]": {
       "name": "No Life Queen [DJ Command Remix]",
@@ -1131,7 +1131,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:10.408572+00:00"
+      "sampledAt": "2026-10-06T14:43:45.562262+00:00"
     },
     "ORCA": {
       "name": "ORCA",
@@ -1143,7 +1143,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:14.913683+00:00"
+      "sampledAt": "2026-10-06T14:43:51.135185+00:00"
     },
     "ORION.78～civilization mix～": {
       "name": "ORION.78～civilization mix～",
@@ -1155,7 +1155,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:14.964133+00:00"
+      "sampledAt": "2026-10-06T14:43:51.188247+00:00"
     },
     "On The Break": {
       "name": "On The Break",
@@ -1167,7 +1167,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:19.475359+00:00"
+      "sampledAt": "2026-10-06T14:43:57.621382+00:00"
     },
     "Over The “Period”": {
       "name": "Over The “Period”",
@@ -1179,7 +1179,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:19.267897+00:00"
+      "sampledAt": "2026-10-06T14:43:57.441826+00:00"
     },
     "PANIC HOLIC": {
       "name": "PANIC HOLIC",
@@ -1191,7 +1191,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:24.906677+00:00"
+      "sampledAt": "2026-10-06T14:44:03.096260+00:00"
     },
     "PARANOIA EVOLUTION": {
       "name": "PARANOIA EVOLUTION",
@@ -1203,7 +1203,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:25.012019+00:00"
+      "sampledAt": "2026-10-06T14:44:03.122268+00:00"
     },
     "PARANOIA survivor": {
       "name": "PARANOIA survivor",
@@ -1215,7 +1215,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:30.427620+00:00"
+      "sampledAt": "2026-10-06T14:44:14.942930+00:00"
     },
     "PARANOiA Revolution": {
       "name": "PARANOiA Revolution",
@@ -1227,7 +1227,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:30.292637+00:00"
+      "sampledAt": "2026-10-06T14:44:15.278769+00:00"
     },
     "PARANOiA ～HADES～": {
       "name": "PARANOiA ～HADES～",
@@ -1239,7 +1239,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:38.560792+00:00"
+      "sampledAt": "2026-10-06T14:44:19.735553+00:00"
     },
     "PARANOiA-Respect-": {
       "name": "PARANOiA-Respect-",
@@ -1251,7 +1251,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:38.630167+00:00"
+      "sampledAt": "2026-10-06T14:44:19.759179+00:00"
     },
     "POSSESSION": {
       "name": "POSSESSION",
@@ -1263,7 +1263,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:47.750239+00:00"
+      "sampledAt": "2026-10-06T14:44:25.439548+00:00"
     },
     "Pluto": {
       "name": "Pluto",
@@ -1275,7 +1275,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:47.777027+00:00"
+      "sampledAt": "2026-10-06T14:44:25.639068+00:00"
     },
     "Pluto The First": {
       "name": "Pluto The First",
@@ -1287,7 +1287,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:54.594602+00:00"
+      "sampledAt": "2026-10-06T14:44:32.143105+00:00"
     },
     "Prey": {
       "name": "Prey",
@@ -1299,7 +1299,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:44:54.854981+00:00"
+      "sampledAt": "2026-10-06T14:44:32.374947+00:00"
     },
     "REVOLUTIONARY ADDICT": {
       "name": "REVOLUTIONARY ADDICT",
@@ -1311,7 +1311,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:00.796561+00:00"
+      "sampledAt": "2026-10-06T14:44:38.014721+00:00"
     },
     "Rave in the Shell": {
       "name": "Rave in the Shell",
@@ -1323,7 +1323,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:00.835920+00:00"
+      "sampledAt": "2026-10-06T14:44:38.145666+00:00"
     },
     "Reach The Sky， Without you": {
       "name": "Reach The Sky， Without you",
@@ -1335,7 +1335,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:06.031489+00:00"
+      "sampledAt": "2026-10-06T14:44:43.309933+00:00"
     },
     "Roche Limit": {
       "name": "Roche Limit",
@@ -1348,7 +1348,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:06.960853+00:00"
+      "sampledAt": "2026-10-06T14:44:43.874666+00:00"
     },
     "Romancing Layer": {
       "name": "Romancing Layer",
@@ -1360,7 +1360,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:13.064050+00:00"
+      "sampledAt": "2026-10-06T14:44:48.970756+00:00"
     },
     "S!ck": {
       "name": "S!ck",
@@ -1372,7 +1372,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:13.098808+00:00"
+      "sampledAt": "2026-10-06T14:44:49.393237+00:00"
     },
     "SABER WING (Akira Ishihara Headshot mix)": {
       "name": "SABER WING (Akira Ishihara Headshot mix)",
@@ -1384,7 +1384,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:22.982363+00:00"
+      "sampledAt": "2026-10-06T14:44:55.732953+00:00"
     },
     "SILVER☆DREAM": {
       "name": "SILVER☆DREAM",
@@ -1396,7 +1396,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:22.992558+00:00"
+      "sampledAt": "2026-10-06T14:44:55.169328+00:00"
     },
     "SISYPHUS": {
       "name": "SISYPHUS",
@@ -1408,7 +1408,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:32.420024+00:00"
+      "sampledAt": "2026-10-06T14:45:00.080584+00:00"
     },
     "STAY GOLD": {
       "name": "STAY GOLD",
@@ -1420,7 +1420,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:32.621557+00:00"
+      "sampledAt": "2026-10-06T14:45:00.381914+00:00"
     },
     "STERLING SILVER (U1 overground mix)": {
       "name": "STERLING SILVER (U1 overground mix)",
@@ -1432,7 +1432,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:38.630143+00:00"
+      "sampledAt": "2026-10-06T14:45:07.988321+00:00"
     },
     "Sakura Sunrise": {
       "name": "Sakura Sunrise",
@@ -1444,7 +1444,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:38.631558+00:00"
+      "sampledAt": "2026-10-06T14:45:08.078348+00:00"
     },
     "Second Heaven": {
       "name": "Second Heaven",
@@ -1456,7 +1456,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:44.035319+00:00"
+      "sampledAt": "2026-10-06T14:45:12.627622+00:00"
     },
     "Shiny World": {
       "name": "Shiny World",
@@ -1468,7 +1468,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:44.022220+00:00"
+      "sampledAt": "2026-10-06T14:45:12.858261+00:00"
     },
     "Silly Love": {
       "name": "Silly Love",
@@ -1480,7 +1480,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:50.928290+00:00"
+      "sampledAt": "2026-10-06T14:45:18.438355+00:00"
     },
     "Snow Garland Fairy": {
       "name": "Snow Garland Fairy",
@@ -1492,7 +1492,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:50.924638+00:00"
+      "sampledAt": "2026-10-06T14:45:18.572854+00:00"
     },
     "Squeeze": {
       "name": "Squeeze",
@@ -1504,7 +1504,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:56.031892+00:00"
+      "sampledAt": "2026-10-06T14:45:23.865999+00:00"
     },
     "Star Trail": {
       "name": "Star Trail",
@@ -1516,7 +1516,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:45:56.058047+00:00"
+      "sampledAt": "2026-10-06T14:45:23.830894+00:00"
     },
     "Starlight Fantasia (Endorphins Mix)": {
       "name": "Starlight Fantasia (Endorphins Mix)",
@@ -1528,7 +1528,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:01.936788+00:00"
+      "sampledAt": "2026-10-06T14:45:28.870959+00:00"
     },
     "StrayedCatz": {
       "name": "StrayedCatz",
@@ -1540,7 +1540,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:02.035160+00:00"
+      "sampledAt": "2026-10-06T14:45:29.010182+00:00"
     },
     "Synergy For Angels": {
       "name": "Synergy For Angels",
@@ -1552,7 +1552,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:09.516056+00:00"
+      "sampledAt": "2026-10-06T14:45:33.789025+00:00"
     },
     "S・A・G・A": {
       "name": "S・A・G・A",
@@ -1564,7 +1564,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:09.268213+00:00"
+      "sampledAt": "2026-10-06T14:45:33.864135+00:00"
     },
     "THIS IS MY LAST RESORT": {
       "name": "THIS IS MY LAST RESORT",
@@ -1576,7 +1576,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:15.193215+00:00"
+      "sampledAt": "2026-10-06T14:45:40.487449+00:00"
     },
     "TRIP MACHINE CLIMAX（X-Special）": {
       "name": "TRIP MACHINE CLIMAX（X-Special）",
@@ -1588,7 +1588,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:15.302745+00:00"
+      "sampledAt": "2026-10-06T14:45:40.638938+00:00"
     },
     "TRIP MACHINE EVOLUTION": {
       "name": "TRIP MACHINE EVOLUTION",
@@ -1600,7 +1600,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:20.226255+00:00"
+      "sampledAt": "2026-10-06T14:45:45.173629+00:00"
     },
     "TYPHØN": {
       "name": "TYPHØN",
@@ -1612,7 +1612,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:20.330546+00:00"
+      "sampledAt": "2026-10-06T14:45:45.148417+00:00"
     },
     "The Ashes of Boreas": {
       "name": "The Ashes of Boreas",
@@ -1624,7 +1624,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:26.766513+00:00"
+      "sampledAt": "2026-10-06T14:45:52.509233+00:00"
     },
     "The History of the Future": {
       "name": "The History of the Future",
@@ -1636,7 +1636,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:26.855232+00:00"
+      "sampledAt": "2026-10-06T14:45:52.588035+00:00"
     },
     "The legend of MAX(X-Special)": {
       "name": "The legend of MAX(X-Special)",
@@ -1648,7 +1648,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:32.504286+00:00"
+      "sampledAt": "2026-10-06T14:45:59.450200+00:00"
     },
     "Throw Out": {
       "name": "Throw Out",
@@ -1660,7 +1660,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:32.236111+00:00"
+      "sampledAt": "2026-10-06T14:45:59.511858+00:00"
     },
     "Tohoku EVOLVED": {
       "name": "Tohoku EVOLVED",
@@ -1672,7 +1672,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:38.338769+00:00"
+      "sampledAt": "2026-10-06T14:46:06.589388+00:00"
     },
     "Top The Charts": {
       "name": "Top The Charts",
@@ -1684,7 +1684,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:38.286304+00:00"
+      "sampledAt": "2026-10-06T14:46:06.614462+00:00"
     },
     "Triple Counter": {
       "name": "Triple Counter",
@@ -1696,7 +1696,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:44.090825+00:00"
+      "sampledAt": "2026-10-06T14:46:22.779151+00:00"
     },
     "Triple Journey -TAG EDITION-": {
       "name": "Triple Journey -TAG EDITION-",
@@ -1708,7 +1708,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:44.096997+00:00"
+      "sampledAt": "2026-10-06T14:46:22.787666+00:00"
     },
     "Unreality": {
       "name": "Unreality",
@@ -1720,7 +1720,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:49.231093+00:00"
+      "sampledAt": "2026-10-06T14:46:28.943343+00:00"
     },
     "VANESSA": {
       "name": "VANESSA",
@@ -1732,7 +1732,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:49.173974+00:00"
+      "sampledAt": "2026-10-06T14:46:28.865527+00:00"
     },
     "Valkyrie dimension": {
       "name": "Valkyrie dimension",
@@ -1744,7 +1744,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:54.863127+00:00"
+      "sampledAt": "2026-10-06T14:46:34.171702+00:00"
     },
     "We're so Happy": {
       "name": "We're so Happy",
@@ -1756,7 +1756,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:46:55.094651+00:00"
+      "sampledAt": "2026-10-06T14:46:34.380646+00:00"
     },
     "Wolf's Rain": {
       "name": "Wolf's Rain",
@@ -1768,7 +1768,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:00.874400+00:00"
+      "sampledAt": "2026-10-06T14:46:41.023321+00:00"
     },
     "Wuv U": {
       "name": "Wuv U",
@@ -1780,7 +1780,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:01.105767+00:00"
+      "sampledAt": "2026-10-06T14:46:41.264160+00:00"
     },
     "Xepher": {
       "name": "Xepher",
@@ -1792,7 +1792,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:05.844103+00:00"
+      "sampledAt": "2026-10-06T14:46:47.162086+00:00"
     },
     "ZETA～素数の世界と超越者～": {
       "name": "ZETA～素数の世界と超越者～",
@@ -1804,7 +1804,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:05.885265+00:00"
+      "sampledAt": "2026-10-06T14:46:47.215707+00:00"
     },
     "bag": {
       "name": "bag",
@@ -1816,7 +1816,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:13.538962+00:00"
+      "sampledAt": "2026-10-06T14:46:51.755645+00:00"
     },
     "chaos eater": {
       "name": "chaos eater",
@@ -1828,7 +1828,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:13.598800+00:00"
+      "sampledAt": "2026-10-06T14:46:51.548974+00:00"
     },
     "fluctus": {
       "name": "fluctus",
@@ -1841,7 +1841,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:21.295345+00:00"
+      "sampledAt": "2026-10-06T14:46:55.854809+00:00"
     },
     "heron": {
       "name": "heron",
@@ -1853,7 +1853,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:20.583589+00:00"
+      "sampledAt": "2026-10-06T14:46:59.490257+00:00"
     },
     "insist": {
       "name": "insist",
@@ -1865,7 +1865,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:26.340725+00:00"
+      "sampledAt": "2026-10-06T14:46:59.491467+00:00"
     },
     "neko＊neko": {
       "name": "neko＊neko",
@@ -1877,7 +1877,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:26.397802+00:00"
+      "sampledAt": "2026-10-06T14:47:04.065740+00:00"
     },
     "osaka EVOLVED -毎度、おおきに！- (TYPE2)": {
       "name": "osaka EVOLVED -毎度、おおきに！- (TYPE2)",
@@ -1889,7 +1889,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:31.283688+00:00"
+      "sampledAt": "2026-10-06T14:47:04.180032+00:00"
     },
     "out of focus": {
       "name": "out of focus",
@@ -1901,7 +1901,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:31.263001+00:00"
+      "sampledAt": "2026-10-06T14:47:10.113741+00:00"
     },
     "roppongi EVOLVED ver.C": {
       "name": "roppongi EVOLVED ver.C",
@@ -1913,7 +1913,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:36.479556+00:00"
+      "sampledAt": "2026-10-06T14:47:09.897081+00:00"
     },
     "roppongi EVOLVED ver.D": {
       "name": "roppongi EVOLVED ver.D",
@@ -1925,7 +1925,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:36.595653+00:00"
+      "sampledAt": "2026-10-06T14:47:17.655005+00:00"
     },
     "snow prism": {
       "name": "snow prism",
@@ -1937,7 +1937,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:42.256925+00:00"
+      "sampledAt": "2026-10-06T14:47:17.655704+00:00"
     },
     "starmine": {
       "name": "starmine",
@@ -1949,7 +1949,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:42.308643+00:00"
+      "sampledAt": "2026-10-06T14:47:23.945315+00:00"
     },
     "tokyoEVOLVED (TYPE3)": {
       "name": "tokyoEVOLVED (TYPE3)",
@@ -1961,7 +1961,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:48.021060+00:00"
+      "sampledAt": "2026-10-06T14:47:24.035346+00:00"
     },
     "toy boxer": {
       "name": "toy boxer",
@@ -1973,7 +1973,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:48.016082+00:00"
+      "sampledAt": "2026-10-06T14:47:30.341863+00:00"
     },
     "volcano": {
       "name": "volcano",
@@ -1985,7 +1985,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:53.045717+00:00"
+      "sampledAt": "2026-10-06T14:47:30.188247+00:00"
     },
     "xenon": {
       "name": "xenon",
@@ -1997,7 +1997,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:52.933569+00:00"
+      "sampledAt": "2026-10-06T14:47:35.222731+00:00"
     },
     "ΔMAX": {
       "name": "ΔMAX",
@@ -2009,7 +2009,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:59.469041+00:00"
+      "sampledAt": "2026-10-06T14:47:35.309929+00:00"
     },
     "ちゅ～いん☆バニー": {
       "name": "ちゅ～いん☆バニー",
@@ -2021,7 +2021,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:47:59.584586+00:00"
+      "sampledAt": "2026-10-06T14:47:48.661679+00:00"
     },
     "めうめうぺったんたん！！": {
       "name": "めうめうぺったんたん！！",
@@ -2033,7 +2033,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:05.820287+00:00"
+      "sampledAt": "2026-10-06T14:47:48.486062+00:00"
     },
     "アドレナリン": {
       "name": "アドレナリン",
@@ -2045,7 +2045,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:05.685969+00:00"
+      "sampledAt": "2026-10-06T14:47:54.008280+00:00"
     },
     "クリムゾンゲイト": {
       "name": "クリムゾンゲイト",
@@ -2057,7 +2057,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:11.324131+00:00"
+      "sampledAt": "2026-10-06T14:47:54.071113+00:00"
     },
     "シュレーディンガーの猫": {
       "name": "シュレーディンガーの猫",
@@ -2069,7 +2069,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:11.253537+00:00"
+      "sampledAt": "2026-10-06T14:48:00.987778+00:00"
     },
     "スイーツはとまらない♪": {
       "name": "スイーツはとまらない♪",
@@ -2081,7 +2081,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:16.826581+00:00"
+      "sampledAt": "2026-10-06T14:48:01.067021+00:00"
     },
     "チルノのパーフェクトさんすう教室": {
       "name": "チルノのパーフェクトさんすう教室",
@@ -2093,7 +2093,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:16.729396+00:00"
+      "sampledAt": "2026-10-06T14:48:07.665112+00:00"
     },
     "チルノのパーフェクトさんすう教室 (EDM REMIX)": {
       "name": "チルノのパーフェクトさんすう教室 (EDM REMIX)",
@@ -2105,7 +2105,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:22.893940+00:00"
+      "sampledAt": "2026-10-06T14:48:08.345791+00:00"
     },
     "デッドボヲルdeホームラン": {
       "name": "デッドボヲルdeホームラン",
@@ -2117,7 +2117,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:23.181502+00:00"
+      "sampledAt": "2026-10-06T14:48:12.903531+00:00"
     },
     "ドーパミン": {
       "name": "ドーパミン",
@@ -2129,7 +2129,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:30.556281+00:00"
+      "sampledAt": "2026-10-06T14:48:12.852100+00:00"
     },
     "ビューティフル レシート": {
       "name": "ビューティフル レシート",
@@ -2141,7 +2141,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:30.561201+00:00"
+      "sampledAt": "2026-10-06T14:48:17.797564+00:00"
     },
     "ベィスドロップ・フリークス": {
       "name": "ベィスドロップ・フリークス",
@@ -2153,7 +2153,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:38.889941+00:00"
+      "sampledAt": "2026-10-06T14:48:17.861548+00:00"
     },
     "ポラリスノウタ": {
       "name": "ポラリスノウタ",
@@ -2165,7 +2165,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:38.692244+00:00"
+      "sampledAt": "2026-10-06T14:48:25.213220+00:00"
     },
     "ヤサイマシ☆ニンニクアブラオオメ": {
       "name": "ヤサイマシ☆ニンニクアブラオオメ",
@@ -2177,7 +2177,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:46.090291+00:00"
+      "sampledAt": "2026-10-06T14:48:25.315389+00:00"
     },
     "ヤマトなでなで♡かぐや姫": {
       "name": "ヤマトなでなで♡かぐや姫",
@@ -2189,7 +2189,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:46.017695+00:00"
+      "sampledAt": "2026-10-06T14:48:31.620010+00:00"
     },
     "ラクガキスト": {
       "name": "ラクガキスト",
@@ -2201,7 +2201,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:52.867867+00:00"
+      "sampledAt": "2026-10-06T14:48:31.309931+00:00"
     },
     "ラブキラ☆スプラッシュ": {
       "name": "ラブキラ☆スプラッシュ",
@@ -2213,7 +2213,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:52.846171+00:00"
+      "sampledAt": "2026-10-06T14:48:38.437061+00:00"
     },
     "ランカーキラーガール": {
       "name": "ランカーキラーガール",
@@ -2225,7 +2225,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:58.669401+00:00"
+      "sampledAt": "2026-10-06T14:48:38.462113+00:00"
     },
     "不沈艦CANDY": {
       "name": "不沈艦CANDY",
@@ -2237,7 +2237,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:48:58.696391+00:00"
+      "sampledAt": "2026-10-06T14:48:44.127270+00:00"
     },
     "世界の果てに約束の凱歌を -DDR Extended Megamix-": {
       "name": "世界の果てに約束の凱歌を -DDR Extended Megamix-",
@@ -2249,7 +2249,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:04.115071+00:00"
+      "sampledAt": "2026-10-06T14:48:46.261672+00:00"
     },
     "乙女繚乱 舞い咲き誇れ": {
       "name": "乙女繚乱 舞い咲き誇れ",
@@ -2261,7 +2261,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:04.047002+00:00"
+      "sampledAt": "2026-10-06T14:48:52.197484+00:00"
     },
     "人マニア": {
       "name": "人マニア",
@@ -2273,7 +2273,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:10.362974+00:00"
+      "sampledAt": "2026-10-06T14:48:52.155780+00:00"
     },
     "冥": {
       "name": "冥",
@@ -2285,7 +2285,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:09.763712+00:00"
+      "sampledAt": "2026-10-06T14:49:00.073737+00:00"
     },
     "初音ミクの消失": {
       "name": "初音ミクの消失",
@@ -2297,7 +2297,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:14.665493+00:00"
+      "sampledAt": "2026-10-06T14:49:00.148099+00:00"
     },
     "千客万来☆無問題！": {
       "name": "千客万来☆無問題！",
@@ -2309,7 +2309,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:14.769157+00:00"
+      "sampledAt": "2026-10-06T14:49:09.251034+00:00"
     },
     "地方創生☆チクワクティクス": {
       "name": "地方創生☆チクワクティクス",
@@ -2321,7 +2321,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:23.164708+00:00"
+      "sampledAt": "2026-10-06T14:49:09.270179+00:00"
     },
     "恋の氷結おてんば湯けむりチルノ温泉": {
       "name": "恋の氷結おてんば湯けむりチルノ温泉",
@@ -2333,7 +2333,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:23.523286+00:00"
+      "sampledAt": "2026-10-06T14:49:15.293282+00:00"
     },
     "恋愛観測": {
       "name": "恋愛観測",
@@ -2345,7 +2345,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:29.154369+00:00"
+      "sampledAt": "2026-10-06T14:49:15.415153+00:00"
     },
     "恋閃繚乱": {
       "name": "恋閃繚乱",
@@ -2357,7 +2357,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:29.061130+00:00"
+      "sampledAt": "2026-10-06T14:49:21.196352+00:00"
     },
     "患部で止まってすぐ溶ける～狂気の優曇華院": {
       "name": "患部で止まってすぐ溶ける～狂気の優曇華院",
@@ -2369,7 +2369,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:36.082034+00:00"
+      "sampledAt": "2026-10-06T14:49:21.381823+00:00"
     },
     "斑咲花": {
       "name": "斑咲花",
@@ -2381,7 +2381,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:36.099214+00:00"
+      "sampledAt": "2026-10-06T14:49:28.866098+00:00"
     },
     "最小三倍完全数": {
       "name": "最小三倍完全数",
@@ -2393,7 +2393,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:41.669867+00:00"
+      "sampledAt": "2026-10-06T14:49:29.067739+00:00"
     },
     "最終鬼畜妹フランドール・Ｓ": {
       "name": "最終鬼畜妹フランドール・Ｓ",
@@ -2405,7 +2405,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:41.620944+00:00"
+      "sampledAt": "2026-10-06T14:49:37.363709+00:00"
     },
     "灼熱Beach Side Bunny": {
       "name": "灼熱Beach Side Bunny",
@@ -2417,7 +2417,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:48.879257+00:00"
+      "sampledAt": "2026-10-06T14:49:37.101669+00:00"
     },
     "熱情のサパデアード": {
       "name": "熱情のサパデアード",
@@ -2429,7 +2429,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:48.902558+00:00"
+      "sampledAt": "2026-10-06T14:50:01.912876+00:00"
     },
     "走れメロンパン": {
       "name": "走れメロンパン",
@@ -2441,7 +2441,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:55.858524+00:00"
+      "sampledAt": "2026-10-06T14:50:02.033981+00:00"
     },
     "阿波おどり -Awaodori- やっぱり踊りはやめられない": {
       "name": "阿波おどり -Awaodori- やっぱり踊りはやめられない",
@@ -2453,7 +2453,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:49:55.954041+00:00"
+      "sampledAt": "2026-10-06T14:50:09.697040+00:00"
     },
     "隅田川夏恋歌": {
       "name": "隅田川夏恋歌",
@@ -2465,7 +2465,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:50:02.961454+00:00"
+      "sampledAt": "2026-10-06T14:50:09.745900+00:00"
     },
     "革命(X-Special)": {
       "name": "革命(X-Special)",
@@ -2477,7 +2477,7 @@
         200,
         200
       ],
-      "sampledAt": "2026-10-06T12:50:03.102561+00:00"
+      "sampledAt": "2026-10-06T14:50:15.426874+00:00"
     }
   },
   "coverage": {
@@ -2494,5 +2494,31 @@
     ]
   },
   "paletteFile": "/bpl/jacket-colors.json",
-  "paletteSha256": "51793c168f31543c89ddccc74e0353c5c442dce5c1f545a59037d1e5b6016914"
+  "paletteSha256": "c8bcb0b20ac2bb3e3a18e484e6c7ee799ee29ccbf56806293e854ba465361b04",
+  "selector": {
+    "areaExponent": 0.7,
+    "chromaWeight": 2,
+    "chromaExponent": 2,
+    "chromaReference": 0.1,
+    "minimumClusterFraction": 0.05,
+    "neutralFallbackChroma": 0.06,
+    "fallback": "oklab-dominant-quadrants-v1",
+    "darkLightnessThreshold": 0.18,
+    "darkAreaThreshold": 0.65,
+    "darkMultiplier": 0.7,
+    "tieBreak": "stable descending cluster fraction, then first maximum"
+  },
+  "validation": {
+    "recalculatedSongs": 206,
+    "recalculatedQuadrants": 824,
+    "changedSongs": 107,
+    "changedQuadrants": 204,
+    "unchangedSongs": 99,
+    "neutralFallbackQuadrants": 186,
+    "songsWithNeutralFallback": 76,
+    "allNeutralFallbackSongs": 21,
+    "verifiedIdenticalSourceHashes": 206,
+    "reproducedBaselineQuadrants": 824,
+    "unresolvedFallbackSongs": 7
+  }
 }
