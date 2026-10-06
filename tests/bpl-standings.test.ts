@@ -76,12 +76,16 @@ describe('season outcome markup', () => {
     expect(renderer().render('seasonResults(0)')).toContain('エキシビション');
     expect((renderer().render('seasonResults(2)').match(/<table/g)||[])).toHaveLength(2);
   });
-  it('keeps every team visible, makes nonparticipants truly disabled and labels them', () => {
-    const html=renderer('4').render('seasonTeamFilters()');
-    expect(html).toMatch(/data-team-filter="supernova_tohoku"[^>]*disabled aria-disabled="true"/);
-    expect(html).toMatch(/data-team-filter="WHITE"[^>]*disabled aria-disabled="true"/);
-    expect(html).toContain('不参加');
-    expect(html).toMatch(/data-team-filter="all" aria-pressed="true">/);
-    expect((renderer('all').render('seasonTeamFilters()').match(/disabled/g)||[])).toHaveLength(0);
+  it('renders only the selected season participants plus all teams, with no hidden or disabled remnants', () => {
+    for (const season of ['0','2','4','5','6','all']) {
+      const html=renderer(season).render('seasonTeamFilters()');
+      const ids=[...html.matchAll(/data-team-filter="([^"]+)"/g)].map(match=>match[1]);
+      expect(ids).toEqual(['all',...standings.seasonTeamIds(data,season)]);
+      expect(html).not.toMatch(/disabled|aria-hidden|不参加/);
+      expect(html).toMatch(/data-team-filter="all" aria-pressed="true">/);
+    }
+    expect(renderer('2','supernova_tohoku').render('seasonTeamFilters()')).toMatch(/data-team-filter="supernova_tohoku" aria-pressed="true"/);
+    expect(renderer('4').render('seasonTeamFilters()')).not.toContain('supernova_tohoku');
+    expect(renderer('0').render('seasonTeamFilters()')).not.toContain('round1');
   });
 });

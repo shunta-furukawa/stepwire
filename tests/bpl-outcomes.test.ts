@@ -112,3 +112,60 @@ describe('BPL result labels and historical affiliation', () => {
     }
   });
 });
+
+
+describe('match card round points', () => {
+  it('sums all 166 rounds once and reconciles every match with its separate advantage', () => {
+    const h=renderHarness();
+    for(const match of data.matches){
+      const totals=[0,0];
+      for(const battle of match.battles){
+        const points=h.run(`roundPoints(${JSON.stringify(battle)})`) as number[];
+        for(const side of [0,1])totals[side]=totals[side]!+points[side]!;
+      }
+      expect(totals.map((total,side)=>total+match.adjustment[side]!)).toEqual(match.points);
+      const card=h.run(`matchCard(${JSON.stringify(match)})`) as string;
+      expect((card.match(/class="round-point"/g)||[])).toHaveLength(match.battles.length*2);
+      expect(card).toContain(`aria-describedby="round-summary-${match.id}"`);
+      expect(card).toContain(`id="round-summary-${match.id}" hidden`);
+      expect(card).toContain('第1ラウンド：');
+      expect(card).toContain('ラウンド獲得点');expect(card).toContain('（pt）');expect(card).not.toContain('EX SCORE');
+      expect(card.includes('class="match-adjustment"')).toBe(match.adjustment.some(Boolean));
+    }
+  });
+  it('keeps ZERO, singles, Duo ties, duplicate titles and weighted rounds source-driven', () => {
+    const h=renderHarness();
+    for(const [id,number,expected] of [
+      ['zero-0',3,[4,9]],['s2-regular-6',1,[1,1]],['s2-regular-12',1,[2,1]],
+      ['s5-regular-11',3,[4,11]],['s2-semi-18',5,[10,10]],['s5-final-1',5,[10,3]],['s4-regular_01',1,[6,6]],
+    ] as const){
+      const battle=data.matches.find(match=>match.id===id)!.battles.find(battle=>battle.number===number)!;
+      expect(h.run(`roundPoints(${JSON.stringify(battle)})`)).toEqual(expected);
+    }
+    expect(h.run(`roundPoints({points:[2,0],songs:[{points:[100,100]}]})`)).toEqual([2,0]);
+    expect(h.run(`matchCard(D.matches.find(m=>m.id==='s2-quarter-2'))`)).toContain('SILK HAT +2 pt');
+  });
+  it('preserves genuine zero and keeps incomplete or invalid sides unknown', () => {
+    const h=renderHarness();
+    for(const input of ['{}','{songs:[]}','{points:[null,null]}','{songs:[{}]}'])expect(h.run(`roundPoints(${input})`)).toEqual([null,null]);
+    expect(h.run(`roundPoints({points:[0,0]})`)).toEqual([0,0]);
+    expect(h.run(`roundPoints({songs:[{points:[0,0]}]})`)).toEqual([0,0]);
+    for(const invalid of ['null','undefined','NaN','Infinity','-1','"0"']){
+      expect(h.run(`roundPoints({points:[${invalid},2],songs:[{points:[1,1]}]})`)).toEqual([null,2]);
+      expect(h.run(`roundPoints({songs:[{points:[1,0]},{points:[${invalid},2]}]})`)).toEqual([null,2]);
+    }
+    const unknown=h.run(`matchRoundPoints({teams:['WHITE','RED'],season:0},{number:1,songs:[]})`) as string;
+    expect((unknown.match(/>—<\/span>/g)||[])).toHaveLength(2);expect(unknown).toContain('未確認');expect(unknown).not.toMatch(/WIN|LOSE|DRAW/);
+  });
+  it('pairs each point column with the historical match team, not the latest player affiliation', () => {
+    const h=renderHarness();
+    const match=data.matches.find(m=>m.teams.includes('game_panic')&&m.battles.some(b=>b.players.flat().includes('HO4-KETI')))!;
+    const card=h.run(`matchCard(${JSON.stringify(match)})`) as string;
+    const headers=[...card.matchAll(/class="round-team-label" data-team="([^"]+)" data-side="([01])"/g)];
+    expect(headers.map(match=>match[1])).toEqual(match.teams);
+    for(const [side,id] of match.teams.entries()){
+      expect((card.match(new RegExp(`class="round-point" data-team="${id}" data-side="${side}"`,'g'))||[])).toHaveLength(match.battles.length);
+    }
+    expect(css).toMatch(/\.round-point\{[^}]*color:var\(--team-text\)/);
+  });
+});

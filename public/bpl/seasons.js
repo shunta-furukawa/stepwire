@@ -42,9 +42,9 @@ function bindSeasonRail() {
 
 function seasonTeamFilters() {
   const ids=Standings.seasonTeamIds(D,state.season);
-  return `<div class="team-strip season-team-filters" aria-label="対戦カードのチームを選択"><button type="button" data-team-filter="all" aria-pressed="${state.team==='all'}"><span class="team-filter-all">全チーム</span><small>${state.team==='all'?'選択中':'すべて表示'}</small></button>${Object.keys(D.teams).map(id=>{
-    const enabled=ids.includes(id),selected=state.team===id;
-    return `<button type="button" data-team-filter="${esc(id)}" aria-pressed="${selected}" ${enabled?'':'disabled aria-disabled="true"'} style="${teamVars(id)}" title="${esc(teamName(id,state.season))}${enabled?'':'：このシーズンは不参加'}">${logo(id,state.season)}<small>${enabled?(selected?'選択中':'絞り込む'):'不参加'}</small></button>`;
+  return `<div class="team-strip season-team-filters" aria-label="対戦カードのチームを選択"><button type="button" data-team-filter="all" aria-pressed="${state.team==='all'}"><span class="team-filter-all">全チーム</span><small>${state.team==='all'?'選択中':'すべて表示'}</small></button>${ids.map(id=>{
+    const selected=state.team===id;
+    return `<button type="button" data-team-filter="${esc(id)}" aria-pressed="${selected}" style="${teamVars(id)}" title="${esc(teamName(id,state.season))}">${logo(id,state.season)}<small>${selected?'選択中':'絞り込む'}</small></button>`;
   }).join('')}</div>`;
 }
 
