@@ -208,6 +208,7 @@ async function checkRoundPoints(label,viewport){
           const number=row.locator('.round-point').nth(side),header=card.locator('.round-team-label').nth(side);
           assert.match(await number.getAttribute('aria-label'),new RegExp('第'+battle.number+'ラウンド'));
           assert.equal(await number.evaluate(n=>getComputedStyle(n).color),await header.evaluate(n=>getComputedStyle(n).color));
+          if(match.teams[side]==='supernova_tohoku')assert.equal(await header.evaluate(n=>{const range=document.createRange();range.selectNodeContents(n);return range.getClientRects().length}),1,'SUPERNOVA header must fit without a dangling letter');
           const n=await number.boundingBox(),h=await header.boundingBox();
           assert.ok(Math.abs(n.x+n.width/2-h.x-h.width/2)<1,'round score centers align with team headings');
         }
@@ -524,9 +525,9 @@ try {
   for(const roster of ['all','0']){await goto('/bpl/s?view=team&id=round1&rosterSeason='+roster,'team','round1');assert.equal(await page.locator('#team-roster-season').inputValue(),'6');assert.equal(param('rosterSeason'),'6')}
 
   await checkRoundPoints('desktop',{width:1280,height:900});
-await checkRoundPoints('mobile',{width:390,height:844});
-await checkRoundPoints('narrow',{width:320,height:720});
-await checkOutcomeLayout('desktop',{width:1280,height:900});
+  await checkRoundPoints('mobile',{width:390,height:844});
+  await checkRoundPoints('narrow',{width:320,height:720});
+  await checkOutcomeLayout('desktop',{width:1280,height:900});
   await checkOutcomeLayout('mobile',{width:390,height:844});
   await checkGradientLayout('desktop',{width:1280,height:900});
   await checkGradientLayout('mobile',{width:390,height:844});
