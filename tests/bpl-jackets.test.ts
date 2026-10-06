@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import { describe, expect, it } from 'vitest';
 import * as jackets from '../public/bpl/jackets.js';
+import * as standings from '../public/bpl/standings.js';
 import palettes from '../public/bpl/jacket-colors.json';
 import provenance from '../docs/bpl-jacket-palettes.json';
 import data from '../public/bpl/data.json';
@@ -38,10 +39,10 @@ function renderHarness(colors: unknown = palettes, module: unknown = jackets) {
     document: { querySelector: get, getElementById: (id: string) => get('#' + id), querySelectorAll: () => [], createElement: () => new Node(), addEventListener() {}, body: { style: {} } },
     window: { addEventListener() {} },
     allArchiveMatches: data.matches, s6SessionPrefs: { hideResults: true },
-    inputData: structuredClone(data), inputBrand: structuredClone(brand), inputColors: colors, inputJackets: module, inputFilters: routing.defaultFilters,
+    inputStandings:standings,inputData: structuredClone(data), inputBrand: structuredClone(brand), inputColors: colors, inputJackets: module, inputFilters: routing.defaultFilters,
   });
   vm.runInContext(readFileSync('public/bpl/seasons.js', 'utf8') + '\n' + script.slice(0, bootStart) + script.slice(bootEnd), ctx);
-  vm.runInContext('D=inputData;B=inputBrand;Jackets=inputJackets;JacketColors=inputColors;Object.assign(state,inputFilters);for(const [id,t] of Object.entries(B.teams))Object.assign(D.teams[id],t)', ctx);
+  vm.runInContext('Standings=inputStandings;D=inputData;B=inputBrand;Jackets=inputJackets;JacketColors=inputColors;Object.assign(state,inputFilters);for(const [id,t] of Object.entries(B.teams))Object.assign(D.teams[id],t)', ctx);
   return { run: (code: string) => vm.runInContext(code, ctx), get };
 }
 

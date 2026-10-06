@@ -3,7 +3,7 @@
  *   BASE_URL=http://127.0.0.1:3000 node tests/bpl-history.browser.mjs
  * Requires Playwright in the runner (NODE_PATH is supported) and a Chromium
  * installation. Set CHROMIUM_PATH only when using a system browser.
- * Set BPL_SCREENSHOT_OUTPUT to save desktop/mobile card, detail and versus PNGs.
+ * Set BPL_SCREENSHOT_OUTPUT to save desktop/mobile standings, card, detail and versus PNGs.
  * No browser or package is downloaded by this script.
  */
 import assert from 'node:assert/strict';
@@ -266,7 +266,131 @@ async function checkOutcomeLayout(label,viewport){
     assert.deepEqual(await fixtureSongs.nth(1).locator('.score-result>b').allTextContents(),['—','0']);
   }finally{await ctx.close()}
 }
+async function checkSeasonStandings(label,viewport){
+  const ctx=await browser.newContext({viewport,isMobile:label==='mobile',hasTouch:label==='mobile',deviceScaleFactor:1,serviceWorkers:'block'});
+  trackImages(ctx);
+  await ctx.addInitScript(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.__copied=text}}}));
+  const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
+  const franchises=['apina_vrames','gigo','game_panic','silkhat','supernova_tohoku','taitostation_tradz','round1','leisure_land'];
+  const current=franchises.filter(id=>id!=='supernova_tohoku');
+  const expected={0:[['BLUE','WHITE','RED']],2:[['silkhat','gigo','game_panic','taitostation_tradz'],['round1','leisure_land','apina_vrames','supernova_tohoku']],4:[['round1','taitostation_tradz','game_panic','silkhat','gigo','leisure_land','apina_vrames']],5:[['taitostation_tradz','apina_vrames','round1','gigo','game_panic','silkhat','leisure_land']]};
+  const filterState=async()=>({season:new URL(target.url()).searchParams.get('season'),team:await target.locator('#team-filter').inputValue(),stage:await target.locator('#stage-filter').inputValue()});
+  const openSeason=async season=>{await target.goto(base+'/bpl/s?view=seasons&season='+season);await readyOn(target,'seasons');};
+  const chooseSeason=async season=>{await target.locator(`button.season-button[data-season="${season}"]`).click();await target.waitForURL(url=>url.searchParams.get('season')===String(season));await readyOn(target,'seasons');};
+  const noOverflow=async()=>assert.equal(await target.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,label+' season page must not overflow');
+  const checkCards=async(season,team='all',stage='all')=>assert.deepEqual(await target.locator('#season-matches .match-card').evaluateAll(nodes=>nodes.map(n=>n.dataset.match)),data.matches.filter(m=>(season==='all'||m.season===Number(season))&&(team==='all'||m.teams.includes(team))&&(stage==='all'||m.stage===stage)).reverse().map(m=>m.id));
+  const checkButtons=async participants=>{
+    const enabled=['all',...Object.keys(data.teams).filter(id=>participants.includes(id))];
+    assert.equal(await target.locator('.season-team-filters button[data-team-filter]').count(),Object.keys(data.teams).length+1);
+    for(const id of Object.keys(data.teams)){
+      const button=target.locator(`button[data-team-filter="${id}"]`),option=target.locator(`#team-filter option[value="${id}"]`),available=participants.includes(id);
+      assert.equal(await button.isDisabled(),!available,id+' native button participation');
+      assert.equal(await option.isDisabled(),!available,id+' select participation');
+      assert.equal(await button.getAttribute('aria-disabled'),available?null:'true');
+      if(!available){assert.match(await button.innerText(),/不参加/);assert.match(await option.innerText(),/不参加/)}
+    }
+    // Native keyboard tab order must skip every disabled nonparticipant.
+    await target.locator('button[data-team-filter="all"]').focus();
+    for(const id of enabled.slice(1)){
+      await target.keyboard.press('Tab');
+      assert.equal(await target.evaluate(()=>document.activeElement?.dataset.teamFilter),id,'disabled teams must be skipped by Tab');
+    }
+    await target.keyboard.press('Tab');assert.equal(await target.evaluate(()=>document.activeElement?.id),'team-filter');
+    const inactive=target.locator('.season-team-filters button:disabled').first();
+    if(await inactive.count()){
+      const before=target.url();await inactive.evaluate(button=>button.click());assert.equal(target.url(),before,'native disabled clicks must not change the filter');
+    }
+  };
+  try{
+    for(const season of ['0','2','4','5']){
+      await openSeason(season);
+      const section=target.locator(`.season-results[data-season="${season}"]`),groups=expected[season],seasonName=season==='0'?'ZERO':'S'+season;
+      assert.equal(await section.count(),1);assert.equal(await section.locator('h2').innerText(),seasonName+'の順位・成績');
+      assert.equal(await section.evaluate(n=>Boolean(n.compareDocumentPosition(document.querySelector('#season-matches'))&Node.DOCUMENT_POSITION_FOLLOWING)),true,'whole-season results precede card filters');
+      assert.equal(await section.locator('.standings-table').count(),groups.length);
+      for(const [index,ids] of groups.entries()){
+        const table=section.locator('.standings-table').nth(index);
+        assert.deepEqual(await table.locator('tbody .standings-row').evaluateAll(nodes=>nodes.map(n=>n.dataset.team)),ids);
+        assert.deepEqual(await table.locator('.standing-rank').allTextContents(),ids.map((_,i)=>String(i+1)),'each group has its own ranking');
+        assert.equal(await table.locator('thead th[scope="col"]').count(),5);assert.equal(await table.locator('tbody th[scope="row"]').count(),ids.length);
+      }
+      if(season==='2')assert.deepEqual(await section.locator('caption').allTextContents(),['Aグループ','Bグループ']);
+      if(season==='0'){
+        assert.match(await section.innerText(),/エキシビション/);
+        assert.deepEqual(await section.locator('.standing-points').allTextContents(),['6','3','0']);
+        assert.deepEqual(await section.locator('.standing-finish').allTextContents(),['準優勝','優勝','予選敗退']);
+      }
+      const final=data.matches.find(m=>m.season===Number(season)&&m.stage==='final'),winner=final.points[0]>final.points[1]?0:1;
+      assert.deepEqual(await section.locator('.season-finalist').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href'))),[winner,1-winner].map(side=>'#team/'+final.teams[side]));
+      assert.deepEqual(await section.locator('.finish-label').allTextContents(),['優勝','準優勝']);
+      assert.equal(await section.locator('.season-final-score').getAttribute('data-match'),final.id);
+      assert.equal((await section.locator('.season-final-score strong').innerText()).replace(/\s+/g,''),final.points[winner]+'–'+final.points[1-winner]);
+      await checkButtons(groups.flat());await checkCards(season);await noOverflow();
+      await section.scrollIntoViewIfNeeded();await screenshot(section,label+'-standings-'+season);
+
+      // Enter and Space both activate native strip buttons, but only filter cards.
+      const original=await section.innerHTML(),team=groups[0][0];
+      await target.locator(`button[data-team-filter="${team}"]`).focus();await target.keyboard.press('Enter');
+      assert.equal(await target.locator('#team-filter').inputValue(),team);assert.equal(new URL(target.url()).searchParams.get('team'),team);
+      assert.equal(await target.locator(`button[data-team-filter="${team}"]`).getAttribute('aria-pressed'),'true');
+      assert.equal(await target.evaluate(()=>document.activeElement?.dataset.teamFilter),team);await checkCards(season,team);
+      assert.equal(await section.innerHTML(),original,'team filter must leave whole-season results unchanged');
+      await target.selectOption('#stage-filter','regular');await checkCards(season,team,'regular');
+      assert.equal(await section.innerHTML(),original,'stage filter must leave whole-season results unchanged');
+      await noOverflow();
+      const filtered=target.url();
+      await section.locator('.season-final-score').click();await readyOn(target,'match',final.id);
+      assert.equal(await target.locator('#match-dialog').evaluate(n=>n.open),true,'final result button opens the match modal');
+      await target.keyboard.press('Escape');await readyOn(target,'seasons');
+      assert.equal(target.url(),filtered);assert.equal(await section.innerHTML(),original);await checkCards(season,team,'regular');
+      await target.goForward();await readyOn(target,'match',final.id);await target.locator('#close-dialog').click();await readyOn(target,'seasons');assert.equal(target.url(),filtered);
+      const card=target.locator('#season-matches .match-card').first(),id=await card.getAttribute('data-match');
+      await card.click();await readyOn(target,'match',id);await target.locator('#close-dialog').click();await readyOn(target,'seasons');assert.equal(target.url(),filtered);
+      await section.locator('.season-finalist').first().click();await readyOn(target,'team',final.teams[winner]);
+      await target.goBack();await readyOn(target,'seasons');assert.equal(target.url(),filtered);assert.equal(await section.innerHTML(),original);
+      await target.locator('button[data-team-filter="all"]').focus();await target.keyboard.press('Space');
+      assert.equal(await target.locator('#team-filter').inputValue(),'all');assert.equal(await section.innerHTML(),original);await checkCards(season,'all','regular');
+    }
+
+    await openSeason('all');
+    const overview=target.locator('.season-results[data-season="all"]');
+    assert.equal(await overview.locator('h2').innerText(),'シーズン別の結果');
+    assert.equal(await overview.locator('.standings-table').count(),0);
+    assert.deepEqual(await overview.locator('.season-winner').evaluateAll(nodes=>nodes.map(n=>n.dataset.season)),['5','4','2','0']);
+    await checkButtons(Object.keys(data.teams));await checkCards('all');await noOverflow();await screenshot(overview,label+'-standings-all');
+    await overview.locator('button[data-season="2"]').click();await readyOn(target,'seasons');assert.equal(new URL(target.url()).searchParams.get('season'),'2');
+
+    // A season switch is one history step; invalid teams reset immediately.
+    for(const [from,team,to,stage] of [['0','WHITE','5','final'],['2','supernova_tohoku','4','regular']]){
+      await openSeason(from);await target.locator(`button[data-team-filter="${team}"]`).click();await target.selectOption('#stage-filter',stage);
+      const before=target.url();await chooseSeason(to);const after=target.url();
+      assert.deepEqual(await filterState(),{season:to,team:'all',stage});assert.equal(new URL(after).searchParams.get('team'),'all');await checkCards(to,'all',stage);
+      await target.goBack();await readyOn(target,'seasons');assert.equal(target.url(),before);assert.deepEqual(await filterState(),{season:from,team,stage});
+      await target.goForward();await readyOn(target,'seasons');assert.equal(target.url(),after);assert.deepEqual(await filterState(),{season:to,team:'all',stage});
+    }
+
+    // Old shared URLs must agree with the rendered controls, canonical/OG metadata
+    // and newly copied URLs, including a valid stage unavailable in that season.
+    for(const [season,team,stage,normalized] of [['5','WHITE','final',{season:'5',team:'all',stage:'final'}],['4','supernova_tohoku','quarter',{season:'4',team:'all',stage:'all'}]]){
+      await target.goto(base+'/bpl/s?'+new URLSearchParams({view:'seasons',season,team,stage}));await readyOn(target,'seasons');
+      assert.deepEqual(await filterState(),normalized);
+      await target.locator('.share-toolbar [data-share-action="copy"]').click();
+      const urls=[target.url(),await target.evaluate(()=>window.__copied),await target.locator('link[rel="canonical"]').getAttribute('href'),await target.locator('meta[property="og:url"]').getAttribute('content'),await target.locator('meta[property="og:image"]').getAttribute('content'),await target.locator('meta[name="twitter:image"]').getAttribute('content')];
+      for(const value of urls)for(const [key,expectedValue] of Object.entries(normalized))assert.equal(new URL(value).searchParams.get(key),expectedValue,key+' normalized in '+value);
+      await checkCards(normalized.season,normalized.team,normalized.stage);
+    }
+    await target.goto(base+'/bpl/s?view=s6');await readyOn(target,'s6');
+    const pending=target.locator('.season-results[data-season="6"]');
+    assert.equal(await pending.locator('h2').innerText(),'S6の順位・成績');
+    assert.match(await pending.innerText(),/開幕前/);assert.match(await pending.innerText(),/順位未確定/);assert.equal(await pending.locator('.standings-table').count(),0);
+    assert.deepEqual((await pending.locator('.pending-teams a').evaluateAll(nodes=>nodes.map(n=>n.hash.replace('#team/','')))).sort(),[...current].sort());
+    await noOverflow();await pending.scrollIntoViewIfNeeded();await screenshot(pending,label+'-standings-6');
+    await pending.locator('.pending-teams a').first().click();await readyOn(target,'team');await target.goBack();await readyOn(target,'s6');assert.equal(await pending.count(),1);
+  }finally{await ctx.close()}
+}
 try {
+  await checkSeasonStandings('desktop',{width:1280,height:900});
+  await checkSeasonStandings('mobile',{width:390,height:844});
   // Repeated entity navigation must retain the selected entity and roster scope.
   await goto('/bpl/s?view=team&id=round1&rosterSeason=2','team','round1');
   assert.equal(await page.locator('#team-roster-season').inputValue(),'2');
@@ -285,10 +409,10 @@ try {
 
   // A season selection is an intentional step; filters replace that step.
   await nav('seasons');
-  await page.locator('[data-season="0"]').click();await page.waitForURL(u=>u.searchParams.get('season')==='0');
+  await page.locator('button.season-button[data-season="0"]').click();await page.waitForURL(u=>u.searchParams.get('season')==='0');
   await page.selectOption('#team-filter','WHITE');await page.selectOption('#stage-filter','final');
   const zero=page.url();
-  await page.locator('[data-season="5"]').click();await page.waitForURL(u=>u.searchParams.get('season')==='5');
+  await page.locator('button.season-button[data-season="5"]').click();await page.waitForURL(u=>u.searchParams.get('season')==='5');
   await page.selectOption('#team-filter','all');await page.selectOption('#stage-filter','all');
   await back('seasons');assert.equal(page.url(),zero);assert.equal(await page.locator('#team-filter').inputValue(),'WHITE');assert.equal(await page.locator('#stage-filter').inputValue(),'final');
   await forward('seasons');assert.equal(param('season'),'5');assert.equal(await page.locator('#team-filter').inputValue(),'all');
