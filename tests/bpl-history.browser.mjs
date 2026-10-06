@@ -115,6 +115,32 @@ async function checkGradientLayout(label,viewport){
     await checkJacket(cosyDuel,sizes.duel,jacketColors.songs['Cosy Catastrophe']);await checkPaleJacket(cosyDuel);
     await screenshot(target.locator('.duel-table'),label+'-jacket-versus');
 
+    // These real archive records span the approved pink/purple recovery,
+    // a white-to-cyan selection, and an unchanged dark jacket, at all 3 sizes.
+    for(const [title,matchId,a,b,season,format] of [
+      ['Wuv U','s4-regular_06','THOR','GIEZ-ACS','4','tag'],
+      ['ALPACORE','s2-regular-6','THOR','KANAME','2','tag'],
+      ['888','s2-regular-9','UN-RE','OOON!!','2','single'],
+    ]){
+      const record=data.matches.find(m=>m.id===matchId),palette=jacketColors.songs[title];
+      const slug=title.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+      await target.goto(base+'/bpl/s?view=seasons&season='+season);await readyOn(target,'seasons');
+      const sampleCard=target.locator(`.match-card[data-match="${matchId}"]`);
+      const index=record.battles.flatMap(battle=>battle.songs.map(song=>song.name)).indexOf(title);
+      await checkJacket(sampleCard.locator('.music-jacket').nth(index),sizes.mini,palette);
+      await screenshot(sampleCard,label+'-moderate-'+slug+'-card');
+      await sampleCard.click();await readyOn(target,'match',matchId);
+      const sampleDetail=target.locator('#dialog-content .song').filter({has:target.locator('.song-title strong').filter({hasText:title})}).locator('.music-jacket').first();
+      await checkJacket(sampleDetail,sizes.detail,palette);
+      await sampleDetail.scrollIntoViewIfNeeded();await screenshot(target.locator('#match-dialog'),label+'-moderate-'+slug+'-detail');
+      await target.locator('#close-dialog').click();await readyOn(target,'seasons');
+      const query=new URLSearchParams({view:'versus',a,b,vsSeason:season,vsFormat:format});
+      await target.goto(base+'/bpl/s?'+query);await readyOn(target,'versus');
+      const sampleDuel=target.locator('.duel-song-heading').filter({has:target.locator('.duel-song-name').filter({hasText:title})}).locator('.music-jacket').first();
+      await checkJacket(sampleDuel,sizes.duel,palette);
+      await sampleDuel.scrollIntoViewIfNeeded();await screenshot(target.locator('.duel-table'),label+'-moderate-'+slug+'-versus');
+    }
+
     // Verify all seven known missing titles use their actual card and detail ♪,
     // without inventing a replacement palette or relying on a single fixture.
     await target.goto(base+'/bpl/s?view=seasons');await readyOn(target,'seasons');
