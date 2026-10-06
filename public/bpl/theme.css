@@ -120,6 +120,6 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
  .song-score b{font-size:20px}
  .score-unit{font-size:10px}
  .duel-table td.duel-score-cell{padding-left:6px;padding-right:6px}
- .duel-table th:nth-child(2),.duel-table th:nth-child(3){min-width:68px}
+ .duel-table th:nth-child(2),.duel-table th:nth-child(3){min-width:64px;padding-left:6px;padding-right:6px;white-space:nowrap}
  .duel-table .result-badge{min-width:43px;padding:2px 5px;font-size:10px}
 }
