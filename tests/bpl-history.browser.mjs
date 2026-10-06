@@ -186,6 +186,48 @@ async function checkOptionalJacketFailure(failure){
     await target.keyboard.press('Escape');await readyOn(target,'seasons');assert.equal(await target.locator('#match-dialog').evaluate(dialog=>dialog.open),false);
   }finally{await ctx.close()}
 }
+async function checkRoundPoints(label,viewport){
+  const ctx=await browser.newContext({viewport,isMobile:label!=='desktop',hasTouch:label!=='desktop',deviceScaleFactor:1,serviceWorkers:'block'});
+  trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
+  try{
+    await target.goto(base+'/bpl/s?view=seasons');await readyOn(target,'seasons');
+    for(const match of data.matches){
+      const card=target.locator(`.match-card[data-match="${match.id}"]`),rows=card.locator('.match-battle-row');
+      assert.equal(await rows.count(),match.battles.length);
+      const description=await card.getAttribute('aria-describedby');
+      assert.equal(description,'round-summary-'+match.id);
+      assert.match(await target.locator('#'+description).textContent(),/第1ラウンド：/);
+      assert.deepEqual(await card.locator('.round-team-label').evaluateAll(nodes=>nodes.map(n=>n.dataset.team)),match.teams);
+      const totals=[0,0];
+      for(const [index,battle] of match.battles.entries()){
+        const row=rows.nth(index),points=battle.points??[0,1].map(side=>battle.songs.reduce((sum,song)=>sum+song.points[side],0));
+        assert.deepEqual(await row.locator('.round-point').allTextContents(),points.map(String),match.id+' round '+battle.number);
+        assert.deepEqual(await row.locator('.round-point').evaluateAll(nodes=>nodes.map(n=>n.dataset.team)),match.teams);
+        for(const side of [0,1]){
+          totals[side]+=points[side];
+          const number=row.locator('.round-point').nth(side),header=card.locator('.round-team-label').nth(side);
+          assert.match(await number.getAttribute('aria-label'),new RegExp('第'+battle.number+'ラウンド'));
+          assert.equal(await number.evaluate(n=>getComputedStyle(n).color),await header.evaluate(n=>getComputedStyle(n).color));
+          if(match.teams[side]==='supernova_tohoku')assert.equal(await header.evaluate(n=>{const range=document.createRange();range.selectNodeContents(n);return range.getClientRects().length}),1,'SUPERNOVA header must fit without a dangling letter');
+          const n=await number.boundingBox(),h=await header.boundingBox();
+          assert.ok(Math.abs(n.x+n.width/2-h.x-h.width/2)<1,'round score centers align with team headings');
+        }
+        assert.equal(await row.evaluate(n=>n.scrollWidth<=n.clientWidth+1),true,match.id+' round row must not overflow');
+      }
+      assert.deepEqual(totals.map((n,side)=>n+match.adjustment[side]),match.points,'round totals + one adjustment agree with match total');
+      assert.equal(await card.locator('.match-adjustment').count(),match.adjustment.some(Boolean)?1:0);
+      assert.equal(await card.evaluate(n=>n.scrollWidth<=n.clientWidth+1),true,match.id+' card must not overflow');
+    }
+    assert.equal(await target.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'round points must not overflow page');
+    for(const id of ['zero-0','s2-quarter-2','s2-regular-1','s4-semi_01','s5-final-1']){
+      const card=target.locator(`.match-card[data-match="${id}"]`);
+      if(await card.count()){await card.scrollIntoViewIfNeeded();await screenshot(card,label+'-round-points-'+id)}
+    }
+    await target.goto(base+'/bpl/s?view=seasons&season=5');await readyOn(target,'seasons');
+    await target.locator('.season-team-filters').scrollIntoViewIfNeeded();await screenshot(target.locator('.season-team-filters'),label+'-participant-filters');
+  }finally{await ctx.close()}
+}
+
 async function checkOutcomeLayout(label,viewport){
   const ctx=await browser.newContext({viewport,isMobile:label==='mobile',hasTouch:label==='mobile',deviceScaleFactor:1,serviceWorkers:'block'});
   trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
@@ -280,26 +322,22 @@ async function checkSeasonStandings(label,viewport){
   const noOverflow=async()=>assert.equal(await target.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,label+' season page must not overflow');
   const checkCards=async(season,team='all',stage='all')=>assert.deepEqual(await target.locator('#season-matches .match-card').evaluateAll(nodes=>nodes.map(n=>n.dataset.match)),data.matches.filter(m=>(season==='all'||m.season===Number(season))&&(team==='all'||m.teams.includes(team))&&(stage==='all'||m.stage===stage)).reverse().map(m=>m.id));
   const checkButtons=async participants=>{
-    const enabled=['all',...Object.keys(data.teams).filter(id=>participants.includes(id))];
-    assert.equal(await target.locator('.season-team-filters button[data-team-filter]').count(),Object.keys(data.teams).length+1);
+    const visible=['all',...Object.keys(data.teams).filter(id=>participants.includes(id))];
+    assert.deepEqual(await target.locator('.season-team-filters button[data-team-filter]').evaluateAll(nodes=>nodes.map(node=>node.dataset.teamFilter)),visible);
+    assert.deepEqual(await target.locator('#team-filter option').evaluateAll(nodes=>nodes.map(node=>node.value)),visible);
     for(const id of Object.keys(data.teams)){
       const button=target.locator(`button[data-team-filter="${id}"]`),option=target.locator(`#team-filter option[value="${id}"]`),available=participants.includes(id);
-      assert.equal(await button.isDisabled(),!available,id+' native button participation');
-      assert.equal(await option.isDisabled(),!available,id+' select participation');
-      assert.equal(await button.getAttribute('aria-disabled'),available?null:'true');
-      if(!available){assert.match(await button.innerText(),/不参加/);assert.match(await option.innerText(),/不参加/)}
+      assert.equal(await button.count(),available?1:0,id+' filter participation');
+      assert.equal(await option.count(),available?1:0,id+' select participation');
+      if(available){assert.equal(await button.isDisabled(),false);assert.equal(await option.isDisabled(),false)}
     }
-    // Native keyboard tab order must skip every disabled nonparticipant.
+    // Nonparticipants are absent from the DOM and native keyboard tab order.
     await target.locator('button[data-team-filter="all"]').focus();
-    for(const id of enabled.slice(1)){
+    for(const id of visible.slice(1)){
       await target.keyboard.press('Tab');
-      assert.equal(await target.evaluate(()=>document.activeElement?.dataset.teamFilter),id,'disabled teams must be skipped by Tab');
+      assert.equal(await target.evaluate(()=>document.activeElement?.dataset.teamFilter),id,'only participants belong in Tab order');
     }
     await target.keyboard.press('Tab');assert.equal(await target.evaluate(()=>document.activeElement?.id),'team-filter');
-    const inactive=target.locator('.season-team-filters button:disabled').first();
-    if(await inactive.count()){
-      const before=target.url();await inactive.evaluate(button=>button.click());assert.equal(target.url(),before,'native disabled clicks must not change the filter');
-    }
   };
   try{
     for(const season of ['0','2','4','5']){
@@ -486,6 +524,9 @@ try {
   for(const [key,value] of Object.entries({matrixSeason:'5',matrixFormat:'single',matrixCategory:'GOLD',matrixStyle:'TRICKY'}))assert.equal(await page.locator('#'+key).inputValue(),value);
   for(const roster of ['all','0']){await goto('/bpl/s?view=team&id=round1&rosterSeason='+roster,'team','round1');assert.equal(await page.locator('#team-roster-season').inputValue(),'6');assert.equal(param('rosterSeason'),'6')}
 
+  await checkRoundPoints('desktop',{width:1280,height:900});
+  await checkRoundPoints('mobile',{width:390,height:844});
+  await checkRoundPoints('narrow',{width:320,height:720});
   await checkOutcomeLayout('desktop',{width:1280,height:900});
   await checkOutcomeLayout('mobile',{width:390,height:844});
   await checkGradientLayout('desktop',{width:1280,height:900});
