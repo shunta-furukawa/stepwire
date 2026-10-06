@@ -207,6 +207,7 @@ async function checkOutcomeLayout(label,viewport){
     await target.goto(base+'/bpl/s?view=versus&a=O4MA%2E&b=KANAME');await readyOn(target,'versus');
     const duel=target.locator('.duel-table tr').filter({has:target.locator('.duel-song-name').filter({hasText:'恋閃繚乱'})});
     assert.deepEqual(await duel.locator('.comparison-label').allTextContents(),['個人EX','個人EX']);
+    for(const column of [2,3])assert.equal(await target.locator(`.duel-table th:nth-child(${column})`).evaluate(n=>{const range=document.createRange();range.selectNodeContents(n);return range.getClientRects().length}),1,'selected player names should fit the mobile header');
     assert.deepEqual(await duel.locator('.score-result>b').allTextContents(),['1,510','1,513']);
     assert.deepEqual(await duel.locator('.score-difference').allTextContents(),['差 -3','差 +3']);
     assert.deepEqual(await duel.locator('.duel-pair-result .result-badge').allTextContents(),['DRAW','DRAW']);
