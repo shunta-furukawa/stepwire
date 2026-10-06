@@ -1,9 +1,16 @@
+export { shareQuery } from '../../public/bpl/urls.js';
+import { createHash } from 'node:crypto';
 import data from '../../public/bpl/data.json';
+import portraits from '../../docs/bpl-generated-portraits.json';
+import { playerSummary, teamSummary, teamRoster, portraitFor, teamName, seasonName } from './summary';
 import { matrixModel, matrixOptions } from '../../public/bpl/matrix.js';
 import brand from '../../public/bpl/brand.json';
 
 const teams: Record<string, {name:string;short:string;color:string}> = data.teams;
 const palette: Record<string, {color?:string}> = brand.teams;
+// Changes to data, identity or card design invalidate social image caches.
+export const summaryVersion = '1';
+export const summaryRevision = createHash('sha256').update(JSON.stringify([summaryVersion, data, brand, portraits.portraits])).digest('hex').slice(0, 16);
 const seasons = ['all','0','2','4','5','6'];
 const stageNames: Record<string,string> = {regular:'レギュラー',quarter:'クォーターファイナル',semi:'セミファイナル',final:'ファイナル'};
 const label = (s:string|number) => String(s)==='0'?'ZERO':String(s)==='all'?'全シーズン':`S${s}`;
@@ -37,6 +44,7 @@ export function shareModel(input: URLSearchParams) {
   let title='BPL DDR 戦績', detail='シーズン・チーム・選手・直接対決', metric=`${matches.length}試合`, eyebrow='ARCHIVE', color='#b4da46';
   let score='', left='',right='';
   let matrix: ReturnType<typeof matrixModel> | null = null;
+  let entity: { kind: 'player'; stats: ReturnType<typeof playerSummary>; portrait: string | null; affiliation: string } | { kind: 'team'; stats: ReturnType<typeof teamSummary>; roster: ReturnType<typeof teamRoster> } | null = null;
   if(view==='s6'||view==='preview'||view==='matrix') {
     title='S6 観戦ガイド';detail='7チーム・28選手 / 新体制と過去の対戦';metric='推しチーム・対戦プレビュー・結果非表示';eyebrow='SEASON 6';
     if(view==='preview'||view==='matrix'){
@@ -58,11 +66,19 @@ export function shareModel(input: URLSearchParams) {
     const m=data.matches.find(m=>m.id===id)!;left=teams[m.teams[0]!]!.short;right=teams[m.teams[1]!]!.short;
     title=`${left} vs ${right}`;score=m.season===6&&hidden?'結果は非表示':m.points.join(' — ');metric=`${m.date} · ${m.label}`;detail=`${label(m.season)} / ${stageNames[m.stage]}`;eyebrow='MATCH RESULT';
   } else if(view==='team') {
-    title=teams[id]!.name;color=palette[id]?.color||teams[id]!.color;
-    const ms=matches.filter(m=>m.teams.includes(id));metric=`${ms.length}試合`;detail=get('rosterSeason')==='all'?'全シーズンのチーム戦績・所属選手':`通算戦績 / ${label(get('rosterSeason'))}所属選手`;eyebrow='TEAM';
+    const roster=teamRoster(id,p.get('rosterSeason')), summary=teamSummary(id,matches);
+    p.set('rosterSeason',String(roster.season));p.set('summaryVersion',summaryVersion);
+    title=teamName(id,roster.latest);color=palette[id]?.color||teams[id]!.color;
+    detail=`通算チーム戦績 / ${seasonName(roster.season)}所属選手`;
+    metric=`${summary.matches}試合 · ${summary.wins}勝 ${summary.draws}分 ${summary.losses}敗 · 優勝${summary.titles}回`;
+    eyebrow='TEAM SUMMARY';entity={kind:'team',stats:summary,roster};
   } else if(view==='player') {
-    const pl=person(id)!;title=pl.name;const ms=matches.filter(m=>m.battles.some(b=>b.players.some(ps=>ps.includes(id))));metric=`${ms.length}試合出場`;
-    detail=pl.history.map(h=>label(h.season)).join(' / ');eyebrow='PLAYER';color=palette[pl.history.at(-1)!.team]?.color||color;
+    const pl=person(id)!, latest=pl.history.at(-1)!, summary=playerSummary(id,matches);
+    p.set('summaryVersion',summaryVersion);title=pl.name;
+    const affiliation=`${seasonName(latest.season)}所属 · ${teamName(latest.team,latest.season)}`;
+    detail=`通算個人成績 / ${affiliation}`;
+    metric=`${summary.matches}試合出場 · Single ${summary.wins}勝 ${summary.draws}分 ${summary.losses}敗（${summary.songs}楽曲） · 勝率${summary.rate===null?'—':summary.rate+'%'}（引分除外） · Duo個人1位 ${summary.firsts}/${summary.duoSongs}楽曲`;
+    eyebrow='PLAYER SUMMARY';color=palette[latest.team]?.color||color;entity={kind:'player',stats:summary,portrait:portraitFor(id),affiliation};
   } else if(view==='versus') {
     const a=get('a','O4MA.'),b=get('b','HIBIKI');if(a===b)throw new RangeError('Choose two players');p.set('a',a);p.set('b',b);
     title=`${a} vs ${b}`;eyebrow='HEAD TO HEAD';
@@ -72,6 +88,6 @@ export function shareModel(input: URLSearchParams) {
   else if(view==='teams'){title='チーム一覧';metric='所属選手・過去戦績';eyebrow='TEAMS';}
   else {title='記録について';metric='集計方法・公式出典';eyebrow='SOURCES';}
   if(hidden&&['team','player','seasons','versus'].includes(view))detail+=' / S6結果非表示';
-  return {params:p,matrix,view,id,title,detail,metric,eyebrow,color,score,left,right,description:`${title}。${detail}。${metric}。STEPWIREの非公式BPL DDR戦績アーカイブ。`};
+  return {params:p,matrix,entity,summaryRevision,view,id,title,detail,metric,eyebrow,color,score,left,right,description:`${title}。${detail}。${metric}。STEPWIREの非公式BPL DDR戦績アーカイブ。`};
 }
 export function escapeHtml(value:string) {return value.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));}

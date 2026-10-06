@@ -43,11 +43,28 @@ jobs:
 
       # The editorial gate: a published report that does not cite a source, or a
       # citation that points at nothing, fails here rather than reaching the site.
+      - name: BPL crawler metadata and images
+        run: pnpm test:bpl:images
+
       - name: Validate content
         run: pnpm content:validate
 
       - name: Build
         run: pnpm build
+
+      - name: Install browser for BPL navigation regressions
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: BPL browser Back/Forward and share regressions
+        run: |
+          pnpm start > /tmp/stepwire-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:3000/bpl > /dev/null; then break; fi
+            sleep 1
+          done
+          pnpm test:bpl:browser
 
       # Exercises the collector end to end against repository fixtures. No
       # network requests, no issues created — this only proves the pipeline

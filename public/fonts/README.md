@@ -17,4 +17,5 @@ file is 1.1 MB (WOFF2, the full face) and is fetched only when something draws w
 used by the BPL social-card renderer (Satori requires TTF/OTF rather than WOFF2).
 It retains the original font name; the SIL OFL in `OFL-DelaGothicOne.txt` applies.
 The subset includes printable ASCII plus characters in the BPL data, share model,
-and image renderer. Regenerate with fontTools + brotli when adding new names.
+and image renderer. Regenerate with `python3 scripts/subset-bpl-font.py`
+(requires fontTools + brotli) when adding new names or card copy.

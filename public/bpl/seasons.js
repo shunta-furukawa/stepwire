@@ -32,15 +32,10 @@ function bindSeasonRail() {
   document.querySelectorAll('[data-season]').forEach(button => {
     button.onclick = () => {
       const scrollLeft = rail?.scrollLeft ?? 0;
-      state.season = button.dataset.season;
-      if (location.hash === '#seasons') {
-        seasonPage();
-        syncShare();
-        const nextRail = document.querySelector('.season-rail');
-        if (nextRail) nextRail.scrollLeft = scrollLeft;
-        document.querySelector(`[data-season="${state.season}"]`)?.focus({ preventScroll: true });
-      }
-      else location.hash = 'seasons';
+      navigate({view:'seasons',id:null,filters:{...state,season:button.dataset.season}},{scroll:false});
+      const nextRail = document.querySelector('.season-rail');
+      if (nextRail) nextRail.scrollLeft = scrollLeft;
+      document.querySelector(`[data-season="${state.season}"]`)?.focus({ preventScroll: true });
     };
   });
 }

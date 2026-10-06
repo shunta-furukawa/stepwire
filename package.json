@@ -24,7 +24,9 @@
     "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm content:validate && pnpm build",
     "narration:transcribe": "tsx scripts/transcribe.ts",
     "rights:check": "node --test scripts/bpl-asset-policy.test.mjs && node scripts/check-bpl-assets.mjs",
-    "rights:audit": "node scripts/audit-article-assets.mjs"
+    "rights:audit": "node scripts/audit-article-assets.mjs",
+    "test:bpl:images": "node --import tsx tests/bpl-share-images.mjs",
+    "test:bpl:browser": "node tests/bpl-history.browser.mjs"
   },
   "dependencies": {
     "@types/three": "0.184.0",
@@ -33,6 +35,7 @@
     "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "sharp": "0.35.4",
     "three": "0.184.0",
     "yaml": "2.9.0",
     "zod": "4.5.4"
@@ -46,6 +49,7 @@
     "@types/react-dom": "19.2.5",
     "eslint": "10.9.1",
     "eslint-config-next": "16.3.3",
+    "playwright": "1.57.0",
     "tailwindcss": "4.3.3",
     "tsx": "4.23.13",
     "typescript": "5.9.3",
