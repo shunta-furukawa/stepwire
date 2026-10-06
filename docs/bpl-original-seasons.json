@@ -1,0 +1,15 @@
+{
+  "description": "Original STEPWIRE season ticket artwork, approved preview 2026-10-06. Original geometric patterns and DejaVu Sans lettering, converted to SVG paths. No official season or team logos.",
+  "assets": {
+    "public/bpl/seasons/zero-art.svg": "6ee1a64ed3c2bbc7bdafefc28760342be013bd0733d3177b0bac7439cd614270",
+    "public/bpl/seasons/zero-badge.svg": "12c1f64863c3ab24d563b184d90567dd24cf4ca7fa96db316dd5a9e13f9180ea",
+    "public/bpl/seasons/s2-art.svg": "2c85bfdaa4e830d6d1b0e4ad6eb01427f7b7a391c90e016ca202b1717537b1e8",
+    "public/bpl/seasons/s2-badge.svg": "da15105d9086d296fab1c50a9c5ced5f3077ff0a3de56ce44ce5ba0ff0bde035",
+    "public/bpl/seasons/s4-art.svg": "b1c10741391b376a4f8d5aabe5cfa8905706f1fb4d58fdcdf6f43515d60241da",
+    "public/bpl/seasons/s4-badge.svg": "a90a11d4889407fc33011f02406f404fd84ba87556b3f9844ca6aa210092435a",
+    "public/bpl/seasons/s5-art.svg": "9c1125297634af26859046481ffa824d02ea2733f50ee6983c2fbe9059e23a8a",
+    "public/bpl/seasons/s5-badge.svg": "4b4e12c023085a37e69f5bbc6ad7086b54dd6f54df000a3b69678c11d5d73a4a",
+    "public/bpl/seasons/s6-art.svg": "1de7c1f5e5d6828d1c5b84b304bf2538bef0d99fa8a3bfa90390786dabffbdd5",
+    "public/bpl/seasons/s6-badge.svg": "2ad3428eaeea6e86070b0bbd0b18f109ef59b176923d2681dcf7fa56dc411f28"
+  }
+}
