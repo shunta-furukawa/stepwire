@@ -1,3 +1,4 @@
+export { shareQuery } from '../../public/bpl/urls.js';
 import { createHash } from 'node:crypto';
 import data from '../../public/bpl/data.json';
 import portraits from '../../docs/bpl-generated-portraits.json';

@@ -178,7 +178,7 @@ function shareContext(matrixOnly=false){
  else if(view==='versus'){for(const k of ['a','b','vsSeason','vsFormat','partnerA','partnerB'])p.set(k,state[k]);title=state.a+' vs '+state.b}
  else if(view==='teams')title='チーム一覧';else if(view==='about')title='記録について';
  const imageParams=new URLSearchParams(p);if(['team','player'].includes(view)){const revision=document.querySelector('meta[name="bpl:summary-revision"]')?.content||D.updated;if(revision)imageParams.set('v',revision)}
- return {title,url:location.origin+'/bpl/s?'+p.toString(),image:location.origin+'/bpl/og?'+imageParams.toString(),params:p};
+ return {title,url:location.origin+'/bpl/s?'+Routing.shareQuery(p),image:location.origin+'/bpl/og?'+Routing.shareQuery(imageParams),params:p};
 }
 function syncShare(){
  if(!D||!document.querySelector('#share-context'))return;

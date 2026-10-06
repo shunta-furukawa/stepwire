@@ -28,6 +28,14 @@ async function forward(view,id){await page.goForward();await ready(view,id)}
 async function modal(open){await page.waitForFunction(open=>document.querySelector('#match-dialog').open===open,open)}
 async function copy(){await page.locator('.share-toolbar [data-share-action="copy"]').click();return new URL(await page.evaluate(()=>window.__copied))}
 async function checkArt(){assert.ok(await page.locator('main img[src^="/bpl/portraits/"]').count());assert.ok(await page.locator('main img[src^="/bpl/seasons/"]').count());}
+const trimPlaintextPunctuation=value=>value.replace(/[.,!?;:)\]}"'。、！？）］｝」』】]+$/u,'');
+function checkPlayerLink(value,id){
+  assert.match(value,/&linkVersion=1$/);
+  assert.equal(trimPlaintextPunctuation(value),value);
+  assert.equal(trimPlaintextPunctuation(value+'.)'),value);
+  assert.equal(new URL(value).searchParams.get('id'),id);
+  if(id.includes('.'))assert.ok(value.includes('%2E'),value);
+}
 try {
   // Repeated entity navigation must retain the selected entity and roster scope.
   await goto('/bpl/s?view=team&id=round1&rosterSeason=2','team','round1');
@@ -74,6 +82,45 @@ try {
   // A direct link must close in-place rather than navigate to another website.
   const zeroMatch=data.matches.find(m=>m.season===0);
   await goto('/bpl/s?view=match&id='+encodeURIComponent(zeroMatch.id),'match',zeroMatch.id);await modal(true);await page.keyboard.press('Escape');await ready('seasons');assert.equal(param('season'),'0');await modal(false);
+
+  // Copy the real toolbar URL, then reopen the plaintext-autolinked URL in a
+  // separate page so old client state cannot mask an incorrect player or OG card.
+  const fresh=await context.newPage(),sharedPlayers=new Set();
+  fresh.on('pageerror',error=>errors.push(error.message));
+  for(const id of ['O4MA.','ZERO.','A.N.C.B.','MOO-G.56','$RYO$','UN-RE']){
+    await goto('/bpl/s?view=player&id='+encodeURIComponent(id),'player',id);
+    assert.equal(await page.locator('main h1').innerText(),id);
+    checkPlayerLink(page.url(),id);
+    const shared=(await copy()).href;
+    checkPlayerLink(shared,id);sharedPlayers.add(shared);
+    await page.locator('.share-toolbar [data-share-action="preview"]').click();
+    const preview=new URL(await page.locator('#share-preview-image').getAttribute('src'));
+    checkPlayerLink(preview.href,id);assert.equal(preview.pathname,'/bpl/og');assert.equal(preview.searchParams.get('summaryVersion'),'1');
+    await page.locator('#share-preview-close').click();
+    await fresh.goto(trimPlaintextPunctuation(shared+'.)'));
+    await fresh.waitForFunction(id=>new URLSearchParams(location.search).get('id')===id&&!document.querySelector('main .loading'),id);
+    assert.equal(await fresh.locator('main h1').innerText(),id);
+    assert.equal(await fresh.title(),id+' — BPL DDR RECORDS');
+    checkPlayerLink(fresh.url(),id);
+    assert.equal(await fresh.locator('meta[property="og:title"]').getAttribute('content'),id+' — STEPWIRE');
+    assert.equal(await fresh.locator('meta[name="twitter:title"]').getAttribute('content'),id+' — STEPWIRE');
+    const canonical=await fresh.locator('link[rel="canonical"]').getAttribute('href');
+    assert.equal(await fresh.locator('meta[property="og:url"]').getAttribute('content'),canonical);
+    checkPlayerLink(canonical,id);
+    const image=new URL(await fresh.locator('meta[property="og:image"]').getAttribute('content'));
+    checkPlayerLink(image.href,id);assert.equal(image.pathname,'/bpl/og');assert.equal(image.searchParams.get('summaryVersion'),'1');
+    assert.equal(await fresh.locator('meta[name="twitter:image"]').getAttribute('content'),image.href);
+    assert.equal(image.searchParams.get('v'),await fresh.locator('meta[name="bpl:summary-revision"]').getAttribute('content'));
+    assert.equal(image.searchParams.get('v'),preview.searchParams.get('v'));
+    if(id==='O4MA.'){
+      const response=await context.request.get(base+image.pathname+image.search);
+      assert.equal(response.status(),200);assert.match(response.headers()['content-type'],/^image\/png/);
+      const png=await response.body();
+      assert.deepEqual([...png.subarray(0,8)],[137,80,78,71,13,10,26,10]);
+      assert.equal(png.readUInt32BE(16),1200);assert.equal(png.readUInt32BE(20),630);
+    }
+  }
+  assert.equal(sharedPlayers.size,6);await fresh.close();
 
   // Legacy hash URLs, punctuation IDs, duel filters and matrix filters survive.
   await goto('/bpl/index.html#player/%24RYO%24','player','$RYO$');assert.equal((await copy()).searchParams.get('id'),'$RYO$');

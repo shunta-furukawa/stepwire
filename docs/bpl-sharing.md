@@ -11,6 +11,7 @@
 - Opening a match pushes a modal history entry and retains the underlying view/filter state. Back or close/Escape/backdrop returns to that entry; Forward reopens the match. An unchanged background DOM preserves its opener and scroll. A directly opened match safely closes to its season (S6 guide for S6), replacing the direct-link entry rather than leaving the site.
 - Native Web Share runs directly from a click. Unsupported browsers copy the URL; clipboard failure exposes a selected readonly URL. Cancelling the native share sheet is not an error. Preview failures have a visible retry instruction.
 - `lib/bpl/share.ts` validates entity IDs and enums before rendering metadata/cards. User text is escaped. Unknown IDs return 404. The image never prints arbitrary search text or fetches a user-supplied image URL.
+- `public/bpl/urls.js` serializes browser, copy/share and server canonical/image URLs consistently. Literal periods are explicitly `%2E`-encoded, and `linkVersion=1` is always last. Plain-text auto-linkers cannot remove the final period from names such as `O4MA.` or `ZERO.`; decoding retains the original exact IDs without introducing slugs or collisions. Legacy unencoded query/hash links are still accepted.
 - Entity URLs include `summaryVersion=1`; image URLs also contain a revision derived from data, branding and the reviewed portrait inventory. Bump the summary version when changing the design. CDN caching remains HTML 1 hour/images 1 day; social networks have independent caches and may delay already-posted previews.
 
 ## Regression checks

@@ -9,6 +9,16 @@ import s6 from '../public/bpl/s6.json';
 
 const url = (path: string) => new URL(path, 'https://stepwire.test');
 const app = readFileSync('public/bpl/app.js', 'utf8');
+const punctuationPlayers = ['O4MA.', 'ZERO.', 'A.N.C.B.', 'MOO-G.56', '$RYO$', 'UN-RE'];
+const trimPlaintextPunctuation = (value: string) => value.replace(/[.,!?;:)\]}"'。、！？）］｝」』】]+$/u, '');
+
+function expectSafePlayerLink(value: string, id: string) {
+  expect(value).toMatch(/&linkVersion=1$/);
+  expect(trimPlaintextPunctuation(value)).toBe(value);
+  expect(trimPlaintextPunctuation(value + '.')).toBe(value);
+  expect(url(value).searchParams.get('id')).toBe(id);
+  if (id.includes('.')) expect(value).toContain('%2E');
+}
 
 describe('BPL URL state', () => {
   it('round trips every filter without leaking state from the previous page', () => {
@@ -35,6 +45,18 @@ describe('BPL URL state', () => {
     expect(routing.parseRoute(url('/bpl/s?view=match&id=zero-final#player/HIBIKI'),true,true).view).toBe('player');
     expect(()=>routing.parseRoute(url('/bpl#player/%broken'))).not.toThrow();
   });
+
+  it('round trips all player IDs through distinct punctuation-safe address-bar URLs', () => {
+    const paths = data.players.map(({id}) => {
+      const path = routing.routePath({view:'player', id, filters:{...routing.defaultFilters}, hideResults:true});
+      expectSafePlayerLink(path, id);
+      expect(routing.parseRoute(url(trimPlaintextPunctuation(path))).id).toBe(id);
+      expect(routing.parseRoute(url('/bpl/s?view=player&id=' + id)).id).toBe(id);
+      expect(routing.parseRoute(url('/bpl#player/' + encodeURIComponent(id))).id).toBe(id);
+      return path;
+    });
+    expect(new Set(paths).size).toBe(data.players.length);
+  });
 });
 
 // Execute the shipped renderers against a small DOM/history adapter. The separate
@@ -42,7 +64,7 @@ describe('BPL URL state', () => {
 function harness(path: string, future = false) {
   type Listener = (event: Record<string, unknown>) => void;
   const nodes = new Map<string, ElementStub>(), pending: Array<() => void> = [];
-  let mainWrites = 0;
+  let mainWrites = 0, copied = '';
   class ElementStub {
     content = ''; textContent = ''; value = ''; hidden = false; open = false;
     id = ''; className = ''; hash = ''; target = ''; scrollTop = 0; scrollLeft = 0; scrollWidth = 0; clientWidth = 0;
@@ -86,7 +108,7 @@ function harness(path: string, future = false) {
     get location(){return location},history,
     document:{querySelector:get,querySelectorAll:(selector:string)=>selector==='nav a'?nav:[],getElementById:(id:string)=>get('#'+id),createElement:()=>new ElementStub(),body:{style:{}},documentElement:{dataset:{}},addEventListener:(type:string,fn:Listener)=>documentEvents.set(type,[...(documentEvents.get(type)||[]),fn])},
     window:{addEventListener:(type:string,fn:Listener)=>windowEvents.set(type,[...(windowEvents.get(type)||[]),fn]),scrollTo(){}},
-    localStorage:{getItem:()=>null,setItem(){}},navigator:{clipboard:{writeText:async()=>{}}},
+    localStorage:{getItem:()=>null,setItem(){}},navigator:{clipboard:{writeText:async(text:string)=>{copied=text}}},
     inputData:cloned,inputBrand:structuredClone(brand),inputS6:s6,inputMatrix:matrix,inputRouting:routing,
   });
   const withoutBoot=app.slice(0,app.indexOf('Promise.all([...['))+app.slice(app.indexOf('// Share URLs carry'));
@@ -95,10 +117,28 @@ function harness(path: string, future = false) {
   const run = (code:string) => vm.runInContext(code,ctx);
   function flush(){while(pending.length)pending.shift()!()}
   function link(hash:string){const a=new ElementStub();a.hash=hash;const event={target:{closest:(selector:string)=>selector.startsWith('a[')?a:null},button:0,preventDefault(){},defaultPrevented:false};for(const fn of documentEvents.get('click')||[])fn(event);flush()}
-  return {run,link,history,get,flush,emit,get location(){return location},get mainWrites(){return mainWrites}};
+  return {run,link,history,get,flush,emit,get location(){return location},get mainWrites(){return mainWrites},get copied(){return copied}};
 }
 
 describe('BPL history and shipped renderers', () => {
+  it.each(punctuationPlayers)('copies and restores the exact player after plaintext autolinking: %s', async id => {
+    const h = harness('/bpl/s?view=player&id=' + id);
+    expectSafePlayerLink(h.location.href, id);
+    expect(h.get('main').innerHTML).toContain(`<h1>${id}</h1>`);
+    expect(h.run('document.title')).toBe(`${id} — BPL DDR RECORDS`);
+    await h.run('copyShare(shareContext().url)');
+    expectSafePlayerLink(h.copied, id);
+    const image = h.run('shareContext().image') as string;
+    expectSafePlayerLink(image, id);
+    expect(url(image).pathname).toBe('/bpl/og');
+    expect(url(image).searchParams.get('summaryVersion')).toBe('1');
+    const fresh = harness(trimPlaintextPunctuation(h.copied + '.)'));
+    expect(fresh.location.searchParams.get('id')).toBe(id);
+    expect(fresh.get('main').innerHTML).toContain(`<h1>${id}</h1>`);
+    expect(fresh.run('document.title')).toBe(`${id} — BPL DDR RECORDS`);
+    expect(url(fresh.run('shareContext().image')).searchParams.get('id')).toBe(id);
+  });
+
   it('restores repeated team/player navigation, entity sharing, roster scope and defaults', () => {
     const h=harness('/bpl/s?view=team&id=round1&rosterSeason=2');
     expect(h.get('#team-roster-season').value).toBe('2');

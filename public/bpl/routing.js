@@ -1,3 +1,6 @@
+import { shareQuery } from './urls.js';
+export { shareQuery };
+
 // URL state is independent of the DOM so history restoration cannot inherit stale filters.
 export const defaultFilters = Object.freeze({season:'all',team:'all',stage:'all',query:'',playerSeason:'all',playerTeam:'all',sort:'matches',a:'O4MA.',b:'HIBIKI',vsSeason:'all',vsFormat:'all',partnerA:'all',partnerB:'all',previewA:'',previewB:'',matrixSeason:'all',matrixFormat:'all',matrixCategory:'all',matrixStyle:'all',rosterSeason:''});
 const views = new Set(['s6','preview','matrix','seasons','teams','team','players','player','versus','match','about']);
@@ -43,4 +46,4 @@ export function routeParams(route) {
   if(['team','player'].includes(route.view))p.set('summaryVersion','1');
   return p;
 }
-export function routePath(route) {return '/bpl/s?'+routeParams(route).toString()}
+export function routePath(route) {return '/bpl/s?'+shareQuery(routeParams(route))}
