@@ -5,6 +5,7 @@ import portraits from '../../docs/bpl-generated-portraits.json';
 import { playerSummary, teamSummary, teamRoster, portraitFor, teamName, seasonName } from './summary';
 import { matrixModel, matrixOptions } from '../../public/bpl/matrix.js';
 import brand from '../../public/bpl/brand.json';
+import { normalizeSeasonFilters } from '../../public/bpl/standings.js';
 
 const teams: Record<string, {name:string;short:string;color:string}> = data.teams;
 const palette: Record<string, {color?:string}> = brand.teams;
@@ -59,7 +60,9 @@ export function shareModel(input: URLSearchParams) {
       }
     }
   } else if(view==='seasons') {
-    const s=get('season'),t=get('team'),stage=get('stage');
+    const normalized=normalizeSeasonFilters(data,{season:get('season'),team:get('team'),stage:get('stage')});
+    const {season:s,team:t,stage}=normalized;
+    for(const key of ['season','team','stage'] as const)if(p.has(key)||normalized[key]!==get(key))p.set(key,normalized[key]);
     const ms=matches.filter(m=>(s==='all'||String(m.season)===s)&&(t==='all'||m.teams.includes(t))&&(stage==='all'||m.stage===stage));
     title=`${label(s)} · BPL DDR`;detail=[t==='all'?'全チーム':teams[t]!.name,stage==='all'?'全ステージ':stageNames[stage]].join(' / ');metric=`${ms.length}試合`;eyebrow='SEASON';
   } else if(view==='match') {

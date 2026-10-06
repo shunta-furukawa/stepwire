@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import * as routing from '../public/bpl/routing.js';
 import * as matrix from '../public/bpl/matrix.js';
 import * as jackets from '../public/bpl/jackets.js';
+import * as standings from '../public/bpl/standings.js';
 import jacketColors from '../public/bpl/jacket-colors.json';
 import data from '../public/bpl/data.json';
 import brand from '../public/bpl/brand.json';
@@ -111,11 +112,11 @@ function harness(path: string, future = false) {
     document:{querySelector:get,querySelectorAll:(selector:string)=>selector==='nav a'?nav:[],getElementById:(id:string)=>get('#'+id),createElement:()=>new ElementStub(),body:{style:{}},documentElement:{dataset:{}},addEventListener:(type:string,fn:Listener)=>documentEvents.set(type,[...(documentEvents.get(type)||[]),fn])},
     window:{addEventListener:(type:string,fn:Listener)=>windowEvents.set(type,[...(windowEvents.get(type)||[]),fn]),scrollTo(){}},
     localStorage:{getItem:()=>null,setItem(){}},navigator:{clipboard:{writeText:async(text:string)=>{copied=text}}},
-    inputData:cloned,inputBrand:structuredClone(brand),inputS6:s6,inputMatrix:matrix,inputRouting:routing,inputJackets:jackets,inputJacketColors:jacketColors,
+    inputStandings:standings,inputData:cloned,inputBrand:structuredClone(brand),inputS6:s6,inputMatrix:matrix,inputRouting:routing,inputJackets:jackets,inputJacketColors:jacketColors,
   });
   const withoutBoot=app.slice(0,app.indexOf('Promise.all([...['))+app.slice(app.indexOf('// Share URLs carry'));
   vm.runInContext(readFileSync('public/bpl/seasons.js','utf8')+'\n'+readFileSync('public/bpl/s6.js','utf8')+'\n'+withoutBoot,ctx);
-  vm.runInContext('D=inputData;B=inputBrand;Matrix=inputMatrix;Routing=inputRouting;Jackets=inputJackets;JacketColors=inputJacketColors;for(const [id,t] of Object.entries(B.teams))Object.assign(D.teams[id],t);initS6(inputS6);setupNavigation();initSharing();route()',ctx);
+  vm.runInContext('Standings=inputStandings;D=inputData;B=inputBrand;Matrix=inputMatrix;Routing=inputRouting;Jackets=inputJackets;JacketColors=inputJacketColors;for(const [id,t] of Object.entries(B.teams))Object.assign(D.teams[id],t);initS6(inputS6);setupNavigation();initSharing();route()',ctx);
   const run = (code:string) => vm.runInContext(code,ctx);
   function flush(){while(pending.length)pending.shift()!()}
   function link(hash:string){const a=new ElementStub();a.hash=hash;const event={target:{closest:(selector:string)=>selector.startsWith('a[')?a:null},button:0,preventDefault(){},defaultPrevented:false};for(const fn of documentEvents.get('click')||[])fn(event);flush()}
@@ -168,7 +169,7 @@ describe('BPL history and shipped renderers', () => {
     h.get('#team-filter').onchange?.({target:{value:'all'}});h.get('#stage-filter').onchange?.({target:{value:'all'}});
     expect(h.history.length).toBe(2);h.history.back();h.flush();
     expect(h.location.searchParams.get('season')).toBe('0');expect(h.get('#team-filter').value).toBe('WHITE');
-    expect(h.get('#stage-filter').value).toBe('final');expect(h.get('main').innerHTML).toContain('ZEROの試合');
+    expect(h.get('#stage-filter').value).toBe('final');expect(h.get('main').innerHTML).toContain('ZEROの対戦カード');
     h.link('#players/s6');
     h.get('#player-sort').onchange?.({target:{value:'name'}});h.get('#player-team').onchange?.({target:{value:'round1'}});
     h.get('#player-search').oninput?.({target:{value:'O4MA.'}});expect(h.location.searchParams.get('query')).toBe('O4MA.');h.link('#player/O4MA.');h.history.back();h.flush();
