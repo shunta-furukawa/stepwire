@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { checkBplAssets } from './lib/bpl-asset-policy.mjs';
@@ -64,5 +64,35 @@ test('allows only exact generated portrait bytes with matching player provenance
     writeFileSync(brandPath, JSON.stringify({ players: { 'O4MA.': { illustration: src } } }));
     rmSync(path);
     assert.ok(checkBplAssets(root, {}, inventory).some(i => i.includes('portrait missing')));
+  } finally { rmSync(root, { recursive: true, force: true }); }
+});
+
+test('allows verified four-color palettes and rejects image metadata or unexplained changes', () => {
+  const root = mkdtempSync(join(tmpdir(), 'bpl-palettes-'));
+  try {
+    mkdirSync(join(root, 'public/bpl'), { recursive: true });
+    writeFileSync(join(root, 'public/bpl/brand.json'), '{}');
+    writeFileSync(join(root, 'public/bpl/data.json'), JSON.stringify({matches:[{battles:[{songs:[{name:'ALPACORE'}]}]}]}));
+    const path = join(root, 'public/bpl/jacket-colors.json');
+    const record = {id:'ddr-'+createHash('sha256').update('ALPACORE').digest('hex').slice(0,12),topLeft:'#ffffff',topRight:'#11aadd',bottomLeft:'#eeeeee',bottomRight:'#22bbdd'};
+    const palette = {version:1,quadrants:['topLeft','topRight','bottomLeft','bottomRight'],songs:{ALPACORE:record}};
+    const save = value => writeFileSync(path, JSON.stringify(value));
+    const inventory = () => ({paletteFile:'/bpl/jacket-colors.json',paletteSha256:createHash('sha256').update(readFileSync(path)).digest('hex'),songs:{ALPACORE:{imageSha256:'a'.repeat(64),sourcePage:'https://p.eagate.573.jp/game/ddr/',sourceImage:'https://p.eagate.573.jp/game/ddr/image',sampledAt:'2026-10-06T12:00:00Z'}}});
+    save(palette);
+    assert.deepEqual(checkBplAssets(root, {}, undefined, inventory()), []);
+    assert.ok(checkBplAssets(root, {}).some(issue => issue.includes('provenance')));
+    const prior = inventory();save({...palette,songs:{ALPACORE:{...record,topLeft:'#aabbcc'}}});
+    assert.ok(checkBplAssets(root, {}, undefined, prior).some(issue => issue.includes('mismatched color provenance')));
+    for (const value of [
+      {...palette,songs:{ALPACORE:{...record,image:'https://example.com/jacket.png'}}},
+      {...palette,songs:{ALPACORE:{...record,topLeft:'url(https://example.com/jacket.png)'}}},
+      {...palette,songs:{ALPACORE:{...record,topLeft:'data:image/png;base64,abc'}}},
+      {...palette,songs:{ALPACORE:{...record,id:'unknown'}}},
+      {...palette,songs:{Unknown:record}},
+      {...palette,quadrants:['topRight','topLeft','bottomRight','bottomLeft']},
+    ]) { save(value); assert.ok(checkBplAssets(root, {}, undefined, inventory()).length > 0); }
+    save(palette);const missing = inventory();missing.songs = {};
+    assert.ok(checkBplAssets(root, {}, undefined, missing).some(issue => issue.includes('mapping mismatch')));
+    writeFileSync(path, '{broken');assert.ok(checkBplAssets(root, {}).some(issue => issue.includes('unreadable color data')));
   } finally { rmSync(root, { recursive: true, force: true }); }
 });

@@ -56,6 +56,8 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: BPL browser Back/Forward and share regressions
+        env:
+          BPL_SCREENSHOT_OUTPUT: /tmp/bpl-browser-screenshots
         run: |
           pnpm start > /tmp/stepwire-server.log 2>&1 &
           server_pid=$!
@@ -65,6 +67,15 @@ jobs:
             sleep 1
           done
           pnpm test:bpl:browser
+
+      - name: Save BPL desktop and mobile visual checks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bpl-browser-screenshots
+          path: /tmp/bpl-browser-screenshots
+          if-no-files-found: warn
+          retention-days: 7
 
       # Exercises the collector end to end against repository fixtures. No
       # network requests, no issues created — this only proves the pipeline

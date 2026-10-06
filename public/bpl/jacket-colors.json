@@ -1,0 +1,1453 @@
+{
+  "version": 1,
+  "quadrants": [
+    "topLeft",
+    "topRight",
+    "bottomLeft",
+    "bottomRight"
+  ],
+  "songs": {
+    "50th Memorial Songs -The BEMANI History-": {
+      "id": "ddr-670ff23d4c76",
+      "topLeft": "#b2071a",
+      "topRight": "#b30417",
+      "bottomLeft": "#b40517",
+      "bottomRight": "#b30316"
+    },
+    "8000000": {
+      "id": "ddr-36877f3dcf65",
+      "topLeft": "#e6e867",
+      "topRight": "#e3e573",
+      "bottomLeft": "#f05c36",
+      "bottomRight": "#f0652e"
+    },
+    "888": {
+      "id": "ddr-5e968ce47ce4",
+      "topLeft": "#030303",
+      "topRight": "#020303",
+      "bottomLeft": "#636179",
+      "bottomRight": "#472835"
+    },
+    "ACE FOR ACES": {
+      "id": "ddr-d79bf9bd8a4f",
+      "topLeft": "#f5fafc",
+      "topRight": "#0c368c",
+      "bottomLeft": "#1851b1",
+      "bottomRight": "#1540a1"
+    },
+    "AFRONOVA": {
+      "id": "ddr-8c09fb966a96",
+      "topLeft": "#7ad391",
+      "topRight": "#317b2f",
+      "bottomLeft": "#850b05",
+      "bottomRight": "#8f1705"
+    },
+    "ALPACORE": {
+      "id": "ddr-f919cb2fbff7",
+      "topLeft": "#fdfefe",
+      "topRight": "#26cdf5",
+      "bottomLeft": "#ffffff",
+      "bottomRight": "#1dcdf6"
+    },
+    "ANTI ANTHEM": {
+      "id": "ddr-77fc96b22b58",
+      "topLeft": "#f9e9d8",
+      "topRight": "#fcf8e9",
+      "bottomLeft": "#b3acd0",
+      "bottomRight": "#8b73d1"
+    },
+    "Ace out": {
+      "id": "ddr-fffdd6015d40",
+      "topLeft": "#e6d95b",
+      "topRight": "#e7d438",
+      "bottomLeft": "#b48522",
+      "bottomRight": "#bc7c11"
+    },
+    "Afterimage d'automne": {
+      "id": "ddr-8d5dfc4fc77e",
+      "topLeft": "#aa9b81",
+      "topRight": "#b4a58b",
+      "bottomLeft": "#a69478",
+      "bottomRight": "#a99678"
+    },
+    "Anti-Matter": {
+      "id": "ddr-b62ce15e23c7",
+      "topLeft": "#566da3",
+      "topRight": "#6085aa",
+      "bottomLeft": "#95a7b6",
+      "bottomRight": "#868895"
+    },
+    "Astrogazer": {
+      "id": "ddr-04f7f96ce23c",
+      "topLeft": "#fcfcfa",
+      "topRight": "#fafcf0",
+      "bottomLeft": "#eff0ec",
+      "bottomRight": "#f1f1f1"
+    },
+    "B4U (\"VOLTAGE\" Special)": {
+      "id": "ddr-a4f2a78e2bfb",
+      "topLeft": "#c21344",
+      "topRight": "#3925b8",
+      "bottomLeft": "#b1194d",
+      "bottomRight": "#2e1eb5"
+    },
+    "BITTER CHOCOLATE STRIKER": {
+      "id": "ddr-5f03c99ca9a6",
+      "topLeft": "#423f77",
+      "topRight": "#393e75",
+      "bottomLeft": "#eef1fe",
+      "bottomRight": "#b69ee1"
+    },
+    "BREAKING THE FUTURE": {
+      "id": "ddr-08c58bd37bc4",
+      "topLeft": "#2c436f",
+      "topRight": "#2c3c63",
+      "bottomLeft": "#4b688d",
+      "bottomRight": "#faf5f1"
+    },
+    "Blew My Mind": {
+      "id": "ddr-0f2d539405c4",
+      "topLeft": "#2e1c17",
+      "topRight": "#422730",
+      "bottomLeft": "#f3efe6",
+      "bottomRight": "#694660"
+    },
+    "Bounce Trippy": {
+      "id": "ddr-10f3d6cfbb69",
+      "topLeft": "#c34748",
+      "topRight": "#89627a",
+      "bottomLeft": "#9e6079",
+      "bottomRight": "#a57878"
+    },
+    "CHAOS": {
+      "id": "ddr-dc1a2f9d7bd7",
+      "topLeft": "#b14719",
+      "topRight": "#983410",
+      "bottomLeft": "#43140b",
+      "bottomRight": "#5b1816"
+    },
+    "CHAOS Terror-Tech Mix": {
+      "id": "ddr-cb38ccd23ed7",
+      "topLeft": "#bd7d1f",
+      "topRight": "#ae7210",
+      "bottomLeft": "#8b5314",
+      "bottomRight": "#9d4d17"
+    },
+    "Chronos": {
+      "id": "ddr-b5a2339ed149",
+      "topLeft": "#036cf4",
+      "topRight": "#086cf3",
+      "bottomLeft": "#2cb2f7",
+      "bottomRight": "#29abf8"
+    },
+    "Chronos (walk with you remix)": {
+      "id": "ddr-6a6ce63bb8f5",
+      "topLeft": "#e5f9fc",
+      "topRight": "#e3f7fd",
+      "bottomLeft": "#3b2b6f",
+      "bottomRight": "#3e2e70"
+    },
+    "Cleopatrysm": {
+      "id": "ddr-86846c4a455f",
+      "topLeft": "#0c1718",
+      "topRight": "#141e1d",
+      "bottomLeft": "#885a4a",
+      "bottomRight": "#5d3a2b"
+    },
+    "Come To m1dy": {
+      "id": "ddr-7892b8a994f0",
+      "topLeft": "#e4f5f6",
+      "topRight": "#dff4f6",
+      "bottomLeft": "#f6fafb",
+      "bottomRight": "#fbfdfd"
+    },
+    "Come to Life": {
+      "id": "ddr-0b3b126368e3",
+      "topLeft": "#c74c94",
+      "topRight": "#eca1d1",
+      "bottomLeft": "#da8f90",
+      "bottomRight": "#cb4397"
+    },
+    "Condor": {
+      "id": "ddr-5631e13dae9f",
+      "topLeft": "#25500b",
+      "topRight": "#277920",
+      "bottomLeft": "#369930",
+      "bottomRight": "#399535"
+    },
+    "Cosmic Hurricane": {
+      "id": "ddr-fd0aafe5753c",
+      "topLeft": "#e0e58b",
+      "topRight": "#68b07d",
+      "bottomLeft": "#54cc85",
+      "bottomRight": "#359a74"
+    },
+    "Cosy Catastrophe": {
+      "id": "ddr-6780ca2f1a52",
+      "topLeft": "#e6e3e2",
+      "topRight": "#e6e2de",
+      "bottomLeft": "#f7f3f2",
+      "bottomRight": "#faf6f4"
+    },
+    "Crazy Hot": {
+      "id": "ddr-6fccaed4e4aa",
+      "topLeft": "#704754",
+      "topRight": "#9b7e7b",
+      "bottomLeft": "#f5b58e",
+      "bottomRight": "#6c4941"
+    },
+    "Crystarium": {
+      "id": "ddr-1d992c1baf62",
+      "topLeft": "#9a0503",
+      "topRight": "#970d05",
+      "bottomLeft": "#6b0301",
+      "bottomRight": "#a40401"
+    },
+    "Cytokinesis": {
+      "id": "ddr-808a0fdde550",
+      "topLeft": "#bb5455",
+      "topRight": "#38182e",
+      "bottomLeft": "#c54e62",
+      "bottomRight": "#dbbecc"
+    },
+    "DDR TAGMIX -LAST DanceR-": {
+      "id": "ddr-1121c4fd7869",
+      "topLeft": "#c1b089",
+      "topRight": "#332e2d",
+      "bottomLeft": "#020913",
+      "bottomRight": "#040a13"
+    },
+    "DEAD END (\"GROOVE RADAR\" Special)": {
+      "id": "ddr-c815e04af7e5",
+      "topLeft": "#3a3730",
+      "topRight": "#28251f",
+      "bottomLeft": "#292720",
+      "bottomRight": "#2a2720"
+    },
+    "DIABLOSIS::Nāga": {
+      "id": "ddr-afde4fdfebe9",
+      "topLeft": "#6c334e",
+      "topRight": "#e665af",
+      "bottomLeft": "#7a5393",
+      "bottomRight": "#f4e9f1"
+    },
+    "DYNAMITE RAVE": {
+      "id": "ddr-01bae2d95b2b",
+      "topLeft": "#3f0402",
+      "topRight": "#460707",
+      "bottomLeft": "#7d0c0b",
+      "bottomRight": "#941a16"
+    },
+    "Dance Celebration (System 7 Remix)": {
+      "id": "ddr-66b56b4e5c5e",
+      "topLeft": "#3b26d8",
+      "topRight": "#7210e8",
+      "bottomLeft": "#9d07c6",
+      "bottomRight": "#7f0b77"
+    },
+    "Dance Dance Revolution(X-Special)": {
+      "id": "ddr-56e1dbbc19d2",
+      "topLeft": "#fefefe",
+      "topRight": "#fdfefe",
+      "bottomLeft": "#fbfcfa",
+      "bottomRight": "#fefdfc"
+    },
+    "Dance Phenomena": {
+      "id": "ddr-df65120fa103",
+      "topLeft": "#f5f7f8",
+      "topRight": "#f3f6f8",
+      "bottomLeft": "#e6ebf1",
+      "bottomRight": "#e4e8ef"
+    },
+    "Dance wiz the Rhythm": {
+      "id": "ddr-16ecaf03e261",
+      "topLeft": "#3036b3",
+      "topRight": "#8bd9f0",
+      "bottomLeft": "#a1ecf0",
+      "bottomRight": "#776fd2"
+    },
+    "Deep tenDon Reflex": {
+      "id": "ddr-749704feaa44",
+      "topLeft": "#e78f50",
+      "topRight": "#2a1432",
+      "bottomLeft": "#41408d",
+      "bottomRight": "#594b7c"
+    },
+    "Destination": {
+      "id": "ddr-293d404a500f",
+      "topLeft": "#4c9a71",
+      "topRight": "#40825c",
+      "bottomLeft": "#e1dcd2",
+      "bottomRight": "#dcd9d0"
+    },
+    "Diamond Night": {
+      "id": "ddr-2e06986de08a",
+      "topLeft": "#211f0d",
+      "topRight": "#1e1c0c",
+      "bottomLeft": "#282c35",
+      "bottomRight": "#202231"
+    },
+    "Dispersion Star": {
+      "id": "ddr-c07bce100a91",
+      "topLeft": "#f6f6f6",
+      "topRight": "#f7f5f6",
+      "bottomLeft": "#fafafb",
+      "bottomRight": "#f9f8f8"
+    },
+    "Elemental Creation": {
+      "id": "ddr-da1c7773046a",
+      "topLeft": "#e2e5e9",
+      "topRight": "#f5f6f8",
+      "bottomLeft": "#181414",
+      "bottomRight": "#623b2d"
+    },
+    "Engraved Mark": {
+      "id": "ddr-2937d0d21636",
+      "topLeft": "#b8a3a1",
+      "topRight": "#706768",
+      "bottomLeft": "#e9e4e1",
+      "bottomRight": "#3b3e5c"
+    },
+    "Euphoric Fragmentation": {
+      "id": "ddr-d2be73bd50fe",
+      "topLeft": "#fa9d36",
+      "topRight": "#fb992c",
+      "bottomLeft": "#fddea3",
+      "bottomRight": "#ebc081"
+    },
+    "FUNKY SUMMER BEACH": {
+      "id": "ddr-d22680f3b9ba",
+      "topLeft": "#e04e22",
+      "topRight": "#e5581f",
+      "bottomLeft": "#e9f0e5",
+      "bottomRight": "#c7edf0"
+    },
+    "Fascination ～eternal love mix～": {
+      "id": "ddr-a036119a78ef",
+      "topLeft": "#292323",
+      "topRight": "#6e6868",
+      "bottomLeft": "#200f0d",
+      "bottomRight": "#2b1615"
+    },
+    "Firestorm": {
+      "id": "ddr-4f827e862634",
+      "topLeft": "#edeb7e",
+      "topRight": "#f5ef6c",
+      "bottomLeft": "#f9ef77",
+      "bottomRight": "#e9904b"
+    },
+    "Flow (True Style)": {
+      "id": "ddr-c71080a27306",
+      "topLeft": "#6d7e1a",
+      "topRight": "#5a6915",
+      "bottomLeft": "#3f551f",
+      "bottomRight": "#e7d439"
+    },
+    "GERBERA": {
+      "id": "ddr-3fac7dddb64e",
+      "topLeft": "#cd6987",
+      "topRight": "#d28ba7",
+      "bottomLeft": "#f0e4de",
+      "bottomRight": "#f2ebe0"
+    },
+    "GHOST KINGDOM": {
+      "id": "ddr-15bfce221720",
+      "topLeft": "#4b656c",
+      "topRight": "#959a84",
+      "bottomLeft": "#6c7373",
+      "bottomRight": "#5f716e"
+    },
+    "Get Your Wish": {
+      "id": "ddr-fc8d8cafe068",
+      "topLeft": "#eef221",
+      "topRight": "#eef322",
+      "bottomLeft": "#182071",
+      "bottomRight": "#131c7d"
+    },
+    "Glitter Flatter Scatter": {
+      "id": "ddr-b9ffc525e49b",
+      "topLeft": "#0a0f17",
+      "topRight": "#3f333b",
+      "bottomLeft": "#030304",
+      "bottomRight": "#201d27"
+    },
+    "Going Hypersonic": {
+      "id": "ddr-744b488f544e",
+      "topLeft": "#444b50",
+      "topRight": "#4a5258",
+      "bottomLeft": "#4a4b4d",
+      "bottomRight": "#4a4c4d"
+    },
+    "Golden Arrow": {
+      "id": "ddr-ca2bd69bad46",
+      "topLeft": "#10060f",
+      "topRight": "#423014",
+      "bottomLeft": "#e7c23a",
+      "bottomRight": "#65230a"
+    },
+    "Good Looking": {
+      "id": "ddr-8cf47189d32e",
+      "topLeft": "#080610",
+      "topRight": "#401848",
+      "bottomLeft": "#322f53",
+      "bottomRight": "#1a1631"
+    },
+    "HAPPY☆LUCKY☆YEAPPY": {
+      "id": "ddr-91ae4679d736",
+      "topLeft": "#f5f2eb",
+      "topRight": "#f14a96",
+      "bottomLeft": "#f54996",
+      "bottomRight": "#e7ed3e"
+    },
+    "HEART BEAT FORMULA": {
+      "id": "ddr-4c11caf5c89d",
+      "topLeft": "#f3f1d7",
+      "topRight": "#f0f0ed",
+      "bottomLeft": "#b8dae8",
+      "bottomRight": "#000001"
+    },
+    "Healing Vision ～Angelic mix～": {
+      "id": "ddr-1f23edcdd19a",
+      "topLeft": "#d2d3d6",
+      "topRight": "#b1b7c3",
+      "bottomLeft": "#a3abba",
+      "bottomRight": "#abb1c0"
+    },
+    "Healing Vision(X-Special)": {
+      "id": "ddr-f2c1d167175b",
+      "topLeft": "#031323",
+      "topRight": "#00325a",
+      "bottomLeft": "#082c47",
+      "bottomRight": "#091b2b"
+    },
+    "Healing-D-Vision": {
+      "id": "ddr-f610359003f4",
+      "topLeft": "#000308",
+      "topRight": "#000308",
+      "bottomLeft": "#020a1b",
+      "bottomRight": "#010916"
+    },
+    "Helios": {
+      "id": "ddr-e3baa6695372",
+      "topLeft": "#271d1f",
+      "topRight": "#1e1a1c",
+      "bottomLeft": "#020202",
+      "bottomRight": "#010101"
+    },
+    "Hella Deep": {
+      "id": "ddr-d92e01ec6b58",
+      "topLeft": "#bea116",
+      "topRight": "#26939e",
+      "bottomLeft": "#be4dad",
+      "bottomRight": "#b85e02"
+    },
+    "Horatio": {
+      "id": "ddr-b69dfbd0cf13",
+      "topLeft": "#f0e07e",
+      "topRight": "#efdb79",
+      "bottomLeft": "#ebd87a",
+      "bottomRight": "#2a1104"
+    },
+    "I'm so Happy": {
+      "id": "ddr-87eee3d57149",
+      "topLeft": "#f2fafc",
+      "topRight": "#6cdaeb",
+      "bottomLeft": "#020712",
+      "bottomRight": "#0f284a"
+    },
+    "IMANOGUILTS": {
+      "id": "ddr-399998d17a78",
+      "topLeft": "#060706",
+      "topRight": "#030404",
+      "bottomLeft": "#0b0d18",
+      "bottomRight": "#060b18"
+    },
+    "INFINITE WORLD": {
+      "id": "ddr-eef59717257a",
+      "topLeft": "#c5a57a",
+      "topRight": "#5574a0",
+      "bottomLeft": "#eba757",
+      "bottomRight": "#d6a665"
+    },
+    "INSERTiON": {
+      "id": "ddr-bafa9080a897",
+      "topLeft": "#2f060e",
+      "topRight": "#423d50",
+      "bottomLeft": "#4a3c51",
+      "bottomRight": "#30050e"
+    },
+    "IX": {
+      "id": "ddr-5eb1f0f9433a",
+      "topLeft": "#f8c11d",
+      "topRight": "#f7bb0d",
+      "bottomLeft": "#eb5b07",
+      "bottomRight": "#e74d07"
+    },
+    "Illegal Function Call": {
+      "id": "ddr-20298635c8a6",
+      "topLeft": "#07131f",
+      "topRight": "#040b16",
+      "bottomLeft": "#24496e",
+      "bottomRight": "#162e41"
+    },
+    "Ishtar": {
+      "id": "ddr-f4239c80cb10",
+      "topLeft": "#af9dec",
+      "topRight": "#c71e14",
+      "bottomLeft": "#a993e7",
+      "bottomRight": "#c52118"
+    },
+    "JOMANDA": {
+      "id": "ddr-cdd82b7a16f8",
+      "topLeft": "#484d6d",
+      "topRight": "#647294",
+      "bottomLeft": "#45597c",
+      "bottomRight": "#151b29"
+    },
+    "Jetcoaster Windy": {
+      "id": "ddr-f22afd693117",
+      "topLeft": "#e3d6c7",
+      "topRight": "#f8edd1",
+      "bottomLeft": "#7e556b",
+      "bottomRight": "#faf3cf"
+    },
+    "KHAMEN BREAK": {
+      "id": "ddr-3d17cfa6ae73",
+      "topLeft": "#19315d",
+      "topRight": "#09152b",
+      "bottomLeft": "#cb9e75",
+      "bottomRight": "#7b7469"
+    },
+    "LIKE A VAMPIRE": {
+      "id": "ddr-903c678f051b",
+      "topLeft": "#c77d64",
+      "topRight": "#f2bfa7",
+      "bottomLeft": "#2f223d",
+      "bottomRight": "#762d27"
+    },
+    "Leaving…": {
+      "id": "ddr-a4c0ef6539b2",
+      "topLeft": "#133b33",
+      "topRight": "#12352e",
+      "bottomLeft": "#255042",
+      "bottomRight": "#264a3d"
+    },
+    "Let's DANCE aROUND!!": {
+      "id": "ddr-2d6ed0f255c2",
+      "topLeft": "#f3ece9",
+      "topRight": "#f8f1f2",
+      "bottomLeft": "#300542",
+      "bottomRight": "#2e043a"
+    },
+    "London EVOLVED ver.A": {
+      "id": "ddr-8a0dd8b0e3e3",
+      "topLeft": "#c38e29",
+      "topRight": "#f1965d",
+      "bottomLeft": "#2d4308",
+      "bottomRight": "#ef3c50"
+    },
+    "London EVOLVED ver.B": {
+      "id": "ddr-51be1819e58f",
+      "topLeft": "#c38e29",
+      "topRight": "#f1965d",
+      "bottomLeft": "#2d4308",
+      "bottomRight": "#ef3c50"
+    },
+    "Lose Your Sense": {
+      "id": "ddr-4f405d0b71eb",
+      "topLeft": "#9b8e69",
+      "topRight": "#888677",
+      "bottomLeft": "#9ba173",
+      "bottomRight": "#a2af82"
+    },
+    "Love You More": {
+      "id": "ddr-b85221ccbaea",
+      "topLeft": "#4809d3",
+      "topRight": "#c33674",
+      "bottomLeft": "#6e07d3",
+      "bottomRight": "#7e1ab3"
+    },
+    "MAX 300": {
+      "id": "ddr-0878dbb94fc5",
+      "topLeft": "#be4734",
+      "topRight": "#b7371d",
+      "bottomLeft": "#cc3d53",
+      "bottomRight": "#d7323f"
+    },
+    "MAX 300(X-Special)": {
+      "id": "ddr-c0efa6b8fa43",
+      "topLeft": "#be4734",
+      "topRight": "#b7371d",
+      "bottomLeft": "#c43542",
+      "bottomRight": "#df3a2f"
+    },
+    "MAX 360": {
+      "id": "ddr-9fc1dc026f16",
+      "topLeft": "#aeca62",
+      "topRight": "#cf3e3d",
+      "bottomLeft": "#d5d5b3",
+      "bottomRight": "#53396b"
+    },
+    "MAXX UNLIMITED": {
+      "id": "ddr-47f8fa4119fc",
+      "topLeft": "#23111b",
+      "topRight": "#1d0d17",
+      "bottomLeft": "#1c0c14",
+      "bottomRight": "#1a0d16"
+    },
+    "MAXX UNLIMITED(X-Special)": {
+      "id": "ddr-2dc6d6136d5f",
+      "topLeft": "#23111b",
+      "topRight": "#1d0d17",
+      "bottomLeft": "#3f2838",
+      "bottomRight": "#3e263c"
+    },
+    "Magnetic": {
+      "id": "ddr-99941d7f2f0d",
+      "topLeft": "#fcf3e8",
+      "topRight": "#fcf2e9",
+      "bottomLeft": "#def9ea",
+      "bottomRight": "#e6faed"
+    },
+    "Mythomane": {
+      "id": "ddr-b9986112402f",
+      "topLeft": "#939393",
+      "topRight": "#bababa",
+      "bottomLeft": "#c2c2c2",
+      "bottomRight": "#b2b2b3"
+    },
+    "New Century": {
+      "id": "ddr-a383ffce7324",
+      "topLeft": "#5e3936",
+      "topRight": "#4f304d",
+      "bottomLeft": "#241212",
+      "bottomRight": "#462e39"
+    },
+    "New Decade": {
+      "id": "ddr-db6bc8ebdd63",
+      "topLeft": "#450c03",
+      "topRight": "#de8921",
+      "bottomLeft": "#e7af23",
+      "bottomRight": "#fcf883"
+    },
+    "New Generation": {
+      "id": "ddr-1acf259842c0",
+      "topLeft": "#040507",
+      "topRight": "#f8f9f5",
+      "bottomLeft": "#f7f7f7",
+      "bottomRight": "#b8525b"
+    },
+    "New Millennium": {
+      "id": "ddr-80f74d7b779a",
+      "topLeft": "#5f242e",
+      "topRight": "#1a2b91",
+      "bottomLeft": "#cbca2e",
+      "bottomRight": "#cccfcf"
+    },
+    "New York EVOLVED (Type C)": {
+      "id": "ddr-107665d48b6a",
+      "topLeft": "#5b2322",
+      "topRight": "#911d23",
+      "bottomLeft": "#010101",
+      "bottomRight": "#281820"
+    },
+    "New York EVOLVED Type B": {
+      "id": "ddr-fe68922dc6f7",
+      "topLeft": "#5b2322",
+      "topRight": "#911d23",
+      "bottomLeft": "#010101",
+      "bottomRight": "#281820"
+    },
+    "No Life Queen [DJ Command Remix]": {
+      "id": "ddr-76b0043401b2",
+      "topLeft": "#1c637b",
+      "topRight": "#344a52",
+      "bottomLeft": "#4d788e",
+      "bottomRight": "#3f4f62"
+    },
+    "ORCA": {
+      "id": "ddr-fc075650d6d0",
+      "topLeft": "#070101",
+      "topRight": "#070505",
+      "bottomLeft": "#070101",
+      "bottomRight": "#060505"
+    },
+    "ORION.78～civilization mix～": {
+      "id": "ddr-39a5987228cb",
+      "topLeft": "#8f182a",
+      "topRight": "#901c37",
+      "bottomLeft": "#7c1310",
+      "bottomRight": "#7d1e1a"
+    },
+    "On The Break": {
+      "id": "ddr-009c3aa112a7",
+      "topLeft": "#9c2945",
+      "topRight": "#9a2d54",
+      "bottomLeft": "#70282c",
+      "bottomRight": "#e23284"
+    },
+    "Over The “Period”": {
+      "id": "ddr-d2c75c3838ab",
+      "topLeft": "#521237",
+      "topRight": "#7b315b",
+      "bottomLeft": "#741e42",
+      "bottomRight": "#6d2341"
+    },
+    "PANIC HOLIC": {
+      "id": "ddr-b2241362b154",
+      "topLeft": "#2a2615",
+      "topRight": "#f9e905",
+      "bottomLeft": "#040402",
+      "bottomRight": "#f7e510"
+    },
+    "PARANOIA EVOLUTION": {
+      "id": "ddr-d5678fd00294",
+      "topLeft": "#6868f5",
+      "topRight": "#6767f2",
+      "bottomLeft": "#7b7af4",
+      "bottomRight": "#3539e3"
+    },
+    "PARANOIA survivor": {
+      "id": "ddr-73cbae1b2a16",
+      "topLeft": "#d2e253",
+      "topRight": "#aad04b",
+      "bottomLeft": "#e1e883",
+      "bottomRight": "#8b53ba"
+    },
+    "PARANOiA Revolution": {
+      "id": "ddr-7101dec73dfb",
+      "topLeft": "#a42508",
+      "topRight": "#a31a14",
+      "bottomLeft": "#222121",
+      "bottomRight": "#232223"
+    },
+    "PARANOiA ～HADES～": {
+      "id": "ddr-423632a2233c",
+      "topLeft": "#3c0907",
+      "topRight": "#51130f",
+      "bottomLeft": "#6b1915",
+      "bottomRight": "#7b1d18"
+    },
+    "PARANOiA-Respect-": {
+      "id": "ddr-62946ba53170",
+      "topLeft": "#dce858",
+      "topRight": "#e3ef6e",
+      "bottomLeft": "#3f3b13",
+      "bottomRight": "#304b25"
+    },
+    "POSSESSION": {
+      "id": "ddr-6c3c130117e6",
+      "topLeft": "#73359a",
+      "topRight": "#7f3da4",
+      "bottomLeft": "#803baa",
+      "bottomRight": "#622e87"
+    },
+    "Pluto": {
+      "id": "ddr-8dad5f6a7dd2",
+      "topLeft": "#2e2623",
+      "topRight": "#2c2923",
+      "bottomLeft": "#342724",
+      "bottomRight": "#341b19"
+    },
+    "Pluto The First": {
+      "id": "ddr-b931040b523e",
+      "topLeft": "#020101",
+      "topRight": "#010000",
+      "bottomLeft": "#f01f01",
+      "bottomRight": "#f53b00"
+    },
+    "Prey": {
+      "id": "ddr-c3abf0bb8985",
+      "topLeft": "#f5efef",
+      "topRight": "#f5f1e5",
+      "bottomLeft": "#f7f6f8",
+      "bottomRight": "#e5e6e2"
+    },
+    "REVOLUTIONARY ADDICT": {
+      "id": "ddr-cb8d58c58735",
+      "topLeft": "#03070d",
+      "topRight": "#e7eff4",
+      "bottomLeft": "#010305",
+      "bottomRight": "#03060b"
+    },
+    "Rave in the Shell": {
+      "id": "ddr-352e21004ce5",
+      "topLeft": "#484e5c",
+      "topRight": "#4d5361",
+      "bottomLeft": "#161518",
+      "bottomRight": "#171619"
+    },
+    "Reach The Sky， Without you": {
+      "id": "ddr-235662e654ca",
+      "topLeft": "#f3d2c1",
+      "topRight": "#dc8990",
+      "bottomLeft": "#d47c8f",
+      "bottomRight": "#d78694"
+    },
+    "Roche Limit": {
+      "id": "ddr-f3c305dcfd47",
+      "topLeft": "#2f2b44",
+      "topRight": "#393c64",
+      "bottomLeft": "#1d1c27",
+      "bottomRight": "#0c0b15"
+    },
+    "Romancing Layer": {
+      "id": "ddr-7592ecdbfcc3",
+      "topLeft": "#5efca2",
+      "topRight": "#66efe4",
+      "bottomLeft": "#ebfbf1",
+      "bottomRight": "#76e7ef"
+    },
+    "S!ck": {
+      "id": "ddr-9f95ed6bf398",
+      "topLeft": "#8632d8",
+      "topRight": "#8040dd",
+      "bottomLeft": "#fcfbfc",
+      "bottomRight": "#341478"
+    },
+    "SABER WING (Akira Ishihara Headshot mix)": {
+      "id": "ddr-8cc2d7147681",
+      "topLeft": "#1c3478",
+      "topRight": "#030725",
+      "bottomLeft": "#011346",
+      "bottomRight": "#9d8b54"
+    },
+    "SILVER☆DREAM": {
+      "id": "ddr-7b735f150093",
+      "topLeft": "#63def7",
+      "topRight": "#4bd7f7",
+      "bottomLeft": "#4dd6f5",
+      "bottomRight": "#4bcbf5"
+    },
+    "SISYPHUS": {
+      "id": "ddr-75b01922b59f",
+      "topLeft": "#3f3b36",
+      "topRight": "#d3d3ce",
+      "bottomLeft": "#2b2f31",
+      "bottomRight": "#2f373a"
+    },
+    "STAY GOLD": {
+      "id": "ddr-f399fd324e7d",
+      "topLeft": "#ab6385",
+      "topRight": "#c553be",
+      "bottomLeft": "#feefa6",
+      "bottomRight": "#bb8f49"
+    },
+    "STERLING SILVER (U1 overground mix)": {
+      "id": "ddr-c52dd4a3bf79",
+      "topLeft": "#261d37",
+      "topRight": "#b33533",
+      "bottomLeft": "#150f1c",
+      "bottomRight": "#2d2c58"
+    },
+    "Sakura Sunrise": {
+      "id": "ddr-c4a13e5da65b",
+      "topLeft": "#c2f57e",
+      "topRight": "#8eeb58",
+      "bottomLeft": "#a4f151",
+      "bottomRight": "#aef268"
+    },
+    "Second Heaven": {
+      "id": "ddr-4e39ddbcccb5",
+      "topLeft": "#dda044",
+      "topRight": "#f1e772",
+      "bottomLeft": "#e8dc56",
+      "bottomRight": "#d6a343"
+    },
+    "Shiny World": {
+      "id": "ddr-bfd067c298c4",
+      "topLeft": "#ae8003",
+      "topRight": "#f9f232",
+      "bottomLeft": "#be9b1e",
+      "bottomRight": "#bba332"
+    },
+    "Silly Love": {
+      "id": "ddr-ddb756f1bb06",
+      "topLeft": "#f8f7e3",
+      "topRight": "#f9f8e1",
+      "bottomLeft": "#fbefed",
+      "bottomRight": "#f9f3f0"
+    },
+    "Snow Garland Fairy": {
+      "id": "ddr-13d2b88ba498",
+      "topLeft": "#e4e7e9",
+      "topRight": "#fcfdfd",
+      "bottomLeft": "#e6ecf1",
+      "bottomRight": "#e6edf1"
+    },
+    "Squeeze": {
+      "id": "ddr-cc3c37aca3d3",
+      "topLeft": "#000000",
+      "topRight": "#000000",
+      "bottomLeft": "#ebdfd8",
+      "bottomRight": "#070403"
+    },
+    "Star Trail": {
+      "id": "ddr-e68bdea19611",
+      "topLeft": "#b2cfda",
+      "topRight": "#e6eff7",
+      "bottomLeft": "#e0f1f9",
+      "bottomRight": "#14354c"
+    },
+    "Starlight Fantasia (Endorphins Mix)": {
+      "id": "ddr-135b6c7645ea",
+      "topLeft": "#f5f5f5",
+      "topRight": "#287fe0",
+      "bottomLeft": "#f5f8f9",
+      "bottomRight": "#fbfdfd"
+    },
+    "StrayedCatz": {
+      "id": "ddr-5fcffc04d28b",
+      "topLeft": "#e169aa",
+      "topRight": "#f169ad",
+      "bottomLeft": "#03044c",
+      "bottomRight": "#05034e"
+    },
+    "Synergy For Angels": {
+      "id": "ddr-acf80bd21d9d",
+      "topLeft": "#f4f0e6",
+      "topRight": "#efe8d6",
+      "bottomLeft": "#817169",
+      "bottomRight": "#3d393a"
+    },
+    "S・A・G・A": {
+      "id": "ddr-3f79377a3c7f",
+      "topLeft": "#64edae",
+      "topRight": "#486628",
+      "bottomLeft": "#1a675e",
+      "bottomRight": "#26341f"
+    },
+    "THIS IS MY LAST RESORT": {
+      "id": "ddr-ea06fdeee064",
+      "topLeft": "#b49762",
+      "topRight": "#e6e038",
+      "bottomLeft": "#dbee5a",
+      "bottomRight": "#ede92a"
+    },
+    "TRIP MACHINE CLIMAX（X-Special）": {
+      "id": "ddr-545c8d056bfd",
+      "topLeft": "#27dff3",
+      "topRight": "#35dcec",
+      "bottomLeft": "#f02403",
+      "bottomRight": "#eb2601"
+    },
+    "TRIP MACHINE EVOLUTION": {
+      "id": "ddr-cb650cfca21e",
+      "topLeft": "#ab3e47",
+      "topRight": "#b03e43",
+      "bottomLeft": "#b43a49",
+      "bottomRight": "#891820"
+    },
+    "TYPHØN": {
+      "id": "ddr-3135c2b74134",
+      "topLeft": "#575048",
+      "topRight": "#58504d",
+      "bottomLeft": "#524e4d",
+      "bottomRight": "#565150"
+    },
+    "The Ashes of Boreas": {
+      "id": "ddr-b17cd6d73c9f",
+      "topLeft": "#ebfaf8",
+      "topRight": "#4ff0e9",
+      "bottomLeft": "#adb1ea",
+      "bottomRight": "#7897f3"
+    },
+    "The History of the Future": {
+      "id": "ddr-ece3bd2b82e9",
+      "topLeft": "#382431",
+      "topRight": "#311b28",
+      "bottomLeft": "#cf4519",
+      "bottomRight": "#321515"
+    },
+    "The legend of MAX(X-Special)": {
+      "id": "ddr-27a36bb99120",
+      "topLeft": "#638cb2",
+      "topRight": "#2b424e",
+      "bottomLeft": "#1f353f",
+      "bottomRight": "#182c3b"
+    },
+    "Throw Out": {
+      "id": "ddr-04ef4e212069",
+      "topLeft": "#c7bfbb",
+      "topRight": "#b1a7a5",
+      "bottomLeft": "#363230",
+      "bottomRight": "#5c5656"
+    },
+    "Tohoku EVOLVED": {
+      "id": "ddr-25761d01c76a",
+      "topLeft": "#5cd7c8",
+      "topRight": "#b8f5e4",
+      "bottomLeft": "#bff5e4",
+      "bottomRight": "#ddfbee"
+    },
+    "Top The Charts": {
+      "id": "ddr-d471f81a9c32",
+      "topLeft": "#897080",
+      "topRight": "#44293d",
+      "bottomLeft": "#74424d",
+      "bottomRight": "#361d3d"
+    },
+    "Triple Counter": {
+      "id": "ddr-c11d2b73322e",
+      "topLeft": "#e9efec",
+      "topRight": "#e8eceb",
+      "bottomLeft": "#e7e5e6",
+      "bottomRight": "#bd0f56"
+    },
+    "Triple Journey -TAG EDITION-": {
+      "id": "ddr-8593c77c6c90",
+      "topLeft": "#d9cfaa",
+      "topRight": "#e5dbbe",
+      "bottomLeft": "#b49e82",
+      "bottomRight": "#d9dbc6"
+    },
+    "Unreality": {
+      "id": "ddr-64311ad27872",
+      "topLeft": "#b8f2ec",
+      "topRight": "#edfbf7",
+      "bottomLeft": "#d2fbf6",
+      "bottomRight": "#f3fcf9"
+    },
+    "VANESSA": {
+      "id": "ddr-2e6c27e28c72",
+      "topLeft": "#010000",
+      "topRight": "#2b1d12",
+      "bottomLeft": "#f7cf38",
+      "bottomRight": "#2a1711"
+    },
+    "Valkyrie dimension": {
+      "id": "ddr-df8fa0109ef8",
+      "topLeft": "#040203",
+      "topRight": "#040304",
+      "bottomLeft": "#1b1118",
+      "bottomRight": "#2c1a26"
+    },
+    "We're so Happy": {
+      "id": "ddr-7f14023d33b1",
+      "topLeft": "#54e6da",
+      "topRight": "#6be3be",
+      "bottomLeft": "#eff8ea",
+      "bottomRight": "#f0f7e9"
+    },
+    "Wolf's Rain": {
+      "id": "ddr-4fb2d1b76149",
+      "topLeft": "#27fda0",
+      "topRight": "#2efda2",
+      "bottomLeft": "#0a9212",
+      "bottomRight": "#1adb2f"
+    },
+    "Wuv U": {
+      "id": "ddr-401ef2c86894",
+      "topLeft": "#faf1dd",
+      "topRight": "#31adc7",
+      "bottomLeft": "#f9ebe6",
+      "bottomRight": "#fae2d9"
+    },
+    "Xepher": {
+      "id": "ddr-d034772ceee8",
+      "topLeft": "#1a1a32",
+      "topRight": "#110e0d",
+      "bottomLeft": "#1a192b",
+      "bottomRight": "#110e0c"
+    },
+    "ZETA～素数の世界と超越者～": {
+      "id": "ddr-d895de88a550",
+      "topLeft": "#c7bf89",
+      "topRight": "#a4a17b",
+      "bottomLeft": "#c0ad8c",
+      "bottomRight": "#b4a581"
+    },
+    "bag": {
+      "id": "ddr-c018019b6a8b",
+      "topLeft": "#faf217",
+      "topRight": "#fbf011",
+      "bottomLeft": "#fbef12",
+      "bottomRight": "#674226"
+    },
+    "chaos eater": {
+      "id": "ddr-84e5529970d9",
+      "topLeft": "#0241c7",
+      "topRight": "#0b296c",
+      "bottomLeft": "#0049c9",
+      "bottomRight": "#122c66"
+    },
+    "fluctus": {
+      "id": "ddr-85d30c88b374",
+      "topLeft": "#c8d8d9",
+      "topRight": "#d4d5d1",
+      "bottomLeft": "#e0e1de",
+      "bottomRight": "#d0cfcd"
+    },
+    "heron": {
+      "id": "ddr-8bf140db34c3",
+      "topLeft": "#f3f3f3",
+      "topRight": "#6a6a6a",
+      "bottomLeft": "#4a4d52",
+      "bottomRight": "#000101"
+    },
+    "insist": {
+      "id": "ddr-509c40394c0e",
+      "topLeft": "#fecf0e",
+      "topRight": "#f0f0f0",
+      "bottomLeft": "#171717",
+      "bottomRight": "#171717"
+    },
+    "neko＊neko": {
+      "id": "ddr-7d316c90fb90",
+      "topLeft": "#fefdfb",
+      "topRight": "#fdfcfa",
+      "bottomLeft": "#fdfbf9",
+      "bottomRight": "#fcfaf7"
+    },
+    "osaka EVOLVED -毎度、おおきに！- (TYPE2)": {
+      "id": "ddr-1d460ae339f8",
+      "topLeft": "#fdfbf7",
+      "topRight": "#ce3230",
+      "bottomLeft": "#e3401e",
+      "bottomRight": "#f7d95a"
+    },
+    "out of focus": {
+      "id": "ddr-a37f664c3145",
+      "topLeft": "#92b3b4",
+      "topRight": "#81aaa9",
+      "bottomLeft": "#161b1c",
+      "bottomRight": "#20292c"
+    },
+    "roppongi EVOLVED ver.C": {
+      "id": "ddr-a4e159f882c6",
+      "topLeft": "#0f4283",
+      "topRight": "#072148",
+      "bottomLeft": "#f9f9f9",
+      "bottomRight": "#020204"
+    },
+    "roppongi EVOLVED ver.D": {
+      "id": "ddr-613ee99c9b8c",
+      "topLeft": "#fcf06d",
+      "topRight": "#f7eb71",
+      "bottomLeft": "#fcfcf2",
+      "bottomRight": "#030303"
+    },
+    "snow prism": {
+      "id": "ddr-d4cb22862af5",
+      "topLeft": "#656ed3",
+      "topRight": "#606dd1",
+      "bottomLeft": "#2b2974",
+      "bottomRight": "#4a52cd"
+    },
+    "starmine": {
+      "id": "ddr-a0f3399fb6e8",
+      "topLeft": "#547019",
+      "topRight": "#26b8be",
+      "bottomLeft": "#c5fcfb",
+      "bottomRight": "#c1f3e0"
+    },
+    "tokyoEVOLVED (TYPE3)": {
+      "id": "ddr-c8695db075fd",
+      "topLeft": "#e11f00",
+      "topRight": "#d72808",
+      "bottomLeft": "#010101",
+      "bottomRight": "#010201"
+    },
+    "toy boxer": {
+      "id": "ddr-1c1f6b727f57",
+      "topLeft": "#fbf6f0",
+      "topRight": "#fdfaf4",
+      "bottomLeft": "#fef0e3",
+      "bottomRight": "#fbf8ea"
+    },
+    "volcano": {
+      "id": "ddr-06612c283234",
+      "topLeft": "#d84608",
+      "topRight": "#fdec62",
+      "bottomLeft": "#d93e0e",
+      "bottomRight": "#df8035"
+    },
+    "xenon": {
+      "id": "ddr-1698c12bca95",
+      "topLeft": "#acd274",
+      "topRight": "#acd375",
+      "bottomLeft": "#fb4980",
+      "bottomRight": "#f94b81"
+    },
+    "ΔMAX": {
+      "id": "ddr-5543410d58c2",
+      "topLeft": "#fd9c02",
+      "topRight": "#fd9c02",
+      "bottomLeft": "#ff9c00",
+      "bottomRight": "#fd9c02"
+    },
+    "ちゅ～いん☆バニー": {
+      "id": "ddr-3fa67a2e925a",
+      "topLeft": "#f7ece3",
+      "topRight": "#f4f3ef",
+      "bottomLeft": "#f6cca3",
+      "bottomRight": "#f8cbbc"
+    },
+    "めうめうぺったんたん！！": {
+      "id": "ddr-b7f35db4f672",
+      "topLeft": "#f8f6ef",
+      "topRight": "#fed3fc",
+      "bottomLeft": "#f0dccd",
+      "bottomRight": "#f1d5e4"
+    },
+    "アドレナリン": {
+      "id": "ddr-6dc8f6201b1b",
+      "topLeft": "#ef922a",
+      "topRight": "#e13184",
+      "bottomLeft": "#fade72",
+      "bottomRight": "#c43352"
+    },
+    "クリムゾンゲイト": {
+      "id": "ddr-57b038e467f3",
+      "topLeft": "#3e414f",
+      "topRight": "#59172c",
+      "bottomLeft": "#161219",
+      "bottomRight": "#321117"
+    },
+    "シュレーディンガーの猫": {
+      "id": "ddr-aeb144f3b493",
+      "topLeft": "#16131f",
+      "topRight": "#5448a4",
+      "bottomLeft": "#3e2a43",
+      "bottomRight": "#6f5383"
+    },
+    "スイーツはとまらない♪": {
+      "id": "ddr-b57de4d79edd",
+      "topLeft": "#fbeede",
+      "topRight": "#fbf3e9",
+      "bottomLeft": "#fbe4cb",
+      "bottomRight": "#504a46"
+    },
+    "チルノのパーフェクトさんすう教室": {
+      "id": "ddr-3a859319aa19",
+      "topLeft": "#5fb0dd",
+      "topRight": "#a7d8ec",
+      "bottomLeft": "#2160aa",
+      "bottomRight": "#40a2db"
+    },
+    "チルノのパーフェクトさんすう教室 (EDM REMIX)": {
+      "id": "ddr-60b4e4b46496",
+      "topLeft": "#bc7590",
+      "topRight": "#b45287",
+      "bottomLeft": "#c6c6d5",
+      "bottomRight": "#45548e"
+    },
+    "デッドボヲルdeホームラン": {
+      "id": "ddr-14ff317660eb",
+      "topLeft": "#8a8362",
+      "topRight": "#ab4032",
+      "bottomLeft": "#605330",
+      "bottomRight": "#5f5736"
+    },
+    "ドーパミン": {
+      "id": "ddr-b5d074f53be5",
+      "topLeft": "#010000",
+      "topRight": "#958c95",
+      "bottomLeft": "#000000",
+      "bottomRight": "#000000"
+    },
+    "ビューティフル レシート": {
+      "id": "ddr-c36287363752",
+      "topLeft": "#42e0cc",
+      "topRight": "#71f377",
+      "bottomLeft": "#d2deee",
+      "bottomRight": "#ebef29"
+    },
+    "ベィスドロップ・フリークス": {
+      "id": "ddr-41fb6c2ae00f",
+      "topLeft": "#f7f5f1",
+      "topRight": "#f6eee4",
+      "bottomLeft": "#f7f4f0",
+      "bottomRight": "#f6f1eb"
+    },
+    "ポラリスノウタ": {
+      "id": "ddr-726f9408a813",
+      "topLeft": "#a5a0b4",
+      "topRight": "#cb526f",
+      "bottomLeft": "#cbb3c1",
+      "bottomRight": "#d0b0c1"
+    },
+    "ヤサイマシ☆ニンニクアブラオオメ": {
+      "id": "ddr-ca1fcf4eec3b",
+      "topLeft": "#fcfaf8",
+      "topRight": "#ccb688",
+      "bottomLeft": "#f7f3e3",
+      "bottomRight": "#fdfdf9"
+    },
+    "ヤマトなでなで♡かぐや姫": {
+      "id": "ddr-caedb7f311f1",
+      "topLeft": "#a669a0",
+      "topRight": "#efcbcd",
+      "bottomLeft": "#aa7cac",
+      "bottomRight": "#d5b0c5"
+    },
+    "ラクガキスト": {
+      "id": "ddr-d203227bcfee",
+      "topLeft": "#efdb4d",
+      "topRight": "#e7dc8a",
+      "bottomLeft": "#af9966",
+      "bottomRight": "#a19d78"
+    },
+    "ラブキラ☆スプラッシュ": {
+      "id": "ddr-502fd9d54786",
+      "topLeft": "#e986db",
+      "topRight": "#d1eff5",
+      "bottomLeft": "#f7eff0",
+      "bottomRight": "#d0b5cc"
+    },
+    "ランカーキラーガール": {
+      "id": "ddr-83a406ec54e5",
+      "topLeft": "#eed82b",
+      "topRight": "#efd829",
+      "bottomLeft": "#efd82a",
+      "bottomRight": "#efd829"
+    },
+    "不沈艦CANDY": {
+      "id": "ddr-cb2a758c4ae5",
+      "topLeft": "#c4094e",
+      "topRight": "#ba38bb",
+      "bottomLeft": "#240614",
+      "bottomRight": "#7b2c76"
+    },
+    "世界の果てに約束の凱歌を -DDR Extended Megamix-": {
+      "id": "ddr-89055c06e90d",
+      "topLeft": "#20170b",
+      "topRight": "#20160a",
+      "bottomLeft": "#f9cd3d",
+      "bottomRight": "#f9d239"
+    },
+    "乙女繚乱 舞い咲き誇れ": {
+      "id": "ddr-79f6ce1563b8",
+      "topLeft": "#fef9f5",
+      "topRight": "#fcf8f2",
+      "bottomLeft": "#9c4b40",
+      "bottomRight": "#c5ae89"
+    },
+    "人マニア": {
+      "id": "ddr-2f64638892ab",
+      "topLeft": "#686868",
+      "topRight": "#626262",
+      "bottomLeft": "#cccccc",
+      "bottomRight": "#c6c6c6"
+    },
+    "冥": {
+      "id": "ddr-389bbac1b256",
+      "topLeft": "#bdadad",
+      "topRight": "#f9f2f2",
+      "bottomLeft": "#c0aeae",
+      "bottomRight": "#fef5f6"
+    },
+    "初音ミクの消失": {
+      "id": "ddr-438eaed9a234",
+      "topLeft": "#99ceb1",
+      "topRight": "#a8d3bd",
+      "bottomLeft": "#8cb8a7",
+      "bottomRight": "#8ac1a1"
+    },
+    "千客万来☆無問題！": {
+      "id": "ddr-ebc32847b7d7",
+      "topLeft": "#872d1f",
+      "topRight": "#8d2c23",
+      "bottomLeft": "#6a3926",
+      "bottomRight": "#753927"
+    },
+    "地方創生☆チクワクティクス": {
+      "id": "ddr-09fc2da75e91",
+      "topLeft": "#494c93",
+      "topRight": "#fcfdfd",
+      "bottomLeft": "#819298",
+      "bottomRight": "#728585"
+    },
+    "恋の氷結おてんば湯けむりチルノ温泉": {
+      "id": "ddr-6470d8f45c08",
+      "topLeft": "#f2ead7",
+      "topRight": "#f4f2e9",
+      "bottomLeft": "#694b91",
+      "bottomRight": "#c93651"
+    },
+    "恋愛観測": {
+      "id": "ddr-5314ffe4db3a",
+      "topLeft": "#f65174",
+      "topRight": "#d1b994",
+      "bottomLeft": "#d6477d",
+      "bottomRight": "#ef65a6"
+    },
+    "恋閃繚乱": {
+      "id": "ddr-2e09ec05f35f",
+      "topLeft": "#c55e6a",
+      "topRight": "#d8a463",
+      "bottomLeft": "#f5b3b9",
+      "bottomRight": "#f9d0c2"
+    },
+    "患部で止まってすぐ溶ける～狂気の優曇華院": {
+      "id": "ddr-5bf7b3ee87c8",
+      "topLeft": "#fdfdfc",
+      "topRight": "#f9f9fa",
+      "bottomLeft": "#cbb3c9",
+      "bottomRight": "#ada8b4"
+    },
+    "斑咲花": {
+      "id": "ddr-fcceea5f312f",
+      "topLeft": "#241e2e",
+      "topRight": "#402b3a",
+      "bottomLeft": "#201920",
+      "bottomRight": "#221a29"
+    },
+    "最小三倍完全数": {
+      "id": "ddr-8e0c3c787e41",
+      "topLeft": "#1c181a",
+      "topRight": "#19171b",
+      "bottomLeft": "#514648",
+      "bottomRight": "#191b1c"
+    },
+    "最終鬼畜妹フランドール・Ｓ": {
+      "id": "ddr-8f5f6d839431",
+      "topLeft": "#f3e6d7",
+      "topRight": "#dfa69a",
+      "bottomLeft": "#b09c9b",
+      "bottomRight": "#9e5370"
+    },
+    "灼熱Beach Side Bunny": {
+      "id": "ddr-733d1b8e8e93",
+      "topLeft": "#fcd486",
+      "topRight": "#fbf49d",
+      "bottomLeft": "#f8e857",
+      "bottomRight": "#f3e44b"
+    },
+    "熱情のサパデアード": {
+      "id": "ddr-c6e9d21195a7",
+      "topLeft": "#9e1b13",
+      "topRight": "#493933",
+      "bottomLeft": "#bb4735",
+      "bottomRight": "#9c210e"
+    },
+    "走れメロンパン": {
+      "id": "ddr-a22023cd5747",
+      "topLeft": "#eed9c2",
+      "topRight": "#d4b294",
+      "bottomLeft": "#eacba6",
+      "bottomRight": "#d9c2a5"
+    },
+    "阿波おどり -Awaodori- やっぱり踊りはやめられない": {
+      "id": "ddr-bb96caf37c11",
+      "topLeft": "#eb7abf",
+      "topRight": "#48254c",
+      "bottomLeft": "#edeecf",
+      "bottomRight": "#ececce"
+    },
+    "隅田川夏恋歌": {
+      "id": "ddr-bb1c5761b06c",
+      "topLeft": "#add7b8",
+      "topRight": "#aecdc9",
+      "bottomLeft": "#482f2c",
+      "bottomRight": "#886b4a"
+    },
+    "革命(X-Special)": {
+      "id": "ddr-d5f3ab1a4d03",
+      "topLeft": "#f7ef9f",
+      "topRight": "#fcfae4",
+      "bottomLeft": "#f6f2aa",
+      "bottomRight": "#663a30"
+    }
+  }
+}

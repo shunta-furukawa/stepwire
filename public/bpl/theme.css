@@ -79,3 +79,13 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
 .s6-settings{margin-top:24px}
 .player-season{position:absolute;top:12px;right:12px;display:flex;align-items:center;gap:5px;background:#141417;padding:3px;color:var(--muted);font-size:10px}
 @media(max-width:650px){.season-scroll-hint{display:block}.season-button{flex:0 0 155px;padding:10px}.season-art{height:72px;aspect-ratio:auto}.season-tab-caption>b{font-size:18px}.season-tab-caption>span{font-size:10px}.season-check{right:10px;top:10px}.s6-heading .s6-logo{width:100px}.dialog-season .season-ticket{width:145px;height:auto}.player-season{top:8px;right:8px}}
+
+/* Append after the current theme. Existing jacket dimensions remain unchanged. */
+.music-jacket.music-gradient {
+  background:
+    radial-gradient(ellipse at left top, var(--jacket-tl) 0%, transparent 72%),
+    radial-gradient(ellipse at right top, var(--jacket-tr) 0%, transparent 72%),
+    radial-gradient(ellipse at left bottom, var(--jacket-bl) 0%, transparent 72%),
+    var(--jacket-br);
+  border: 1px solid #ffffff25;
+}
