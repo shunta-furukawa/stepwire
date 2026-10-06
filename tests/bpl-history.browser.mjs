@@ -160,6 +160,85 @@ async function checkOptionalJacketFailure(failure){
     await target.keyboard.press('Escape');await readyOn(target,'seasons');assert.equal(await target.locator('#match-dialog').evaluate(dialog=>dialog.open),false);
   }finally{await ctx.close()}
 }
+async function checkOutcomeLayout(label,viewport){
+  const ctx=await browser.newContext({viewport,isMobile:label==='mobile',hasTouch:label==='mobile',deviceScaleFactor:1,serviceWorkers:'block'});
+  trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
+  try{
+    // Establish the actual rendered W/D/L history palette rather than a new one.
+    await target.goto(base+'/bpl/s?view=player&id=O4MA%2E');await readyOn(target,'player','O4MA.');
+    const colors=await target.evaluate(()=>Object.fromEntries(['w','d','l'].map(result=>{
+      const sample=document.createElement('span');sample.className='outcome '+result;document.body.append(sample);
+      const style=getComputedStyle(sample),color={color:style.color,background:style.backgroundColor};sample.remove();return [result,color];
+    })));
+    await target.goto(base+'/bpl/s?view=match&id=s4-semi_01');await readyOn(target,'match','s4-semi_01');
+    const battle=target.locator('.battle-detail').first(),song=battle.locator('.song').first();
+    assert.deepEqual(await battle.locator('.lineup-side').evaluateAll(nodes=>nodes.map(n=>n.dataset.team)),['round1','silkhat']);
+    assert.deepEqual(await battle.locator('.lineup-team').allTextContents(),['ROUND1','SILK HAT']);
+    const teamStyles=await battle.locator('.lineup-side').evaluateAll(nodes=>nodes.map(n=>({border:getComputedStyle(n).borderLeftColor,text:getComputedStyle(n.querySelector('.lineup-team')).color})));
+    assert.notEqual(teamStyles[0].border,teamStyles[1].border);assert.notEqual(teamStyles[0].text,teamStyles[1].text);
+    assert.deepEqual(await song.locator('.result-badge').allTextContents(),['WIN','LOSE']);
+    assert.deepEqual(await song.locator('.score-result>b').allTextContents(),['1,384','1,372']);
+    for(const [side,result] of [[0,'w'],[1,'l']]){
+      assert.deepEqual(await song.locator('.result-badge').nth(side).evaluate(n=>({color:getComputedStyle(n).color,background:getComputedStyle(n).backgroundColor})),colors[result]);
+      assert.equal(await song.locator('.score-result>b').nth(side).evaluate(n=>getComputedStyle(n).color),colors[result].color);
+    }
+    assert.equal(await target.locator('#match-dialog').evaluate(n=>n.scrollWidth<=n.clientWidth+1),true);
+    await battle.scrollIntoViewIfNeeded();await screenshot(battle,label+'-match-outcomes');
+
+    // Both players enter from their own recent W/L record; home/away order must not invert it.
+    for(const id of ['$RYO$','A.N.C.B.']){
+      await target.goto(base+'/bpl/s?view=player&id='+encodeURIComponent(id));await readyOn(target,'player',id);
+      const entry=target.locator('.outcomes [data-match]').last(),matchId=await entry.getAttribute('data-match'),title=await entry.getAttribute('title'),expected=await entry.innerText();
+      const match=data.matches.find(m=>m.id===matchId),b=match.battles.find(b=>b.type==='single'&&b.players.flat().includes(id)&&b.songs.some(s=>title.startsWith(s.name+'：')));
+      const selectedSong=b.songs.find(s=>title.startsWith(s.name+'：')),side=b.players.findIndex(ps=>ps.includes(id));
+      await entry.click();await readyOn(target,'match',matchId);
+      const selected=target.locator('.song').filter({has:target.locator('.song-title strong').filter({hasText:selectedSong.name})}).first();
+      assert.equal(await selected.locator('.result-badge').nth(side).innerText(),{W:'WIN',L:'LOSE',D:'DRAW'}[expected]);
+      await target.goBack();await readyOn(target,'player',id);assert.equal(await target.locator('#match-dialog').evaluate(n=>n.open),false);
+      await target.goForward();await readyOn(target,'match',matchId);await target.locator('#close-dialog').click();await readyOn(target,'player',id);
+    }
+
+    // A transferred player still belongs to the team recorded for this match.
+    const old=data.matches.find(m=>m.teams.includes('game_panic')&&m.battles.some(b=>b.players.flat().includes('HO4-KETI')));
+    await target.goto(base+'/bpl/s?view=match&id='+old.id);await readyOn(target,'match',old.id);
+    const transferred=target.locator('.lineup-side').filter({has:target.locator('a[href="#player/HO4-KETI"]')});
+    for(const lineup of await transferred.all())assert.equal(await lineup.getAttribute('data-team'),'game_panic');
+
+    await target.goto(base+'/bpl/s?view=versus&a=O4MA%2E&b=KANAME');await readyOn(target,'versus');
+    const duel=target.locator('.duel-table tr').filter({has:target.locator('.duel-song-name').filter({hasText:'恋閃繚乱'})});
+    assert.deepEqual(await duel.locator('.comparison-label').allTextContents(),['個人EX','個人EX']);
+    assert.deepEqual(await duel.locator('.score-result>b').allTextContents(),['1,510','1,513']);
+    assert.deepEqual(await duel.locator('.score-difference').allTextContents(),['差 -3','差 +3']);
+    assert.deepEqual(await duel.locator('.duel-pair-result .result-badge').allTextContents(),['DRAW','DRAW']);
+    assert.equal(await duel.locator('.score-result>b').nth(0).evaluate(n=>getComputedStyle(n).color),colors.l.color);
+    assert.equal(await duel.locator('.score-result>b').nth(1).evaluate(n=>getComputedStyle(n).color),colors.w.color);
+    for(const badge of await duel.locator('.result-badge').all())assert.equal(await badge.evaluate(n=>getComputedStyle(n).color),colors.d.color);
+    const single=target.locator('.duel-table tr').filter({has:target.locator('.duel-song-name').filter({hasText:'Throw Out'})});
+    assert.deepEqual(await single.locator('.result-badge').allTextContents(),['LOSE','WIN']);
+    await target.locator('.duel-table').scrollIntoViewIfNeeded();
+    await target.locator('.duel-table').evaluate(n=>n.scrollIntoView({block:'start'}));
+    await screenshot(target,label+'-duel-outcomes');
+    assert.equal(await target.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'page must not overflow on mobile');
+    await target.selectOption('#vs-a','KANAME');await target.selectOption('#vs-b','O4MA.');
+    assert.deepEqual(await single.locator('.result-badge').allTextContents(),['WIN','LOSE']);
+    assert.deepEqual(await duel.locator('.score-result>b').allTextContents(),['1,513','1,510']);
+    assert.deepEqual(await duel.locator('.duel-pair-result .result-badge').allTextContents(),['DRAW','DRAW']);
+    await single.locator('[data-match]').click();await readyOn(target,'match');await target.keyboard.press('Escape');await readyOn(target,'versus');
+    assert.equal(await target.locator('#vs-a').inputValue(),'KANAME');assert.equal(await target.locator('#vs-b').inputValue(),'O4MA.');
+
+    // Boundary fixtures are intercepted in this isolated context only.
+    await target.route('**/bpl/data.json',route=>{
+      const fixture=structuredClone(data),m=fixture.matches.find(m=>m.id==='s4-semi_01'),b=m.battles[0],s=b.songs[0];
+      b.songs=[{...s,name:'Zero draw fixture',scores:[0,0],points:[0,0]},{...s,name:'Unknown fixture',scores:[null,0],points:[null,0]}];
+      return route.fulfill({json:fixture});
+    });
+    await target.goto(base+'/bpl/s?view=match&id=s4-semi_01');await readyOn(target,'match','s4-semi_01');
+    const fixtureSongs=target.locator('.battle-detail').first().locator('.song');
+    assert.deepEqual(await fixtureSongs.nth(0).locator('.result-badge').allTextContents(),['DRAW','DRAW']);
+    assert.deepEqual(await fixtureSongs.nth(1).locator('.result-badge').allTextContents(),['—','—']);
+    assert.deepEqual(await fixtureSongs.nth(1).locator('.score-result>b').allTextContents(),['—','0']);
+  }finally{await ctx.close()}
+}
 try {
   // Repeated entity navigation must retain the selected entity and roster scope.
   await goto('/bpl/s?view=team&id=round1&rosterSeason=2','team','round1');
@@ -256,6 +335,8 @@ try {
   for(const [key,value] of Object.entries({matrixSeason:'5',matrixFormat:'single',matrixCategory:'GOLD',matrixStyle:'TRICKY'}))assert.equal(await page.locator('#'+key).inputValue(),value);
   for(const roster of ['all','0']){await goto('/bpl/s?view=team&id=round1&rosterSeason='+roster,'team','round1');assert.equal(await page.locator('#team-roster-season').inputValue(),'6');assert.equal(param('rosterSeason'),'6')}
 
+  await checkOutcomeLayout('desktop',{width:1280,height:900});
+  await checkOutcomeLayout('mobile',{width:390,height:844});
   await checkGradientLayout('desktop',{width:1280,height:900});
   await checkGradientLayout('mobile',{width:390,height:844});
   for(const failure of ['palette-network','palette-status','palette-json','module','both'])await checkOptionalJacketFailure(failure);
