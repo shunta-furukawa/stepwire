@@ -192,6 +192,17 @@ describe('BPL history and shipped renderers', () => {
     expect(h.mainWrites).toBe(writes); // Modal history leaves its opener and scroll position intact.
   });
 
+  it('resets the scrolling match body on reopen and hidden S6 rendering', () => {
+    const h=harness('/bpl/s?view=seasons&season=5',true);
+    const id=data.matches.find(m=>m.season===5)!.id;
+    h.run(`openMatch(${JSON.stringify(id)})`);
+    h.get('#dialog-content').scrollTop=900;
+    h.get('#close-dialog').onclick?.({});h.flush();
+    h.history.forward();h.flush();expect(h.get('#dialog-content').scrollTop).toBe(0);
+    h.get('#dialog-content').scrollTop=900;
+    h.run('openMatch("s6-future")');expect(h.get('#dialog-content').scrollTop).toBe(0);
+  });
+
   it('direct match dismissal never leaves the archive and old duplicate hash events do not render twice', () => {
     const match=data.matches.find(m=>m.season===0)!;
     const h=harness('/bpl/s?view=match&id='+match.id+'#seasons');

@@ -186,6 +186,62 @@ async function checkOptionalJacketFailure(failure){
     await target.keyboard.press('Escape');await readyOn(target,'seasons');assert.equal(await target.locator('#match-dialog').evaluate(dialog=>dialog.open),false);
   }finally{await ctx.close()}
 }
+async function checkPinnedMatchClose(label,viewport){
+  const mobile=label!=='desktop';
+  const ctx=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,deviceScaleFactor:1,serviceWorkers:'block'});
+  trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
+  try{
+    await target.goto(base+'/bpl/s?view=seasons&season=5');await readyOn(target,'seasons');
+    const match=data.matches.filter(m=>m.season===5).sort((a,b)=>b.battles.flatMap(r=>r.songs).length-a.battles.flatMap(r=>r.songs).length)[0];
+    const opener=target.locator(`.match-card[data-match="${match.id}"]`),dialog=target.locator('#match-dialog'),body=target.locator('#dialog-content'),close=target.getByRole('button',{name:'試合詳細を閉じる',exact:true});
+    const underlying=target.url();await opener.click();await readyOn(target,'match',match.id);
+    const initial=await close.boundingBox();assert.ok(initial);
+    assert.ok(initial.width>=44&&initial.height>=44,'close target must be at least 44px');
+    const checkPinned=async()=>{
+      const box=await close.boundingBox(),frame=await dialog.boundingBox(),content=await body.boundingBox();
+      assert.ok(box&&frame&&content);assert.ok(Math.abs(box.x-initial.x)<1&&Math.abs(box.y-initial.y)<1,'close must not move with match body');
+      assert.ok(box.x>=frame.x&&box.y>=frame.y&&box.x+box.width<=frame.x+frame.width&&box.y+box.height<=frame.y+frame.height);
+      assert.ok(box.x>=0&&box.y>=0&&box.x+box.width<=viewport.width&&box.y+box.height<=viewport.height,'close stays in viewport');
+      assert.ok(box.y+box.height<=content.y,'scrolling match text must not overlap the close target');
+      assert.equal(await close.evaluate(node=>{const r=node.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===node}),true,'close must be the actual pointer target');
+      assert.equal(await dialog.evaluate(node=>node.scrollTop),0,'outer dialog never scrolls');
+      const overflow=await body.evaluate(node=>({width:node.clientWidth,scrollWidth:node.scrollWidth,wide:[...node.querySelectorAll('*')].filter(child=>child.getBoundingClientRect().right>node.getBoundingClientRect().right+1).map(child=>child.className)}));
+      assert.ok(overflow.scrollWidth<=overflow.width+1,'match body has no horizontal overflow: '+JSON.stringify({label,...overflow}));
+      return box;
+    };
+    await checkPinned();await screenshot(target,label+'-match-close-top');
+    // A real wheel gesture moves the inner body; do not let locator.click auto-scroll
+    // an offscreen close button back into view and mask the original regression.
+    const content=await body.boundingBox();await target.mouse.move(content.x+content.width/2,content.y+content.height/2);await target.mouse.wheel(0,600);
+    await target.waitForFunction(()=>document.querySelector('#dialog-content').scrollTop>100);await checkPinned();
+    await body.evaluate(node=>{node.scrollTop=node.scrollHeight});
+    await target.waitForFunction(()=>{const n=document.querySelector('#dialog-content');return Math.abs(n.scrollHeight-n.clientHeight-n.scrollTop)<2});
+    await checkPinned();assert.equal(await target.locator('.dialog-season').evaluate(node=>node.getBoundingClientRect().bottom<document.querySelector('#dialog-content').getBoundingClientRect().top),true,'large match header scrolls away normally');
+    await screenshot(target,label+'-match-close-bottom');
+    await close.focus();await checkPinned();await target.keyboard.press('Shift+Tab');assert.equal(await body.evaluate(node=>node.contains(document.activeElement)),true);await target.keyboard.press('Tab');assert.equal(await target.evaluate(()=>document.activeElement?.id),'close-dialog');
+    assert.ok(await close.evaluate(node=>parseFloat(getComputedStyle(node).outlineWidth)>=3),'keyboard focus remains visible after real Tab navigation');
+    let box=await checkPinned();
+    if(mobile)await target.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);else await target.mouse.click(box.x+box.width/2,box.y+box.height/2);
+    await readyOn(target,'seasons');assert.equal(target.url(),underlying);assert.equal(await dialog.evaluate(node=>node.open),false);assert.equal(await target.evaluate(()=>document.activeElement?.dataset.match),match.id);
+    // Close / Escape / backdrop / browser Back retain the same underlying page,
+    // and Forward or opening another card starts at the top of the new body.
+    for(const exit of ['escape','backdrop','back','keyboard']){
+      await target.goForward();await readyOn(target,'match',match.id);assert.equal(await body.evaluate(node=>node.scrollTop),0);
+      await body.evaluate(node=>{node.scrollTop=node.scrollHeight});await checkPinned();
+      if(exit==='escape')await target.keyboard.press('Escape');
+      if(exit==='backdrop')await target.mouse.click(1,1);
+      if(exit==='back')await target.goBack();
+      if(exit==='keyboard'){await close.focus();await target.keyboard.press('Enter')}
+      await readyOn(target,'seasons');assert.equal(target.url(),underlying);assert.equal(await dialog.evaluate(node=>node.open),false);assert.equal(await target.evaluate(()=>document.activeElement?.dataset.match),match.id);
+    }
+    await opener.click();await readyOn(target,'match',match.id);assert.equal(await body.evaluate(node=>node.scrollTop),0);await checkPinned();await target.keyboard.press('Escape');await readyOn(target,'seasons');
+    // Direct match URLs also close in place, including the compact ZERO modal.
+    const zero=data.matches.find(m=>m.season===0);
+    await target.goto(base+'/bpl/s?view=match&id='+encodeURIComponent(zero.id));await readyOn(target,'match',zero.id);
+    assert.equal(await body.evaluate(node=>node.scrollTop),0);box=await close.boundingBox();assert.ok(box&&box.width>=44&&box.height>=44);
+    await target.mouse.click(box.x+box.width/2,box.y+box.height/2);await readyOn(target,'seasons');assert.equal(new URL(target.url()).searchParams.get('season'),'0');
+  }finally{await ctx.close()}
+}
 async function checkRoundPoints(label,viewport){
   const ctx=await browser.newContext({viewport,isMobile:label!=='desktop',hasTouch:label!=='desktop',deviceScaleFactor:1,serviceWorkers:'block'});
   trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
@@ -427,6 +483,7 @@ async function checkSeasonStandings(label,viewport){
   }finally{await ctx.close()}
 }
 try {
+  for(const [label,viewport] of Object.entries({desktop:{width:1280,height:900},mobile:{width:390,height:844},narrow:{width:320,height:720},wideMobile:{width:400,height:800},landscape:{width:844,height:390}}))await checkPinnedMatchClose(label,viewport);
   await checkSeasonStandings('desktop',{width:1280,height:900});
   await checkSeasonStandings('mobile',{width:390,height:844});
   // Repeated entity navigation must retain the selected entity and roster scope.
