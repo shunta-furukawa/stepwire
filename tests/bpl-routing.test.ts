@@ -3,6 +3,8 @@ import vm from 'node:vm';
 import { describe, expect, it } from 'vitest';
 import * as routing from '../public/bpl/routing.js';
 import * as matrix from '../public/bpl/matrix.js';
+import * as jackets from '../public/bpl/jackets.js';
+import jacketColors from '../public/bpl/jacket-colors.json';
 import data from '../public/bpl/data.json';
 import brand from '../public/bpl/brand.json';
 import s6 from '../public/bpl/s6.json';
@@ -109,11 +111,11 @@ function harness(path: string, future = false) {
     document:{querySelector:get,querySelectorAll:(selector:string)=>selector==='nav a'?nav:[],getElementById:(id:string)=>get('#'+id),createElement:()=>new ElementStub(),body:{style:{}},documentElement:{dataset:{}},addEventListener:(type:string,fn:Listener)=>documentEvents.set(type,[...(documentEvents.get(type)||[]),fn])},
     window:{addEventListener:(type:string,fn:Listener)=>windowEvents.set(type,[...(windowEvents.get(type)||[]),fn]),scrollTo(){}},
     localStorage:{getItem:()=>null,setItem(){}},navigator:{clipboard:{writeText:async(text:string)=>{copied=text}}},
-    inputData:cloned,inputBrand:structuredClone(brand),inputS6:s6,inputMatrix:matrix,inputRouting:routing,
+    inputData:cloned,inputBrand:structuredClone(brand),inputS6:s6,inputMatrix:matrix,inputRouting:routing,inputJackets:jackets,inputJacketColors:jacketColors,
   });
   const withoutBoot=app.slice(0,app.indexOf('Promise.all([...['))+app.slice(app.indexOf('// Share URLs carry'));
   vm.runInContext(readFileSync('public/bpl/seasons.js','utf8')+'\n'+readFileSync('public/bpl/s6.js','utf8')+'\n'+withoutBoot,ctx);
-  vm.runInContext('D=inputData;B=inputBrand;Matrix=inputMatrix;Routing=inputRouting;for(const [id,t] of Object.entries(B.teams))Object.assign(D.teams[id],t);initS6(inputS6);setupNavigation();initSharing();route()',ctx);
+  vm.runInContext('D=inputData;B=inputBrand;Matrix=inputMatrix;Routing=inputRouting;Jackets=inputJackets;JacketColors=inputJacketColors;for(const [id,t] of Object.entries(B.teams))Object.assign(D.teams[id],t);initS6(inputS6);setupNavigation();initSharing();route()',ctx);
   const run = (code:string) => vm.runInContext(code,ctx);
   function flush(){while(pending.length)pending.shift()!()}
   function link(hash:string){const a=new ElementStub();a.hash=hash;const event={target:{closest:(selector:string)=>selector.startsWith('a[')?a:null},button:0,preventDefault(){},defaultPrevented:false};for(const fn of documentEvents.get('click')||[])fn(event);flush()}

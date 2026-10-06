@@ -3,7 +3,7 @@
 Current mitigation, not a legal clearance or permission grant:
 
 - Current `/bpl` displays no third-party logos, portraits, jackets, background textures, or copied promotional catchphrases.
-- Season/team labels and generic player/music symbols are original UI. Team identification colors remain; they are not presented as an officially licensed palette.
+- Season/team labels and generic fallback symbols are original UI. Team identification colors remain; they are not presented as an officially licensed palette.
 - Removed the public CSS-file source link and image-download metadata. Public sources point to official human-readable pages and broadcast videos.
 - Deleted the two artwork archive chunks from the current repository tree. Build preparation removes legacy extracted `public/bpl/assets` so reused workspaces cannot republish them.
 - Retained factual match records, scores, participant/team/song names, roster histories, category designations, and official result URLs. No blanket conclusion that all reuse is permitted is asserted.
@@ -48,3 +48,9 @@ At the operator's request, the generic player symbols are replaced with AI-gener
 - Only the generated WebP portraits are deployed under `public/bpl/portraits/`. Source photographs are not checked in or bundled. The interface labels the illustrations as unofficial AI-made depictions in the archive's display/source information.
 - The existing cleanup of `public/bpl/assets/`, legacy CDN-reference checks, original SW-icon hash inventory and vendor archive rejection remain in place. The new allowance is restricted to exact inventoried generated files with matching player mappings, and also rejects serving the recorded reference-photo bytes.
 - This change does not restore official photographs, jackets, logos or backgrounds, nor change article publication, past Git objects, historical deployments, PWA settings or sharing-image artwork.
+
+## Color-only song representations — 2026-10-06
+
+At the operator's request, 206 music-note placeholders are replaced with abstract CSS gradients based on one representative color from each of four quadrants of current public official jacket references. Seven songs without a verified public source association retain the note placeholder. The runtime stores only exact song-title identifiers, stable IDs and four HEX colors; source-image bytes, text and shapes are not reconstructed or bundled. The interface describes these as unofficial color references and does not assert permission or endorsement.
+
+`docs/bpl-jacket-palettes.json` contains the technical source/sampling inventory and the palette-file digest. The earlier deleted image archive and Git history are not restored; no byte-for-byte identity with the removed artwork has been asserted. Temporary reference files used for the design study were removed, and the full extraction processed images in memory. This is not a legal clearance. Existing reviewed/generated portrait and original season inventories remain unchanged.

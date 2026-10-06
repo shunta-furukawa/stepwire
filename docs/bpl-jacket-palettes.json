@@ -1,0 +1,2498 @@
+{
+  "version": 1,
+  "startedAt": "2026-10-06T12:43:55.200652+00:00",
+  "algorithm": "oklab-dominant-quadrants-v1",
+  "method": "Five Oklab clusters per quadrant; alpha<32 ignored; alpha-weighted cluster mass mildly favors chroma and avoids tiny highlights; representative is an RGB pixel from the at-most-128px analysis thumbnail, closest to the chosen perceptual center. No color invention, RGB averaging, or source-image persistence.",
+  "rightsStatus": "Technical color provenance only. No copyright or other rights clearance is asserted.",
+  "songs": {
+    "50th Memorial Songs -The BEMANI History-": {
+      "name": "50th Memorial Songs -The BEMANI History-",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=26&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=D0iDbio81PIbI8dD6QOIP9IidDOP0PDP&kind=1",
+      "sourceTitle": "50th Memorial Songs -The BEMANI History-",
+      "imageSha256": "ba6719329f75466b08d7d23964b9b12b90149e0e879e1b5e8cd0b2616238c09f",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:29.312304+00:00"
+    },
+    "8000000": {
+      "name": "8000000",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=26&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Dd98lDdo8Ob698d9qbO9iD0PqO19oQbI&kind=1",
+      "sourceTitle": "8000000",
+      "imageSha256": "1f493672a44391d482a1e1f62ac604769e7f3fc33a40888f70b5c366f739d722",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:29.467936+00:00"
+    },
+    "888": {
+      "name": "888",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=26&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=id9oObq9P6Q6Pq6lQPqI88OP1DD8D0O1&kind=1",
+      "sourceTitle": "888",
+      "imageSha256": "227d689d46b71d8b7c55fa1a6d66f7bffa4c71023b539ad0dc884cb70953a402",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:33.841510+00:00"
+    },
+    "ACE FOR ACES": {
+      "name": "ACE FOR ACES",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=ld6P1lbb0bPO9doqbbPOoPb8qoDo8id0&kind=1",
+      "sourceTitle": "ACE FOR ACES",
+      "imageSha256": "fb647745500492965b7c578cfd4707e2d9164b7559692c1baf2eb90b1dca574d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:34.012691+00:00"
+    },
+    "AFRONOVA": {
+      "name": "AFRONOVA",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Pd99DQo0bD9D9oIbPIId18P6l8qlDQO6&kind=1",
+      "sourceTitle": "AFRONOVA",
+      "imageSha256": "d73c3c1b3d474e8902fd4ac97630eb00dcb96150142fa1d12c2c816834570ac1",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:38.510548+00:00"
+    },
+    "ALPACORE": {
+      "name": "ALPACORE",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=6&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6d8DiDl0i1oldbbo0o60PQ0q96d608Dq&kind=1",
+      "sourceTitle": "ALPACORE",
+      "imageSha256": "1cbbb49937585644b9a52520872ea6309b55d56f88b893b7afdf16c3b91ee31b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:38.493396+00:00"
+    },
+    "ANTI ANTHEM": {
+      "name": "ANTI ANTHEM",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=6&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1q6Qoi0lldP6qoQI9PI199d6P0Q96ld0&kind=1",
+      "sourceTitle": "ANTI ANTHEM",
+      "imageSha256": "c18520bf02cd08118983ce177b5e3756005d56f679ff658b0ee6cf8d678611ea",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:43.302026+00:00"
+    },
+    "Ace out": {
+      "name": "Ace out",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=l61ldlPo1DQ081860O86D0Qo0qdOd0qP&kind=1",
+      "sourceTitle": "Ace out",
+      "imageSha256": "dbf5a0f7d7a4b7a939d3709c66d3f31f7992350b64258c71251a278feaac6f5a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:43.323243+00:00"
+    },
+    "Afterimage d'automne": {
+      "name": "Afterimage d'automne",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=6&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=blld8o09oQo80PIIoIdbP9688DIqlbdb&kind=1",
+      "sourceTitle": "Afterimage d'automne",
+      "imageSha256": "6d3de84fb982a3203f0e008232611e60059509946940a3f634768e4bb4e2c566",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:48.595393+00:00"
+    },
+    "Anti-Matter": {
+      "name": "Anti-Matter",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=6&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=D89QP18016o01qoOi60I6Q19dlOQPbdo&kind=1",
+      "sourceTitle": "Anti-Matter",
+      "imageSha256": "3285eb91f422eb319f160f9ebc164b0b3e2cbb49c4be330c00f567ec12a1177e",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:48.496636+00:00"
+    },
+    "Astrogazer": {
+      "name": "Astrogazer",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=6&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6QdIl8odooDQ0oOQ0IObQqo1lO986PP6&kind=1",
+      "sourceTitle": "Astrogazer",
+      "imageSha256": "e261e031224b7f9e0ed75d542fafb27993839aacaa397900f22d02da8cf62c4c",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:54.909573+00:00"
+    },
+    "B4U (\"VOLTAGE\" Special)": {
+      "name": "B4U (\"VOLTAGE\" Special)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=7&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6boDb6Pdd6QDP1oPdlQ0Qo1ld0lQb6P6&kind=1",
+      "sourceTitle": "B4U (\"VOLTAGE\" Special)",
+      "imageSha256": "6439e4666f24182e3ccc63e160726e50bb429d080a499e1281313bb96ee4319b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:36:54.763608+00:00"
+    },
+    "BITTER CHOCOLATE STRIKER": {
+      "name": "BITTER CHOCOLATE STRIKER",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=7&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=o9P816l0QQ1b9l1l6i1o6OD9bl9dP00l&kind=1",
+      "sourceTitle": "BITTER CHOCOLATE STRIKER",
+      "imageSha256": "6da18bc921ca9e383e76fe26ca0618d31dd72ea1e15f71dd01aafa3136b004d0",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:00.567383+00:00"
+    },
+    "BREAKING THE FUTURE": {
+      "name": "BREAKING THE FUTURE",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=7&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=dlq91b19ld10IdIqQ9q99O8QDOOi18dq&kind=1",
+      "sourceTitle": "BREAKING THE FUTURE",
+      "imageSha256": "811818c0071cb8c2ed4feadbd1c8db7f35b79dcd603a2943e2f08425b7c841d0",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:00.479326+00:00"
+    },
+    "Blew My Mind": {
+      "name": "Blew My Mind",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=7&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=8IdlOq1qI8OO1PP88I6olPiI6IqqqIIO&kind=1",
+      "sourceTitle": "Blew My Mind",
+      "imageSha256": "ab5408ba6f6214c1f90207d03e255c25921c3c8fa0dba5aa428138fdca75851d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:04.975268+00:00"
+    },
+    "Bounce Trippy": {
+      "name": "Bounce Trippy",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=7&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=l81l981iPod0PDIIObIldoQb6Ol9o1Iq&kind=1",
+      "sourceTitle": "Bounce Trippy",
+      "imageSha256": "3c92c8d0304bead017a5fa0cb9e07a4c6257fd6aeb981cca81fa8d275a457d8d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:05.268185+00:00"
+    },
+    "CHAOS": {
+      "name": "CHAOS",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=8o1iQPiId8P6Db9Iqo1Oo119QDoq8qQ8&kind=1",
+      "sourceTitle": "CHAOS",
+      "imageSha256": "863b1f631164d20cae2a02379df1883b4e36d27e3f93478839a51ecbc962f8ba",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:10.498621+00:00"
+    },
+    "CHAOS Terror-Tech Mix": {
+      "name": "CHAOS Terror-Tech Mix",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=b16OP1o9qb6bQd66qOl98iq0boiQP919&kind=1",
+      "sourceTitle": "CHAOS Terror-Tech Mix",
+      "imageSha256": "229670ebe586f6d56ec0107e74f6491df52c098a37f834fbaa96a9e1719a5265",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:10.729039+00:00"
+    },
+    "Chronos": {
+      "name": "Chronos",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=P8DQP9QIioPdi9IO6q0100PlQOIl86I9&kind=1",
+      "sourceTitle": "Chronos",
+      "imageSha256": "5fffabc2a180b6ec152354a2805266ec6a46a53296bae1c43f09a01141529c33",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:15.721130+00:00"
+    },
+    "Chronos (walk with you remix)": {
+      "name": "Chronos (walk with you remix)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=d18bbq1l699OP9Di6q8oqD9oPb1o1P6I&kind=1",
+      "sourceTitle": "Chronos (walk with you remix)",
+      "imageSha256": "fcc92938579b1072e41d549ec54f3b72d7992bcf6fde622d6e8e2baff8bafe8a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:15.974977+00:00"
+    },
+    "Cleopatrysm": {
+      "name": "Cleopatrysm",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=d91lIllbboPd668QP88I06Q6QqooQiO1&kind=1",
+      "sourceTitle": "Cleopatrysm",
+      "imageSha256": "48f85c795e90969de32bab7950f5a8b1f7ec45e2f1d4a2e4ec10012d60ba3a59",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:20.581036+00:00"
+    },
+    "Come To m1dy": {
+      "name": "Come To m1dy",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=bll06Di6q1QOlddDlPDPiQDDI09bOOoP&kind=1",
+      "sourceTitle": "Come To m1dy",
+      "imageSha256": "56e69a3c7168c2770b2ad503a38f217941d309b042fc89dd48f657b743a32bc8",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:20.635104+00:00"
+    },
+    "Come to Life": {
+      "name": "Come to Life",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=oIII9lI0q6i9Q0b18ldoI6o0PQ0qqD01&kind=1",
+      "sourceTitle": "Come to Life",
+      "imageSha256": "b0e6235521775daedfe6a3d26a5bd57fd4be0d66ea77025dd54072a489cfcb07",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:25.622231+00:00"
+    },
+    "Condor": {
+      "name": "Condor",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1Ol1i86OQd61IlqPb9O1060l0OQDoDQI&kind=1",
+      "sourceTitle": "Condor",
+      "imageSha256": "39b619567efa2b0a39519452f217339962abc85f980dfbdb91285147258fca64",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:25.680864+00:00"
+    },
+    "Cosmic Hurricane": {
+      "name": "Cosmic Hurricane",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=dO9b8Id9QQ8DOO69Q0lqi6O9QlDPIPl9&kind=1",
+      "sourceTitle": "Cosmic Hurricane",
+      "imageSha256": "2f685188fec8d3b16e1fd5f933c7c856bafb0e0de1b80bc37b70eeda486513c0",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:31.386913+00:00"
+    },
+    "Cosy Catastrophe": {
+      "name": "Cosy Catastrophe",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=9QIo1lbD1ldlqPO0iD68io69Pd8b01Do&kind=1",
+      "sourceTitle": "Cosy Catastrophe",
+      "imageSha256": "445aa12e7b57378e1d51714874ed0994ad42c4b65b9e26902425bad6d4c6bed5",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:31.457832+00:00"
+    },
+    "Crazy Hot": {
+      "name": "Crazy Hot",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=dq6b0b6OD9DbDPQOO608oDo8Q80ODIqO&kind=1",
+      "sourceTitle": "Crazy Hot",
+      "imageSha256": "6d965d49395a5c2fb16b44b9db16eb27c5e12714bace6aa0c214e38c48dfdfd7",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:37.861874+00:00"
+    },
+    "Crystarium": {
+      "name": "Crystarium",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=oP8iIdilQ0QiDllqDbDIOl0iQPd9PQ9I&kind=1",
+      "sourceTitle": "Crystarium",
+      "imageSha256": "956f1df30e65c0583b6e1347216a2cc75a99abcec7b1778e542b4f9749f0e4f2",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:37.940722+00:00"
+    },
+    "Cytokinesis": {
+      "name": "Cytokinesis",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=ibl00b69Oli68l96d6o1P1ob8QPillbO&kind=1",
+      "sourceTitle": "Cytokinesis",
+      "imageSha256": "8645f6932360daa85fbf34c859ba061bd0a4ce92fe2df170cc8101c7ef6925ae",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:43.937035+00:00"
+    },
+    "DDR TAGMIX -LAST DanceR-": {
+      "name": "DDR TAGMIX -LAST DanceR-",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=dQODIo01o98oPll086Qdol8bq9QP8d61&kind=1",
+      "sourceTitle": "DDR TAGMIX -LAST DanceR-",
+      "imageSha256": "9c89a7d311092870b4587670120610c98b66aaa8098baeb127fab0dcb499fd4b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:43.927115+00:00"
+    },
+    "DEAD END (\"GROOVE RADAR\" Special)": {
+      "name": "DEAD END (\"GROOVE RADAR\" Special)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=PooiIP8qP0IPd9D1Ibi6l9bDoqdi9P8O&kind=1",
+      "sourceTitle": "DEAD END (\"GROOVE RADAR\" Special)",
+      "imageSha256": "974a8bc90493b9dd3b7eb3d4224ff95a57a36f3d514ea196ee33d39ffb9917ce",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:48.952811+00:00"
+    },
+    "DIABLOSIS::Nāga": {
+      "name": "DIABLOSIS::Nāga",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=QlQ10I6o1l88loioo6DIObi0P09PPdiD&kind=1",
+      "sourceTitle": "DIABLOSIS::Nāga",
+      "imageSha256": "c0c913a77c23e6ac202ee8f565a9582c55f4952e268763e7d8d05e0117c316cb",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:49.155207+00:00"
+    },
+    "DYNAMITE RAVE": {
+      "name": "DYNAMITE RAVE",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=10&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1QIPID18qib8D9Oo9lOo8I6DPi9qiod6&kind=1",
+      "sourceTitle": "DYNAMITE RAVE",
+      "imageSha256": "97ea1da43c4a406d6048e34fdabec821fa65a5d196c5d7a194febc1b02ccdc15",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:56.192324+00:00"
+    },
+    "Dance Celebration (System 7 Remix)": {
+      "name": "Dance Celebration (System 7 Remix)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=98D001P6b696O18P8qiIOl811bq1oQ16&kind=1",
+      "sourceTitle": "Dance Celebration (System 7 Remix)",
+      "imageSha256": "de85ac26e9a88d4c0031e3d3d384b0e3fea2d373e612f5a40651ea8c8bf271bb",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:37:56.281136+00:00"
+    },
+    "Dance Dance Revolution(X-Special)": {
+      "name": "Dance Dance Revolution(X-Special)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6o966dbdo9dPIil6qQ09d1I0o0Qld611&kind=1",
+      "sourceTitle": "Dance Dance Revolution(X-Special)",
+      "imageSha256": "d70f44a062e7096b8f127b40e8e444f932989e722c2a7b52d07814ec55ef2f27",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:00.871802+00:00"
+    },
+    "Dance Phenomena": {
+      "name": "Dance Phenomena",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=oQ91qO6Dii66bO69I9ooIQD101Dl68Qi&kind=1",
+      "sourceTitle": "Dance Phenomena",
+      "imageSha256": "dab5f9fd45feffe151cd2961ff5fc0961ddb6f5bc8e00ba82c7d60ecf58cacde",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:00.931649+00:00"
+    },
+    "Dance wiz the Rhythm": {
+      "name": "Dance wiz the Rhythm",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Ib08idDooQbP00Q1Io0QlObloibb1b8Q&kind=1",
+      "sourceTitle": "Dance wiz the Rhythm",
+      "imageSha256": "983db0c3c2a34373bad9ad4d83516ffe16482d3ee4527b79fe57871b17ee99a5",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:06.531232+00:00"
+    },
+    "Deep tenDon Reflex": {
+      "name": "Deep tenDon Reflex",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1IQ16dPQPQ0Q1qdidld6lO1o86q98o69&kind=1",
+      "sourceTitle": "Deep tenDon Reflex",
+      "imageSha256": "cfb1b6db29c02fea76faec4eda4e88aba44e058b8e757ea6aff9b4665c83a328",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:06.457770+00:00"
+    },
+    "Destination": {
+      "name": "Destination",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=9dD6dlq01qd80loD6OOQb60ql6P6068O&kind=1",
+      "sourceTitle": "Destination",
+      "imageSha256": "a9ab8ef2a60cdba70c00647c09d240f50c3ba8646d8e3f59d779b8fb38be7f4a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:11.929001+00:00"
+    },
+    "Diamond Night": {
+      "name": "Diamond Night",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=QD6b8i08P1IQloIPOPiqlIPoDlPi9DPI&kind=1",
+      "sourceTitle": "Diamond Night",
+      "imageSha256": "75834dcb3c19f0c0d0d35216d87f4ae3f0d8c0c31c1bb535d3bfc0115825a0ae",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:11.934202+00:00"
+    },
+    "Dispersion Star": {
+      "name": "Dispersion Star",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=10&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6i000qlo9PD9oi9I9Qb990D6D9i19699&kind=1",
+      "sourceTitle": "Dispersion Star",
+      "imageSha256": "e52ab74693ad8f89d02dbafae3a80418176687ac21bc2e49227150f87b6d39f7",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:17.565478+00:00"
+    },
+    "Elemental Creation": {
+      "name": "Elemental Creation",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=10&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=OiIOPd80d9PQQIbidO6ObioboO88OD9l&kind=1",
+      "sourceTitle": "Elemental Creation",
+      "imageSha256": "26906032afcb66431ae6baa7e0111987355f4834bc4ae90aa94e05f4fa42b75b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:17.665673+00:00"
+    },
+    "Engraved Mark": {
+      "name": "Engraved Mark",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=11&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lb19I8d0DPb88QDQlP616lDqoboli90O&kind=1",
+      "sourceTitle": "Engraved Mark",
+      "imageSha256": "d9736fe3b2fb2214704f7eb71cd86cb225b64346a8fdb3d72462dea2c7f7a841",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:23.039262+00:00"
+    },
+    "Euphoric Fragmentation": {
+      "name": "Euphoric Fragmentation",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=11&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=0dD8bq9QiD1DO0Io118idQoiP6PP900d&kind=1",
+      "sourceTitle": "Euphoric Fragmentation",
+      "imageSha256": "5c5a5b198b729e089b849a1fe3fcadaa952b015f3bdbbe938b458daa7fccdff7",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:22.970882+00:00"
+    },
+    "FUNKY SUMMER BEACH": {
+      "name": "FUNKY SUMMER BEACH",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=9i6dOd608qb0IlqoDIPb8q1o8q1ddQQd&kind=1",
+      "sourceTitle": "FUNKY SUMMER BEACH",
+      "imageSha256": "38cf9a0e0bb0da7f19b61bd49db77db3a76eb613af6d30a1f6de551537c0e06d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:30.277853+00:00"
+    },
+    "Fascination ～eternal love mix～": {
+      "name": "Fascination ～eternal love mix～",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=11&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=8QbqP80q9PI8bbi0qOoiibOQD08OPdli&kind=1",
+      "sourceTitle": "Fascination ～eternal love mix～",
+      "imageSha256": "9a3911f07fba0204b4c65a5dbea343eac57045f9a1f576b88e2d32a026c30345",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:29.547172+00:00"
+    },
+    "Firestorm": {
+      "name": "Firestorm",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=11&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=qqDOddP66Ol1q1IIOb1OPO68DP1ood1i&kind=1",
+      "sourceTitle": "Firestorm",
+      "imageSha256": "225c178469d18e0a091aec0e2bcd006c52aa81330b52192cfc02249b5209fab2",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:36.003691+00:00"
+    },
+    "Flow (True Style)": {
+      "name": "Flow (True Style)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=11&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=0D096II0i9l0doPlbPQbiPo1IQDDoOP0&kind=1",
+      "sourceTitle": "Flow (True Style)",
+      "imageSha256": "d829478fca3099138904c3e4cb00ca120f13c3f724426a9a9edb1e822c1559b9",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:35.870495+00:00"
+    },
+    "GERBERA": {
+      "name": "GERBERA",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=bd8OODli0POo9bOq6i0oIPdIlbDlI910&kind=1",
+      "sourceTitle": "GERBERA",
+      "imageSha256": "1a612d6aa52c4d80a9e8a5fdfb96150ed6f05b0569d2f99f4935c3abb6336c60",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:42.669522+00:00"
+    },
+    "GHOST KINGDOM": {
+      "name": "GHOST KINGDOM",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=dQbolPiDiiObioli96DlOo9OlP9DoDIi&kind=1",
+      "sourceTitle": "GHOST KINGDOM",
+      "imageSha256": "78572ede19070d99cca68ff1f38d89f634684357755e3aced7a2bacfd4ecacb2",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:42.576235+00:00"
+    },
+    "Get Your Wish": {
+      "name": "Get Your Wish",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=8O9o9OPPdd1Db6996P99bq9oQI66P88o&kind=1",
+      "sourceTitle": "Get Your Wish",
+      "imageSha256": "17f9e9b498bef1f04897eb9ead87fdd4a86bca4cac2207605144cb46ebc56f70",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:48.771242+00:00"
+    },
+    "Glitter Flatter Scatter": {
+      "name": "Glitter Flatter Scatter",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=06lOillb6id0Dib9o1b06iPblqPl61PI&kind=1",
+      "sourceTitle": "Glitter Flatter Scatter",
+      "imageSha256": "3166189ee4bf62641a9ca75d48f421032cd045c7a4353bac1e31d4e51ace59dd",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:48.869528+00:00"
+    },
+    "Going Hypersonic": {
+      "name": "Going Hypersonic",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6Obi001oi9Qd1966dOd6d6Qo66dbbill&kind=1",
+      "sourceTitle": "Going Hypersonic",
+      "imageSha256": "902863bc5b6d2886d52cdf52fd17ed277961ca0f5f465271e6fa3bebaa44b413",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:54.908637+00:00"
+    },
+    "Golden Arrow": {
+      "name": "Golden Arrow",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=dIdDQD1Q8oPQ90Q1DPbiQI661qD9oi6I&kind=1",
+      "sourceTitle": "Golden Arrow",
+      "imageSha256": "712c5e367d0c174ff3be6141b491ccc1ed7f3aa940064b3a3d92d174158f36d9",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:38:54.798321+00:00"
+    },
+    "Good Looking": {
+      "name": "Good Looking",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=i9PQoDbQI0qqd6I00d19bQo6q9PoOIbO&kind=1",
+      "sourceTitle": "Good Looking",
+      "imageSha256": "713d0fdc5bd16749886160a3e9f19f5eb01b48a666826fbb14fbee94817f9def",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:00.650614+00:00"
+    },
+    "HAPPY☆LUCKY☆YEAPPY": {
+      "name": "HAPPY☆LUCKY☆YEAPPY",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=ol6IDd019O0qq8dblPQ96ol1oPbI990b&kind=1",
+      "sourceTitle": "HAPPY☆LUCKY☆YEAPPY",
+      "imageSha256": "a42f92542eb51ee4fb6e8228d6e9dc5404b2e40f336fe1e76cd590cb306aa3cd",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:00.836017+00:00"
+    },
+    "HEART BEAT FORMULA": {
+      "name": "HEART BEAT FORMULA",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1l8ibdlb0O0q00o6l9Pq1ibdbIQqqOb1&kind=1",
+      "sourceTitle": "HEART BEAT FORMULA",
+      "imageSha256": "e1cfb8423b90c7858823edd7d1cefcc0449caf9f41a90e7b345e89949db63ea8",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:07.337757+00:00"
+    },
+    "Healing Vision ～Angelic mix～": {
+      "name": "Healing Vision ～Angelic mix～",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=olQQ8QPPqqObDD9ooodOl9i9od8b06I9&kind=1",
+      "sourceTitle": "Healing Vision ～Angelic mix～",
+      "imageSha256": "4b1d2b453e5ede990a308ccfb6697e64b8f37fa1220ae7103d0fcf1d9dec211c",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:07.410871+00:00"
+    },
+    "Healing Vision(X-Special)": {
+      "name": "Healing Vision(X-Special)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=0D1618DDbol8bl9dP0lDdiD66ioIiidD&kind=1",
+      "sourceTitle": "Healing Vision(X-Special)",
+      "imageSha256": "e1baf3f6dd9b9a8104197dd41c691554a84e7c96e88072be78dddd1407367c45",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:15.175990+00:00"
+    },
+    "Healing-D-Vision": {
+      "name": "Healing-D-Vision",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=109P1iO9i6q1q0bdQobiodQDoD619dqd&kind=1",
+      "sourceTitle": "Healing-D-Vision",
+      "imageSha256": "21b05a6f222a6cb8084b24df4432fc87af571501deba59dadf2859fcbb585b01",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:15.275338+00:00"
+    },
+    "Helios": {
+      "name": "Helios",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=OPdooDlO9iO09lI1ODP00660loDiiodi&kind=1",
+      "sourceTitle": "Helios",
+      "imageSha256": "04838b241b794163c6df0d455becd08d4bdc9c38cbeaf7c02f8abca741757e48",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:23.919958+00:00"
+    },
+    "Hella Deep": {
+      "name": "Hella Deep",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=i8iPdIlP1IIDib96Qq080ibq6bblQqQD&kind=1",
+      "sourceTitle": "Hella Deep",
+      "imageSha256": "f6ca188bb8e4eb961afa523a4e21f62aa4d83439f577e50711e9435b64bf5e35",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:23.912111+00:00"
+    },
+    "Horatio": {
+      "name": "Horatio",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=PIdPo9o0qOIiPDIIlbo9l9dObP81lQqi&kind=1",
+      "sourceTitle": "Horatio",
+      "imageSha256": "2a5fc2a39c9701d7e60944d2d717576bd648420c64dfe63fe8f3155562bc96ab",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:33.421944+00:00"
+    },
+    "I'm so Happy": {
+      "name": "I'm so Happy",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=90lolio9qd6qo6Pl8oo69iqi81oiiQib&kind=1",
+      "sourceTitle": "I'm so Happy",
+      "imageSha256": "78377c39b8c12a946f70cd1ea98a34e3aea802228c919a6146231912a50955ca",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:33.378790+00:00"
+    },
+    "IMANOGUILTS": {
+      "name": "IMANOGUILTS",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Q8qb1oQobdqDqi0i19qqb11P1oDoiD8O&kind=1",
+      "sourceTitle": "IMANOGUILTS",
+      "imageSha256": "f7a505914195a486ed482c39f4a22781e55d08eceffebbc4c11bd27986451ced",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:44.073322+00:00"
+    },
+    "INFINITE WORLD": {
+      "name": "INFINITE WORLD",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=14&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lob09DPQD0Dl6Q09dbq8biIb6QqDql8i&kind=1",
+      "sourceTitle": "INFINITE WORLD",
+      "imageSha256": "8190d9b3e617ba8ba5e816302ab80ebf5410faee21ba79d73b6355cbdb5970d1",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:43.888195+00:00"
+    },
+    "INSERTiON": {
+      "name": "INSERTiON",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=14&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6oldqOoilo1OoP6P9OoO8bdD9lI86qdQ&kind=1",
+      "sourceTitle": "INSERTiON",
+      "imageSha256": "7a810fdb407a75c7c02d2053f7f3cfc8ea06631624e7a1714a6954df6a8e2c82",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:52.119075+00:00"
+    },
+    "IX": {
+      "name": "IX",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=26&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=00obPO6oPIPOoD9qb0dIl6q6D8P6o9bI&kind=1",
+      "sourceTitle": "IX",
+      "imageSha256": "bb7c012200411c5340a83fa0d92ad09dea045b50f68f9e07732d3e0240b1b92e",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:39:52.154560+00:00"
+    },
+    "Illegal Function Call": {
+      "name": "Illegal Function Call",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1Ob1I0do8Iq6QqP6PQIiddD18dqDP9oo&kind=1",
+      "sourceTitle": "Illegal Function Call",
+      "imageSha256": "97daa82a9d6e7295dad93b98b7bbbe52a05d601421a3f2a2d9419c115643c4d3",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:00.518550+00:00"
+    },
+    "Ishtar": {
+      "name": "Ishtar",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=14&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=bPb96lbDP9OdI0Oi1189iOPPdllPIDQb&kind=1",
+      "sourceTitle": "Ishtar",
+      "imageSha256": "c37e8c8cf835e4e5210030cc7550419dee58226163f73c0de213531e60655ec4",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:00.501758+00:00"
+    },
+    "JOMANDA": {
+      "name": "JOMANDA",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=14&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=dDQqqIQlDQ9POd90OPl9Dd1i106odDl0&kind=1",
+      "sourceTitle": "JOMANDA",
+      "imageSha256": "78491bac2f8df398cf36df232e34457d864345a7d345188b18445efb95d0834e",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:08.832179+00:00"
+    },
+    "Jetcoaster Windy": {
+      "name": "Jetcoaster Windy",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=14&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=qD1I6qqll88q9dq9PoloD68lqddIDo6O&kind=1",
+      "sourceTitle": "Jetcoaster Windy",
+      "imageSha256": "1363e687fa5c2a2fc308430d0bc13ca858426cd71a91c77220cd0afe534c9f1d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:09.055937+00:00"
+    },
+    "KHAMEN BREAK": {
+      "name": "KHAMEN BREAK",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=14&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Qq8bbbqO6qQ1DPODd16oi1QDQoQ9b8DO&kind=1",
+      "sourceTitle": "KHAMEN BREAK",
+      "imageSha256": "c44361e23d8a9597f4537ac3ba51dccb38f112fb1be2db0118f8f46c7b1ed447",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:17.379024+00:00"
+    },
+    "LIKE A VAMPIRE": {
+      "name": "LIKE A VAMPIRE",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=15&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=ooiqoi6Q0dil6b10QOq8DiOIiq9iQb10&kind=1",
+      "sourceTitle": "LIKE A VAMPIRE",
+      "imageSha256": "677a9e1a03261443dd1db679d78f57167398205915f9aab6490826269ce18895",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:17.391521+00:00"
+    },
+    "Leaving…": {
+      "name": "Leaving…",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=15&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6bO0Dq60bboi009iDbO8o9Q9999PiiDP&kind=1",
+      "sourceTitle": "Leaving…",
+      "imageSha256": "14984e80eeaab658e811cf5cc4aac04f30c3a2f9a22caa162e25f5c59b0a9ffc",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:25.660961+00:00"
+    },
+    "Let's DANCE aROUND!!": {
+      "name": "Let's DANCE aROUND!!",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=15&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=ddqQ801q1lIdIooDiq66qPil1oD0611I&kind=1",
+      "sourceTitle": "Let's DANCE aROUND!!",
+      "imageSha256": "1126bdf8b7fe58485f8a9dd0d87c585fbe3d2028fa1d863f560b739256ff6bfe",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:25.739899+00:00"
+    },
+    "London EVOLVED ver.A": {
+      "name": "London EVOLVED ver.A",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=15&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=D6IQ1O1D00D1o8IQq0O9qqIibqDiiO0i&kind=1",
+      "sourceTitle": "London EVOLVED ver.A",
+      "imageSha256": "6bde41a3090f146ec5f85e0ba4e2335a561b51f7f79b1b4c851543c1692a039a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:32.008121+00:00"
+    },
+    "London EVOLVED ver.B": {
+      "name": "London EVOLVED ver.B",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=15&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=OlDo09P8l0d6d80i8qD0qQddbi0QQD8b&kind=1",
+      "sourceTitle": "London EVOLVED ver.B",
+      "imageSha256": "f31bd22f18492f3834098440760cb5bc2572b546659235ef92ca60d7d7b00c9b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:32.045038+00:00"
+    },
+    "Lose Your Sense": {
+      "name": "Lose Your Sense",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=15&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=b1QllqO8oQdqo086QdIlIblDDbPodDoP&kind=1",
+      "sourceTitle": "Lose Your Sense",
+      "imageSha256": "cb15ef84d3dd914be3904701873aaf352385bbf218325cf9904e0d5f12cfc030",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:41.667391+00:00"
+    },
+    "Love You More": {
+      "name": "Love You More",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=15&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=qIqbqPblQIIObd9166bbDiioOIiIq991&kind=1",
+      "sourceTitle": "Love You More",
+      "imageSha256": "dcd7a691f50747b2f4d4c5f54eb5f4236f57fd9068649a49d9ee2db4b4011ba5",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:41.815751+00:00"
+    },
+    "MAX 300": {
+      "name": "MAX 300",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=16&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6P18lOliIQqIO6Di0PP8iDlDQ01b0o0q&kind=1",
+      "sourceTitle": "MAX 300",
+      "imageSha256": "941ddbfc876483d964453e20c2670916e546a8f854ce89df2c500e2287cc2609",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:51.261934+00:00"
+    },
+    "MAX 300(X-Special)": {
+      "name": "MAX 300(X-Special)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=16&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=oOI88lollO1OOQQd9DPi0690I6i6oiII&kind=1",
+      "sourceTitle": "MAX 300(X-Special)",
+      "imageSha256": "97a166b337fe1d070d80e9dde01cb44edb5f2cf31c13664e83915adbb383a366",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:51.232166+00:00"
+    },
+    "MAX 360": {
+      "name": "MAX 360",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=16&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1Dl19idl0i0qiqidbDIIbQddiP6o11PP&kind=1",
+      "sourceTitle": "MAX 360",
+      "imageSha256": "17a4c97cc2853e0a16d753b627e414ba7968334bfad3cb7b6d5585eb64051f21",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:58.754406+00:00"
+    },
+    "MAXX UNLIMITED": {
+      "name": "MAXX UNLIMITED",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=16&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lObPDQDI08DoodDq1061IP1qbQ1qQQbl&kind=1",
+      "sourceTitle": "MAXX UNLIMITED",
+      "imageSha256": "ccb91635b8eb4b40eb972960e132d04c0ddf4981387967eb2ee0f8d5fe9dafa2",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:40:58.778316+00:00"
+    },
+    "MAXX UNLIMITED(X-Special)": {
+      "name": "MAXX UNLIMITED(X-Special)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=16&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1980q80l1Q96O881IidPd16qDbOol9Qd&kind=1",
+      "sourceTitle": "MAXX UNLIMITED(X-Special)",
+      "imageSha256": "363bf109a6130d95ee587be4cd01bc52336b1d4fc37726c1fae44cf4f71edd4d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:41:04.385230+00:00"
+    },
+    "Magnetic": {
+      "name": "Magnetic",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=15&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=18l0blb188Oqqi8I68o8oq91Qbq86QDi&kind=1",
+      "sourceTitle": "Magnetic",
+      "imageSha256": "506fb19038aedf2a16754f3c9dba4bc670b37772ca14e9ec4e49dc56fff52ef3",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:41:05.909248+00:00"
+    },
+    "Mythomane": {
+      "name": "Mythomane",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=16&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lbD8DodiOiP8D61lidIi88DIiPqi8o6P&kind=1",
+      "sourceTitle": "Mythomane",
+      "imageSha256": "9db652be617fe51b80166f2b386e4e96e1e9fea811ee48a957cc04111d202871",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:41:11.900657+00:00"
+    },
+    "New Century": {
+      "name": "New Century",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=o068b00O6QD8lo9O1i9PbQlqO6IQOidD&kind=1",
+      "sourceTitle": "New Century",
+      "imageSha256": "878bd4798d1e535c9e050fe7a8906c9dec485c31178914f2c6377bbb2677a805",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:41:11.985509+00:00"
+    },
+    "New Decade": {
+      "name": "New Decade",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=o0l1Qioq1i9iQl6b9q6il0iqi1b1OQ9b&kind=1",
+      "sourceTitle": "New Decade",
+      "imageSha256": "fbef10299f8d5d968fd4bc7e0ab785d6fcd8be94455f35ddd969ddc83bbc9b6d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:41:19.784883+00:00"
+    },
+    "New Generation": {
+      "name": "New Generation",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6i99bQI11qD818DDdq6qb0Dql880lP8l&kind=1",
+      "sourceTitle": "New Generation",
+      "imageSha256": "4ade7ddaa261fbf4709fa8255f300b600c37fa5ee886855e917b39f75521719a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:41:19.884032+00:00"
+    },
+    "New Millennium": {
+      "name": "New Millennium",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=q96q9D9oIIOQl8QQ60ii19P0Dbq8Q609&kind=1",
+      "sourceTitle": "New Millennium",
+      "imageSha256": "4f57bac86cf7a97504a673db88f5f88024c83b5b7ce93f453dc6ee489f1e215d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:41:27.395998+00:00"
+    },
+    "New York EVOLVED (Type C)": {
+      "name": "New York EVOLVED (Type C)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Od8ld9bQQPDddIqDQ1PloOOdQ0IQo0O9&kind=1",
+      "sourceTitle": "New York EVOLVED (Type C)",
+      "imageSha256": "d9f1665b6da5e32bb28c801c2c92a954da8a167c87fad7fa678ba924b5a15034",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:41:27.189363+00:00"
+    },
+    "New York EVOLVED Type B": {
+      "name": "New York EVOLVED Type B",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=61P0I66id16QIi08Q1918PlldOOiooql&kind=1",
+      "sourceTitle": "New York EVOLVED (Type B)",
+      "imageSha256": "d9f1665b6da5e32bb28c801c2c92a954da8a167c87fad7fa678ba924b5a15034",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:10.189215+00:00"
+    },
+    "No Life Queen [DJ Command Remix]": {
+      "name": "No Life Queen [DJ Command Remix]",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=I9P1dbOqD1qIP8bd9O80Ooo869bldobD&kind=1",
+      "sourceTitle": "No Life Queen [DJ Command Remix]",
+      "imageSha256": "e30f25c03f60c16aa37fd255ae1e7e1075cbf10e84dd84465b2ecc3cb75655e4",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:10.408572+00:00"
+    },
+    "ORCA": {
+      "name": "ORCA",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=99OQb9b0IQ98P6IQdPOiqi8q16o16iqP&kind=1",
+      "sourceTitle": "ORCA",
+      "imageSha256": "217d881dfe9fa9ad90698db3305a7786c9d41d3fecd039d5debe364a2a0570f6",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:14.913683+00:00"
+    },
+    "ORION.78～civilization mix～": {
+      "name": "ORION.78～civilization mix～",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=61ido0DPl8q0dI1i011Do1b6669dPIlo&kind=1",
+      "sourceTitle": "ORION.78～civilization mix～",
+      "imageSha256": "7f339174223812f1506b5487d6dd6a4ca04dfc7d7b5192a3da34f1bcae683e8d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:14.964133+00:00"
+    },
+    "On The Break": {
+      "name": "On The Break",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=d88boiQ609PO8ODDo6IliPIb69I80dlP&kind=1",
+      "sourceTitle": "On The Break",
+      "imageSha256": "6c5b3dce1b302e2d0a70354fc0c61ff04454b07406ab78521815904d97a17c43",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:19.475359+00:00"
+    },
+    "Over The “Period”": {
+      "name": "Over The “Period”",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6bid6d9qPQ80DOqiidQQ891o6Od8801l&kind=1",
+      "sourceTitle": "Over The “Period”",
+      "imageSha256": "386f29a131302a09a1da4c381ad89eec95632fd25d586b7ec237e24fb84653e4",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:19.267897+00:00"
+    },
+    "PANIC HOLIC": {
+      "name": "PANIC HOLIC",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=9IlP00lPi6oOQQqOl1DoI0o10bi1iid1&kind=1",
+      "sourceTitle": "PANIC HOLIC",
+      "imageSha256": "b630fe19f4344a25c1d6c06a792ac59fe8ffd3c9274861162f3a9a8eadc8cf97",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:24.906677+00:00"
+    },
+    "PARANOIA EVOLUTION": {
+      "name": "PARANOIA EVOLUTION",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=DPQo8Q0l9D8IPiDiq11l8OI6i11OOb6O&kind=1",
+      "sourceTitle": "PARANOIA EVOLUTION",
+      "imageSha256": "7ae614f526ba6a9404f75365a9edec45373d996e2a4a27f69f891955749b4f94",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:25.012019+00:00"
+    },
+    "PARANOIA survivor": {
+      "name": "PARANOIA survivor",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=O9Id8Qi6OIDIQ6bPi610q0001l1P099q&kind=1",
+      "sourceTitle": "PARANOIA survivor",
+      "imageSha256": "c8830cd8219fcc105c6f9f65fb800fa3cd48a6792dc7572c8358f4770d93fab9",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:30.427620+00:00"
+    },
+    "PARANOiA Revolution": {
+      "name": "PARANOiA Revolution",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=606b9d6OiliId69bO9Odi6qq8o8Qd0dq&kind=1",
+      "sourceTitle": "PARANOiA Revolution",
+      "imageSha256": "aa928cf588b4364b920b10729f9e155bb735366201838962ef2b1d7a06141859",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:30.292637+00:00"
+    },
+    "PARANOiA ～HADES～": {
+      "name": "PARANOiA ～HADES～",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=io1d1Dq80Di08O1Pb9bQ8DoP9d9Ooi90&kind=1",
+      "sourceTitle": "PARANOiA ～HADES～",
+      "imageSha256": "8b1c0c47a3509e9ff832a859ec4957bb4f8e21f06c85dfd2dd4bafd2ccb1a9fe",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:38.560792+00:00"
+    },
+    "PARANOiA-Respect-": {
+      "name": "PARANOiA-Respect-",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=IP00ID9bdlOoP9o9lo1qlO0D1Pdo9I8l&kind=1",
+      "sourceTitle": "PARANOiA-Respect-",
+      "imageSha256": "1d54069b2292bbd935d596b412542a9391fcf31e0396245726a154edfd7b50fd",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:38.630167+00:00"
+    },
+    "POSSESSION": {
+      "name": "POSSESSION",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=q6di1DQbi88i9QlPol1iIPbb8lP1qP1b&kind=1",
+      "sourceTitle": "POSSESSION",
+      "imageSha256": "663676746e0285b027cb1e26fc2a91d79ab46776f2c3fd03e9a0c772cb4c5555",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:47.750239+00:00"
+    },
+    "Pluto": {
+      "name": "Pluto",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=dD6PqbboDil89DPIID86Pldi6obI1b8l&kind=1",
+      "sourceTitle": "Pluto",
+      "imageSha256": "c458d5e0657844cde5e04406e537f04f90591fc262b9ada3ff3192967690741c",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:47.777027+00:00"
+    },
+    "Pluto The First": {
+      "name": "Pluto The First",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=PIO8dod8P9OOP1bi0D1POIi6OdOdQDql&kind=1",
+      "sourceTitle": "Pluto The First",
+      "imageSha256": "b999f49e9a8005fcabcad094a2cc6e87fafe455923cdbf14aad19f043baf4b39",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:54.594602+00:00"
+    },
+    "Prey": {
+      "name": "Prey",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=18&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=i916bDibPI9l869o9IIQb8DbO9bPDi6q&kind=1",
+      "sourceTitle": "Prey",
+      "imageSha256": "cd8d1a2466909c0fc86e6075903cf04b4671975d4948506ed447a0f6f4d12383",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:44:54.854981+00:00"
+    },
+    "REVOLUTIONARY ADDICT": {
+      "name": "REVOLUTIONARY ADDICT",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=19&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=O0Id19qQlDibiDdIP90o81bOo16qbQ0o&kind=1",
+      "sourceTitle": "REVOLUTIONARY ADDICT",
+      "imageSha256": "dbc9ee24c0adbc8d81965019ffd46bff6fffae27375e56c4fc509ccee249555e",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:00.796561+00:00"
+    },
+    "Rave in the Shell": {
+      "name": "Rave in the Shell",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=19&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=PIl8P90Pll19Pido608olD61QIqq0b9d&kind=1",
+      "sourceTitle": "Rave in the Shell",
+      "imageSha256": "d51605c5749c4ca47b00add13800784327a0fd79c479acfea802da751359b094",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:00.835920+00:00"
+    },
+    "Reach The Sky， Without you": {
+      "name": "Reach The Sky， Without you",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=19&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=POq8OPlOO9199i11Od0P00801Qo01DQo&kind=1",
+      "sourceTitle": "Reach The Sky, Without you",
+      "imageSha256": "86f0fb4c7779adf3747cb230605baca0ff274b2ac8171bc70040ebed61fd9488",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:06.031489+00:00"
+    },
+    "Roche Limit": {
+      "name": "Roche Limit",
+      "sourceTitle": "Roche Limit",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/25th/music/index.html",
+      "sourceImage": "https://eacache.s.konaminet.jp/game/ddr/25th/img/music/jk/10.jpg",
+      "evidenceMatchNotes": "Exact title in the song’s own result list item; paired image URL is under the official DDR 25th music/jk directory, not a promotional banner.",
+      "imageSha256": "3c154ffed363ea673bfc98641a3ddb892c6924e85a931b09bdc6bea902b8cd4e",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:06.960853+00:00"
+    },
+    "Romancing Layer": {
+      "name": "Romancing Layer",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=19&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=iQqbdqOlqlPP11d1qI8lO6iQb19dO991&kind=1",
+      "sourceTitle": "Romancing Layer",
+      "imageSha256": "f56c2747d7896dfd4a97960811ca29558ead5b2a5c1f8a73bff0d4556704c063",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:13.064050+00:00"
+    },
+    "S!ck": {
+      "name": "S!ck",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=20&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=QOPioi8P81q9l0QiP6q06b06bdOO8b1O&kind=1",
+      "sourceTitle": "S!ck",
+      "imageSha256": "5a27f98747b5273aa44f67d852bc2cd94b8de2f79dfdaeb7f5a29e9674e19614",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:13.098808+00:00"
+    },
+    "SABER WING (Akira Ishihara Headshot mix)": {
+      "name": "SABER WING (Akira Ishihara Headshot mix)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=20&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=PIP60POo0dDQlIiqO9bIQ1oddQD8P9Il&kind=1",
+      "sourceTitle": "SABER WING (Akira Ishihara Headshot mix)",
+      "imageSha256": "efcdfaf26bb1819bbf1225f030866c0385d0ea765ab0575e175516977edc27d6",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:22.982363+00:00"
+    },
+    "SILVER☆DREAM": {
+      "name": "SILVER☆DREAM",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=21&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Q6ql0lOOdq90DI1PqO1bd10bP0Oi8Q0Q&kind=1",
+      "sourceTitle": "SILVER☆DREAM",
+      "imageSha256": "d6fc022282b6ba8373b9825b5b00a2680fb713d9bb0e8cec6c21b96eff2452ba",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:22.992558+00:00"
+    },
+    "SISYPHUS": {
+      "name": "SISYPHUS",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=21&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lliDD9qPqiIDI8P9bb18IO60l9D061Io&kind=1",
+      "sourceTitle": "SISYPHUS",
+      "imageSha256": "eaae57e8387412c761512f7b39e5f4d885f6af5f1f9817b91123c8df9603f6e3",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:32.420024+00:00"
+    },
+    "STAY GOLD": {
+      "name": "STAY GOLD",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=22&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=989od088q99DPIIq6IQidI1IQ1qQOlb6&kind=1",
+      "sourceTitle": "STAY GOLD",
+      "imageSha256": "c33786d35a98f3a55a24308e2134b38568cbedfa7e5fe23b0959218bb21800bc",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:32.621557+00:00"
+    },
+    "STERLING SILVER (U1 overground mix)": {
+      "name": "STERLING SILVER (U1 overground mix)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=22&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=oqPii6QDdPOI6lDDQ96DOI8ill61bobd&kind=1",
+      "sourceTitle": "STERLING SILVER (U1 overground mix)",
+      "imageSha256": "ef510c5b3e2cbad0824032e7c52faabca31a6c7efb7ecd9722ba2dfe669c6fac",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:38.630143+00:00"
+    },
+    "Sakura Sunrise": {
+      "name": "Sakura Sunrise",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=20&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6lD1ooDi8Pdl0OlO0QoIioI8119I0PPq&kind=1",
+      "sourceTitle": "Sakura Sunrise",
+      "imageSha256": "f22ab44fba1eedca68ab57e01e685c16dcaae1685f2b2947820110744399142b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:38.631558+00:00"
+    },
+    "Second Heaven": {
+      "name": "Second Heaven",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=20&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=9bI0dQdb01Dl1bQq1Pq998i0l096D99P&kind=1",
+      "sourceTitle": "Second Heaven",
+      "imageSha256": "341a8efb286e3303455a63cf5c9c80559075e1a2ef70c2e56d2d6cf7ac6d5323",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:44.035319+00:00"
+    },
+    "Shiny World": {
+      "name": "Shiny World",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=20&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=b6ldDOq9qi1IiIIdiIl1108q1iQ9O6d6&kind=1",
+      "sourceTitle": "Shiny World",
+      "imageSha256": "5465fb297623cc299d231de871a277e4582583ea6f9fd438169be0e9bd703c01",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:44.022220+00:00"
+    },
+    "Silly Love": {
+      "name": "Silly Love",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=21&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Q8bIddo10ilqbd6I8QOq1bod1OO8dqlO&kind=1",
+      "sourceTitle": "Silly Love",
+      "imageSha256": "58f5ce2d45c88c4518e62a9c32e6fe8be140e506a20a09f0685b6785055089d8",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:50.928290+00:00"
+    },
+    "Snow Garland Fairy": {
+      "name": "Snow Garland Fairy",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=21&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=8ql0DIiI0D9D1OP0qb8olo9bIQdP0ddq&kind=1",
+      "sourceTitle": "Snow Garland Fairy",
+      "imageSha256": "a8e09643d6cc4cefa51bae5b6fd3834154fab5f8beb7960e6a629cb06754e7c1",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:50.924638+00:00"
+    },
+    "Squeeze": {
+      "name": "Squeeze",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=21&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=D9I8d1PDOQ8QqP1o1IIi0o8d6660ddOQ&kind=1",
+      "sourceTitle": "Squeeze",
+      "imageSha256": "bf3932983db644396f44d501dd7cf07636b6da6840df0757ae46ac182c6a8a5b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:56.031892+00:00"
+    },
+    "Star Trail": {
+      "name": "Star Trail",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=22&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=I1DiOI16Id0qdlqbQ6ObPlilDP1oiI98&kind=1",
+      "sourceTitle": "Star Trail",
+      "imageSha256": "db14c106e1a2be0606c7061a59c94bc3da6a6900f1f4b1b9347b48ef5fb2484a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:45:56.058047+00:00"
+    },
+    "Starlight Fantasia (Endorphins Mix)": {
+      "name": "Starlight Fantasia (Endorphins Mix)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=21&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1QqObIQPDOq6bI6iOqDiiI66oDQQidlb&kind=1",
+      "sourceTitle": "Starlight Fantasia (Endorphins Mix)",
+      "imageSha256": "2a9596fc09fae943b9f56cee79fd11545d84f4bfe08683672360d5592da715e8",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:01.936788+00:00"
+    },
+    "StrayedCatz": {
+      "name": "StrayedCatz",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=22&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=li6dD9b8dboOd9bbqli886lDl08IPQ00&kind=1",
+      "sourceTitle": "StrayedCatz",
+      "imageSha256": "a4d873d7f5511e8cbc921c7b0f4641547b9f179a0ee3f24b1ebc9f529106e13a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:02.035160+00:00"
+    },
+    "Synergy For Angels": {
+      "name": "Synergy For Angels",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=22&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=b9IoO68b1Qd9I6O8qqoo6q1o8DQ8l9lo&kind=1",
+      "sourceTitle": "Synergy For Angels",
+      "imageSha256": "b82fb903aca2a8d934fc69f5a21a2f05b8d7a611a49c3b2f61c1df6a6c1af1d5",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:09.516056+00:00"
+    },
+    "S・A・G・A": {
+      "name": "S・A・G・A",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=20&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=iObdoO9b1O9o8dP8o0id9b1QioQ0q9q9&kind=1",
+      "sourceTitle": "S・A・G・A",
+      "imageSha256": "69f82332d2d1fbc004e6472f4c9676414465e066be651b17d316e70a37a746b1",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:09.268213+00:00"
+    },
+    "THIS IS MY LAST RESORT": {
+      "name": "THIS IS MY LAST RESORT",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=23&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Q88dlIQDd9lbiiiio0dddO6QP6O091lI&kind=1",
+      "sourceTitle": "THIS IS MY LAST RESORT",
+      "imageSha256": "15546c8ae56408887fadbe6683755083b23f33580ba63cfdfb96bf0f9974ffce",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:15.193215+00:00"
+    },
+    "TRIP MACHINE CLIMAX（X-Special）": {
+      "name": "TRIP MACHINE CLIMAX（X-Special）",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=24&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=boQPliilD01OD1bIdOOIOOi0Q9P16OlO&kind=1",
+      "sourceTitle": "TRIP MACHINE CLIMAX(X-Special)",
+      "imageSha256": "37f29d9280fde4641e68f6c730ad0f9673f2f0d65a95103ef6c5ee7ca27cd3cb",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:15.302745+00:00"
+    },
+    "TRIP MACHINE EVOLUTION": {
+      "name": "TRIP MACHINE EVOLUTION",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=24&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=8O6b1D9PDO0ll1IO9d1ODDPPo0QPQbob&kind=1",
+      "sourceTitle": "TRIP MACHINE EVOLUTION",
+      "imageSha256": "9bce68c9772cf6d93a758a7bdd56994a3c8260365bc28d025b67a157c7907eae",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:20.226255+00:00"
+    },
+    "TYPHØN": {
+      "name": "TYPHØN",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=24&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=i0Q0o98q0DqbbiDd6966QIIoddlob6lI&kind=1",
+      "sourceTitle": "TYPHØN",
+      "imageSha256": "4096e89bf85ee7083083486f2395c24df51ea8c9f007e283243c1fa8af67ad36",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:20.330546+00:00"
+    },
+    "The Ashes of Boreas": {
+      "name": "The Ashes of Boreas",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=23&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lO990qi9qq9II1boI10ObdbbolQ1Ii0i&kind=1",
+      "sourceTitle": "The Ashes of Boreas",
+      "imageSha256": "6588464bb960197cbca78b45071bc2ece03cbaa0ea7a32f2ce83e665285e3efc",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:26.766513+00:00"
+    },
+    "The History of the Future": {
+      "name": "The History of the Future",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=23&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Q8bIDb60oPo890oi0l0O9PQd9lOb8o1Q&kind=1",
+      "sourceTitle": "The History of the Future",
+      "imageSha256": "f69f8dd3427ad1100bbe698db08798b819547a6db457c4070817bd958c04be71",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:26.855232+00:00"
+    },
+    "The legend of MAX(X-Special)": {
+      "name": "The legend of MAX(X-Special)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=23&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1o6dQqq9P8IQ6PbQO88OI1b91P9DoqQ8&kind=1",
+      "sourceTitle": "The legend of MAX(X-Special)",
+      "imageSha256": "f0a0a04605d10fcf3dc2338510087b8d5f4ebce67c58ee4b3945d02bac623b2b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:32.504286+00:00"
+    },
+    "Throw Out": {
+      "name": "Throw Out",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=23&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=9oll10Dq1qdbPQl68OQ8dOd9q86999i1&kind=1",
+      "sourceTitle": "Throw Out",
+      "imageSha256": "51198831d6c9091cccaf32f8162481c59819ce24a3c638238233c6541c3b5b7d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:32.236111+00:00"
+    },
+    "Tohoku EVOLVED": {
+      "name": "Tohoku EVOLVED",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=23&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=OddDoQ6dqi0QdQDDOO6qlO08d8bPbli1&kind=1",
+      "sourceTitle": "Tohoku EVOLVED",
+      "imageSha256": "17a20ead9c84e3da1ad52bc6a4191aa6f3a6f5abd792592cf992b9517a48f249",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:38.338769+00:00"
+    },
+    "Top The Charts": {
+      "name": "Top The Charts",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=24&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=l9i996ld6PbbiO1911OoOI8lIPQ06ID8&kind=1",
+      "sourceTitle": "Top The Charts",
+      "imageSha256": "99e694ac020999fd9347f503621736ca7664fb1d39e542799d8d77c6d3e41618",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:38.286304+00:00"
+    },
+    "Triple Counter": {
+      "name": "Triple Counter",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=24&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=d810q0I8q6d0l1POlIO6d66bOPb96dql&kind=1",
+      "sourceTitle": "Triple Counter",
+      "imageSha256": "f3e4bb97f5126a5a7d72dd94134b5359dd911fb1e6962454c28f5da3b9a892ce",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:44.090825+00:00"
+    },
+    "Triple Journey -TAG EDITION-": {
+      "name": "Triple Journey -TAG EDITION-",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=24&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lDOPd60Q9obl6D0q8qqdQi9lioblD1db&kind=1",
+      "sourceTitle": "Triple Journey -TAG EDITION-",
+      "imageSha256": "75041cb2f6f9c62269314278c653987b399c7e357db6ecb87ac3b31dbf56ae57",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:44.096997+00:00"
+    },
+    "Unreality": {
+      "name": "Unreality",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=24&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=boDqoIDqDlP1io6bQ0O10diDbbqOD96I&kind=1",
+      "sourceTitle": "Unreality",
+      "imageSha256": "555b7d49c0c8ce7c0837dd61ee8f7131799fc15aeb6a48e2043a73d67f80699b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:49.231093+00:00"
+    },
+    "VANESSA": {
+      "name": "VANESSA",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6d6bqoOlqi8ooqOdlqdPblqol88b68QP&kind=1",
+      "sourceTitle": "VANESSA",
+      "imageSha256": "590863026c225f8bb5a17d7ef7ba622fb0d7a3486288b6eb526bc7d4380b11a6",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:49.173974+00:00"
+    },
+    "Valkyrie dimension": {
+      "name": "Valkyrie dimension",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=186dd6DQq891Ib9Ilq8Qbo8lIqb0Qoll&kind=1",
+      "sourceTitle": "Valkyrie dimension",
+      "imageSha256": "daf1d1ac29555350f7cda1ae146470cd2a67d111a474a18e0468b8eb8c3e850e",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:54.863127+00:00"
+    },
+    "We're so Happy": {
+      "name": "We're so Happy",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=I6DdI9O1Oo8O9lo1D08ldOllo0o166I8&kind=1",
+      "sourceTitle": "We're so Happy",
+      "imageSha256": "546def1298a53ba093ad5affea44c0881ae2f9e515a3b45e3a32a55b36e27189",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:46:55.094651+00:00"
+    },
+    "Wolf's Rain": {
+      "name": "Wolf's Rain",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=qPDO188oQ0i1b8b1b9OPoO0I10lPbQbi&kind=1",
+      "sourceTitle": "Wolf's Rain",
+      "imageSha256": "18722a22a86ee7005eb12c888b7a553a87ea05ea0437fbe9dca35c7d46fd150c",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:00.874400+00:00"
+    },
+    "Wuv U": {
+      "name": "Wuv U",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6DPiPD9qDboDlP8qq61Q89qPP0dIO0OI&kind=1",
+      "sourceTitle": "Wuv U",
+      "imageSha256": "ac6be6b6229f03c5407962a05786dd1f39aa5cd47e21ec0d930f6f64dc0ac301",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:01.105767+00:00"
+    },
+    "Xepher": {
+      "name": "Xepher",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=PQQd6lQlDqilqliI0IobolqIDlo0Iboq&kind=1",
+      "sourceTitle": "Xepher",
+      "imageSha256": "3cd8fa7bd335f3d8d02f6469aa47310d7447f4c4c48791ba6af85f1aabfc1efe",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:05.844103+00:00"
+    },
+    "ZETA～素数の世界と超越者～": {
+      "name": "ZETA～素数の世界と超越者～",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=96QPqq0q6Id0Ii0QbD1bQqPbiDqb0lPo&kind=1",
+      "sourceTitle": "ZETA～素数の世界と超越者～",
+      "imageSha256": "24e2624329d1a06d549c8fd4a1dd7c4dce796dee8668f7e0472cb27d92f4315a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:05.885265+00:00"
+    },
+    "bag": {
+      "name": "bag",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=6&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=9qbdq1PiI1O81P1PdioQli66Ob9QiiQP&kind=1",
+      "sourceTitle": "bag",
+      "imageSha256": "d80b4fbb9c8d55b6411c949cc15b0bf209cef163646727ac7e7250f990c5de12",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:13.538962+00:00"
+    },
+    "chaos eater": {
+      "name": "chaos eater",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=8&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1iQIIPdQQOOlP9l90oPdIi60D9OOlqoQ&kind=1",
+      "sourceTitle": "chaos eater",
+      "imageSha256": "260daa35649dc05d5d44b9e7ccc9720865d9af15a38096ed941002cf9d6fb94f",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:13.598800+00:00"
+    },
+    "fluctus": {
+      "name": "fluctus",
+      "sourceTitle": "fluctus",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/25th/music/index.html",
+      "sourceImage": "https://eacache.s.konaminet.jp/game/ddr/25th/img/music/jk/29.jpg",
+      "evidenceMatchNotes": "Exact title in the song’s own result list item; paired image URL is under the official DDR 25th music/jk directory, not a promotional banner.",
+      "imageSha256": "34fa454da94e1b7b760da2d45b9863e58f1ebccd96d126afe42551a94bf65028",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:21.295345+00:00"
+    },
+    "heron": {
+      "name": "heron",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=13&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=DibOOIOD1id66O0DqOQ61O6I9bIIQQ0q&kind=1",
+      "sourceTitle": "heron",
+      "imageSha256": "c51bf2399cc05f1e4b5aaf6ef4cb47b8b71876ee6bf9b74d261aed6997bfff5f",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:20.583589+00:00"
+    },
+    "insist": {
+      "name": "insist",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=14&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6oIO00P8bdqqbP9qlqIqDP1Q1d9PD0qi&kind=1",
+      "sourceTitle": "insist",
+      "imageSha256": "6d58923a136d5b03848d185bd7f64e673e1c6a4b75cd40d902b3da56735e7131",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:26.340725+00:00"
+    },
+    "neko＊neko": {
+      "name": "neko＊neko",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Po09DbIQ9QPoboQi0900lbbOqDoPbIod&kind=1",
+      "sourceTitle": "neko＊neko",
+      "imageSha256": "c980be8220ea00d032a083cf14da1667d3418c7838ccfffab57ac663f3f45133",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:26.397802+00:00"
+    },
+    "osaka EVOLVED -毎度、おおきに！- (TYPE2)": {
+      "name": "osaka EVOLVED -毎度、おおきに！- (TYPE2)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=8006PP188Qldob68ld6OPqlbl1biod6D&kind=1",
+      "sourceTitle": "osaka EVOLVED -毎度、おおきに！- (TYPE2)",
+      "imageSha256": "37363e8f12bc15cef3bf886871faa1af344c6a9f10a06b99729c3b37c6d9818c",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:31.283688+00:00"
+    },
+    "out of focus": {
+      "name": "out of focus",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=17&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=I6qdO8Di181P6Q9Ooq0d8d0DOdq1dOOQ&kind=1",
+      "sourceTitle": "out of focus",
+      "imageSha256": "32b52b604954f4ada70260ff53d3ad567d6a5c7f08e1d5a5cb7f1f974c02003a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:31.263001+00:00"
+    },
+    "roppongi EVOLVED ver.C": {
+      "name": "roppongi EVOLVED ver.C",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=19&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lb9Qo61bbOdQidlQQD8DP8199Q911Id9&kind=1",
+      "sourceTitle": "roppongi EVOLVED ver.C",
+      "imageSha256": "42fa952af554afbcbab3081b3f989756c3883249f110ca5f697fea02db9793e2",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:36.479556+00:00"
+    },
+    "roppongi EVOLVED ver.D": {
+      "name": "roppongi EVOLVED ver.D",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=20&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=l8q6diIod06OdP11P6I8oIddiPo16DPd&kind=1",
+      "sourceTitle": "roppongi EVOLVED ver.D",
+      "imageSha256": "ab6981d6de28155e83a69e852194343d15a98c1ba6b7f3e70e923c53b3a71b1d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:36.595653+00:00"
+    },
+    "snow prism": {
+      "name": "snow prism",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=21&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=OQbdD9iD898Q01oIddDliq8q9D1QlQ1I&kind=1",
+      "sourceTitle": "snow prism",
+      "imageSha256": "e5bc0eb762d20f0603cf8a7d2a0be70eec7341dbdc3c1b15760d9b011c0dd892",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:42.256925+00:00"
+    },
+    "starmine": {
+      "name": "starmine",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=21&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=l666Dd0bIO9O69boPd898b19bPDo1IdO&kind=1",
+      "sourceTitle": "starmine",
+      "imageSha256": "8f890180126101a0d4691b27392d6a5716b0860e86843e3c34ec8152e5ecdb00",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:42.308643+00:00"
+    },
+    "tokyoEVOLVED (TYPE3)": {
+      "name": "tokyoEVOLVED (TYPE3)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=23&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6OOd69q0oP8iblIIb08OQO9dq9oIq8i6&kind=1",
+      "sourceTitle": "tokyoEVOLVED (TYPE3)",
+      "imageSha256": "84c8ff5f6672644294ec0e412bc7390a9c63b3dea9d50af9a8cc3002a6cde0cb",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:48.021060+00:00"
+    },
+    "toy boxer": {
+      "name": "toy boxer",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=24&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=d9QO9odlI18i96I6DQPld1iiol8ODl0o&kind=1",
+      "sourceTitle": "toy boxer",
+      "imageSha256": "e78dd6d77113e9b82875cf64826407f098bc3aeb3ecec3cabe4b35c0460dee5a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:48.016082+00:00"
+    },
+    "volcano": {
+      "name": "volcano",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=8idID0Pq0O68Qb0Q69P6IDldqI91qi1O&kind=1",
+      "sourceTitle": "volcano",
+      "imageSha256": "911107c7dcae80a64a238f624129179bc1791e9fedfc934e2eec26b5b6f46a36",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:53.045717+00:00"
+    },
+    "xenon": {
+      "name": "xenon",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=25&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=bDDd08iP8dlIlOo6iqd91dPiI1lQdOQq&kind=1",
+      "sourceTitle": "xenon",
+      "imageSha256": "fda7e775e07a757a398182fcc182a1775f53ea94ca3f58a5270056d20c6bd1bf",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:52.933569+00:00"
+    },
+    "ΔMAX": {
+      "name": "ΔMAX",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=9&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=QQldo10ObPPQPlliODiDIIl0Q1oPoo61&kind=1",
+      "sourceTitle": "ΔMAX",
+      "imageSha256": "01e302eb3869cbf7e058d8d4c125ba10ec4e90f3c5b2365fa0cbc43fa35fd7a5",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:59.469041+00:00"
+    },
+    "ちゅ～いん☆バニー": {
+      "name": "ちゅ～いん☆バニー",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lIQ1608o9O6bdoPO0ooi8io8i6q6bO1b&kind=1",
+      "sourceTitle": "ちゅ～いん☆バニー",
+      "imageSha256": "7456ad8be9341747087fb6afd2971426217f68195d4e3210d7852327bb085351",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:47:59.584586+00:00"
+    },
+    "めうめうぺったんたん！！": {
+      "name": "めうめうぺったんたん！！",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=4&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=db1DlQ9qqI8PiqPD6q88O1P8PDbP11dq&kind=1",
+      "sourceTitle": "めうめうぺったんたん！！",
+      "imageSha256": "0e7a7f84aa2ad15b5edea15b300e74de59dfe720478cf5eeaaabcb6c26800cce",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:05.820287+00:00"
+    },
+    "アドレナリン": {
+      "name": "アドレナリン",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=0&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=111O66bbPIQb09PlIoolIOD666QqqIdP&kind=1",
+      "sourceTitle": "アドレナリン",
+      "imageSha256": "07da6191bf09a7358ef637ccf63bd80f69bc08f12d7daa1f06553424f10c6cc4",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:05.685969+00:00"
+    },
+    "クリムゾンゲイト": {
+      "name": "クリムゾンゲイト",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=1&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=q6iD8idqo69qIPl00IQidoq1o1o1d1b9&kind=1",
+      "sourceTitle": "クリムゾンゲイト",
+      "imageSha256": "4ded8f8677302aa7b2383ea456872ac2ccc6745b2f7a8486e1c34e4953765eb3",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:11.324131+00:00"
+    },
+    "シュレーディンガーの猫": {
+      "name": "シュレーディンガーの猫",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=DIiQbd09D0PoIiPl9iP1q8qldOOqol8i&kind=1",
+      "sourceTitle": "シュレーディンガーの猫",
+      "imageSha256": "8ef7c5fff0595b2ecac2c45144f3a0dc2aeadb04fe2805f7b1abc698c17a5acf",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:11.253537+00:00"
+    },
+    "スイーツはとまらない♪": {
+      "name": "スイーツはとまらない♪",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=qoidddb08iIoDOo9DQoO0loPl8lPQ81o&kind=1",
+      "sourceTitle": "スイーツはとまらない♪",
+      "imageSha256": "e06394a7ce01d4faf4e3dbb0f6c0e85b4e564450abee62b1a1f7ac4b020d7a92",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:16.826581+00:00"
+    },
+    "チルノのパーフェクトさんすう教室": {
+      "name": "チルノのパーフェクトさんすう教室",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=P66d8iQQIIQO96qoDdIqi9l19i69D9Dq&kind=1",
+      "sourceTitle": "チルノのパーフェクトさんすう教室",
+      "imageSha256": "c51e84087ff78d27b9e9515fef4d3bb9945b668ac254eb03cd0c3c3bbed601da",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:16.729396+00:00"
+    },
+    "チルノのパーフェクトさんすう教室 (EDM REMIX)": {
+      "name": "チルノのパーフェクトさんすう教室 (EDM REMIX)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Q96Qo0qbQ81odQoqPOOQ98oDbo6Pb1IO&kind=1",
+      "sourceTitle": "チルノのパーフェクトさんすう教室 (EDM REMIX)",
+      "imageSha256": "dbd21d7a11d324a8f4f58fdeb885215ee8ba0b791b30df0af8a1e64a693a8d8e",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:22.893940+00:00"
+    },
+    "デッドボヲルdeホームラン": {
+      "name": "デッドボヲルdeホームラン",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lQ86Pod1b9oI8OiDDoId099di9OI8d9I&kind=1",
+      "sourceTitle": "デッドボヲルdeホームラン",
+      "imageSha256": "485ab892e0797163cd19e3025d8ae12c24a1fcb2295614099c12484f3001c416",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:23.181502+00:00"
+    },
+    "ドーパミン": {
+      "name": "ドーパミン",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=QoODOoqDli0bOoqqDo8ODo1lDI9llblo&kind=1",
+      "sourceTitle": "ドーパミン",
+      "imageSha256": "859cd989c7bbd6a85323392ce9238ee272bb431e731cf72deedb460902d1dd86",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:30.556281+00:00"
+    },
+    "ビューティフル レシート": {
+      "name": "ビューティフル レシート",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=3&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Qb1db18qP1Ib6liPI1668Pq8QPb0QO09&kind=1",
+      "sourceTitle": "ビューティフル レシート",
+      "imageSha256": "c6aa7cb8a9e25071359cf2faf3e16f14192bf907a8855a9cfc9e2f5eed207ce8",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:30.561201+00:00"
+    },
+    "ベィスドロップ・フリークス": {
+      "name": "ベィスドロップ・フリークス",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=4&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=qD6P1ldl09Dqq8QP01bbid0b9IdqobPl&kind=1",
+      "sourceTitle": "ベィスドロップ・フリークス",
+      "imageSha256": "4bf9f9d6616c71d1ad801674e1965d638a43953d99114a0a8e28425cb84db848",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:38.889941+00:00"
+    },
+    "ポラリスノウタ": {
+      "name": "ポラリスノウタ",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=4&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=D6iI9O90il0OoIqP1Q86OIQdDQQilII8&kind=1",
+      "sourceTitle": "ポラリスノウタ",
+      "imageSha256": "ffaa6c91697bc82dc2d3e1b09c77597b5ccd568bac756bc2e487b7efc2fcfd8a",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:38.692244+00:00"
+    },
+    "ヤサイマシ☆ニンニクアブラオオメ": {
+      "name": "ヤサイマシ☆ニンニクアブラオオメ",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=4&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=IQ9ddqDqq908QqQl196DQODQD9Q6oOiQ&kind=1",
+      "sourceTitle": "ヤサイマシ☆ニンニクアブラオオメ",
+      "imageSha256": "384890e8645b74c1e11149740dd131e75d400c46ca1035d0dc491e4235fd7bd2",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:46.090291+00:00"
+    },
+    "ヤマトなでなで♡かぐや姫": {
+      "name": "ヤマトなでなで♡かぐや姫",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=4&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=Q8Q6d00DoIiPolOb9PIO0Pll96O0I1qD&kind=1",
+      "sourceTitle": "ヤマトなでなで♡かぐや姫",
+      "imageSha256": "c3d5efc70eada57f0dd3b14f3d635a7451519380a005661fc7afab90eed609e4",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:46.017695+00:00"
+    },
+    "ラクガキスト": {
+      "name": "ラクガキスト",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=D08qoOdPd8iOO916bOPIIIdqPP6O00iP&kind=1",
+      "sourceTitle": "ラクガキスト",
+      "imageSha256": "a4a0890086d40bef0daccbbd0f4c6e3fc58026bb9efaea064fd1266a982bea09",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:52.867867+00:00"
+    },
+    "ラブキラ☆スプラッシュ": {
+      "name": "ラブキラ☆スプラッシュ",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=loii6b8OODDOl9q0OD88Ibb9I0qO0PPo&kind=1",
+      "sourceTitle": "ラブキラ☆スプラッシュ",
+      "imageSha256": "8abb32a75b4b3c3c82acd749fb26ba0879d3690603d3d4ed57423c4195dbee2d",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:52.846171+00:00"
+    },
+    "ランカーキラーガール": {
+      "name": "ランカーキラーガール",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=D08lqQOPdOO6D6ll690Qd6PdbO111011&kind=1",
+      "sourceTitle": "ランカーキラーガール",
+      "imageSha256": "c467e7a6490bdddeccaa1ce5bfdd5c3cd4cf4e7a0818fb3733c84995cb0e0daa",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:58.669401+00:00"
+    },
+    "不沈艦CANDY": {
+      "name": "不沈艦CANDY",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=4&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=i8O81i0iQdqiI8qqP0oo8IPl9IoId1bO&kind=1",
+      "sourceTitle": "不沈艦CANDY",
+      "imageSha256": "acade668eb3e28699a4a4a1c97f5e0a1bd9bca64b9a4d66a6aeb0b0bacfda8c5",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:48:58.696391+00:00"
+    },
+    "世界の果てに約束の凱歌を -DDR Extended Megamix-": {
+      "name": "世界の果てに約束の凱歌を -DDR Extended Megamix-",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=l9QibD8IoooD9DIl1O8Q0lo89I9qdido&kind=1",
+      "sourceTitle": "世界の果てに約束の凱歌を -DDR Extended Megamix-",
+      "imageSha256": "11feaff5bea7e0fd5c14b3fc335338e37f043f407d0aff1d39b836f5b26abf68",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:04.115071+00:00"
+    },
+    "乙女繚乱 舞い咲き誇れ": {
+      "name": "乙女繚乱 舞い咲き誇れ",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=0&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=i91q8l0bbi8qll000ob6qDiQP891iiql&kind=1",
+      "sourceTitle": "乙女繚乱 舞い咲き誇れ",
+      "imageSha256": "6343794b45a714dc657d99ab2b9a82456313dac22e1ed3b65caa0745d750aca1",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:04.047002+00:00"
+    },
+    "人マニア": {
+      "name": "人マニア",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=3&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=iDli1d0oP8lI6i8Qobbilo86OIPIqQlb&kind=1",
+      "sourceTitle": "人マニア",
+      "imageSha256": "86c0bfc66d616f14fbf56202cfe316f09346f8621fbe15e3badb9cb97166e9d9",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:10.362974+00:00"
+    },
+    "冥": {
+      "name": "冥",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=4&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=iqiqod1l08DlDql98QOi10oibldd8b86&kind=1",
+      "sourceTitle": "冥",
+      "imageSha256": "1e861fd68beda79625317415cf937e3faf0c9a9fc161b542bb5cce1b900c62cc",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:09.763712+00:00"
+    },
+    "初音ミクの消失": {
+      "name": "初音ミクの消失",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=3&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=QlQ9Qb00bI0ob9oDIiPqO1QdQ0o6O0O6&kind=1",
+      "sourceTitle": "初音ミクの消失",
+      "imageSha256": "e3631a8145afe8aaa4e64a916f2aadd1429b1aa46dad1c31d46ebd933116ef9f",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:14.665493+00:00"
+    },
+    "千客万来☆無問題！": {
+      "name": "千客万来☆無問題！",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=loQ0Ibqqo8OO11oI9i9D6o0DDI0PDiOO&kind=1",
+      "sourceTitle": "千客万来☆無問題！",
+      "imageSha256": "5dc4bf0d6f22b6aa87ef2f1192c8488780a2fe235a4fdcf4b95acc9f10e74f91",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:14.769157+00:00"
+    },
+    "地方創生☆チクワクティクス": {
+      "name": "地方創生☆チクワクティクス",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=91dD6iqPO066do99169POPbQPbo9o6oq&kind=1",
+      "sourceTitle": "地方創生☆チクワクティクス",
+      "imageSha256": "0d6b0829cd74083cdb1b9f7ddc70b36cc59abf1ec0e93f1ed529394a8ef138db",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:23.164708+00:00"
+    },
+    "恋の氷結おてんば湯けむりチルノ温泉": {
+      "name": "恋の氷結おてんば湯けむりチルノ温泉",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=1&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6l99bqIQOQl0QQDIoiQ6PQPOoDPlD0O9&kind=1",
+      "sourceTitle": "恋の氷結おてんば湯けむりチルノ温泉",
+      "imageSha256": "687bf0768ff4cf838eede6e8db327cdafb078de0c621b33b41f44db7a2ef78dc",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:23.523286+00:00"
+    },
+    "恋愛観測": {
+      "name": "恋愛観測",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=iP8ll9I0dd8d689PPqlI9008d06io09q&kind=1",
+      "sourceTitle": "恋愛観測",
+      "imageSha256": "a5fccabbd6b0aad0b1d30af529edf930dbcaa2bc5a449368759c27465182e5aa",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:29.154369+00:00"
+    },
+    "恋閃繚乱": {
+      "name": "恋閃繚乱",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=lOb8O16P9P81olPdI1o1Dl9I6QQoIqIP&kind=1",
+      "sourceTitle": "恋閃繚乱",
+      "imageSha256": "428ed3d69a97b25ef014e39543ffc36307945230cc80205911e26f5677cc3b40",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:29.061130+00:00"
+    },
+    "患部で止まってすぐ溶ける～狂気の優曇華院": {
+      "name": "患部で止まってすぐ溶ける～狂気の優曇華院",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=1&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6OIoOPDb9iI8i1Do9qQ96Q0ddOdd6q9i&kind=1",
+      "sourceTitle": "患部で止まってすぐ溶ける～狂気の優曇華院",
+      "imageSha256": "3b0fa63ae2ba3f8c85f47b59ceaa1f48f006f19f16a552a6fec13ee95648de03",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:36.082034+00:00"
+    },
+    "斑咲花": {
+      "name": "斑咲花",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=4&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=I86OI9lQ1qQ66dPDlddo8PoPo01PO66i&kind=1",
+      "sourceTitle": "斑咲花",
+      "imageSha256": "14563290ef81534cb2e0e8447c55ea642be88f8ad94480e93a0684c361c166c6",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:36.099214+00:00"
+    },
+    "最小三倍完全数": {
+      "name": "最小三倍完全数",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=1&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=O9qDQOQO8dDDIiO9dPP0Pb8qQo9l89D9&kind=1",
+      "sourceTitle": "最小三倍完全数",
+      "imageSha256": "8d9faf2d828f8b02ad8e8f0f28dbe1e56ba62c254b3c4efc733a7515b5212ab6",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:41.669867+00:00"
+    },
+    "最終鬼畜妹フランドール・Ｓ": {
+      "name": "最終鬼畜妹フランドール・Ｓ",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=1&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=i0P1O6lbP1oDd6q6b08iPPoq6iPdI818&kind=1",
+      "sourceTitle": "最終鬼畜妹フランドール・Ｓ",
+      "imageSha256": "7b0e16675b2bd6de7bfadcddaa182657b488f71f8c3b9bbfdf5b356c7050567b",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:41.620944+00:00"
+    },
+    "灼熱Beach Side Bunny": {
+      "name": "灼熱Beach Side Bunny",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=6dO6i9qq601D8ild9QIlbO8bodbiQ1Pl&kind=1",
+      "sourceTitle": "灼熱Beach Side Bunny",
+      "imageSha256": "6e7fa45a39441f40cf2e2f17151473c7444937e73bcb77e071b313690dbf8b31",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:48.879257+00:00"
+    },
+    "熱情のサパデアード": {
+      "name": "熱情のサパデアード",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=3&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=P160qOD09PQoOPI6iIOO69qDoqQl1qDQ&kind=1",
+      "sourceTitle": "熱情のサパデアード",
+      "imageSha256": "1d64fd192d1f8304b7c2c776f7eefb8f1f51b29b86ca7a7cc344134586ed81e6",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:48.902558+00:00"
+    },
+    "走れメロンパン": {
+      "name": "走れメロンパン",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=3&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=diPbi6I8O1lQ1b9lO0q8IoqDqbD9P6dP&kind=1",
+      "sourceTitle": "走れメロンパン",
+      "imageSha256": "17a999b5563698a6c1bffe9537c69a070e216852887cd8554b6a4c51c2e65f40",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:55.858524+00:00"
+    },
+    "阿波おどり -Awaodori- やっぱり踊りはやめられない": {
+      "name": "阿波おどり -Awaodori- やっぱり踊りはやめられない",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=0&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=1d9lDIl6iiiD0D0d8qd6dlDlq6P8o0QI&kind=1",
+      "sourceTitle": "阿波おどり -Awaodori- やっぱり踊りはやめられない",
+      "imageSha256": "45c8b8fbbf7c82ac456febdb2f3ea83212b6c432669a2c37d2ee4743a510806c",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:49:55.954041+00:00"
+    },
+    "隅田川夏恋歌": {
+      "name": "隅田川夏恋歌",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=ibI69PPO1iP0D1IlI0bb11QOq6081POo&kind=1",
+      "sourceTitle": "隅田川夏恋歌",
+      "imageSha256": "23452ac3e6e0424af6e7e1dbae6328aa29fdd1e4d7c0906ab224a13c07460585",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:50:02.961454+00:00"
+    },
+    "革命(X-Special)": {
+      "name": "革命(X-Special)",
+      "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=0&filter=7",
+      "sourceImage": "https://p.eagate.573.jp/game/ddr/ddrworld/images/binary_jk.html?img=qIqqdd1Odqi1Iiolq9qqPOi0bPPld8Pb&kind=1",
+      "sourceTitle": "革命(X-Special)",
+      "imageSha256": "a74c469b804678c22f2d1ece8a9cf86969518329a30e396571d66eb883bd072f",
+      "sourceDimensions": [
+        200,
+        200
+      ],
+      "sampledAt": "2026-10-06T12:50:03.102561+00:00"
+    }
+  },
+  "coverage": {
+    "totalSongs": 213,
+    "sampledSongs": 206,
+    "unresolved": [
+      "3y3s",
+      "Bad Maniacs",
+      "Fly Like You",
+      "Ganymede -re:born-",
+      "Thunderstorm",
+      "コメット⇒スケイター",
+      "恋歌疾風！かるたクイーンいろは"
+    ]
+  },
+  "paletteFile": "/bpl/jacket-colors.json",
+  "paletteSha256": "51793c168f31543c89ddccc74e0353c5c442dce5c1f545a59037d1e5b6016914"
+}

@@ -3,17 +3,29 @@
  *   BASE_URL=http://127.0.0.1:3000 node tests/bpl-history.browser.mjs
  * Requires Playwright in the runner (NODE_PATH is supported) and a Chromium
  * installation. Set CHROMIUM_PATH only when using a system browser.
+ * Set BPL_SCREENSHOT_OUTPUT to save desktop/mobile card, detail and versus PNGs.
  * No browser or package is downloaded by this script.
  */
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { readFile } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
+import { resolve, join } from 'node:path';
 const require=createRequire(import.meta.url);
 const { chromium }=require('playwright');
+const sharp=require('sharp');
 const data=JSON.parse(await readFile(new URL('../public/bpl/data.json',import.meta.url),'utf8'));
+const jacketColors=JSON.parse(await readFile(new URL('../public/bpl/jacket-colors.json',import.meta.url),'utf8'));
+const missingJackets=['3y3s','Bad Maniacs','Fly Like You','Ganymede -re:born-','Thunderstorm','コメット⇒スケイター','恋歌疾風！かるたクイーンいろは'];
+const screenshotOutput=process.env.BPL_SCREENSHOT_OUTPUT?resolve(process.env.BPL_SCREENSHOT_OUTPUT):null;
+if(screenshotOutput)await mkdir(screenshotOutput,{recursive:true});
 const base=process.env.BASE_URL||'http://127.0.0.1:3000';
+const externalImageRequests=[];
+function trackImages(ctx){ctx.on('request',request=>{
+  if(request.resourceType()==='image'&&new URL(request.url()).origin!==new URL(base).origin)externalImageRequests.push(request.url());
+});}
 const browser=await chromium.launch({headless:true,...(process.env.CHROMIUM_PATH?{executablePath:process.env.CHROMIUM_PATH}: {})});
 const context=await browser.newContext({viewport:{width:1280,height:900},serviceWorkers:'block'});
+trackImages(context);
 await context.addInitScript(()=>{
   Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.__copied=text}}});
 });
@@ -35,6 +47,118 @@ function checkPlayerLink(value,id){
   assert.equal(trimPlaintextPunctuation(value+'.)'),value);
   assert.equal(new URL(value).searchParams.get('id'),id);
   if(id.includes('.'))assert.ok(value.includes('%2E'),value);
+}
+
+async function readyOn(target,view,id){
+  await target.waitForFunction(({view,id})=>{const p=new URLSearchParams(location.search);return p.get('view')===view&&(!id||p.get('id')===id)&&!document.querySelector('main .loading')},{view,id});
+}
+async function screenshot(target,name){
+  if(screenshotOutput)await target.screenshot({path:join(screenshotOutput,name+'.png'),animations:'disabled'});
+}
+async function checkJacket(target,size,palette=null){
+  assert.equal(await target.count(),1);
+  const actual=await target.evaluate(element=>{
+    const style=getComputedStyle(element),box=element.getBoundingClientRect();
+    const metrics=({width,height,fontFamily,fontSize,lineHeight,letterSpacing})=>({width,height,fontFamily,fontSize,lineHeight,letterSpacing});
+    // Compare dimensions and typography to the old symbol in the same parent.
+    const fallback=element.cloneNode(false);
+    fallback.classList.remove('music-gradient');fallback.classList.add('music-symbol');fallback.removeAttribute('style');fallback.textContent='♪';
+    element.after(fallback);const previous=metrics(getComputedStyle(fallback));fallback.remove();
+    return {width:box.width,height:box.height,metrics:metrics(style),previous,
+      variables:['tl','tr','bl','br'].map(key=>style.getPropertyValue('--jacket-'+key).trim()),
+      background:style.backgroundImage,borderWidth:style.borderTopWidth,borderStyle:style.borderTopStyle,borderColor:style.borderTopColor,
+      aria:element.getAttribute('aria-hidden'),html:element.outerHTML,text:element.textContent};
+  });
+  assert.equal(actual.width,size);assert.equal(actual.height,size);
+  assert.deepEqual(actual.metrics,actual.previous,'jacket gradients must retain the existing dimensions and font');
+  assert.equal(actual.aria,'true');assert.doesNotMatch(actual.html,/<img|https?:|url\(/i);
+  assert.equal(actual.borderWidth,'1px');assert.equal(actual.borderStyle,'solid');
+  assert.notEqual(actual.borderColor,'transparent');assert.notEqual(actual.borderColor,'rgba(0, 0, 0, 0)');
+  if(palette){
+    assert.deepEqual(actual.variables,['topLeft','topRight','bottomLeft','bottomRight'].map(key=>palette[key].toLowerCase()));
+    assert.equal(actual.text,'');assert.match(actual.html,/music-gradient/);
+    assert.equal((actual.background.match(/radial-gradient\(/g)||[]).length,3);
+    assert.doesNotMatch(actual.background,/url\(|linear-gradient\(/i);
+  }else{
+    assert.equal(actual.text,'♪');assert.match(actual.html,/music-symbol/);assert.equal(actual.background,'none');
+  }
+}
+async function checkPaleJacket(target){
+  const {data:pixels,info}=await sharp(await target.screenshot({animations:'disabled'})).removeAlpha().raw().toBuffer({resolveWithObject:true});
+  for(const [x,y] of [[.25,.25],[.75,.25],[.25,.75],[.75,.75],[.5,.5]]){
+    const offset=(Math.floor(y*info.height)*info.width+Math.floor(x*info.width))*info.channels;
+    assert.ok([...pixels.subarray(offset,offset+3)].every(channel=>channel>170),'pale Cosy palette must remain visible against the dark surrounding surface');
+  }
+  const parentColor=await target.evaluate(element=>getComputedStyle(element.closest('.match-card,.song,td')).backgroundColor);
+  assert.ok(parentColor==='rgba(0, 0, 0, 0)'||parentColor.match(/\d+/g).slice(0,3).every(channel=>Number(channel)<100),parentColor);
+}
+async function checkGradientLayout(label,viewport){
+  const ctx=await browser.newContext({viewport,isMobile:label==='mobile',hasTouch:label==='mobile',deviceScaleFactor:1,serviceWorkers:'block'});
+  trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
+  const sizes=label==='mobile'?{mini:28,duel:44,detail:76}:{mini:34,duel:60,detail:96};
+  try{
+    // Use a real pale record in the archive, including its real score and title.
+    const match=data.matches.find(m=>m.season===5&&m.battles.some(b=>b.songs.some(s=>s.name==='Cosy Catastrophe')));
+    const titles=match.battles.flatMap(b=>b.songs.map(s=>s.name));
+    await target.goto(base+'/bpl/s?view=seasons&season=5');await readyOn(target,'seasons');
+    const card=target.locator(`.match-card[data-match="${match.id}"]`);
+    const cosyMini=card.locator('.music-jacket').nth(titles.indexOf('Cosy Catastrophe'));
+    await checkJacket(cosyMini,sizes.mini,jacketColors.songs['Cosy Catastrophe']);await checkPaleJacket(cosyMini);
+    await screenshot(target.locator('.match-list'),label+'-jacket-card-grid');
+    await card.click();await readyOn(target,'match',match.id);
+    const cosyDetail=target.locator('#dialog-content .song').filter({has:target.locator('.song-title strong').filter({hasText:'Cosy Catastrophe'})}).locator('.music-jacket');
+    await checkJacket(cosyDetail,sizes.detail,jacketColors.songs['Cosy Catastrophe']);await checkPaleJacket(cosyDetail);
+    await cosyDetail.scrollIntoViewIfNeeded();await screenshot(target.locator('#match-dialog'),label+'-jacket-detail');
+    await target.locator('#close-dialog').click();await readyOn(target,'seasons');
+    await target.goto(base+'/bpl/s?view=versus&a=HIBIKI&b=NOTTY&vsSeason=5&vsFormat=all');await readyOn(target,'versus');
+    const cosyDuel=target.locator('.duel-song-heading').filter({has:target.locator('.duel-song-name').filter({hasText:'Cosy Catastrophe'})}).locator('.music-jacket');
+    await checkJacket(cosyDuel,sizes.duel,jacketColors.songs['Cosy Catastrophe']);await checkPaleJacket(cosyDuel);
+    await screenshot(target.locator('.duel-table'),label+'-jacket-versus');
+
+    // Verify all seven known missing titles use their actual card and detail ♪,
+    // without inventing a replacement palette or relying on a single fixture.
+    await target.goto(base+'/bpl/s?view=seasons');await readyOn(target,'seasons');
+    for(const title of missingJackets){
+      const missingMatch=data.matches.find(m=>m.battles.some(b=>b.songs.some(s=>s.name===title)));
+      const missingTitles=missingMatch.battles.flatMap(b=>b.songs.map(s=>s.name));
+      const missingCard=target.locator(`.match-card[data-match="${missingMatch.id}"]`);
+      await checkJacket(missingCard.locator('.music-jacket').nth(missingTitles.indexOf(title)),sizes.mini);
+      await missingCard.click();await readyOn(target,'match',missingMatch.id);
+      const detail=target.locator('#dialog-content .song').filter({has:target.locator('.song-title strong').filter({hasText:title})}).locator('.music-jacket');
+      assert.ok(await detail.count(),title);
+      for(const jacket of await detail.all())await checkJacket(jacket,sizes.detail);
+      await target.locator('#close-dialog').click();await readyOn(target,'seasons');
+    }
+  }finally{await ctx.close()}
+}
+async function checkOptionalJacketFailure(failure){
+  const ctx=await browser.newContext({viewport:{width:1280,height:900},serviceWorkers:'block'});trackImages(ctx);
+  await ctx.addInitScript(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.__copied=text}}}));
+  const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
+  try{
+    if(['module','both'].includes(failure))await target.route('**/bpl/jackets.js',route=>route.abort('failed'));
+    if(failure.startsWith('palette-')||failure==='both')await target.route('**/bpl/jacket-colors.json',route=>{
+      if(['palette-network','both'].includes(failure))return route.abort('failed');
+      if(failure==='palette-status')return route.fulfill({status:503,contentType:'application/json',body:'{}'});
+      return route.fulfill({status:200,contentType:'application/json',body:'{invalid JSON'});
+    });
+    await target.goto(base+'/bpl/s?view=seasons&season=5');await readyOn(target,'seasons');
+    assert.equal(await target.locator('.match-card').count(),data.matches.filter(m=>m.season===5).length);
+    assert.ok(await target.locator('.music-symbol.mini-jacket').count());assert.equal(await target.locator('.music-gradient').count(),0);
+    await target.selectOption('#team-filter','round1');assert.equal(new URL(target.url()).searchParams.get('team'),'round1');
+    await target.locator('nav a[href="#players"]').click();await readyOn(target,'players');
+    await target.fill('#player-search','O4MA.');await target.locator('#player-grid a[href="#player/O4MA."]').click();await readyOn(target,'player','O4MA.');
+    await target.locator('.share-toolbar [data-share-action="copy"]').click();checkPlayerLink(await target.evaluate(()=>window.__copied),'O4MA.');
+    await target.goBack();await readyOn(target,'players');assert.equal(await target.locator('#player-search').inputValue(),'O4MA.');
+    await target.goForward();await readyOn(target,'player','O4MA.');
+    await target.locator('nav a[href="#seasons"]').click();await readyOn(target,'seasons');
+    const card=target.locator('.match-card').first(),id=await card.getAttribute('data-match');
+    await card.click();await readyOn(target,'match',id);
+    assert.ok(await target.locator('#dialog-content .music-symbol').count());assert.equal(await target.locator('#dialog-content .music-gradient').count(),0);
+    await target.goBack();await readyOn(target,'seasons');assert.equal(await target.locator('#match-dialog').evaluate(dialog=>dialog.open),false);
+    await target.goForward();await readyOn(target,'match',id);assert.equal(await target.locator('#match-dialog').evaluate(dialog=>dialog.open),true);
+    await target.keyboard.press('Escape');await readyOn(target,'seasons');assert.equal(await target.locator('#match-dialog').evaluate(dialog=>dialog.open),false);
+  }finally{await ctx.close()}
 }
 try {
   // Repeated entity navigation must retain the selected entity and roster scope.
@@ -132,6 +256,10 @@ try {
   for(const [key,value] of Object.entries({matrixSeason:'5',matrixFormat:'single',matrixCategory:'GOLD',matrixStyle:'TRICKY'}))assert.equal(await page.locator('#'+key).inputValue(),value);
   for(const roster of ['all','0']){await goto('/bpl/s?view=team&id=round1&rosterSeason='+roster,'team','round1');assert.equal(await page.locator('#team-roster-season').inputValue(),'6');assert.equal(param('rosterSeason'),'6')}
 
+  await checkGradientLayout('desktop',{width:1280,height:900});
+  await checkGradientLayout('mobile',{width:390,height:844});
+  for(const failure of ['palette-network','palette-status','palette-json','module','both'])await checkOptionalJacketFailure(failure);
+
   // Simulate future official data at the fetch boundary, without changing source data.
   await page.route('**/bpl/data.json',async route=>{
     const fixture=structuredClone(data);fixture.matches.push({...structuredClone(data.matches[0]),id:'s6-future',season:6,points:[99,1]});
@@ -142,5 +270,6 @@ try {
   await page.locator('#s6-reveal-all').click();await page.waitForURL(u=>u.searchParams.get('hideResults')==='0');assert.match(await page.locator('.dialog-score').innerText(),/99 : 1/);
   await back('s6');assert.equal(await page.locator('#s6-spoilers').isChecked(),true);
   await forward('match','s6-future');await modal(true);assert.match(await page.locator('.dialog-score').innerText(),/99 : 1/);
-  assert.deepEqual(errors,[]);console.log('BPL browser history regressions passed');
+  assert.deepEqual(externalImageRequests,[],'BPL must not request external jacket or other image assets');
+  assert.deepEqual(errors,[]);console.log('BPL browser history and jacket regressions passed'+(screenshotOutput?' (screenshots: '+screenshotOutput+')':''));
 } finally {await context.close();await browser.close()}
