@@ -217,9 +217,8 @@ async function checkPinnedMatchClose(label,viewport){
     await target.waitForFunction(()=>{const n=document.querySelector('#dialog-content');return Math.abs(n.scrollHeight-n.clientHeight-n.scrollTop)<2});
     await checkPinned();assert.equal(await target.locator('.dialog-season').evaluate(node=>node.getBoundingClientRect().bottom<document.querySelector('#dialog-content').getBoundingClientRect().top),true,'large match header scrolls away normally');
     await screenshot(target,label+'-match-close-bottom');
-    await close.focus();assert.equal(await target.evaluate(()=>document.activeElement?.id),'close-dialog');
-    assert.ok(await close.evaluate(node=>parseFloat(getComputedStyle(node).outlineWidth)>=3),'keyboard focus remains visible');
-    await checkPinned();await target.keyboard.press('Shift+Tab');assert.equal(await body.evaluate(node=>node.contains(document.activeElement)),true);await target.keyboard.press('Tab');assert.equal(await target.evaluate(()=>document.activeElement?.id),'close-dialog');
+    await close.focus();await checkPinned();await target.keyboard.press('Shift+Tab');assert.equal(await body.evaluate(node=>node.contains(document.activeElement)),true);await target.keyboard.press('Tab');assert.equal(await target.evaluate(()=>document.activeElement?.id),'close-dialog');
+    assert.ok(await close.evaluate(node=>parseFloat(getComputedStyle(node).outlineWidth)>=3),'keyboard focus remains visible after real Tab navigation');
     let box=await checkPinned();
     if(mobile)await target.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);else await target.mouse.click(box.x+box.width/2,box.y+box.height/2);
     await readyOn(target,'seasons');assert.equal(target.url(),underlying);assert.equal(await dialog.evaluate(node=>node.open),false);assert.equal(await target.evaluate(()=>document.activeElement?.dataset.match),match.id);
