@@ -193,7 +193,7 @@ function syncMatrixDetail(page){
  if(!['s6','preview','matrix'].includes(page.view)||!validMatrixPair(state.matrixA,state.matrixB)){resetMatrixDetail();return}
  const path=Routing.routePath({...page,filters:{...state}});
  if(path!==renderedMatrixPath){renderMatrixDetail(state.matrixA,state.matrixB);renderedMatrixPath=path;matrixReturnFocus=[...document.querySelectorAll('[data-matrix-a]')].find(button=>button.dataset.matrixA===state.matrixA&&button.dataset.matrixB===state.matrixB)||null}
- if(!matrixDialog.open)matrixDialog.showModal();syncDialogScrollLock();
+ if(!matrixDialog.open){matrixDialog.showModal();document.querySelector('#matrix-dialog-content').scrollTop=0}syncDialogScrollLock();
 }
 // Keep Tab wrapping inside the top detail dialog rather than browser chrome.
 for(const modal of [dialog,matrixDialog])modal.addEventListener('keydown',event=>{
