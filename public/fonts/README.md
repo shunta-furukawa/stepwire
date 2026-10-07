@@ -19,3 +19,11 @@ It retains the original font name; the SIL OFL in `OFL-DelaGothicOne.txt` applie
 The subset includes printable ASCII plus characters in the BPL data, share model,
 and image renderer. Regenerate with `python3 scripts/subset-bpl-font.py`
 (requires fontTools + brotli) when adding new names or card copy.
+
+## Original BPL team nameplates
+
+`BplTeam.ttf` is an ASCII-only subset of DejaVu Sans Condensed Bold. Its Bitstream
+Vera / DejaVu license is in `LICENSE-BplTeam.txt`. `BplTeamJapanese.otf` contains
+only the glyphs for レジャーランド from Noto Sans CJK Bold, licensed under the
+SIL Open Font License in `OFL-BplTeamJapanese.txt`. These are ordinary fonts used
+consistently for every team; they are not official team logo lettering.

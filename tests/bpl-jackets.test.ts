@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import { describe, expect, it } from 'vitest';
 import * as jackets from '../public/bpl/jackets.js';
+import * as nameplates from '../public/bpl/nameplates.js';
 import * as standings from '../public/bpl/standings.js';
 import palettes from '../public/bpl/jacket-colors.json';
 import provenance from '../docs/bpl-jacket-palettes.json';
@@ -39,10 +40,10 @@ function renderHarness(colors: unknown = palettes, module: unknown = jackets) {
     document: { querySelector: get, getElementById: (id: string) => get('#' + id), querySelectorAll: () => [], createElement: () => new Node(), addEventListener() {}, body: { style: {} } },
     window: { addEventListener() {} },
     allArchiveMatches: data.matches, s6SessionPrefs: { hideResults: true },
-    inputStandings:standings,inputData: structuredClone(data), inputBrand: structuredClone(brand), inputColors: colors, inputJackets: module, inputFilters: routing.defaultFilters,
+    inputStandings:standings,inputData: structuredClone(data), inputBrand: structuredClone(brand), inputColors: colors, inputJackets: module, inputNameplates: nameplates, inputFilters: routing.defaultFilters,
   });
   vm.runInContext(readFileSync('public/bpl/seasons.js', 'utf8') + '\n' + script.slice(0, bootStart) + script.slice(bootEnd), ctx);
-  vm.runInContext('Standings=inputStandings;D=inputData;B=inputBrand;Jackets=inputJackets;JacketColors=inputColors;Object.assign(state,inputFilters);for(const [id,t] of Object.entries(B.teams))Object.assign(D.teams[id],t)', ctx);
+  vm.runInContext('Standings=inputStandings;D=inputData;B=inputBrand;Jackets=inputJackets;Nameplates=inputNameplates;JacketColors=inputColors;Object.assign(state,inputFilters);for(const [id,t] of Object.entries(B.teams))Object.assign(D.teams[id],t)', ctx);
   return { run: (code: string) => vm.runInContext(code, ctx), get };
 }
 
@@ -195,7 +196,7 @@ describe('BPL shipped jacket rendering and optional-resource resilience', () => 
     const calls: string[] = [];
     const main = { innerHTML: '' };
     const ctx = vm.createContext({
-      D: undefined, B: undefined, Matrix: undefined, Routing: undefined, Jackets: undefined, JacketColors: undefined, main,
+      D: undefined, B: undefined, Matrix: undefined, Routing: undefined, Jackets: undefined, JacketColors: undefined, Nameplates: undefined, main,
       fetch: async (path: string) => {
         if (path.endsWith('jacket-colors.json')) {
           if (['palette-network', 'both'].includes(failure)) throw new Error('offline');
@@ -207,6 +208,7 @@ describe('BPL shipped jacket rendering and optional-resource resilience', () => 
         return { ok: true, json: async () => path.endsWith('data.json') ? structuredClone(data) : path.endsWith('brand.json') ? structuredClone(brand) : {} };
       },
       testImport: async (path: string) => {
+        if (path.endsWith('nameplates.js')) return nameplates;
         if (path.endsWith('jackets.js')) {
           if (['module', 'both'].includes(failure)) throw new Error('module unavailable');
           return jackets;
@@ -222,6 +224,7 @@ describe('BPL shipped jacket rendering and optional-resource resilience', () => 
     expect(calls).toEqual(['s6', 'navigation', 'sharing', 'route']);
     expect(main.innerHTML).toBe('');
     expect(ctx.D.matches).toHaveLength(data.matches.length);
+    expect(ctx.Nameplates).toBe(nameplates);
     expect(ctx.Jackets).toBe(['module', 'both'].includes(failure) ? null : jackets);
     if (failure.startsWith('palette-') || failure === 'both') expect(jackets.paletteForTitle(ctx.JacketColors, 'Cosy Catastrophe')).toBeNull();
     else expect(ctx.JacketColors).toBe(palettes);

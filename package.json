@@ -26,7 +26,7 @@
     "rights:check": "node --test scripts/bpl-asset-policy.test.mjs && node scripts/check-bpl-assets.mjs",
     "rights:audit": "node scripts/audit-article-assets.mjs",
     "test:bpl:images": "node --import tsx tests/bpl-share-images.mjs",
-    "test:bpl:browser": "node tests/bpl-history.browser.mjs"
+    "test:bpl:browser": "node tests/bpl-nameplates.browser.mjs && node tests/bpl-history.browser.mjs"
   },
   "dependencies": {
     "@types/three": "0.184.0",

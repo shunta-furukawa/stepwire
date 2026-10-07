@@ -165,3 +165,74 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
 
 /* Avoid a lingering native tap highlight floating above the newly opened modal. */
 .matrix-cell,#matrix-dialog .matrix-songs button{-webkit-tap-highlight-color:transparent}
+
+/* Original team-name plates: one type system, full season-aware names, no logos.
+   Keep isolated from legacy image-box rules and use size variants per context. */
+@font-face{font-family:BplTeam;src:url('/fonts/BplTeam.ttf') format('truetype');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:BplTeamJapanese;src:url('/fonts/BplTeamJapanese.otf') format('opentype');font-weight:700;font-style:normal;font-display:swap}
+.team-nameplate{--np-unit:24px;--np-main:1;--np-top:.43;position:relative;isolation:isolate;display:inline-flex;flex:none;align-items:center;justify-content:flex-start;width:128px;max-width:100%;min-width:0;height:68px;margin:0;padding:10px 9px 11px;border:1px solid rgba(var(--team-rgb),.55);border-left:4px solid var(--team);border-radius:0;background:linear-gradient(130deg,rgba(var(--team-rgb),.14),rgba(var(--team-rgb),.025) 70%),#15161a;color:#f5f5f0;font-family:BplTeam,'Arial Narrow',Arial,sans-serif;font-style:normal;font-weight:700;text-align:left;text-transform:none;vertical-align:middle;overflow:hidden;line-height:1}
+.team-nameplate::after{content:"";position:absolute;z-index:-1;top:-20%;right:3%;height:140%;width:30px;border-left:8px solid rgba(var(--team-rgb),.085);border-right:8px solid rgba(var(--team-rgb),.085);transform:skew(-22deg);pointer-events:none}
+.nameplate-copy{display:block;min-width:0;max-width:100%}
+.nameplate-top,.nameplate-main{display:block;max-width:100%;color:inherit;font-family:inherit;font-weight:700;font-style:normal;text-transform:none;white-space:nowrap;overflow-wrap:normal;word-break:normal}
+.nameplate-top{font-size:max(11px,calc(var(--np-unit)*var(--np-top)));line-height:1.12;letter-spacing:0;margin-bottom:3px}
+.nameplate-main{font-size:calc(var(--np-unit)*var(--np-main));line-height:1.02;letter-spacing:-.045em}
+.np-short{--np-main:1.45}.np-mid{--np-main:.94}.np-equal{--np-main:.82;--np-top:.82}.np-equal .nameplate-top{letter-spacing:-.025em;margin-bottom:1px}.np-long-split{--np-main:.9;--np-top:.54}.np-long-split .nameplate-top{letter-spacing:-.035em}.np-long{--np-main:.6}.np-long .nameplate-main{letter-spacing:-.055em}.np-jp{--np-main:.55}.np-jp .nameplate-main{font-family:BplTeamJapanese,'Hiragino Sans','Yu Gothic',sans-serif;letter-spacing:-.04em;line-height:1.25}.np-fallback .nameplate-main{font-size:16px;white-space:normal;overflow-wrap:anywhere;line-height:1.25}
+.team-nameplate.team-card-logo{--np-unit:34px;width:172px;height:116px;max-width:calc(100% - 62px);padding:15px 14px 20px}
+.team-nameplate.team-card-logo::before,.team-nameplate.team-hero-logo::before{content:"";position:absolute;left:14px;bottom:10px;width:28px;height:3px;background:var(--team)}
+.team-card-heading{min-width:0}.team-card-heading>.badge{flex:none;white-space:nowrap;font-size:11px}
+.team-nameplate.team-hero-logo{--np-unit:46px;width:230px;height:164px;padding:20px 18px 24px}
+.team-nameplate.team-hero-logo::before{left:18px;bottom:15px;width:36px}
+.team-hero-copy{min-width:0}
+.nameplate-sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+/* A full-name plate replaces the old icon + duplicate name in compact rows. */
+.match-card .team-row{gap:10px;min-height:80px}
+.match-card .team-nameplate.match-logo{flex:1;width:auto;max-width:240px;height:64px;padding:9px 10px;--np-unit:25px}
+.match-card .team-row .result-symbol{margin-left:auto;flex:none}.match-card .team-row .score{flex:none}
+.season-team-filters .team-nameplate{width:100%;max-width:170px;height:64px;--np-unit:24px}
+.season-team-filters button{padding:9px 6px;gap:8px;min-height:103px}
+.pending-teams a{display:block;padding:0;border:0;background:transparent}
+.pending-teams .team-nameplate{width:100%;height:68px;--np-unit:25px}
+.season-finalist{min-width:0}.season-finalist .team-nameplate{width:100%;max-width:210px;height:74px;--np-unit:28px}
+.zero-team .team-nameplate{width:140px;height:74px;--np-unit:28px}.zero-team>span:last-child{flex:none}
+.player-visual>.team-nameplate{width:calc(100% - 130px);max-width:152px;height:76px;--np-unit:27px;margin-bottom:2px}
+.team-name-link .team-nameplate,.history-team .team-nameplate{width:148px;height:68px;--np-unit:27px}
+.vs-identity .team-nameplate{width:148px;height:68px;--np-unit:27px}
+.s6-team-title{align-items:center;flex-wrap:wrap}.s6-team-title h3{margin:0;min-width:0}.s6-team-title a{display:block}.s6-team-title .team-nameplate{width:174px;height:76px;--np-unit:30px}.s6-team-title>.badge{margin-left:auto}
+.s6-preview-team .team-nameplate{width:174px;height:92px;--np-unit:32px}
+#match-dialog .team-nameplate.detail-logo{width:168px;max-width:100%;height:90px;--np-unit:30px;margin:0;padding:12px}
+#match-dialog .dialog-score>div{min-width:0;display:flex;justify-content:center}
+@media(max-width:1050px){.zero-team .team-nameplate{width:100%}.season-team-filters{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:651px) and (max-width:900px){.s6-preview-score{grid-template-columns:repeat(2,minmax(0,1fr))}.s6-preview-score>div:nth-child(2){grid-row:2;grid-column:1/-1}}
+@media(max-width:650px){
+ .team-nameplate.team-card-logo{max-width:calc(100% - 62px)}
+ .team-nameplate.team-hero-logo{margin-bottom:20px}
+ .match-card .team-row{gap:8px;padding:7px 8px 7px 6px}
+ .match-card .team-nameplate.match-logo{--np-unit:24px;max-width:none;padding:9px 8px}
+ .season-team-filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .season-team-filters button{min-height:99px;padding:7px 5px}.season-team-filters .team-nameplate{height:64px;--np-unit:24px;padding:8px}
+ .pending-teams{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.pending-teams .team-nameplate{--np-unit:24px;padding:8px}
+ .season-finalist .team-nameplate{height:68px;--np-unit:25px;padding:9px 7px}
+ .zero-teams{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.zero-team{padding:10px}.zero-team .team-nameplate{height:68px;--np-unit:24px;padding:8px}
+ .player-visual>.team-nameplate{width:calc(100% - 139px);min-width:0;max-width:158px;height:76px;--np-unit:24px;padding:9px 7px}
+ .team-name-link .team-nameplate{width:128px;--np-unit:24px;padding:8px}.history-team .team-nameplate{width:148px}
+ .s6-team-title .team-nameplate{width:174px;max-width:100%;--np-unit:30px}
+ .s6-preview-score{grid-template-columns:repeat(2,minmax(0,1fr))}.s6-preview-score .s6-preview-team{min-width:0;padding:12px 8px}.s6-preview-team .team-nameplate{width:174px;height:80px;--np-unit:26px;padding:10px 8px}
+ #match-dialog .dialog-score{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:18px 0 24px}
+ #match-dialog .dialog-score>strong{grid-row:2;grid-column:1/-1;justify-self:center}
+ #match-dialog .team-nameplate.detail-logo{width:100%;height:80px;--np-unit:25px;padding:10px 8px}
+ .versus-board{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+ .versus-board>.middle{grid-row:2;grid-column:1/-1}
+ .vs-identity .team-nameplate{width:100%;max-width:148px;--np-unit:25px;padding:9px 8px}
+}
+@media(max-width:360px){
+ .team-card-heading{padding:18px 16px;gap:8px}
+ .team-nameplate.team-card-logo{max-width:calc(100% - 57px);padding:15px 12px 20px;--np-unit:32px}
+ .season-finalists{grid-template-columns:minmax(0,1fr)}
+ .season-final-score{min-width:0;flex-wrap:wrap;gap:8px 12px}
+ .standings-groups{grid-template-columns:minmax(0,1fr)}.standings-group{min-width:0}
+ .standings-table{table-layout:fixed}.standings-table thead th{white-space:normal}.standings-table tbody th{width:auto}
+ .standings-table tr>*:nth-child(1){width:10%}.standings-table tr>*:nth-child(2){width:28%}.standings-table tr>*:nth-child(3){width:12%}.standings-table tr>*:nth-child(4){width:24%}.standings-table tr>*:nth-child(5){width:26%}
+ .standing-finish{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+ .season-finalist .team-nameplate{width:180px;--np-unit:28px}
+ .s6-preview-score{gap:8px;padding:14px 5px}.s6-preview-score .s6-preview-team{padding:10px 5px}.s6-preview-team .team-nameplate{padding:9px 6px;--np-unit:23px}
+}
