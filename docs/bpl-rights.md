@@ -51,6 +51,17 @@ At the operator's request, the generic player symbols are replaced with AI-gener
 
 ## Color-only song representations — 2026-10-06
 
-At the operator's request, 206 music-note placeholders are replaced with abstract CSS gradients based on one representative color from each of four quadrants of current public official jacket references. Seven songs without a verified public source association retain the note placeholder. The runtime stores only exact song-title identifiers, stable IDs and four HEX colors; source-image bytes, text and shapes are not reconstructed or bundled. The interface describes these as unofficial color references and does not assert permission or endorsement.
+At the operator's request, 206 music-note placeholders are replaced with abstract CSS gradients based on one representative color from each of four quadrants of current public official jacket references. At that stage, seven songs without a verified public source association retained the note placeholder; the 2026-10-07 completion below supersedes that coverage. The runtime stores only exact song-title identifiers, stable IDs and four HEX colors; source-image bytes, text and shapes are not reconstructed or bundled. The interface describes these as unofficial color references and does not assert permission or endorsement.
 
 `docs/bpl-jacket-palettes.json` contains the technical source/sampling inventory and the palette-file digest. The earlier deleted image archive and Git history are not restored; no byte-for-byte identity with the removed artwork has been asserted. Temporary reference files used for the design study were removed, and the full extraction processed images in memory. This is not a legal clearance. Existing reviewed/generated portrait and original season inventories remain unchanged.
+
+## Color-only completion — 2026-10-07
+
+With operator approval, the final seven note placeholders are now four-color CSS
+palettes, completing all 213 archive titles. Their reference images were verified
+by song title, artist and visible jacket on 三倍 Ice Cream / 3icecream.com. These
+seven are explicitly third-party references, not official source claims or rights
+clearance. The same approved moderate extractor was used without modification.
+All 206 existing palettes and source associations are retained unchanged. Only
+four HEX colors per song, stable IDs and technical provenance were added; no
+reference-image bytes, text or shapes are published or committed.

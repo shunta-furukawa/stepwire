@@ -2,9 +2,24 @@
   "version": 1,
   "startedAt": "2026-10-06T14:38:48.583834+00:00",
   "algorithm": "oklab-moderate-quadrants-v2",
-  "method": "Five Oklab clusters per quadrant; alpha<32 ignored; alpha-weighted cluster area to exponent 0.7 with moderate chroma weighting; clusters under 5% excluded; use the original selector when no eligible cluster has Oklab chroma >=0.06; preserve the existing dark penalty. The representative is an RGB pixel from the at-most-128px analysis thumbnail, closest to the chosen perceptual center. No pixel chroma boost, color invention, RGB averaging, or source-image persistence.",
+  "method": "Five Oklab clusters per quadrant; alpha<32 ignored; alpha-weighted cluster area to exponent 0.7 with moderate chroma weighting; clusters under 5% excluded; use the original selector when no eligible cluster has Oklab chroma >=0.06; preserve the existing dark penalty. The representative is an RGB pixel from the at-most-128px analysis thumbnail, closest to the chosen perceptual center. No pixel chroma boost, color invention, RGB averaging, or source-image pixels in the repository/deployed assets.",
   "rightsStatus": "Technical color provenance only. No copyright or other rights clearance is asserted.",
   "songs": {
+    "3y3s": {
+      "name": "3y3s",
+      "sourcePage": "https://3icecream.com/ddr/song_details/loD8qPl09qqi0o1iqbbDOdllDblioDIl?diff=3",
+      "sourceImage": "https://3icecream.com/img/banners/f/loD8qPl09qqi0o1iqbbDOdllDblioDIl.jpg",
+      "sourceTitle": "3y3s",
+      "sourceArtist": "青龍",
+      "sourceProvider": "三倍 Ice Cream / 3icecream.com",
+      "sourceType": "third-party reference",
+      "imageSha256": "32dac612e84a30a69ec076e300b88e4ab9da49cf9f177723c071567f17e2cfe4",
+      "sourceDimensions": [
+        512,
+        512
+      ],
+      "sampledAt": "2026-10-07T07:02:33Z"
+    },
     "50th Memorial Songs -The BEMANI History-": {
       "name": "50th Memorial Songs -The BEMANI History-",
       "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=26&filter=7",
@@ -172,6 +187,21 @@
         200
       ],
       "sampledAt": "2026-10-06T14:39:26.386542+00:00"
+    },
+    "Bad Maniacs": {
+      "name": "Bad Maniacs",
+      "sourcePage": "https://3icecream.com/ddr/song_details/6O9O0ooOb8O8Q6D0ldqi1O8o6891Iq86?diff=3",
+      "sourceImage": "https://3icecream.com/img/banners/f/6O9O0ooOb8O8Q6D0ldqi1O8o6891Iq86.jpg",
+      "sourceTitle": "Bad Maniacs",
+      "sourceArtist": "kors k as teranoid",
+      "sourceProvider": "三倍 Ice Cream / 3icecream.com",
+      "sourceType": "third-party reference",
+      "imageSha256": "aa3e9b80302472ff07d5633ff6e4bb4d090c8d1d3787b750aa95c2b45ab195f3",
+      "sourceDimensions": [
+        512,
+        512
+      ],
+      "sampledAt": "2026-10-07T07:02:33Z"
     },
     "Blew My Mind": {
       "name": "Blew My Mind",
@@ -581,6 +611,21 @@
       ],
       "sampledAt": "2026-10-06T14:41:10.118642+00:00"
     },
+    "Fly Like You": {
+      "name": "Fly Like You",
+      "sourcePage": "https://3icecream.com/ddr/song_details/Qib986b6oDqPl8IQiOoDOQ06IlbD68bl?diff=0",
+      "sourceImage": "https://3icecream.com/img/banners/f/Qib986b6oDqPl8IQiOoDOQ06IlbD68bl.jpg",
+      "sourceTitle": "Fly Like You",
+      "sourceArtist": "technoplanet",
+      "sourceProvider": "三倍 Ice Cream / 3icecream.com",
+      "sourceType": "third-party reference",
+      "imageSha256": "32525de31a9240ba95886f16899dd9f971c76dcaa131108d74ccfe8b3f191670",
+      "sourceDimensions": [
+        676,
+        676
+      ],
+      "sampledAt": "2026-10-07T07:02:33Z"
+    },
     "GERBERA": {
       "name": "GERBERA",
       "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=12&filter=7",
@@ -604,6 +649,21 @@
         200
       ],
       "sampledAt": "2026-10-06T14:41:17.024407+00:00"
+    },
+    "Ganymede -re:born-": {
+      "name": "Ganymede -re:born-",
+      "sourcePage": "https://3icecream.com/ddr/song_details/Dlo0PPibIoQbOI8I61O1DobQOIiDb11b?diff=4",
+      "sourceImage": "https://3icecream.com/img/banners/f/Dlo0PPibIoQbOI8I61O1DobQOIiDb11b.jpg",
+      "sourceTitle": "Ganymede -re:born-",
+      "sourceArtist": "BEMANI Sound Team \"玄武 feat.二代目朱雀\"",
+      "sourceProvider": "三倍 Ice Cream / 3icecream.com",
+      "sourceType": "third-party reference",
+      "imageSha256": "3dcde14db995bda4f24b7509ce81bdfc65c354f31ad16a7cb04f115c93a85a40",
+      "sourceDimensions": [
+        512,
+        512
+      ],
+      "sampledAt": "2026-10-07T07:02:33Z"
     },
     "Get Your Wish": {
       "name": "Get Your Wish",
@@ -1662,6 +1722,21 @@
       ],
       "sampledAt": "2026-10-06T14:45:59.511858+00:00"
     },
+    "Thunderstorm": {
+      "name": "Thunderstorm",
+      "sourcePage": "https://3icecream.com/ddr/song_details/6lD9PQo88OI0PQ6db0I1l90lbQOP11O0?diff=3",
+      "sourceImage": "https://3icecream.com/img/banners/f/6lD9PQo88OI0PQ6db0I1l90lbQOP11O0.jpg",
+      "sourceTitle": "Thunderstorm",
+      "sourceArtist": "nagomu tamaki",
+      "sourceProvider": "三倍 Ice Cream / 3icecream.com",
+      "sourceType": "third-party reference",
+      "imageSha256": "23c0ba7896323452329f7c12e70179da0c874f5133c33a7a838389dd65238c1f",
+      "sourceDimensions": [
+        512,
+        512
+      ],
+      "sampledAt": "2026-10-07T07:02:33Z"
+    },
     "Tohoku EVOLVED": {
       "name": "Tohoku EVOLVED",
       "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=23&filter=7",
@@ -2059,6 +2134,21 @@
       ],
       "sampledAt": "2026-10-06T14:47:54.071113+00:00"
     },
+    "コメット⇒スケイター": {
+      "name": "コメット⇒スケイター",
+      "sourcePage": "https://3icecream.com/ddr/song_details/9ioI0IQ16OPb1Q0q8Oqdd6D9dPqDb618?diff=4",
+      "sourceImage": "https://3icecream.com/img/banners/f/9ioI0IQ16OPb1Q0q8Oqdd6D9dPqDb618.jpg",
+      "sourceTitle": "コメット⇒スケイター",
+      "sourceArtist": "U-ske feat. 棗いつき",
+      "sourceProvider": "三倍 Ice Cream / 3icecream.com",
+      "sourceType": "third-party reference",
+      "imageSha256": "d0663567e78cd2724fd060f4f5d15ffa1651ff6738d5baff8989df38a2abcccb",
+      "sourceDimensions": [
+        512,
+        512
+      ],
+      "sampledAt": "2026-10-07T07:02:33Z"
+    },
     "シュレーディンガーの猫": {
       "name": "シュレーディンガーの猫",
       "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=2&filter=7",
@@ -2347,6 +2437,21 @@
       ],
       "sampledAt": "2026-10-06T14:49:15.415153+00:00"
     },
+    "恋歌疾風！かるたクイーンいろは": {
+      "name": "恋歌疾風！かるたクイーンいろは",
+      "sourcePage": "https://3icecream.com/ddr/song_details/db6q6DlPd68bbQOOQ99OI1I9QD8PqDo8?diff=2",
+      "sourceImage": "https://3icecream.com/img/banners/f/db6q6DlPd68bbQOOQ99OI1I9QD8PqDo8.jpg",
+      "sourceTitle": "恋歌疾風！かるたクイーンいろは",
+      "sourceArtist": "ねこまんまチーム！",
+      "sourceProvider": "三倍 Ice Cream / 3icecream.com",
+      "sourceType": "third-party reference",
+      "imageSha256": "2fcd9e5835d564c080abc06fc47b350b2d4faca888c2a183121c4eacc912d57d",
+      "sourceDimensions": [
+        676,
+        676
+      ],
+      "sampledAt": "2026-10-07T07:02:33Z"
+    },
     "恋閃繚乱": {
       "name": "恋閃繚乱",
       "sourcePage": "https://p.eagate.573.jp/game/ddr/ddrworld/music/index.html?offset=5&filter=7",
@@ -2482,19 +2587,11 @@
   },
   "coverage": {
     "totalSongs": 213,
-    "sampledSongs": 206,
-    "unresolved": [
-      "3y3s",
-      "Bad Maniacs",
-      "Fly Like You",
-      "Ganymede -re:born-",
-      "Thunderstorm",
-      "コメット⇒スケイター",
-      "恋歌疾風！かるたクイーンいろは"
-    ]
+    "sampledSongs": 213,
+    "unresolved": []
   },
   "paletteFile": "/bpl/jacket-colors.json",
-  "paletteSha256": "c8bcb0b20ac2bb3e3a18e484e6c7ee799ee29ccbf56806293e854ba465361b04",
+  "paletteSha256": "46816739a283c8791a8f595f817083b5d9be074610f435c66c83b119a9090cf7",
   "selector": {
     "areaExponent": 0.7,
     "chromaWeight": 2,
@@ -2519,6 +2616,20 @@
     "allNeutralFallbackSongs": 21,
     "verifiedIdenticalSourceHashes": 206,
     "reproducedBaselineQuadrants": 824,
-    "unresolvedFallbackSongs": 7
+    "unresolvedFallbackSongs": 7,
+    "scope": "2026-10-06 moderate refresh of the original 206 official-source palettes"
+  },
+  "completion": {
+    "sampledAt": "2026-10-07T07:02:33Z",
+    "addedSongs": 7,
+    "addedQuadrants": 28,
+    "unchangedExistingSongs": 206,
+    "unchangedExistingQuadrants": 824,
+    "thirdPartyReferenceSongs": 7,
+    "neutralFallbackQuadrants": 5,
+    "sourceProvider": "三倍 Ice Cream / 3icecream.com",
+    "verification": "Each title and artist was matched on its public song_details page; the loaded jacket image and dimensions were visually checked. Existing 206 palettes and their source associations are unchanged.",
+    "rightsStatus": "Third-party visual references, not official source claims or permission to republish. Only four sampled HEX colors per song are shipped; no source-image pixels are included.",
+    "unresolvedFallbackSongs": 0
   }
 }

@@ -16,7 +16,7 @@ const { chromium }=require('playwright');
 const sharp=require('sharp');
 const data=JSON.parse(await readFile(new URL('../public/bpl/data.json',import.meta.url),'utf8'));
 const jacketColors=JSON.parse(await readFile(new URL('../public/bpl/jacket-colors.json',import.meta.url),'utf8'));
-const missingJackets=['3y3s','Bad Maniacs','Fly Like You','Ganymede -re:born-','Thunderstorm','コメット⇒スケイター','恋歌疾風！かるたクイーンいろは'];
+const completedJackets=['3y3s','Bad Maniacs','Fly Like You','Ganymede -re:born-','Thunderstorm','コメット⇒スケイター','恋歌疾風！かるたクイーンいろは'];
 const screenshotOutput=process.env.BPL_SCREENSHOT_OUTPUT?resolve(process.env.BPL_SCREENSHOT_OUTPUT):null;
 if(screenshotOutput)await mkdir(screenshotOutput,{recursive:true});
 const base=process.env.BASE_URL||'http://127.0.0.1:3000';
@@ -142,19 +142,30 @@ async function checkGradientLayout(label,viewport){
       await sampleDuel.scrollIntoViewIfNeeded();await screenshot(target.locator('.duel-table'),label+'-moderate-'+slug+'-versus');
     }
 
-    // Verify all seven known missing titles use their actual card and detail ♪,
-    // without inventing a replacement palette or relying on a single fixture.
-    await target.goto(base+'/bpl/s?view=seasons');await readyOn(target,'seasons');
-    for(const title of missingJackets){
-      const missingMatch=data.matches.find(m=>m.battles.some(b=>b.songs.some(s=>s.name===title)));
-      const missingTitles=missingMatch.battles.flatMap(b=>b.songs.map(s=>s.name));
-      const missingCard=target.locator(`.match-card[data-match="${missingMatch.id}"]`);
-      await checkJacket(missingCard.locator('.music-jacket').nth(missingTitles.indexOf(title)),sizes.mini);
-      await missingCard.click();await readyOn(target,'match',missingMatch.id);
+    // All seven newly verified references must render at every shipped size,
+    // including actual archived cards, match details and opposing-player rows.
+    for(const title of completedJackets){
+      const match=data.matches.find(m=>m.battles.some(b=>b.songs.some(s=>s.name===title)));
+      const titles=match.battles.flatMap(b=>b.songs.map(s=>s.name));
+      const palette=jacketColors.songs[title],slug=palette.id;
+      await target.goto(base+'/bpl/s?view=seasons');await readyOn(target,'seasons');
+      assert.equal(await target.locator('.music-symbol').count(),0,'all archive songs have palettes');
+      const card=target.locator(`.match-card[data-match="${match.id}"]`);
+      await checkJacket(card.locator('.music-jacket').nth(titles.indexOf(title)),sizes.mini,palette);
+      await screenshot(card,label+'-completed-'+slug+'-card');
+      await card.click();await readyOn(target,'match',match.id);
       const detail=target.locator('#dialog-content .song').filter({has:target.locator('.song-title strong').filter({hasText:title})}).locator('.music-jacket');
       assert.ok(await detail.count(),title);
-      for(const jacket of await detail.all())await checkJacket(jacket,sizes.detail);
+      for(const jacket of await detail.all())await checkJacket(jacket,sizes.detail,palette);
+      await detail.first().scrollIntoViewIfNeeded();await screenshot(target.locator('#match-dialog'),label+'-completed-'+slug+'-detail');
       await target.locator('#close-dialog').click();await readyOn(target,'seasons');
+      const battle=match.battles.find(b=>b.songs.some(s=>s.name===title));
+      const query=new URLSearchParams({view:'versus',a:battle.players[0][0],b:battle.players[1][0],vsSeason:String(match.season),vsFormat:battle.type});
+      await target.goto(base+'/bpl/s?'+query);await readyOn(target,'versus');
+      const duel=target.locator('.duel-song-heading').filter({has:target.locator('.duel-song-name').filter({hasText:title})}).locator('.music-jacket');
+      assert.ok(await duel.count(),title);
+      for(const jacket of await duel.all())await checkJacket(jacket,sizes.duel,palette);
+      await duel.first().scrollIntoViewIfNeeded();await screenshot(target.locator('.duel-table'),label+'-completed-'+slug+'-versus');
     }
   }finally{await ctx.close()}
 }

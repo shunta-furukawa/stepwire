@@ -7,6 +7,13 @@
     "bottomRight"
   ],
   "songs": {
+    "3y3s": {
+      "id": "ddr-1a8ba1b0f7c5",
+      "topLeft": "#701f42",
+      "topRight": "#7f2752",
+      "bottomLeft": "#4e1230",
+      "bottomRight": "#501033"
+    },
     "50th Memorial Songs -The BEMANI History-": {
       "id": "ddr-670ff23d4c76",
       "topLeft": "#b2071a",
@@ -104,6 +111,13 @@
       "topRight": "#2c3c63",
       "bottomLeft": "#4b688d",
       "bottomRight": "#faf5f1"
+    },
+    "Bad Maniacs": {
+      "id": "ddr-b068e3bc70dd",
+      "topLeft": "#d4df90",
+      "topRight": "#ef1b24",
+      "bottomLeft": "#d30525",
+      "bottomRight": "#d81626"
     },
     "Blew My Mind": {
       "id": "ddr-0f2d539405c4",
@@ -343,6 +357,13 @@
       "bottomLeft": "#3f551f",
       "bottomRight": "#6e7d11"
     },
+    "Fly Like You": {
+      "id": "ddr-525deb392e55",
+      "topLeft": "#e9989e",
+      "topRight": "#d57b86",
+      "bottomLeft": "#87c5dc",
+      "bottomRight": "#eff5f3"
+    },
     "GERBERA": {
       "id": "ddr-3fac7dddb64e",
       "topLeft": "#cd6987",
@@ -356,6 +377,13 @@
       "topRight": "#cac99b",
       "bottomLeft": "#6c7373",
       "bottomRight": "#5f716e"
+    },
+    "Ganymede -re:born-": {
+      "id": "ddr-239b7b81af15",
+      "topLeft": "#e5ecea",
+      "topRight": "#42554f",
+      "bottomLeft": "#1b1d1a",
+      "bottomRight": "#748272"
     },
     "Get Your Wish": {
       "id": "ddr-fc8d8cafe068",
@@ -973,6 +1001,13 @@
       "bottomLeft": "#363230",
       "bottomRight": "#5c5656"
     },
+    "Thunderstorm": {
+      "id": "ddr-31a9beb9609b",
+      "topLeft": "#5f5b95",
+      "topRight": "#554e86",
+      "bottomLeft": "#12101a",
+      "bottomRight": "#404770"
+    },
     "Tohoku EVOLVED": {
       "id": "ddr-25761d01c76a",
       "topLeft": "#5cd7c8",
@@ -1204,6 +1239,13 @@
       "bottomLeft": "#161219",
       "bottomRight": "#321117"
     },
+    "コメット⇒スケイター": {
+      "id": "ddr-4e39fb0378fa",
+      "topLeft": "#5e44b3",
+      "topRight": "#35468e",
+      "bottomLeft": "#bd78d3",
+      "bottomRight": "#a588c7"
+    },
     "シュレーディンガーの猫": {
       "id": "ddr-aeb144f3b493",
       "topLeft": "#857199",
@@ -1371,6 +1413,13 @@
       "topRight": "#d9848f",
       "bottomLeft": "#d6477d",
       "bottomRight": "#ef65a6"
+    },
+    "恋歌疾風！かるたクイーンいろは": {
+      "id": "ddr-10cb9aef4c7c",
+      "topLeft": "#fc5e8d",
+      "topRight": "#f86ab1",
+      "bottomLeft": "#f56195",
+      "bottomRight": "#eb669c"
     },
     "恋閃繚乱": {
       "id": "ddr-2e09ec05f35f",
