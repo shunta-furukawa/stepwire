@@ -301,6 +301,7 @@ async function checkMatrixDetailModal(label,viewport){
     await target.goto(base+query());await readyOn(target,'s6');
     const opener=cell(),underlying=target.url(),table=await target.locator('.s6-matrix').innerHTML();
     assert.equal(await opener.getAttribute('aria-haspopup'),'dialog');assert.equal(await opener.getAttribute('aria-controls'),'matrix-dialog');
+    assert.equal(await opener.evaluate(node=>getComputedStyle(node).webkitTapHighlightColor),'rgba(0, 0, 0, 0)','cell tap highlight must not float above the opened modal');
     await openCell(a,b,true);await checkRecords();assert.equal(new URL(target.url()).searchParams.get('view'),'s6');
     const pairUrl=target.url();for(const [key,value] of Object.entries({...teams,...defaults}))assert.equal(new URL(pairUrl).searchParams.get(key),value);
     assert.equal(await dialog.evaluate(node=>node.contains(document.activeElement)),true,'initial focus is within the modal');
@@ -331,6 +332,7 @@ async function checkMatrixDetailModal(label,viewport){
     await openCell();await body.locator('summary').click();
     const song=body.locator('.matrix-songs button').last();await song.scrollIntoViewIfNeeded();
     const scroll=await body.evaluate(node=>node.scrollTop),detailHtml=await body.innerHTML(),matchId=await song.getAttribute('data-match');
+    assert.equal(await song.evaluate(node=>getComputedStyle(node).webkitTapHighlightColor),'rgba(0, 0, 0, 0)','song tap highlight must not float above the nested match');
     assert.ok(scroll>0,'nested match starts from a genuinely scrolled detail');
     await pointClick(song);await readyOn(target,'match',matchId);
     const checkNested=async()=>{

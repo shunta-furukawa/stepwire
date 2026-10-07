@@ -162,3 +162,6 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
 #matrix-dialog .matrix-songs button:hover{border-color:var(--accent)}
 #matrix-dialog .matrix-detail>.button{white-space:normal;overflow-wrap:anywhere}
 @media(max-width:400px){#matrix-dialog th,#matrix-dialog td{padding:10px 4px;font-size:11px}#matrix-dialog .category-chip{font-size:10px;gap:3px}}
+
+/* Avoid a lingering native tap highlight floating above the newly opened modal. */
+.matrix-cell,#matrix-dialog .matrix-songs button{-webkit-tap-highlight-color:transparent}
