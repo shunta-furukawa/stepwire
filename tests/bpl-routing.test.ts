@@ -203,6 +203,77 @@ describe('BPL history and shipped renderers', () => {
     h.run('openMatch("s6-future")');expect(h.get('#dialog-content').scrollTop).toBe(0);
   });
 
+  it('opens matrix pairs without replacing the table; dismissal and history retain exact filters', () => {
+    const h=harness('/bpl/s?view=matrix&previewA=round1&previewB=gigo&matrixSeason=5&matrixFormat=single');
+    const original=h.location.href,writes=h.mainWrites;
+    h.run('openMatrixDetail("O4MA.","UN-LIM")');
+    expect(h.get('#matrix-dialog').open).toBe(true);
+    expect(h.get('#matrix-dialog-content').innerHTML).toContain('O4MA. vs UN-LIM');
+    expect(h.location.searchParams.get('matrixA')).toBe('O4MA.');
+    expect(h.location.searchParams.get('matrixB')).toBe('UN-LIM');
+    expect(h.location.searchParams.get('matrixSeason')).toBe('5');
+    expect(h.location.searchParams.get('matrixFormat')).toBe('single');
+    expect(h.mainWrites).toBe(writes);
+    const length=h.history.length;
+    h.run('openMatrixDetail("O4MA.","UN-LIM")');expect(h.history.length).toBe(length);
+    for(const exit of ['button','cancel','backdrop','back']) {
+      if(exit==='button')h.get('#close-matrix-dialog').onclick?.({});
+      if(exit==='cancel')h.get('#matrix-dialog').dispatch('cancel',{preventDefault(){}});
+      if(exit==='backdrop')h.get('#matrix-dialog').dispatch('click',{target:h.get('#matrix-dialog'),clientX:1,clientY:1});
+      if(exit==='back')h.history.back();
+      h.flush();expect(h.location.href).toBe(original);expect(h.get('#matrix-dialog').open).toBe(false);
+      expect(h.run('document.body.style.overflow')).toBe('');
+      h.history.forward();h.flush();expect(h.get('#matrix-dialog').open).toBe(true);
+    }
+    expect(h.mainWrites).toBe(writes);
+  });
+
+  it('stacks match history above the matrix detail without losing its content or scroll', () => {
+    const h=harness('/bpl/s?view=s6&previewA=round1&previewB=gigo');
+    h.run('openMatrixDetail("O4MA.","UN-LIM")');
+    const pair=h.location.href,body=h.get('#matrix-dialog-content'),markup=body.innerHTML,writes=h.mainWrites;
+    body.scrollTop=700;
+    const match=matrix.matrixRows(data.matches,'O4MA.','UN-LIM')[0]!.matchId;
+    h.run(`openMatch(${JSON.stringify(match)})`);h.flush();
+    expect(h.get('#match-dialog').open).toBe(true);expect(h.get('#matrix-dialog').open).toBe(true);
+    h.get('#close-dialog').onclick?.({});h.flush();
+    expect(h.location.href).toBe(pair);expect(h.get('#match-dialog').open).toBe(false);
+    expect(h.get('#matrix-dialog').open).toBe(true);expect(body.innerHTML).toBe(markup);expect(body.scrollTop).toBe(700);
+    expect(h.run('document.body.style.overflow')).toBe('hidden');expect(h.mainWrites).toBe(writes);
+    h.history.forward();h.flush();expect(h.get('#match-dialog').open).toBe(true);
+    h.history.back();h.flush();h.history.back();h.flush();
+    expect(h.get('#matrix-dialog').open).toBe(false);expect(h.run('document.body.style.overflow')).toBe('');
+  });
+
+  it('supports direct and empty matrix pair links, rejects invalid pairs, and retains whole-table sharing', () => {
+    const direct=harness('/bpl/s?view=matrix&previewA=round1&previewB=gigo&matrixA=O4MA%2E&matrixB=UN-LIM&matrixCategory=POPULAR&matrixStyle=STANDARD');
+    expect(direct.get('#matrix-dialog').open).toBe(true);
+    expect(direct.get('#matrix-dialog-content').innerHTML).toContain('選択中の条件に該当する楽曲記録はありません');
+    const shared=direct.run('shareContext(true).params');
+    expect(shared.get('view')).toBe('matrix');expect(shared.get('matrixVersion')).toBe('2');expect(shared.has('matrixA')).toBe(false);
+    direct.get('#close-matrix-dialog').onclick?.({});direct.flush();
+    expect(direct.location.searchParams.get('view')).toBe('matrix');expect(direct.location.searchParams.has('matrixA')).toBe(false);
+    expect(direct.history.length).toBe(1);
+    for(const pair of ['matrixA=unknown&matrixB=UN-LIM','matrixA=UN-LIM&matrixB=O4MA%2E','matrixA=O4MA%2E']) {
+      const h=harness('/bpl/s?view=matrix&previewA=round1&previewB=gigo&'+pair);
+      expect(h.get('#matrix-dialog').open).toBe(false);expect(h.location.searchParams.has('matrixA')).toBe(false);
+      expect(h.location.searchParams.has('matrixB')).toBe(false);
+    }
+  });
+
+  it('normalizes pair state when teams or pages change and restores it when going Back', () => {
+    const h=harness('/bpl/s?view=s6&previewA=round1&previewB=gigo');
+    h.run('openMatrixDetail("O4MA.","UN-LIM")');
+    h.link('#versus/O4MA./UN-LIM');expect(h.get('#matrix-dialog').open).toBe(false);
+    h.history.back();h.flush();expect(h.get('#matrix-dialog').open).toBe(true);
+    h.link('#preview/apina/gigo');expect(h.get('#matrix-dialog').open).toBe(false);
+    expect(h.location.searchParams.has('matrixA')).toBe(false);
+    h.history.back();h.flush();expect(h.get('#matrix-dialog').open).toBe(true);
+    h.get('#close-matrix-dialog').onclick?.({});h.flush();
+    h.get('#s6-a').onchange?.({target:{value:'apina'}});h.flush();
+    expect(h.location.searchParams.get('previewA')).toBe('apina');expect(h.get('#matrix-dialog').open).toBe(false);
+  });
+
   it('direct match dismissal never leaves the archive and old duplicate hash events do not render twice', () => {
     const match=data.matches.find(m=>m.season===0)!;
     const h=harness('/bpl/s?view=match&id='+match.id+'#seasons');
