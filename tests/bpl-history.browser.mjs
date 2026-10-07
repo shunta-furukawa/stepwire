@@ -281,7 +281,7 @@ async function checkMatrixDetailModal(label,viewport){
     assert.equal(await body.locator('.matrix-songs button').count(),rows.length);
     assert.deepEqual(await body.locator('.matrix-songs button b').allTextContents(),[...rows].sort((x,y)=>y.date.localeCompare(x.date)).map(row=>row.song));
     const groups=Object.values(rows.reduce((out,row)=>{(out[row.theme]??=[]).push(row);return out},{}));
-    assert.deepEqual(await body.locator('tbody tr').evaluateAll(nodes=>nodes.map(node=>[...node.querySelectorAll('td')].map(td=>td.textContent))),groups.map(group=>{const t=matrixTally(group);return [`${t.w}勝 ${t.d}分 ${t.l}敗`,t.rate===null?'—':t.rate+'%',String(t.n)]}));
+    assert.deepEqual(await body.locator('tbody tr').evaluateAll(nodes=>nodes.map(node=>[...node.querySelectorAll('td')].map(td=>td.textContent))),groups.map(group=>{const t=matrixTally(group);return [`${t.w}勝 ${t.d}分 ${t.l}敗`,t.rate===null?'—':t.rate+'%',t.n+'曲']}));
     if(!rows.length){assert.match(await body.innerText(),/選択中の条件に該当する楽曲記録はありません/);assert.equal(await body.locator('details').count(),0)}
   };
   const checkLayout=async(initial=null)=>{

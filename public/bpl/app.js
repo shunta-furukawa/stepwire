@@ -195,6 +195,14 @@ function syncMatrixDetail(page){
  if(path!==renderedMatrixPath){renderMatrixDetail(state.matrixA,state.matrixB);renderedMatrixPath=path;matrixReturnFocus=[...document.querySelectorAll('[data-matrix-a]')].find(button=>button.dataset.matrixA===state.matrixA&&button.dataset.matrixB===state.matrixB)||null}
  if(!matrixDialog.open)matrixDialog.showModal();syncDialogScrollLock();
 }
+// Keep Tab wrapping inside the top detail dialog rather than browser chrome.
+for(const modal of [dialog,matrixDialog])modal.addEventListener('keydown',event=>{
+ if(event.key!=='Tab')return;
+ const stops=[...modal.querySelectorAll('a[href],button,input,select,textarea,summary,[tabindex]')].filter(node=>!node.disabled&&node.tabIndex>=0&&node.getClientRects().length);
+ const first=stops[0],last=stops.at(-1);
+ if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}
+ else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+});
 document.querySelector('#close-matrix-dialog').onclick=closeMatrixDetail;
 matrixDialog.addEventListener('cancel',e=>{e.preventDefault();closeMatrixDetail()});
 matrixDialog.addEventListener('close',()=>{if(!matrixDialog.open){syncDialogScrollLock();closeMatrixDetail()}});
