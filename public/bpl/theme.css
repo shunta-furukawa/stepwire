@@ -216,7 +216,7 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
  .player-visual>.team-nameplate{width:calc(100% - 139px);min-width:0;max-width:158px;height:76px;--np-unit:24px;padding:9px 7px}
  .team-name-link .team-nameplate{width:128px;--np-unit:24px;padding:8px}.history-team .team-nameplate{width:148px}
  .s6-team-title .team-nameplate{width:174px;max-width:100%;--np-unit:30px}
- .s6-preview-score .s6-preview-team{padding:12px 8px}.s6-preview-team .team-nameplate{width:174px;height:80px;--np-unit:26px;padding:10px 8px}
+ .s6-preview-score{grid-template-columns:repeat(2,minmax(0,1fr))}.s6-preview-score .s6-preview-team{min-width:0;padding:12px 8px}.s6-preview-team .team-nameplate{width:174px;height:80px;--np-unit:26px;padding:10px 8px}
  #match-dialog .dialog-score{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:18px 0 24px}
  #match-dialog .dialog-score>strong{grid-row:2;grid-column:1/-1;justify-self:center}
  #match-dialog .team-nameplate.detail-logo{width:100%;height:80px;--np-unit:25px;padding:10px 8px}

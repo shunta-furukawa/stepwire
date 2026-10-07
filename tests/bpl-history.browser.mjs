@@ -8,7 +8,7 @@
  */
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
 import { matrixRows, matrixTally } from '../public/bpl/matrix.js';
 const require=createRequire(import.meta.url);
@@ -284,12 +284,21 @@ async function checkMatrixDetailModal(label,viewport){
     assert.deepEqual(await body.locator('tbody tr').evaluateAll(nodes=>nodes.map(node=>[...node.querySelectorAll('td')].map(td=>td.textContent))),groups.map(group=>{const t=matrixTally(group);return [`${t.w}勝 ${t.d}分 ${t.l}敗`,t.rate===null?'—':t.rate+'%',t.n+'曲']}));
     if(!rows.length){assert.match(await body.innerText(),/選択中の条件に該当する楽曲記録はありません/);assert.equal(await body.locator('details').count(),0)}
   };
+  const layoutDiagnostics=async()=>target.evaluate(()=>{
+    const rect=node=>{if(!node)return null;const r=node.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};
+    const metrics=node=>{if(!node)return null;const s=getComputedStyle(node);return {className:node.className,box:rect(node),clientWidth:node.clientWidth,scrollWidth:node.scrollWidth,width:s.width,minWidth:s.minWidth,maxWidth:s.maxWidth,overflowX:s.overflowX,gridTemplateColumns:s.gridTemplateColumns}};
+    return {url:location.href,innerWidth,innerHeight,scrollX,scrollY,
+      visualViewport:visualViewport?{width:visualViewport.width,height:visualViewport.height,scale:visualViewport.scale,offsetLeft:visualViewport.offsetLeft,offsetTop:visualViewport.offsetTop}:null,
+      document:{clientWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth,clientHeight:document.documentElement.clientHeight},body:metrics(document.body),
+      dialog:metrics(document.querySelector('#matrix-dialog')),content:metrics(document.querySelector('#matrix-dialog-content')),close:rect(document.querySelector('#close-matrix-dialog')),
+      candidates:[...document.querySelectorAll('.s6-preview-score,.s6-preview-team,.pending-teams,.s6-team,.matrix-filters,.table-wrap,.s6-matrix,.team-nameplate')].filter(node=>node.getClientRects().length).map(metrics)};
+  });
   const checkLayout=async(initial=null)=>{
-    const box=await close.boundingBox(),frame=await dialog.boundingBox(),content=await body.boundingBox();assert.ok(box&&frame&&content);
+    const box=await close.boundingBox(),frame=await dialog.boundingBox(),content=await body.boundingBox();assert.ok(box&&frame&&content,label+' matrix dialog, close and body must have layout boxes');
     assert.ok(box.width>=44&&box.height>=44,'matrix close has a 44px pointer/touch target');
     if(initial)assert.ok(Math.abs(box.x-initial.x)<1&&Math.abs(box.y-initial.y)<1,'matrix close is pinned while its body scrolls');
     assert.ok(box.x>=frame.x&&box.y>=frame.y&&box.x+box.width<=frame.x+frame.width&&box.y+box.height<=frame.y+frame.height);
-    assert.ok(frame.x>=0&&frame.y>=0&&frame.x+frame.width<=viewport.width+1&&frame.y+frame.height<=viewport.height+1,'matrix modal fits the safe viewport');
+    assert.ok(frame.x>=0&&frame.y>=0&&frame.x+frame.width<=viewport.width+1&&frame.y+frame.height<=viewport.height+1,'matrix modal fits the safe viewport: '+JSON.stringify({label,viewport,frame,close:box,content,page:await layoutDiagnostics()}));
     assert.ok(box.y+box.height<=content.y,'matrix content never scrolls beneath its close target');
     assert.equal(await close.evaluate(node=>{const r=node.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===node}),true,'close remains the real hit target');
     assert.equal(await dialog.evaluate(node=>node.scrollTop),0,'the outer matrix dialog never scrolls');
@@ -408,6 +417,12 @@ async function checkMatrixDetailModal(label,viewport){
     const image=new URL(await target.locator('#share-preview-image').getAttribute('src'));assert.equal(image.pathname,'/bpl/og');
     for(const [key,value] of Object.entries({view:'matrix',matrixVersion:'2',...teams,...filters}))assert.equal(image.searchParams.get(key),value);
     assert.equal(image.searchParams.has('matrixA'),false);assert.equal(image.searchParams.has('matrixB'),false);await target.locator('#share-preview-close').click();
+  }catch(error){
+    const diagnostics={label,viewport,...await layoutDiagnostics().catch(problem=>({diagnosticError:String(problem)}))};
+    console.error('BPL matrix modal failure:',JSON.stringify(diagnostics));
+    await screenshot(target,label+'-matrix-detail-failure').catch(problem=>console.error('Matrix failure screenshot:',String(problem)));
+    if(screenshotOutput)await writeFile(join(screenshotOutput,label+'-matrix-detail-failure.json'),JSON.stringify(diagnostics,null,2)).catch(problem=>console.error('Matrix failure diagnostics:',String(problem)));
+    throw error;
   }finally{await ctx.close()}
 }
 
