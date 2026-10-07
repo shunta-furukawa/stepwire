@@ -3,13 +3,14 @@
  *   BASE_URL=http://127.0.0.1:3000 node tests/bpl-history.browser.mjs
  * Requires Playwright in the runner (NODE_PATH is supported) and a Chromium
  * installation. Set CHROMIUM_PATH only when using a system browser.
- * Set BPL_SCREENSHOT_OUTPUT to save desktop/mobile standings, card, detail and versus PNGs.
+ * Set BPL_SCREENSHOT_OUTPUT to save standings, card, match/matrix detail and versus PNGs.
  * No browser or package is downloaded by this script.
  */
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { mkdir, readFile } from 'node:fs/promises';
 import { resolve, join } from 'node:path';
+import { matrixRows, matrixTally } from '../public/bpl/matrix.js';
 const require=createRequire(import.meta.url);
 const { chromium }=require('playwright');
 const sharp=require('sharp');
@@ -242,6 +243,172 @@ async function checkPinnedMatchClose(label,viewport){
     await target.mouse.click(box.x+box.width/2,box.y+box.height/2);await readyOn(target,'seasons');assert.equal(new URL(target.url()).searchParams.get('season'),'0');
   }finally{await ctx.close()}
 }
+async function checkMatrixDetailModal(label,viewport){
+  const mobile=label!=='desktop',a='O4MA.',b='UN-LIM',teams={previewA:'round1',previewB:'gigo'};
+  const defaults={matrixSeason:'all',matrixFormat:'all',matrixCategory:'all',matrixStyle:'all'};
+  const ctx=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,deviceScaleFactor:1,serviceWorkers:'block'});
+  trackImages(ctx);await ctx.addInitScript(()=>Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.__copied=text}}}));
+  const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
+  const dialog=target.locator('#matrix-dialog'),body=target.locator('#matrix-dialog-content'),close=target.getByRole('button',{name:'対戦成績を閉じる',exact:true});
+  const cell=(left=a,right=b)=>target.locator(`[data-matrix-a="${left}"][data-matrix-b="${right}"]`);
+  const query=(extra={})=>'/bpl/s?'+new URLSearchParams({view:'s6',hideResults:'1',...teams,...defaults,...extra});
+  const opened=async(left=a,right=b)=>{
+    await target.waitForFunction(({left,right})=>{const q=new URLSearchParams(location.search);return document.querySelector('#matrix-dialog')?.open&&q.get('matrixA')===left&&q.get('matrixB')===right},{left,right});
+    assert.equal(await target.locator('#matrix-detail-title').innerText(),left+' vs '+right);
+    assert.equal(await target.locator('main #matrix-detail,main .matrix-detail').count(),0,'details must not be rendered below the table');
+    assert.equal(await dialog.getAttribute('aria-labelledby'),'matrix-detail-title');
+    assert.equal(await dialog.evaluate(node=>node.matches(':modal')),true,'matrix detail uses a native modal, making the page inert');
+    assert.equal(await target.evaluate(()=>getComputedStyle(document.body).overflow),'hidden');
+  };
+  const closed=async(expectedUrl=null,focusCell=null)=>{
+    await target.waitForFunction(()=>!document.querySelector('#matrix-dialog').open&&!document.querySelector('#match-dialog').open&&!new URLSearchParams(location.search).has('matrixA')&&!new URLSearchParams(location.search).has('matrixB'));
+    if(expectedUrl)assert.equal(target.url(),expectedUrl,'closing preserves the table page, teams and filters');
+    assert.notEqual(await target.evaluate(()=>getComputedStyle(document.body).overflow),'hidden','final dismissal unlocks the page');
+    if(focusCell)assert.equal(await focusCell.evaluate(node=>document.activeElement===node),true,'focus returns to the originating table cell');
+  };
+  const pointClick=async(locator)=>{
+    const box=await locator.boundingBox();assert.ok(box);
+    if(mobile)await target.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);else await target.mouse.click(box.x+box.width/2,box.y+box.height/2);
+  };
+  const openCell=async(left=a,right=b,keyboard=false)=>{
+    const opener=cell(left,right);await opener.scrollIntoViewIfNeeded();
+    if(keyboard){await opener.focus();await target.keyboard.press('Enter')}else await pointClick(opener);
+    await opened(left,right);
+  };
+  const checkRecords=async(left=a,right=b,filters=defaults)=>{
+    const rows=matrixRows(data.matches,left,right,filters),total=matrixTally(rows);
+    assert.ok((await body.innerText()).includes(`${total.w}勝 ${total.d}分 ${total.l}敗 · ${total.n}曲 · 勝率 ${total.rate===null?'—':total.rate+'%'}`),'modal summary agrees with the shared matrix aggregation');
+    assert.equal(await body.locator('.matrix-songs button').count(),rows.length);
+    assert.deepEqual(await body.locator('.matrix-songs button b').allTextContents(),[...rows].sort((x,y)=>y.date.localeCompare(x.date)).map(row=>row.song));
+    const groups=Object.values(rows.reduce((out,row)=>{(out[row.theme]??=[]).push(row);return out},{}));
+    assert.deepEqual(await body.locator('tbody tr').evaluateAll(nodes=>nodes.map(node=>[...node.querySelectorAll('td')].map(td=>td.textContent))),groups.map(group=>{const t=matrixTally(group);return [`${t.w}勝 ${t.d}分 ${t.l}敗`,t.rate===null?'—':t.rate+'%',String(t.n)]}));
+    if(!rows.length){assert.match(await body.innerText(),/選択中の条件に該当する楽曲記録はありません/);assert.equal(await body.locator('details').count(),0)}
+  };
+  const checkLayout=async(initial=null)=>{
+    const box=await close.boundingBox(),frame=await dialog.boundingBox(),content=await body.boundingBox();assert.ok(box&&frame&&content);
+    assert.ok(box.width>=44&&box.height>=44,'matrix close has a 44px pointer/touch target');
+    if(initial)assert.ok(Math.abs(box.x-initial.x)<1&&Math.abs(box.y-initial.y)<1,'matrix close is pinned while its body scrolls');
+    assert.ok(box.x>=frame.x&&box.y>=frame.y&&box.x+box.width<=frame.x+frame.width&&box.y+box.height<=frame.y+frame.height);
+    assert.ok(frame.x>=0&&frame.y>=0&&frame.x+frame.width<=viewport.width+1&&frame.y+frame.height<=viewport.height+1,'matrix modal fits the safe viewport');
+    assert.ok(box.y+box.height<=content.y,'matrix content never scrolls beneath its close target');
+    assert.equal(await close.evaluate(node=>{const r=node.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)===node}),true,'close remains the real hit target');
+    assert.equal(await dialog.evaluate(node=>node.scrollTop),0,'the outer matrix dialog never scrolls');
+    for(const locator of [dialog,body])assert.equal(await locator.evaluate(node=>node.scrollWidth<=node.clientWidth+1),true,label+' matrix detail has no horizontal overflow');
+    assert.equal(await target.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),true,'the wide matrix stays inside its table scroller');
+    return box;
+  };
+  try{
+    await target.goto(base+query());await readyOn(target,'s6');
+    const opener=cell(),underlying=target.url(),table=await target.locator('.s6-matrix').innerHTML();
+    assert.equal(await opener.getAttribute('aria-haspopup'),'dialog');assert.equal(await opener.getAttribute('aria-controls'),'matrix-dialog');
+    await openCell(a,b,true);await checkRecords();assert.equal(new URL(target.url()).searchParams.get('view'),'s6');
+    const pairUrl=target.url();for(const [key,value] of Object.entries({...teams,...defaults}))assert.equal(new URL(pairUrl).searchParams.get(key),value);
+    assert.equal(await dialog.evaluate(node=>node.contains(document.activeElement)),true,'initial focus is within the modal');
+    // Native Tab traversal and focus attempts must never reach the inert table.
+    await close.focus();await target.keyboard.press('Tab');assert.equal(await body.evaluate(node=>node.contains(document.activeElement)),true);
+    await target.keyboard.press('Shift+Tab');assert.equal(await close.evaluate(node=>document.activeElement===node),true);
+    await target.locator('#s6-a').evaluate(node=>node.focus());assert.equal(await dialog.evaluate(node=>node.contains(document.activeElement)),true);
+    assert.ok(await close.evaluate(node=>parseFloat(getComputedStyle(node).outlineWidth)>=3),'matrix keyboard focus remains visible');
+    await body.locator('summary').click();assert.equal(await body.locator('details').evaluate(node=>node.open),true);
+    await body.evaluate(node=>{node.scrollTop=0});const initial=await checkLayout();await screenshot(target,label+'-matrix-detail-top');
+    const content=await body.boundingBox();await target.mouse.move(content.x+content.width/2,content.y+content.height/2);await target.mouse.wheel(0,600);
+    await target.waitForFunction(()=>document.querySelector('#matrix-dialog-content').scrollTop>100);await checkLayout(initial);
+    await body.evaluate(node=>{node.scrollTop=node.scrollHeight});
+    await target.waitForFunction(()=>{const n=document.querySelector('#matrix-dialog-content');return Math.abs(n.scrollHeight-n.clientHeight-n.scrollTop)<2});
+    await checkLayout(initial);await screenshot(target,label+'-matrix-detail-bottom');
+    await pointClick(close);await closed(underlying,opener);assert.equal(await target.locator('.s6-matrix').innerHTML(),table,'opening detail leaves all matrix cells unchanged');
+
+    // Every dismissal consumes one overlay entry, so Forward restores this pair.
+    for(const exit of ['escape','backdrop','back','keyboard']){
+      await target.goForward();await opened();assert.equal(target.url(),pairUrl);assert.equal(await body.evaluate(node=>node.scrollTop),0);
+      if(exit==='escape')await target.keyboard.press('Escape');
+      if(exit==='backdrop'){if(mobile)await target.touchscreen.tap(1,1);else await target.mouse.click(1,1)}
+      if(exit==='back')await target.goBack();
+      if(exit==='keyboard'){await close.focus();await target.keyboard.press('Enter')}
+      await closed(underlying,opener);
+    }
+    for(let repeat=0;repeat<3;repeat++){await openCell();await pointClick(close);await closed(underlying,opener)}
+    await openCell();await body.locator('summary').click();
+    const song=body.locator('.matrix-songs button').last();await song.scrollIntoViewIfNeeded();
+    const scroll=await body.evaluate(node=>node.scrollTop),detailHtml=await body.innerHTML(),matchId=await song.getAttribute('data-match');
+    assert.ok(scroll>0,'nested match starts from a genuinely scrolled detail');
+    await pointClick(song);await readyOn(target,'match',matchId);
+    const checkNested=async()=>{
+      assert.equal(await dialog.evaluate(node=>node.open),true,'matrix remains open beneath match details');
+      assert.equal(await target.locator('#match-dialog').evaluate(node=>node.matches(':modal')&&node.contains(document.activeElement)),true);
+      assert.equal(await body.innerHTML(),detailHtml);assert.ok(Math.abs(await body.evaluate(node=>node.scrollTop)-scroll)<2);
+      await target.locator('#close-dialog').focus();await target.keyboard.press('Tab');assert.equal(await target.locator('#match-dialog').evaluate(node=>node.contains(document.activeElement)),true,'Tab stays in the uppermost match modal');
+    };
+    const checkRestored=async()=>{
+      await opened();assert.equal(target.url(),pairUrl);assert.equal(await target.locator('#match-dialog').evaluate(node=>node.open),false);
+      assert.equal(await body.innerHTML(),detailHtml,'expanded matrix content survives the nested match');assert.ok(Math.abs(await body.evaluate(node=>node.scrollTop)-scroll)<2,'matrix scroll survives the nested match');
+      assert.equal(await song.evaluate(node=>document.activeElement===node),true,'match dismissal returns focus to its exact song button');
+    };
+    for(const exit of ['close','escape','back','backdrop']){
+      await checkNested();if(exit==='close')await screenshot(target,label+'-matrix-nested-match');
+      if(exit==='close')await pointClick(target.getByRole('button',{name:'試合詳細を閉じる',exact:true}));
+      if(exit==='escape')await target.keyboard.press('Escape');
+      if(exit==='back')await target.goBack();
+      if(exit==='backdrop')await target.mouse.click(1,1);
+      await checkRestored();
+      if(exit!=='backdrop'){await target.goForward();await readyOn(target,'match',matchId)}
+    }
+    await target.goBack();await closed(underlying,opener);
+    await target.goForward();await opened();await target.goForward();await readyOn(target,'match',matchId);
+    await target.goBack();await opened();await target.goBack();await closed(underlying,opener);
+
+    // Queued click handlers are the intentional synthetic exception: real input
+    // cannot hit an underlying cell after showModal makes the page inert.
+    const historyBefore=await target.evaluate(()=>history.length);
+    await opener.evaluate(node=>{node.click();node.click();node.click()});await opened();
+    const historyAfter=await target.evaluate(()=>history.length);assert.ok(historyAfter<=historyBefore+1,'repeated same-pair taps do not stack history entries');
+    await cell('ZERO.','HIBIKI').evaluate(node=>node.click());await opened('ZERO.','HIBIKI');await checkRecords('ZERO.','HIBIKI');
+    assert.equal(await target.evaluate(()=>history.length),historyAfter,'new queued pair replaces the open overlay');
+    await target.goBack();await closed(underlying);await target.goForward();await opened('ZERO.','HIBIKI');await pointClick(close);await closed(underlying);
+
+    // Detail follows all four visible filters, including a genuine zero result.
+    const filters={matrixSeason:'5',matrixFormat:'single',matrixCategory:'GOLD',matrixStyle:'TRICKY'};
+    for(const selected of [{matrixSeason:'2',matrixFormat:'tag',matrixCategory:'WHITE',matrixStyle:'TRICKY'},filters]){
+      for(const [key,value] of Object.entries(selected))await target.selectOption('#'+key,value);
+      const filteredUrl=target.url();await openCell();await checkRecords(a,b,selected);
+      for(const [key,value] of Object.entries(selected))assert.equal(new URL(target.url()).searchParams.get(key),value);
+      await pointClick(close);await closed(filteredUrl,opener);
+    }
+    for(const key of Object.keys(defaults))await target.selectOption('#'+key,'all');
+    await openCell('HO4-KETI','ALPAA');await checkRecords('HO4-KETI','ALPAA');await checkLayout();await screenshot(target,label+'-matrix-detail-empty');await pointClick(close);await closed();
+    // A team change rebuilds the table and cannot retain an old player's detail.
+    await target.selectOption('#s6-b','silkhat');assert.equal(await cell(a,b).count(),0);await openCell(a,'KANAME');await checkRecords(a,'KANAME');
+    const silkPair=target.url();await body.locator('a[href^="#versus/"]').click();await readyOn(target,'versus');
+    assert.equal(await dialog.evaluate(node=>node.open),false);assert.equal(await target.locator('#match-dialog').evaluate(node=>node.open),false);
+    assert.equal(await target.locator('#vs-a').inputValue(),a);assert.equal(await target.locator('#vs-b').inputValue(),'KANAME');
+    await target.goBack();await opened(a,'KANAME');assert.equal(target.url(),silkPair);
+    // A deep-link navigation arriving while detail is open resets the old pair.
+    await target.evaluate(()=>{location.hash='#preview/round1/gigo'});await readyOn(target,'preview');await closed();
+    assert.equal(await target.locator('#s6-b').inputValue(),'gigo');assert.equal(await cell(a,b).count(),1);
+
+    // Direct pair URLs keep their own view and close in place even without an
+    // overlay history entry; punctuation IDs and filters round-trip unchanged.
+    for(const view of ['s6','preview','matrix']){
+      await target.goto(base+query({view,matrixA:a,matrixB:b}));await readyOn(target,view);await opened();await checkRecords();
+      await target.keyboard.press('Escape');await closed();assert.equal(new URL(target.url()).searchParams.get('view'),view);
+      for(const [key,value] of Object.entries({...teams,...defaults}))assert.equal(new URL(target.url()).searchParams.get(key),value);
+    }
+    for(const pair of [{matrixA:'missing-player',matrixB:b},{matrixA:a,matrixB:'KANAME'},{matrixA:a},{matrixA:a,matrixB:a}]){
+      await target.goto(base+query({view:'matrix',...pair}));await readyOn(target,'matrix');await closed();assert.equal(await target.locator('.s6-matrix').count(),1);
+    }
+    // Existing matrix copy/image actions still share the entire selected table.
+    await target.goto(base+query({view:'matrix',...filters}));await readyOn(target,'matrix');
+    const share=async()=>{await target.locator('[data-matrix-share][data-share-action="copy"]').click();return new URL(await target.evaluate(()=>window.__copied))};
+    const sharedBefore=await share();await openCell();await pointClick(close);await closed();const sharedAfter=await share();assert.equal(sharedAfter.href,sharedBefore.href);
+    for(const [key,value] of Object.entries({view:'matrix',matrixVersion:'2',...teams,...filters}))assert.equal(sharedAfter.searchParams.get(key),value);
+    assert.equal(sharedAfter.searchParams.has('matrixA'),false);assert.equal(sharedAfter.searchParams.has('matrixB'),false);
+    await target.locator('[data-matrix-share][data-share-action="preview"]').click();
+    const image=new URL(await target.locator('#share-preview-image').getAttribute('src'));assert.equal(image.pathname,'/bpl/og');
+    for(const [key,value] of Object.entries({view:'matrix',matrixVersion:'2',...teams,...filters}))assert.equal(image.searchParams.get(key),value);
+    assert.equal(image.searchParams.has('matrixA'),false);assert.equal(image.searchParams.has('matrixB'),false);await target.locator('#share-preview-close').click();
+  }finally{await ctx.close()}
+}
+
 async function checkRoundPoints(label,viewport){
   const ctx=await browser.newContext({viewport,isMobile:label!=='desktop',hasTouch:label!=='desktop',deviceScaleFactor:1,serviceWorkers:'block'});
   trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
@@ -483,6 +650,7 @@ async function checkSeasonStandings(label,viewport){
   }finally{await ctx.close()}
 }
 try {
+  for(const [label,viewport] of Object.entries({desktop:{width:1280,height:900},mobile:{width:390,height:844},narrow:{width:320,height:720},landscape:{width:844,height:390}}))await checkMatrixDetailModal(label,viewport);
   for(const [label,viewport] of Object.entries({desktop:{width:1280,height:900},mobile:{width:390,height:844},narrow:{width:320,height:720},wideMobile:{width:400,height:800},landscape:{width:844,height:390}}))await checkPinnedMatchClose(label,viewport);
   await checkSeasonStandings('desktop',{width:1280,height:900});
   await checkSeasonStandings('mobile',{width:390,height:844});

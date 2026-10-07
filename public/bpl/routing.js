@@ -2,12 +2,12 @@ import { shareQuery } from './urls.js';
 export { shareQuery };
 
 // URL state is independent of the DOM so history restoration cannot inherit stale filters.
-export const defaultFilters = Object.freeze({season:'all',team:'all',stage:'all',query:'',playerSeason:'all',playerTeam:'all',sort:'matches',a:'O4MA.',b:'HIBIKI',vsSeason:'all',vsFormat:'all',partnerA:'all',partnerB:'all',previewA:'',previewB:'',matrixSeason:'all',matrixFormat:'all',matrixCategory:'all',matrixStyle:'all',rosterSeason:''});
+export const defaultFilters = Object.freeze({season:'all',team:'all',stage:'all',query:'',playerSeason:'all',playerTeam:'all',sort:'matches',a:'O4MA.',b:'HIBIKI',vsSeason:'all',vsFormat:'all',partnerA:'all',partnerB:'all',previewA:'',previewB:'',matrixSeason:'all',matrixFormat:'all',matrixCategory:'all',matrixStyle:'all',matrixA:'',matrixB:'',rosterSeason:''});
 const views = new Set(['s6','preview','matrix','seasons','teams','team','players','player','versus','match','about']);
 const keys = {
-  s6:['previewA','previewB','matrixSeason','matrixFormat','matrixCategory','matrixStyle'],
-  preview:['previewA','previewB','matrixSeason','matrixFormat','matrixCategory','matrixStyle'],
-  matrix:['previewA','previewB','matrixSeason','matrixFormat','matrixCategory','matrixStyle'],
+  s6:['previewA','previewB','matrixSeason','matrixFormat','matrixCategory','matrixStyle','matrixA','matrixB'],
+  preview:['previewA','previewB','matrixSeason','matrixFormat','matrixCategory','matrixStyle','matrixA','matrixB'],
+  matrix:['previewA','previewB','matrixSeason','matrixFormat','matrixCategory','matrixStyle','matrixA','matrixB'],
   seasons:['season','team','stage'], players:['playerSeason','playerTeam','query','sort'],
   versus:['a','b','vsSeason','vsFormat','partnerA','partnerB'], team:['rosterSeason'],
 };
@@ -47,3 +47,6 @@ export function routeParams(route) {
   return p;
 }
 export function routePath(route) {return '/bpl/s?'+shareQuery(routeParams(route))}
+
+// Pair details are an overlay on the existing S6 page, not a second page render.
+export function pagePath(route) {return routePath({...route,filters:{...route.filters,matrixA:'',matrixB:''}})}

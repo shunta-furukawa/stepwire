@@ -1,5 +1,5 @@
 'use strict';
-let D,B,Matrix,Routing,Jackets,JacketColors,Standings;const main=document.querySelector('main'),dialog=document.querySelector('#match-dialog');
+let D,B,Matrix,Routing,Jackets,JacketColors,Standings;const main=document.querySelector('main'),dialog=document.querySelector('#match-dialog'),matrixDialog=document.querySelector('#matrix-dialog');
 const state={};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const num=v=>v===null||v===undefined?'—':Number(v).toLocaleString('ja-JP');
@@ -145,13 +145,13 @@ function commitRouteState(){
  if(!currentRoute)return;
  currentRoute=snapshotRoute();const path=Routing.routePath(currentRoute);
  if(location.pathname+location.search+location.hash!==path)history.replaceState(history.state,'',path);
- if(currentRoute.view!=='match')renderedPagePath=path;
+ if(currentRoute.view!=='match')renderedPagePath=Routing.pagePath(currentRoute);
  lastRenderedUrl=location.href;syncShare();
 }
-function navigate(next,{replace=false,background=null,modalEntry=false,scroll=true}={}){
+function navigate(next,{replace=false,background=null,modalEntry=false,matrixEntry=false,scroll=true}={}){
  commitRouteState();const target={...next,filters:{...next.filters},hideResults:s6SessionPrefs.hideResults};
  const path=Routing.routePath(target),same=location.pathname+location.search+location.hash===path;
- if(!same)history[replace?'replaceState':'pushState']({bpl:true,background,modalEntry},'',path);
+ if(!same)history[replace?'replaceState':'pushState']({bpl:true,background,modalEntry,matrixEntry},'',path);
  route(null,{force:true,scroll});
 }
 function openMatch(id){
@@ -167,24 +167,56 @@ function closeMatch(){
 }
 document.querySelector('#close-dialog').onclick=closeMatch;
 dialog.addEventListener('cancel',e=>{e.preventDefault();closeMatch()});
-dialog.addEventListener('close',()=>{if(!dialog.open){document.body.style.overflow='';if(currentRoute?.view==='match')closeMatch()}});
+dialog.addEventListener('close',()=>{if(!dialog.open){syncDialogScrollLock();if(currentRoute?.view==='match')closeMatch()}});
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeMatch()}});
+// A pair stays in the existing page URL. A match can stack above it, retaining
+// its expanded songs, scroll position and native focus return target on Back.
+let renderedMatrixPath='',closingMatrix=false,matrixReturnFocus=null;
+function syncDialogScrollLock(){document.body.style.overflow=dialog.open||matrixDialog.open?'hidden':''}
+function validMatrixPair(a,b){return state.previewA!==state.previewB&&s6Roster(state.previewA).some(p=>p.id===a)&&s6Roster(state.previewB).some(p=>p.id===b)}
+function openMatrixDetail(a,b){
+ if(!['s6','preview','matrix'].includes(currentRoute?.view)||!validMatrixPair(a,b))return;
+ if(state.matrixA===a&&state.matrixB===b&&matrixDialog.open)return;
+ const replacing=matrixDialog.open;
+ navigate({...snapshotRoute(),filters:{...state,matrixA:a,matrixB:b}},{replace:replacing,matrixEntry:replacing?!!history.state?.matrixEntry:true,scroll:false});
+}
+function closeMatrixDetail(){
+ if(closingMatrix||currentRoute?.view==='match'||!state.matrixA||!state.matrixB)return;
+ if(history.state?.bpl&&history.state.matrixEntry){closingMatrix=true;history.back()}
+ else navigate({...snapshotRoute(),filters:{...state,matrixA:'',matrixB:''}},{replace:true,scroll:false});
+}
+function resetMatrixDetail(){
+ state.matrixA='';state.matrixB='';renderedMatrixPath='';
+ if(matrixDialog.open){matrixDialog.close();if(matrixReturnFocus?.isConnected)matrixReturnFocus.focus({preventScroll:true})}matrixReturnFocus=null;syncDialogScrollLock();
+}
+function syncMatrixDetail(page){
+ if(!['s6','preview','matrix'].includes(page.view)||!validMatrixPair(state.matrixA,state.matrixB)){resetMatrixDetail();return}
+ const path=Routing.routePath({...page,filters:{...state}});
+ if(path!==renderedMatrixPath){renderMatrixDetail(state.matrixA,state.matrixB);renderedMatrixPath=path;matrixReturnFocus=[...document.querySelectorAll('[data-matrix-a]')].find(button=>button.dataset.matrixA===state.matrixA&&button.dataset.matrixB===state.matrixB)||null}
+ if(!matrixDialog.open)matrixDialog.showModal();syncDialogScrollLock();
+}
+document.querySelector('#close-matrix-dialog').onclick=closeMatrixDetail;
+matrixDialog.addEventListener('cancel',e=>{e.preventDefault();closeMatrixDetail()});
+matrixDialog.addEventListener('close',()=>{if(!matrixDialog.open){syncDialogScrollLock();closeMatrixDetail()}});
+matrixDialog.addEventListener('click',e=>{if(e.target===matrixDialog){const r=matrixDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeMatrixDetail()}});
 function route(event,{force=false,scroll=true}={}){
  if(!D||!Routing||(!force&&location.href===lastRenderedUrl))return;
- closingMatch=false;
+ closingMatch=false;closingMatrix=false;
  const next=Routing.parseRoute(new URL(location.href),s6SessionPrefs.hideResults,event?.type==='hashchange');
  currentRoute=next;s6SessionPrefs.hideResults=next.hideResults;applyS6Visibility();
- activeShareMatch=null;if(dialog.open)dialog.close();document.body.style.overflow='';
+ activeShareMatch=null;if(dialog.open)dialog.close();
  const preview=document.querySelector('#share-preview');if(preview?.open)preview.close();
  const page=next.view==='match'?(history.state?.background||matchFallback(next.id)):next;
  Object.assign(state,Routing.defaultFilters,page.filters);
  if(!player(state.a))state.a=Routing.defaultFilters.a;if(!player(state.b))state.b=Routing.defaultFilters.b;
- const view=page.view,id=page.id,samePage=renderedPagePath===Routing.routePath({...page,hideResults:next.hideResults});
+ const view=page.view,id=page.id,samePage=renderedPagePath===Routing.pagePath({...page,hideResults:next.hideResults});
  document.querySelectorAll('nav a').forEach(a=>{const active=a.dataset.view===(view==='player'?'players':view==='team'?'teams':['preview','matrix'].includes(view)?'s6':view);a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
  document.title=(view==='player'?id+' — ':view==='team'?team(id).name+' — ':view==='versus'?'直接対決 — ':'')+'BPL DDR RECORDS';
  if(!samePage)({s6:s6Page,preview:s6Page,matrix:s6Page,seasons:seasonPage,teams:teamsPage,team:()=>teamPage(id),players:playersPage,player:()=>playerPage(id),versus:versusPage,about:aboutPage}[view]||seasonPage)();
- renderedPagePath=Routing.routePath({...page,filters:{...state},hideResults:next.hideResults});
+ renderedPagePath=Routing.pagePath({...page,filters:{...state},hideResults:next.hideResults});
+ syncMatrixDetail(page);
  if(next.view==='match')renderMatch(next.id);
+ syncDialogScrollLock();
  commitRouteState();
  if(scroll&&!samePage){if(view==='matrix')document.querySelector('#s6-matrix-section')?.scrollIntoView();else window.scrollTo(0,0)}
 }
