@@ -227,7 +227,12 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
 @media(max-width:360px){
  .team-card-heading{padding:18px 16px;gap:8px}
  .team-nameplate.team-card-logo{max-width:calc(100% - 57px);padding:15px 12px 20px;--np-unit:32px}
- .season-finalists{grid-template-columns:1fr}
+ .season-finalists{grid-template-columns:minmax(0,1fr)}
+ .season-final-score{min-width:0;flex-wrap:wrap;gap:8px 12px}
+ .standings-groups{grid-template-columns:minmax(0,1fr)}.standings-group{min-width:0}
+ .standings-table{table-layout:fixed}.standings-table thead th{white-space:normal}.standings-table tbody th{width:auto}
+ .standings-table tr>*:nth-child(1){width:10%}.standings-table tr>*:nth-child(2){width:28%}.standings-table tr>*:nth-child(3){width:12%}.standings-table tr>*:nth-child(4){width:24%}.standings-table tr>*:nth-child(5){width:26%}
+ .standing-finish{max-width:100%;white-space:normal;overflow-wrap:anywhere}
  .season-finalist .team-nameplate{width:180px;--np-unit:28px}
  .s6-preview-score{gap:8px;padding:14px 5px}.s6-preview-score .s6-preview-team{padding:10px 5px}.s6-preview-team .team-nameplate{padding:9px 6px;--np-unit:23px}
 }

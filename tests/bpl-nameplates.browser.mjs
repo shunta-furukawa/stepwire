@@ -6,7 +6,7 @@
  */
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 
 const require = createRequire(import.meta.url);
@@ -44,8 +44,38 @@ async function noPageOverflow(page, label) {
     html: document.documentElement.scrollWidth,
     body: document.body.scrollWidth,
   }));
-  assert.ok(measurements.html <= measurements.viewport + 1 && measurements.body <= measurements.viewport + 1,
-    label + ': horizontal page overflow ' + JSON.stringify(measurements));
+  try {
+    assert.ok(measurements.html <= measurements.viewport + 1 && measurements.body <= measurements.viewport + 1,
+      label + ': horizontal page overflow ' + JSON.stringify(measurements));
+  } catch (error) {
+    const layout = await page.evaluate(() => {
+      const metrics = node => {
+        const box = node.getBoundingClientRect(), style = getComputedStyle(node);
+        return {
+          tag: node.tagName, id: node.id, className: node.className,
+          text: node.textContent.trim().replace(/\s+/g, ' ').slice(0, 120),
+          box: { x: box.x, y: box.y, width: box.width, height: box.height, right: box.right, bottom: box.bottom },
+          clientWidth: node.clientWidth, scrollWidth: node.scrollWidth,
+          display: style.display, width: style.width, minWidth: style.minWidth, maxWidth: style.maxWidth,
+          paddingLeft: style.paddingLeft, paddingRight: style.paddingRight, gap: style.gap,
+          overflowX: style.overflowX, gridTemplateColumns: style.gridTemplateColumns,
+          tableLayout: style.tableLayout, whiteSpace: style.whiteSpace, fontSize: style.fontSize,
+        };
+      };
+      const collect = selector => [...document.querySelectorAll(selector)].filter(node => node.getClientRects().length).map(metrics);
+      return {
+        url: location.href, innerWidth, innerHeight, scrollX, scrollY,
+        visualViewport: visualViewport ? { width: visualViewport.width, height: visualViewport.height, scale: visualViewport.scale } : null,
+        mainChildren: collect('main > *'), seasonResultChildren: collect('.season-results > *'),
+        standingsGroupsAndTables: collect('.standings-group,.standings-table'),
+        standingsCells: collect('.standings-table th,.standings-table td,.standing-finish'),
+        finalists: collect('.season-finalists > *'), toolbarChildren: collect('.toolbar > *'),
+      };
+    }).catch(problem => ({ diagnosticError: String(problem) }));
+    error.layoutDiagnostics = { label, ...measurements, ...layout };
+    error.message += '\nLayout diagnostics: ' + JSON.stringify(error.layoutDiagnostics);
+    throw error;
+  }
 }
 
 // Range rects measure rendered glyph runs, unlike scrollWidth alone (which can
@@ -230,6 +260,10 @@ async function checkViewport(label, viewport) {
     console.log('BPL nameplates:', label, 'passed');
   } catch (error) {
     await screenshot(page, label + '-nameplates-failure').catch(() => {});
+    if (screenshotOutput && error.layoutDiagnostics) {
+      await writeFile(join(screenshotOutput, label + '-nameplates-failure.json'), JSON.stringify(error.layoutDiagnostics, null, 2))
+        .catch(problem => console.error('Nameplate overflow diagnostics:', String(problem)));
+    }
     throw error;
   } finally {
     await context.close();
