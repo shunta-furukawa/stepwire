@@ -42,8 +42,23 @@ then discarded. The original selector reproduced all 824 production colors
 before moderate selection was accepted. All seven approved comparison tuples
 also had to match. The updated provenance records resampling time, exact
 selector settings, source-match counts, change/fallback totals, and the runtime
-JSON SHA-256. The seven unresolved titles retain the existing music symbol.
+JSON SHA-256. At that stage, seven unresolved titles retained the existing music symbol.
 
 No official image is included here, and technical provenance does not assert
 copyright or other rights clearance. CSS corner ordering and blending are
 unchanged.
+
+## Seven-title completion — 2026-10-07
+
+The remaining titles (3y3s, Bad Maniacs, Fly Like You, Ganymede -re:born-,
+Thunderstorm, コメット⇒スケイター, and 恋歌疾風！かるたクイーンいろは) were
+matched by title and artist to public song pages on 三倍 Ice Cream / 3icecream.com.
+Their loaded jackets were visually checked and passed through the unchanged
+`extract(image)` implementation with the pinned dependencies above. These are
+third-party visual references, not official sources or artwork permissions.
+
+Only the new four-color tuples, stable IDs, and technical source provenance are
+committed. The existing 206 palettes and their source associations are unchanged;
+all 213 archive song titles now have a palette. Ganymede -re:born- uses the neutral
+fallback selector in all four quadrants; Thunderstorm uses it in one quadrant.
+The original-image pixels are not included in the repository or deployed assets.

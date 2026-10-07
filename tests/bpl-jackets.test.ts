@@ -11,7 +11,7 @@ import data from '../public/bpl/data.json';
 import brand from '../public/bpl/brand.json';
 import * as routing from '../public/bpl/routing.js';
 
-const missing = ['3y3s', 'Bad Maniacs', 'Fly Like You', 'Ganymede -re:born-', 'Thunderstorm', 'コメット⇒スケイター', '恋歌疾風！かるたクイーンいろは'];
+const completed = ['3y3s', 'Bad Maniacs', 'Fly Like You', 'Ganymede -re:born-', 'Thunderstorm', 'コメット⇒スケイター', '恋歌疾風！かるたクイーンいろは'];
 const quadrants = ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'] as const;
 type Palette = { id?: string } & Record<typeof quadrants[number], string>;
 const songs = palettes.songs as Record<string, Palette>;
@@ -48,15 +48,15 @@ function renderHarness(colors: unknown = palettes, module: unknown = jackets) {
 }
 
 describe('BPL approved four-color jacket dataset', () => {
-  it('has exactly the approved 206 palettes and seven explicit fallbacks, with stable unique IDs', () => {
+  it('has exactly the approved 213 palettes without changing the existing 206, with stable unique IDs', () => {
     expect(palettes.version).toBe(1);
     expect(palettes.quadrants).toEqual(quadrants);
     expect(jackets.QUADRANTS).toEqual(quadrants);
     expect(Object.isFrozen(jackets.QUADRANTS)).toBe(true);
     const archiveTitles = new Set(data.matches.flatMap(m => m.battles.flatMap(b => b.songs.map(s => s.name))));
     expect(archiveTitles.size).toBe(213);
-    expect(Object.keys(songs)).toHaveLength(206);
-    expect([...archiveTitles].filter(name => !Object.hasOwn(songs, name)).sort()).toEqual([...missing].sort());
+    expect(Object.keys(songs)).toHaveLength(213);
+    expect([...archiveTitles].filter(name => !Object.hasOwn(songs, name)).sort()).toEqual([]);
     const ids = new Set<string>();
     for (const [name, palette] of Object.entries(songs)) {
       expect(archiveTitles.has(name), name).toBe(true);
@@ -68,7 +68,7 @@ describe('BPL approved four-color jacket dataset', () => {
       ids.add(id);
     }
     // Lock the approved title/ID/color mapping without depending on JSON whitespace.
-    const approved = Object.keys(songs).sort().map(name => [name, ...['id', ...quadrants].map(key => songs[name]![key as keyof Palette])]);
+    const approved = Object.keys(songs).filter(name => !completed.includes(name)).sort().map(name => [name, ...['id', ...quadrants].map(key => songs[name]![key as keyof Palette])]);
     expect(createHash('sha256').update(JSON.stringify(approved)).digest('hex')).toBe('5c2ca89f8200b1c80516e6bdabc8fe55edc4b1f6fba16319206cbdb464fef729');
     expect(JSON.stringify(palettes)).not.toMatch(/https?:|data:|base64|<img|url\(/i);
   });
@@ -87,12 +87,12 @@ describe('BPL approved four-color jacket dataset', () => {
       expect(quadrants.map(key => songs[title]![key]), title).toEqual(colors);
     }
     expect(Object.keys(provenance.songs).sort()).toEqual(Object.keys(songs).sort());
-    expect(provenance.coverage).toEqual({ totalSongs: 213, sampledSongs: 206, unresolved: missing });
+    expect(provenance.coverage).toEqual({ totalSongs: 213, sampledSongs: 213, unresolved: [] });
     expect(provenance.paletteFile).toBe('/bpl/jacket-colors.json');
     expect(createHash('sha256').update(readFileSync('public/bpl/jacket-colors.json')).digest('hex')).toBe(provenance.paletteSha256);
     // Source associations, hashes and dimensions must match the original 206-source inventory.
     const sourceFields = ['name', 'sourcePage', 'sourceImage', 'sourceTitle', 'imageSha256', 'sourceDimensions'] as const;
-    const sources = Object.entries(provenance.songs).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([name, source]) => [name, ...sourceFields.map(key => source[key])]);
+    const sources = Object.entries(provenance.songs).filter(([name]) => !completed.includes(name)).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0).map(([name, source]) => [name, ...sourceFields.map(key => source[key])]);
     expect(createHash('sha256').update(JSON.stringify(sources)).digest('hex')).toBe('1db640575990424f593658bd62afcd6f1b515bf3304469ece063700c2731f17d');
     expect(provenance.algorithm).toBe('oklab-moderate-quadrants-v2');
     expect(provenance.selector).toEqual({
@@ -102,6 +102,72 @@ describe('BPL approved four-color jacket dataset', () => {
       darkAreaThreshold: 0.65, darkMultiplier: 0.7,
       tieBreak: 'stable descending cluster fraction, then first maximum',
     });
+  });
+
+  it('adds the seven verified third-party reference palettes with explicit provenance', () => {
+    const expected = {
+      "3y3s": [
+            "#701f42",
+            "#7f2752",
+            "#4e1230",
+            "#501033"
+      ],
+      "Bad Maniacs": [
+            "#d4df90",
+            "#ef1b24",
+            "#d30525",
+            "#d81626"
+      ],
+      "Fly Like You": [
+            "#e9989e",
+            "#d57b86",
+            "#87c5dc",
+            "#eff5f3"
+      ],
+      "Ganymede -re:born-": [
+            "#e5ecea",
+            "#42554f",
+            "#1b1d1a",
+            "#748272"
+      ],
+      "Thunderstorm": [
+            "#5f5b95",
+            "#554e86",
+            "#12101a",
+            "#404770"
+      ],
+      "コメット⇒スケイター": [
+            "#5e44b3",
+            "#35468e",
+            "#bd78d3",
+            "#a588c7"
+      ],
+      "恋歌疾風！かるたクイーンいろは": [
+            "#fc5e8d",
+            "#f86ab1",
+            "#f56195",
+            "#eb669c"
+      ]
+};
+    expect(Object.keys(expected).sort()).toEqual([...completed].sort());
+    for (const [title, colors] of Object.entries(expected)) {
+      expect(quadrants.map(key => songs[title]![key]), title).toEqual(colors);
+      const source = provenance.songs[title as keyof typeof provenance.songs];
+      expect(source).toMatchObject({ sourceProvider: '三倍 Ice Cream / 3icecream.com', sourceType: 'third-party reference' });
+      expect(new URL(source.sourcePage).hostname).toBe('3icecream.com');
+      expect(new URL(source.sourceImage).hostname).toBe('3icecream.com');
+      expect(source.sourceTitle).toBe(title);
+      expect(source.imageSha256).toMatch(/^[a-f0-9]{64}$/);
+      expect(source.sourceDimensions.every(dimension => dimension >= 512)).toBe(true);
+    }
+    // Lock each third-party title, artist and exact image association, too.
+    const sourceFields = ['name', 'sourcePage', 'sourceImage', 'sourceTitle', 'sourceArtist', 'sourceType', 'sourceProvider', 'imageSha256', 'sourceDimensions'];
+    const sources = Object.entries(provenance.songs).filter(([name]) => completed.includes(name)).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)
+      .map(([name, source]) => [name, ...sourceFields.map(key => (source as Record<string, unknown>)[key])]);
+    expect(createHash('sha256').update(JSON.stringify(sources)).digest('hex')).toBe('c601400460deac05f549dec32acd3912b6c0bcf2980647791332a07057cadb32');
+    expect(provenance.completion).toMatchObject({ addedSongs: 7, addedQuadrants: 28, unchangedExistingSongs: 206, unchangedExistingQuadrants: 824, thirdPartyReferenceSongs: 7 });
+    expect(script).toContain('全213曲に4色の配色を用いています。');
+    expect(script).toContain('第三者サイト「三倍 Ice Cream」');
   });
 
   it('keeps top-left, top-right, bottom-left, bottom-right in that order', () => {
@@ -141,9 +207,8 @@ describe('BPL approved four-color jacket dataset', () => {
       expect(html).toContain(`class="music-jacket music-gradient ${size}"`);
       expect(html).toContain('aria-hidden="true"></span>');
       expect(html).not.toMatch(/♪|<img|role=|aria-label=|title=|https?:|url\(/i);
-      for (const name of missing) {
-        expect(jackets.jacketMarkup(name, palettes, size)).toBe(`<span class="music-jacket music-symbol ${size}" aria-hidden="true">♪</span>`);
-      }
+      for (const name of completed) expect(jackets.jacketMarkup(name, palettes, size)).toContain('music-gradient');
+      expect(jackets.jacketMarkup('Unknown song', palettes, size)).toBe(`<span class="music-jacket music-symbol ${size}" aria-hidden="true">♪</span>`);
     }
   });
 
@@ -170,7 +235,7 @@ describe('BPL shipped jacket rendering and optional-resource resilience', () => 
     const cards = h.get('main').innerHTML;
     expect(cards).toContain(jackets.jacketMarkup('Cosy Catastrophe', palettes, 'mini-jacket'));
     expect(cards.match(/class="music-jacket music-gradient mini-jacket"/g)?.length).toBeGreaterThan(200);
-    for (const name of missing) expect(cards).toContain(jackets.jacketMarkup(name, palettes, 'mini-jacket'));
+    for (const name of completed) expect(cards).toContain(jackets.jacketMarkup(name, palettes, 'mini-jacket'));
     const match = data.matches.find(m => m.battles.some(b => b.songs.some(s => s.name === 'Cosy Catastrophe')))!;
     h.run(`renderMatch(${JSON.stringify(match.id)})`);
     expect(h.get('#dialog-content').innerHTML).toContain(jackets.jacketMarkup('Cosy Catastrophe', palettes));

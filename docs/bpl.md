@@ -12,13 +12,13 @@ See `bpl-sharing.md` for sharing and OG behavior, and `bpl-s6.md` for viewing pr
 
 ## Four-color song gradients — 2026-10-06
 
-`public/bpl/jacket-colors.json` contains 206 palettes for the archive's 213 exact song-title identifiers. Each has a stable ID and four HEX colors in top-left, top-right, bottom-left, bottom-right order. The seven unverified titles retain the music-note symbol. No source image is bundled or requested by the browser/build.
+`public/bpl/jacket-colors.json` contains 213 palettes for the archive's 213 exact song-title identifiers. Each has a stable ID and four HEX colors in top-left, top-right, bottom-left, bottom-right order. All 213 titles have a palette. The final seven use verified third-party references from 三倍 Ice Cream / 3icecream.com. No source image is bundled or requested by the browser/build.
 
 `public/bpl/jackets.js` validates the four colors before rendering decorative CSS; unknown/invalid palettes and optional palette/module load failures retain the note symbol. The existing song titles and jacket dimensions stay visible/unchanged. The same renderer covers match-card miniatures, match details and head-to-head rows. Player portraits, season artwork, masthead dimensions, sharing metadata and OG rendering are unaffected.
 
-`docs/bpl-jacket-palettes.json` records the public official page/image mapping, source-image hash and dimensions, sampling time, algorithm, unresolved titles and exact runtime palette-file hash. This is provenance, not rights clearance. Runtime data allows no artwork URL or image bytes. The asset gate rejects altered/uninventoried palette content and preserves the official-artwork rejection rules.
+`docs/bpl-jacket-palettes.json` records the public page/image mapping (206 official sources and seven explicitly labeled third-party references), source-image hash and dimensions, sampling time, algorithm, unresolved titles and exact runtime palette-file hash. This is provenance, not rights clearance. Runtime data allows no artwork URL or image bytes. The asset gate rejects altered/uninventoried palette content and preserves the official-artwork rejection rules.
 
-Colors were extracted offline from the current official source images with per-quadrant Oklab clustering. Alpha below 32 is excluded; alpha weights coverage; modest chroma/near-black weighting reduces noise from small text and shadows. A representative pixel from each selected cluster is retained instead of averaging the entire quadrant. Analysis uses at most 128px thumbnails and a deterministic seed. White-led covers may legitimately yield nearly white gradients; colors are not invented to force distinction. Deleted artwork archives/history were not restored.
+Colors were extracted offline from the verified reference images with per-quadrant Oklab clustering. Alpha below 32 is excluded; alpha weights coverage; modest chroma/near-black weighting reduces noise from small text and shadows. A representative pixel from each selected cluster is retained instead of averaging the entire quadrant. Analysis uses at most 128px thumbnails and a deterministic seed. White-led covers may legitimately yield nearly white gradients; colors are not invented to force distinction. Deleted artwork archives/history were not restored.
 
 ## Season standings and participation — 2026-10-06
 
