@@ -238,6 +238,7 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
 }
 
 /* Summary controls remain visually one card, with separately focusable rounds. */
+.match-card{-webkit-tap-highlight-color:transparent}
 .match-overview,.match-card .hint,.match-card .match-battle-row{width:100%;padding:0;border:0;background:transparent;color:inherit;font:inherit;text-align:left;border-radius:0}
 .match-overview{display:block}
 .match-card .hint{border-top:1px solid var(--line);padding-top:10px;color:var(--muted);font-size:12px}

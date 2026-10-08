@@ -459,6 +459,7 @@ async function checkRoundNavigation(label,viewport){
     await target.goto(base+'/bpl/s?view=seasons&season=4');await readyOn(target,'seasons');
     const card=target.locator('.match-card[data-match="s4-final"]');
     assert.equal(await card.locator('button button').count(),0,'summary controls must not nest buttons');
+    assert.equal(await card.evaluate(node=>getComputedStyle(node).webkitTapHighlightColor),'rgba(0, 0, 0, 0)','old touch highlight must not linger over the newly opened round');
     for(const round of [1,3,6,2,5,4]){
       const opener=card.locator(`button.match-battle-row[data-round="${round}"]`);
       await opener.scrollIntoViewIfNeeded();const background=await target.evaluate(()=>scrollY);
