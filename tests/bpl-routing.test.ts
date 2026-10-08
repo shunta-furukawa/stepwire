@@ -39,6 +39,20 @@ describe('BPL URL state', () => {
     }
   });
 
+  it('round trips a stable round number only on match routes', () => {
+    for(const round of ['1','3','6']) {
+      const parsed=routing.parseRoute(url('/bpl/s?view=match&id=s4-final&round='+round));
+      expect(parsed.round).toBe(round);
+      expect(url(routing.routePath(parsed)).searchParams.get('round')).toBe(round);
+    }
+    for(const round of ['', '0', '-1', '1.5', '1e2', '01', 'Infinity', '9007199254740992', '<script>']) {
+      const parsed=routing.parseRoute(url('/bpl/s?view=match&id=s4-final&round='+encodeURIComponent(round)));
+      expect(parsed.round).toBeNull();
+      expect(url(routing.routePath(parsed)).searchParams.has('round')).toBe(false);
+    }
+    expect(routing.parseRoute(url('/bpl/s?view=seasons&round=3')).round).toBeUndefined();
+  });
+
   it('accepts punctuation, old query+hash links, S6 rosters, and direct match links', () => {
     expect(routing.parseRoute(url('/bpl#player/O4MA.')).id).toBe('O4MA.');
     expect(routing.parseRoute(url('/bpl#player/A%2FB%26C')).id).toBe('A/B&C');
@@ -191,6 +205,16 @@ describe('BPL history and shipped renderers', () => {
     h.history.forward();h.flush();h.get('#match-dialog').dispatch('click',{target:h.get('#match-dialog'),clientX:0,clientY:0});h.flush();expect(h.location.searchParams.get('id')).toBe('round1');
     expect(h.history.length).toBe(2);
     expect(h.mainWrites).toBe(writes); // Modal history leaves its opener and scroll position intact.
+  });
+
+  it('retains the selected round through Back/Forward and rejects unknown rounds', () => {
+    const h=harness('/bpl/s?view=seasons&season=4');
+    h.run('openMatch("s4-final", "5")');
+    expect(h.location.searchParams.get('round')).toBe('5');
+    expect(h.get('#dialog-content').innerHTML).toContain('class="battle-detail" data-round="5"');
+    h.history.back();h.flush();expect(h.location.searchParams.has('round')).toBe(false);
+    h.history.forward();h.flush();expect(h.location.searchParams.get('round')).toBe('5');
+    h.run('openMatch("s4-final", "999")');expect(h.location.searchParams.has('round')).toBe(false);
   });
 
   it('resets the scrolling match body on reopen and hidden S6 rendering', () => {

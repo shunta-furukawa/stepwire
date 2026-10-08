@@ -236,3 +236,12 @@ dialog{background:var(--panel);border:1px solid #55554e;border-radius:2px;color:
  .season-finalist .team-nameplate{width:180px;--np-unit:28px}
  .s6-preview-score{gap:8px;padding:14px 5px}.s6-preview-score .s6-preview-team{padding:10px 5px}.s6-preview-team .team-nameplate{padding:9px 6px;--np-unit:23px}
 }
+
+/* Summary controls remain visually one card, with separately focusable rounds. */
+.match-overview,.match-card .hint,.match-card .match-battle-row{width:100%;padding:0;border:0;background:transparent;color:inherit;font:inherit;text-align:left;border-radius:0}
+.match-overview{display:block}
+.match-card .hint{border-top:1px solid var(--line);padding-top:10px;color:var(--muted);font-size:12px}
+.match-card .match-battle-row{min-height:44px}
+.match-card .match-battle-row+.match-battle-row{border-top:1px solid var(--line);padding-top:8px}
+.match-overview:focus-visible,.match-card .hint:focus-visible,.match-battle-row:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.match-battle-row:hover,.match-battle-row:focus-visible{background:var(--line)}

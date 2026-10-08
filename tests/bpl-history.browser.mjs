@@ -106,7 +106,7 @@ async function checkGradientLayout(label,viewport){
     const cosyMini=card.locator('.music-jacket').nth(titles.indexOf('Cosy Catastrophe'));
     await checkJacket(cosyMini,sizes.mini,jacketColors.songs['Cosy Catastrophe']);await checkPaleJacket(cosyMini);
     await screenshot(target.locator('.match-list'),label+'-jacket-card-grid');
-    await card.click();await readyOn(target,'match',match.id);
+    await card.locator('.match-overview').click();await readyOn(target,'match',match.id);
     const cosyDetail=target.locator('#dialog-content .song').filter({has:target.locator('.song-title strong').filter({hasText:'Cosy Catastrophe'})}).locator('.music-jacket');
     await checkJacket(cosyDetail,sizes.detail,jacketColors.songs['Cosy Catastrophe']);await checkPaleJacket(cosyDetail);
     await cosyDetail.scrollIntoViewIfNeeded();await screenshot(target.locator('#match-dialog'),label+'-jacket-detail');
@@ -153,7 +153,7 @@ async function checkGradientLayout(label,viewport){
       const card=target.locator(`.match-card[data-match="${match.id}"]`);
       await checkJacket(card.locator('.music-jacket').nth(titles.indexOf(title)),sizes.mini,palette);
       await screenshot(card,label+'-completed-'+slug+'-card');
-      await card.click();await readyOn(target,'match',match.id);
+      await card.locator('.match-overview').click();await readyOn(target,'match',match.id);
       const detail=target.locator('#dialog-content .song').filter({has:target.locator('.song-title strong').filter({hasText:title})}).locator('.music-jacket');
       assert.ok(await detail.count(),title);
       for(const jacket of await detail.all())await checkJacket(jacket,sizes.detail,palette);
@@ -191,7 +191,7 @@ async function checkOptionalJacketFailure(failure){
     await target.goForward();await readyOn(target,'player','O4MA.');
     await target.locator('nav a[href="#seasons"]').click();await readyOn(target,'seasons');
     const card=target.locator('.match-card').first(),id=await card.getAttribute('data-match');
-    await card.click();await readyOn(target,'match',id);
+    await card.locator('.match-overview').click();await readyOn(target,'match',id);
     assert.ok(await target.locator('#dialog-content .music-symbol').count());assert.equal(await target.locator('#dialog-content .music-gradient').count(),0);
     await target.goBack();await readyOn(target,'seasons');assert.equal(await target.locator('#match-dialog').evaluate(dialog=>dialog.open),false);
     await target.goForward();await readyOn(target,'match',id);assert.equal(await target.locator('#match-dialog').evaluate(dialog=>dialog.open),true);
@@ -205,7 +205,7 @@ async function checkPinnedMatchClose(label,viewport){
   try{
     await target.goto(base+'/bpl/s?view=seasons&season=5');await readyOn(target,'seasons');
     const match=data.matches.filter(m=>m.season===5).sort((a,b)=>b.battles.flatMap(r=>r.songs).length-a.battles.flatMap(r=>r.songs).length)[0];
-    const opener=target.locator(`.match-card[data-match="${match.id}"]`),dialog=target.locator('#match-dialog'),body=target.locator('#dialog-content'),close=target.getByRole('button',{name:'試合詳細を閉じる',exact:true});
+    const opener=target.locator(`.match-card[data-match="${match.id}"] .match-overview`),dialog=target.locator('#match-dialog'),body=target.locator('#dialog-content'),close=target.getByRole('button',{name:'試合詳細を閉じる',exact:true});
     const underlying=target.url();await opener.click();await readyOn(target,'match',match.id);
     const initial=await close.boundingBox();assert.ok(initial);
     assert.ok(initial.width>=44&&initial.height>=44,'close target must be at least 44px');
@@ -437,6 +437,65 @@ async function checkMatrixDetailModal(label,viewport){
   }finally{await ctx.close()}
 }
 
+async function checkRoundNavigation(label,viewport){
+  const mobile=label!=='desktop';
+  const ctx=await browser.newContext({viewport,isMobile:mobile,hasTouch:mobile,deviceScaleFactor:1,reducedMotion:label==='reduced'?'reduce':'no-preference',serviceWorkers:'block'});
+  trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
+  try{
+    const body=target.locator('#dialog-content'),close=target.locator('#close-dialog');
+    const checkRound=async round=>{
+      await target.waitForFunction(round=>document.querySelector('#match-dialog').open&&new URLSearchParams(location.search).get('round')===String(round),round);
+      const position=await body.evaluate((node,round)=>{
+        const section=[...node.querySelectorAll('.battle-detail')].find(item=>item.dataset.round===String(round));
+        const box=section.getBoundingClientRect(),frame=node.getBoundingClientRect();
+        return {delta:box.top-frame.top,visible:box.top>=frame.top-1&&box.top<frame.bottom,scroll:node.scrollTop,remaining:node.scrollHeight-node.clientHeight-node.scrollTop,outer:node.parentElement.scrollTop};
+      },round);
+      assert.ok(position.visible,'selected heading is visible: '+JSON.stringify(position));
+      assert.ok(Math.abs(position.delta)<2||position.remaining<2,'selected round is aligned at top or clamped at content end');
+      assert.ok(position.scroll>0);assert.equal(position.outer,0);
+      const x=await close.boundingBox(),y=await body.boundingBox();
+      assert.ok(x.y+x.height<=y.y,'close button stays above the scrolled content');
+    };
+    await target.goto(base+'/bpl/s?view=seasons&season=4');await readyOn(target,'seasons');
+    const card=target.locator('.match-card[data-match="s4-final"]');
+    assert.equal(await card.locator('button button').count(),0,'summary controls must not nest buttons');
+    for(const round of [1,3,6,2,5,4]){
+      const opener=card.locator(`button.match-battle-row[data-round="${round}"]`);
+      await opener.scrollIntoViewIfNeeded();const background=await target.evaluate(()=>scrollY);
+      // Nested artwork, points and labels must all resolve to the same row.
+      const nested=opener.locator(round%2?'.mini-jacket':'.round-point').last();
+      if(mobile)await nested.tap();else await nested.click();
+      await checkRound(round);assert.equal(await target.evaluate(()=>scrollY),background);
+      if(round===5)await screenshot(target,label+'-match-round-5');
+      await close.click();await readyOn(target,'seasons');
+      assert.equal(await target.evaluate(()=>scrollY),background);
+      assert.equal(await target.evaluate(()=>document.activeElement?.dataset.round),String(round),'focus returns to the tapped round');
+      await target.goForward();await checkRound(round);
+      await target.keyboard.press('Escape');await readyOn(target,'seasons');
+    }
+    await card.locator('.match-overview').click();await readyOn(target,'match','s4-final');
+    assert.equal(await body.evaluate(node=>node.scrollTop),0,'whole-match header still opens at top');
+    await close.click();await readyOn(target,'seasons');
+    await card.locator('[data-round="3"]').focus();await target.keyboard.press('Enter');await checkRound(3);
+    assert.equal(await target.evaluate(()=>document.activeElement?.classList.contains('battle-detail')),true);
+    await target.keyboard.press('Tab');
+    assert.equal(await target.evaluate(()=>document.activeElement?.closest('.battle-detail')?.dataset.round),'3','Tab continues inside the selected round');
+    await checkRound(3);
+    await close.click();await readyOn(target,'seasons');
+    await card.locator('[data-round="2"]').focus();await target.keyboard.press('Space');await checkRound(2);
+    const address=target.url();await target.reload();await checkRound(2);assert.equal(target.url(),address);
+    // All supported season formats, including short score-only ZERO rounds.
+    for(const match of data.matches.filter(match=>match.stage==='final')){
+      const round=match.battles.at(-1).number;
+      await target.goto(base+'/bpl/s?view=match&id='+encodeURIComponent(match.id)+'&round='+round);await readyOn(target,'match',match.id);await checkRound(round);
+    }
+    for(const round of ['999','-1','garbage']){
+      await target.goto(base+'/bpl/s?view=match&id=s4-final&round='+round);await readyOn(target,'match','s4-final');
+      assert.equal(await body.evaluate(node=>node.scrollTop),0,'unknown rounds fall back to the match overview');
+    }
+  }finally{await ctx.close()}
+}
+
 async function checkRoundPoints(label,viewport){
   const ctx=await browser.newContext({viewport,isMobile:label!=='desktop',hasTouch:label!=='desktop',deviceScaleFactor:1,serviceWorkers:'block'});
   trackImages(ctx);const target=await ctx.newPage();target.on('pageerror',error=>errors.push(error.message));
@@ -634,7 +693,7 @@ async function checkSeasonStandings(label,viewport){
       assert.equal(target.url(),filtered);assert.equal(await section.innerHTML(),original);await checkCards(season,team,'regular');
       await target.goForward();await readyOn(target,'match',final.id);await target.locator('#close-dialog').click();await readyOn(target,'seasons');assert.equal(target.url(),filtered);
       const card=target.locator('#season-matches .match-card').first(),id=await card.getAttribute('data-match');
-      await card.click();await readyOn(target,'match',id);await target.locator('#close-dialog').click();await readyOn(target,'seasons');assert.equal(target.url(),filtered);
+      await card.locator('.match-overview').click();await readyOn(target,'match',id);await target.locator('#close-dialog').click();await readyOn(target,'seasons');assert.equal(target.url(),filtered);
       await section.locator('.season-finalist').first().click();await readyOn(target,'team',final.teams[winner]);
       await target.goBack();await readyOn(target,'seasons');assert.equal(target.url(),filtered);assert.equal(await section.innerHTML(),original);
       await target.locator('button[data-team-filter="all"]').focus();await target.keyboard.press('Space');
@@ -777,6 +836,9 @@ try {
   for(const [key,value] of Object.entries({matrixSeason:'5',matrixFormat:'single',matrixCategory:'GOLD',matrixStyle:'TRICKY'}))assert.equal(await page.locator('#'+key).inputValue(),value);
   for(const roster of ['all','0']){await goto('/bpl/s?view=team&id=round1&rosterSeason='+roster,'team','round1');assert.equal(await page.locator('#team-roster-season').inputValue(),'6');assert.equal(param('rosterSeason'),'6')}
 
+  await checkRoundNavigation('desktop',{width:1280,height:900});
+  await checkRoundNavigation('mobile',{width:390,height:844});
+  await checkRoundNavigation('reduced',{width:320,height:720});
   await checkRoundPoints('desktop',{width:1280,height:900});
   await checkRoundPoints('mobile',{width:390,height:844});
   await checkRoundPoints('narrow',{width:320,height:720});
