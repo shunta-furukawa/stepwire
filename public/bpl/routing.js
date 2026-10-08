@@ -11,6 +11,7 @@ const keys = {
   seasons:['season','team','stage'], players:['playerSeason','playerTeam','query','sort'],
   versus:['a','b','vsSeason','vsFormat','partnerA','partnerB'], team:['rosterSeason'],
 };
+const matchRound = value => /^[1-9]\d*$/.test(String(value)) && Number.isSafeInteger(Number(value)) ? String(value) : null;
 const decode = value => {try{return decodeURIComponent(value)}catch{return value}};
 export function hashRoute(hash, filters = defaultFilters) {
   const [raw,...args] = hash.replace(/^#/,'').split('/').map(decode);
@@ -36,11 +37,12 @@ export function parseRoute(url, hideResults = true, hashOnly = false) {
     // Explicit query filters beat the legacy route's convenience defaults.
     if(legacy.view===q.get('view'))for(const key of Object.keys(filters))if(q.has(key))route.filters[key]=q.get(key);
   }
-  return {...route,hideResults:q.has('hideResults')?q.get('hideResults')!=='0':hideResults};
+  return {...route,...(route.view==='match'?{round:matchRound(q.get('round'))}:{}),hideResults:q.has('hideResults')?q.get('hideResults')!=='0':hideResults};
 }
 export function routeParams(route) {
   const p = new URLSearchParams({view:route.view,hideResults:route.hideResults?'1':'0'});
   if(['team','player','match'].includes(route.view))p.set('id',route.id||'');
+  if(route.view==='match'&&matchRound(route.round))p.set('round',matchRound(route.round));
   for(const key of keys[route.view]||[])if(route.filters[key]!==''&&route.filters[key]!==undefined)p.set(key,String(route.filters[key]));
   if(route.view==='matrix')p.set('matrixVersion','2');
   if(['team','player'].includes(route.view))p.set('summaryVersion','1');

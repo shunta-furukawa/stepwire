@@ -66,7 +66,9 @@ export function shareModel(input: URLSearchParams) {
     const ms=matches.filter(m=>(s==='all'||String(m.season)===s)&&(t==='all'||m.teams.includes(t))&&(stage==='all'||m.stage===stage));
     title=`${label(s)} · BPL DDR`;detail=[t==='all'?'全チーム':teams[t]!.name,stage==='all'?'全ステージ':stageNames[stage]].join(' / ');metric=`${ms.length}試合`;eyebrow='SEASON';
   } else if(view==='match') {
-    const m=data.matches.find(m=>m.id===id)!;left=teams[m.teams[0]!]!.short;right=teams[m.teams[1]!]!.short;
+    const m=data.matches.find(m=>m.id===id)!;
+    const round=input.get('round');if(round&&m.battles.some(b=>String(b.number)===round))p.set('round',round);
+    left=teams[m.teams[0]!]!.short;right=teams[m.teams[1]!]!.short;
     title=`${left} vs ${right}`;score=m.season===6&&hidden?'結果は非表示':m.points.join(' — ');metric=`${m.date} · ${m.label}`;detail=`${label(m.season)} / ${stageNames[m.stage]}`;eyebrow='MATCH RESULT';
   } else if(view==='team') {
     const roster=teamRoster(id,p.get('rosterSeason')), summary=teamSummary(id,matches);

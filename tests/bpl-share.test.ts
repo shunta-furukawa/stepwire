@@ -4,6 +4,11 @@ import data from '../public/bpl/data.json';
 
 describe('BPL shared cards',()=>{
  it('validates every match and keeps official points',()=>{for(const m of data.matches){const c=shareModel(new URLSearchParams({view:'match',id:m.id}));expect(c.score).toBe(m.points.join(' — '));expect(c.metric).toContain(m.date)}});
+ it('preserves existing round targets and drops invalid or unrelated targets',()=>{
+   for(const m of data.matches)for(const battle of m.battles)expect(shareModel(new URLSearchParams({view:'match',id:m.id,round:String(battle.number)})).params.get('round')).toBe(String(battle.number));
+   for(const round of ['0','999','-1','1.5','01','<script>'])expect(shareModel(new URLSearchParams({view:'match',id:'s4-final',round})).params.has('round')).toBe(false);
+   expect(shareModel(new URLSearchParams({view:'seasons',round:'3'})).params.has('round')).toBe(false);
+ });
  it('preserves season zero and stage/team filters',()=>{const c=shareModel(new URLSearchParams({view:'seasons',season:'0'}));expect(c.title).toContain('ZERO');expect(c.metric).toBe('4試合');expect(shareModel(new URLSearchParams({view:'seasons',season:'5',stage:'final'})).metric).toBe('1試合')});
  it('keeps punctuation and exact duo partners in URLs',()=>{const p=new URLSearchParams({view:'versus',a:'O4MA.',b:'HIBIKI',vsSeason:'4',vsFormat:'tag',partnerA:'all',partnerB:'all'});const c=shareModel(p);expect(c.detail).toContain('DUO × DUO');expect(c.params.get('a')).toBe('O4MA.');expect(c.params.get('vsSeason')).toBe('4')});
  it('generates every player and team',()=>{for(const p of data.players)expect(shareModel(new URLSearchParams({view:'player',id:p.id})).title).toBe(p.name);for(const id of Object.keys(data.teams))expect(shareModel(new URLSearchParams({view:'team',id})).title).toBeTruthy()});
