@@ -248,7 +248,7 @@ Promise.all([...['data.json','brand.json','s6.json'].map(u=>fetch('/bpl/'+u).the
 let activeShareMatch=null;
 function shareContext(matrixOnly=false){
  const view=matrixOnly?'matrix':currentRoute?.view||'s6',args=[currentRoute?.id];
- const p=new URLSearchParams({view});if(view==='match'&&currentRoute.round)p.set('round',currentRoute.round);if(view==='matrix')p.set('matrixVersion','2');if(['team','player'].includes(view))p.set('summaryVersion','1');p.set('hideResults',s6SessionPrefs.hideResults?'1':'0');let title='BPL DDR 戦績';
+ const p=new URLSearchParams({view});if(view==='match'&&currentRoute.round)p.set('round',currentRoute.round);if(view==='matrix')p.set('matrixVersion','3');if(['team','player'].includes(view))p.set('summaryVersion','1');p.set('hideResults',s6SessionPrefs.hideResults?'1':'0');let title='BPL DDR 戦績';
  if(view==='match'){p.set('id',currentRoute.id);const m=allArchiveMatches.find(m=>m.id===currentRoute.id);title=m?m.teams.map(t=>team(t).short).join(' vs ')+(m.season===6&&s6SessionPrefs.hideResults?' · 結果非表示':' · '+m.points.join(' : ')):'試合が見つかりません'}
  else if(view==='s6'||view==='preview'||view==='matrix'){for(const k of Object.keys(Matrix.matrixOptions))p.set(k,state[k]);p.set('previewA',state.previewA);p.set('previewB',state.previewB);title=view==='s6'?'S6 観戦ガイド':teamName(state.previewA,6)+' vs '+teamName(state.previewB,6)}
  else if(view==='team'){p.set('id',args[0]);p.set('rosterSeason',state.rosterSeason);title=teamName(args[0],D.players.flatMap(p=>p.history.filter(h=>h.team===args[0]).map(h=>h.season)).sort((a,b)=>a-b).at(-1))}

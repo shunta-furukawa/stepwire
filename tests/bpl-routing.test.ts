@@ -275,7 +275,7 @@ describe('BPL history and shipped renderers', () => {
     expect(direct.get('#matrix-dialog').open).toBe(true);
     expect(direct.get('#matrix-dialog-content').innerHTML).toContain('選択中の条件に該当する楽曲記録はありません');
     const shared=direct.run('shareContext(true).params');
-    expect(shared.get('view')).toBe('matrix');expect(shared.get('matrixVersion')).toBe('2');expect(shared.has('matrixA')).toBe(false);
+    expect(shared.get('view')).toBe('matrix');expect(shared.get('matrixVersion')).toBe('3');expect(shared.has('matrixA')).toBe(false);
     direct.get('#close-matrix-dialog').onclick?.({});direct.flush();
     expect(direct.location.searchParams.get('view')).toBe('matrix');expect(direct.location.searchParams.has('matrixA')).toBe(false);
     expect(direct.history.length).toBe(1);
