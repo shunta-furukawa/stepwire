@@ -44,7 +44,7 @@ export function routeParams(route) {
   if(['team','player','match'].includes(route.view))p.set('id',route.id||'');
   if(route.view==='match'&&matchRound(route.round))p.set('round',matchRound(route.round));
   for(const key of keys[route.view]||[])if(route.filters[key]!==''&&route.filters[key]!==undefined)p.set(key,String(route.filters[key]));
-  if(route.view==='matrix')p.set('matrixVersion','2');
+  if(route.view==='matrix')p.set('matrixVersion','3');
   if(['team','player'].includes(route.view))p.set('summaryVersion','1');
   return p;
 }

@@ -422,11 +422,11 @@ async function checkMatrixDetailModal(label,viewport){
     await target.goto(base+query({view:'matrix',...filters}));await readyOn(target,'matrix');
     const share=async()=>{await target.locator('[data-matrix-share][data-share-action="copy"]').click();return new URL(await target.evaluate(()=>window.__copied))};
     const sharedBefore=await share();await openCell();await pointClick(close);await closed();const sharedAfter=await share();assert.equal(sharedAfter.href,sharedBefore.href);
-    for(const [key,value] of Object.entries({view:'matrix',matrixVersion:'2',...teams,...filters}))assert.equal(sharedAfter.searchParams.get(key),value);
+    for(const [key,value] of Object.entries({view:'matrix',matrixVersion:'3',...teams,...filters}))assert.equal(sharedAfter.searchParams.get(key),value);
     assert.equal(sharedAfter.searchParams.has('matrixA'),false);assert.equal(sharedAfter.searchParams.has('matrixB'),false);
     await target.locator('[data-matrix-share][data-share-action="preview"]').click();
     const image=new URL(await target.locator('#share-preview-image').getAttribute('src'));assert.equal(image.pathname,'/bpl/og');
-    for(const [key,value] of Object.entries({view:'matrix',matrixVersion:'2',...teams,...filters}))assert.equal(image.searchParams.get(key),value);
+    for(const [key,value] of Object.entries({view:'matrix',matrixVersion:'3',...teams,...filters}))assert.equal(image.searchParams.get(key),value);
     assert.equal(image.searchParams.has('matrixA'),false);assert.equal(image.searchParams.has('matrixB'),false);await target.locator('#share-preview-close').click();
   }catch(error){
     const diagnostics={label,viewport,...await layoutDiagnostics().catch(problem=>({diagnosticError:String(problem)}))};

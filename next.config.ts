@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   outputFileTracingIncludes: {
-    '/**': ['./content/**/*', './public/bpl/index.html', './public/fonts/BplShare.ttf', './public/brand/wordmark.svg', './public/bpl/portraits/*.webp'],
+    '/**': ['./content/**/*', './public/bpl/index.html', './public/fonts/BplShare.ttf', './public/fonts/BplMatrix*', './public/fonts/BplTeam.ttf', './public/brand/wordmark.svg', './public/bpl/portraits/*.webp'],
   },
   typedRoutes: true,
   async rewrites() {
