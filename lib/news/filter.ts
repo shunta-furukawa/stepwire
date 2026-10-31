@@ -16,10 +16,11 @@ import type { RawItem } from './types';
  *       include: ['DanceDanceRevolution', 'DDR']
  *       exclude: ['MenuBar', 'SOUND VOLTEX']
  *
- * Matching is case-insensitive substring against the title and the summary.
- * Deliberately not regular expressions: the registry is editorial
- * configuration meant to be reviewed by a human in a pull request, and a
- * mis-anchored regex fails in ways a substring cannot.
+ * Matching is case-insensitive substring against the title and the summary,
+ * except the exact term `DDR`: adjacent ASCII letters or digits make it part
+ * of another word (e.g. NomadDrive), not the game's abbreviation. Japanese
+ * text and punctuation can sit directly beside DDR. Terms stay literal;
+ * the registry does not accept regular expressions.
  */
 
 export interface SourceFilter {
@@ -33,18 +34,26 @@ function haystack(item: RawItem): string {
   return `${item.title}\n${item.summary ?? ''}`.toLowerCase();
 }
 
+function matchesTerm(text: string, term: string): boolean {
+  const normalized = term.toLowerCase();
+  // ASCII alphanumerics let DDRの新曲 match and treat underscores as
+  // punctuation rather than word characters.
+  if (normalized === 'ddr') return /(?:^|[^a-z0-9])ddr(?=$|[^a-z0-9])/.test(text);
+  return text.includes(normalized);
+}
+
 export function matchesFilter(item: RawItem, filter?: SourceFilter): boolean {
   if (!filter) return true;
 
   const text = haystack(item);
 
-  if (filter.exclude?.some((term) => text.includes(term.toLowerCase()))) {
+  if (filter.exclude?.some((term) => matchesTerm(text, term))) {
     return false;
   }
 
   if (!filter.include || filter.include.length === 0) return true;
 
-  return filter.include.some((term) => text.includes(term.toLowerCase()));
+  return filter.include.some((term) => matchesTerm(text, term));
 }
 
 /** Applies a source's filter, reporting how many items it removed. */

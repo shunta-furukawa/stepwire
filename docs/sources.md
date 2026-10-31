@@ -156,10 +156,14 @@ and an inbox that cannot be triaged on a phone has lost its only advantage.
         - MenuBar
 ```
 
-Matching is case-insensitive substring against the title and the summary.
-Deliberately not regular expressions: the registry is editorial configuration
-reviewed by a human in a pull request, and a mis-anchored regex fails in ways a
-substring cannot.
+Matching is case-insensitive substring against the title and the summary,
+except for the exact term `DDR` (any case): it must not have an ASCII letter
+or digit immediately before or after it. This rejects `NomadDrive`, `GDDR6`
+and `DDR5`, while keeping `DDR WORLD`, `DDR GRAND PRIX` and `DDRの新曲`.
+Japanese text, punctuation and underscores count as boundaries. This rule
+applies to both `include` and `exclude`; all other terms, including
+`DanceDanceRevolution` and `BEMANI`, keep substring matching. Terms remain
+literal strings, not regular expressions.
 
 The filter runs **before** `maxItems`, so a busy multi-game feed cannot spend
 its per-source budget on items that are about to be discarded.
